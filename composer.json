@@ -105,7 +105,7 @@
         ],
         "x-payout:doctor": [
             "@php artisan about --only=environment",
-            "@php artisan route:list --path=x --compact"
+            "@php artisan route:list --path=x"
         ],
         "x-payout:verify": [
             "composer validate",
