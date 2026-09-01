@@ -99,6 +99,7 @@
             "@php artisan key:generate --ansi --force",
             "@php artisan migrate --graceful --ansi",
             "@php artisan x-change:install --force --no-interaction --provision-system-principal --confirm-system-principal --system-principal-name=\"x-PayOut System\"",
+            "@php artisan x-payout:commission",
             "npm install",
             "npm run build",
             "@x-payout:doctor"
