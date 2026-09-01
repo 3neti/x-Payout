@@ -1,0 +1,713 @@
+<script setup lang="ts">
+import InputError from '@/components/InputError.vue';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Spinner } from '@/components/ui/spinner';
+import VoucherStatusStamp from '@/components/x-change/VoucherStatusStamp.vue';
+import RiderRuntimeSequencer from '@/components/x-rider/RiderRuntimeSequencer.vue';
+import XRayClaimPreview from '@/components/x-change/XRayClaimPreview.vue';
+import ClaimSurfaceRenderer from '@/components/x-change/ClaimSurfaceRenderer.vue';
+import type { ClaimSurfaceLike } from '@/components/x-change/ClaimSurfaceRenderer.vue';
+import type { RawRiderStage } from '@/components/x-rider/types';
+import { initializeTheme } from '@/composables/useTheme';
+import { useXChangeRoutes } from '@/composables/useXChangeRoutes';
+import { useVoucherPreview } from '@/composables/useVoucherPreview';
+import { router, useForm, usePage } from '@inertiajs/vue3';
+import { AlertCircle } from 'lucide-vue-next';
+import { ref, computed, onMounted, watch } from 'vue';
+import { resolveClaimWidgetExperienceStages } from '@/components/x-change/claimWidgetExperienceStages';
+import { resolveLegacyRiderStages } from '@/components/x-change/claimWidgetLegacyStages';
+import { submitLegacyClaimStart } from '@/components/x-change/claimWidgetLegacySubmit';
+import { resolveClaimWidgetPreviewViewModel } from '@/components/x-change/claimWidgetPreviewViewModel';
+import { resolveClaimWidgetSubmitViewModel } from '@/components/x-change/claimWidgetSubmitViewModel';
+import { isReturningRedeemerFromStorage } from '@/components/x-change/claimWidgetVoucherState';
+import { useCompiledClaimForm } from '@/components/x-change/useCompiledClaimForm';
+import FormFlowRenderer from '@/components/x-change/FormFlowRenderer.vue';
+import { resolveClaimWidgetFormFlowSectionViewModel } from '@/components/x-change/claimWidgetFormFlowSectionViewModel';
+import { resolveClaimWidgetPreviewMode } from '@/components/x-change/claimWidgetPreviewMode';
+import { store as startClaimFlow } from '@/routes/x-change/claim/flows';
+
+initializeTheme();
+
+interface Props {
+    initialCode?: string | null;
+    claimExperience?: Record<string, unknown> | null;
+    claimSurface?: ClaimSurfaceLike | null;
+    compiledFormSubmitted?: boolean;
+    compiledFormSubmitError?: string | null;
+}
+
+const props = defineProps<Props>();
+
+const page = usePage();
+const errors = computed(() => page.props.errors as Record<string, string>);
+const routes = useXChangeRoutes();
+
+const form = useForm({
+    code: props.initialCode || '',
+});
+
+const { code, loading, error, voucherData, showPreview } = useVoucherPreview({
+    debounceMs: 500,
+    minCodeLength: 4,
+});
+
+if (props.initialCode) {
+    code.value = props.initialCode;
+}
+
+onMounted(() => {
+    if (props.initialCode && submitButton.value) {
+        const buttonEl = submitButton.value.$el as HTMLElement;
+        buttonEl?.focus();
+    }
+});
+
+const voucherInput = ref<HTMLInputElement | null>(null);
+const submitButton = ref<HTMLButtonElement | null>(null);
+const reactiveClaimExperience = ref<Record<string, unknown> | null>(
+    props.claimExperience ?? null,
+);
+const claimExperienceLoading = ref(false);
+const claimExperienceError = ref<string | null>(null);
+let claimExperienceAbortController: AbortController | null = null;
+const xrayResult = ref<Record<string, unknown> | null>(null);
+const xrayLoading = ref(false);
+const xrayError = ref<string | null>(null);
+let xrayAbortController: AbortController | null = null;
+const canonicalizingCode = ref<string | null>(null);
+
+const normalizedCode = computed(() => code.value.trim().toUpperCase());
+const normalizedInitialCode = computed(() =>
+    typeof props.initialCode === 'string'
+        ? props.initialCode.trim().toUpperCase()
+        : '',
+);
+
+const currentClaimExperience = computed(() => {
+    if (normalizedCode.value === normalizedInitialCode.value) {
+        return reactiveClaimExperience.value ?? props.claimExperience;
+    }
+
+    return reactiveClaimExperience.value;
+});
+
+const isReturningRedeemer = computed(() => isReturningRedeemerFromStorage());
+
+// A resolved `claimSurface` is only trustworthy for the exact code it was
+// server-resolved for (the initial code) -- once the visitor types a
+// different code, this component's own client-side preview fetch (below)
+// takes over instead.
+const activeClaimSurface = computed<ClaimSurfaceLike | null>(() =>
+    props.claimSurface && normalizedCode.value === normalizedInitialCode.value
+        ? props.claimSurface
+        : null,
+);
+
+const showIssuerConsole = computed(
+    () => activeClaimSurface.value?.visibility === 'issuer_console',
+);
+
+// The calm outcome panel replaces the old client-fetched
+// `VoucherStatusStamp` block whenever the server already resolved a
+// terminal surface for this code -- avoids rendering both at once.
+const showSurfaceOutcome = computed(
+    () => !showIssuerConsole.value && Boolean(activeClaimSurface.value?.state?.terminal),
+);
+
+const serverResolvedXRay = computed<Record<string, unknown> | null>(() => {
+    if (
+        activeClaimSurface.value?.visibility !== 'public_preview' ||
+        activeClaimSurface.value.state?.terminal
+    ) {
+        return null;
+    }
+
+    const component = (activeClaimSurface.value.components ?? []).find(
+        (candidate) => candidate.type === 'xray_preview',
+    );
+
+    return component?.props ?? null;
+});
+
+const resolvedXRay = computed<Record<string, unknown> | null>(
+    () => serverResolvedXRay.value ?? xrayResult.value,
+);
+
+const surfaceTakesOver = computed(
+    () => showIssuerConsole.value || showSurfaceOutcome.value,
+);
+
+const isCanonicalizingResolvedCode = computed(() =>
+    Boolean(canonicalizingCode.value)
+    && canonicalizingCode.value !== normalizedInitialCode.value,
+);
+
+const riderStages = computed<RawRiderStage[]>(() =>
+    resolveLegacyRiderStages(
+        voucherData.value as Record<string, any> | null | undefined,
+    ),
+);
+
+function submit() {
+    const claimCode = normalizedCode.value;
+
+    if (claimCode === '') {
+        return;
+    }
+
+    submitLegacyClaimStart(form, code.value, (claimCode) =>
+        startClaimFlow.url(claimCode),
+    );
+}
+
+function canonicalizeResolvedClaimCode(voucherCode: string): void {
+    const claimCode = voucherCode.trim().toUpperCase();
+
+    if (
+        claimCode.length < 4 ||
+        claimCode === normalizedInitialCode.value ||
+        canonicalizingCode.value === claimCode
+    ) {
+        return;
+    }
+
+    canonicalizingCode.value = claimCode;
+
+    router.visit(routes.claim.startWithCode(claimCode), {
+        preserveScroll: true,
+        preserveState: false,
+        replace: true,
+    });
+}
+
+const experienceStages = computed(() =>
+    resolveClaimWidgetExperienceStages({
+        claimExperience: currentClaimExperience.value,
+        legacyStages: riderStages.value,
+    }),
+);
+
+const preClaimVisualStages = computed<RawRiderStage[]>(
+    () => experienceStages.value.preClaimVisualStages,
+);
+
+const previewViewModel = computed(() =>
+    resolveClaimWidgetPreviewViewModel({
+        voucherData: voucherData.value,
+        preClaimVisualStages: preClaimVisualStages.value,
+    }),
+);
+
+const previewMode = computed(() =>
+    resolveClaimWidgetPreviewMode({
+        loading: loading.value,
+        error: error.value,
+        voucherData: voucherData.value,
+        isNonActive: previewViewModel.value.isNonActive,
+    }),
+);
+
+const runtimeStages = computed<RawRiderStage[]>(
+    () => experienceStages.value.runtimeStages,
+);
+
+const redirectStages = computed<RawRiderStage[]>(
+    () => experienceStages.value.redirectStages,
+);
+
+function withClaimRuntimeContext(stages: RawRiderStage[]): RawRiderStage[] {
+    const claimCode = normalizedCode.value;
+
+    if (!claimCode) {
+        return stages;
+    }
+
+    return stages.map((stage) => ({
+        ...stage,
+        payload: {
+            ...(stage.payload ?? {}),
+            context_code: stage.payload?.context_code ?? claimCode,
+            context_label: stage.payload?.context_label ?? 'Pay Code',
+        },
+    }));
+}
+
+const contextualRuntimeStages = computed<RawRiderStage[]>(() =>
+    withClaimRuntimeContext(runtimeStages.value),
+);
+
+const contextualRedirectStages = computed<RawRiderStage[]>(() =>
+    withClaimRuntimeContext(redirectStages.value),
+);
+
+const emit = defineEmits<{
+    'submit:compiled-form': [
+        payload: {
+            code: string;
+            values: Record<string, unknown>;
+        },
+    ];
+    'update:compiled-form-values': [values: Record<string, unknown>];
+}>();
+
+const compiledForm = useCompiledClaimForm({
+    initialCode: computed(() => normalizedCode.value || props.initialCode),
+    claimExperience: currentClaimExperience,
+    submitted: computed(() => props.compiledFormSubmitted),
+    submitError: computed(() => props.compiledFormSubmitError),
+    emitSubmit: (payload) => emit('submit:compiled-form', payload),
+    emitUpdateValues: (values) => emit('update:compiled-form-values', values),
+});
+
+const submitViewModel = computed(() =>
+    resolveClaimWidgetSubmitViewModel({
+        hasCompiledForm: Boolean(compiledForm.normalizedFlow.value),
+        compiledFormValid: compiledForm.isValid.value,
+        processing: form.processing,
+    }),
+);
+
+const formFlowSection = computed(() =>
+    resolveClaimWidgetFormFlowSectionViewModel({
+        hasCompiledFlow: Boolean(compiledForm.normalizedFlow.value),
+        usesLegacyFlow: compiledForm.usesLegacyFlow.value,
+    }),
+);
+
+const compiledFormFields = computed<Record<string, unknown>[]>(() => {
+    const fields = compiledForm.normalizedFlow.value?.fields;
+
+    return Array.isArray(fields) ? (fields as Record<string, unknown>[]) : [];
+});
+
+const hasSliceSelector = computed(() =>
+    compiledFormFields.value.some((field) => field.type === 'slice_selector'),
+);
+
+const isSliceSelectionOnly = computed(
+    () =>
+        compiledFormFields.value.length === 1 &&
+        hasSliceSelector.value,
+);
+
+const isSecretGateOnly = computed(
+    () =>
+        compiledFormFields.value.length === 1 &&
+        compiledFormFields.value[0]?.key === 'secret' &&
+        compiledFormFields.value[0]?.type === 'password',
+);
+
+const compiledFormTitle = computed(() =>
+    isSliceSelectionOnly.value
+        ? 'Choose Slices'
+        : isSecretGateOnly.value
+          ? 'Pay Code Passcode'
+          : 'Claim Information',
+);
+
+const compiledFormDescription = computed(() =>
+    isSliceSelectionOnly.value
+        ? 'Choose which slices to redeem. Payout details are collected in the next step.'
+        : isSecretGateOnly.value
+          ? "Enter the passcode shared by the issuer. We'll check it before asking for payout details."
+        : 'Complete the required claim details to continue.',
+);
+
+function submitClaim(): void {
+    if (compiledForm.normalizedFlow.value) {
+        compiledForm.submit();
+
+        return;
+    }
+
+    submit();
+}
+
+async function fetchClaimExperience(voucherCode: string): Promise<void> {
+    if (voucherCode.length < 4) {
+        reactiveClaimExperience.value = null;
+
+        return;
+    }
+
+    if (
+        voucherCode === normalizedInitialCode.value &&
+        props.claimExperience &&
+        reactiveClaimExperience.value === props.claimExperience
+    ) {
+        return;
+    }
+
+    claimExperienceAbortController?.abort();
+    claimExperienceAbortController = new AbortController();
+    claimExperienceLoading.value = true;
+    claimExperienceError.value = null;
+
+    try {
+        const response = await fetch(routes.claim.experience(voucherCode), {
+            signal: claimExperienceAbortController.signal,
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+        const data = await response.json();
+
+        if (!response.ok || data.success === false) {
+            reactiveClaimExperience.value = null;
+            claimExperienceError.value =
+                data.message || 'Unable to prepare claim options.';
+
+            return;
+        }
+
+        reactiveClaimExperience.value = data.claim_experience ?? null;
+    } catch (error: any) {
+        if (error?.name === 'AbortError') {
+            return;
+        }
+
+        reactiveClaimExperience.value = null;
+        claimExperienceError.value = 'Unable to prepare claim options.';
+    } finally {
+        claimExperienceLoading.value = false;
+    }
+}
+
+async function fetchXRay(voucherCode: string): Promise<void> {
+    if (voucherCode.length < 4) {
+        xrayResult.value = null;
+
+        return;
+    }
+
+    xrayAbortController?.abort();
+    xrayAbortController = new AbortController();
+    xrayLoading.value = true;
+    xrayError.value = null;
+
+    try {
+        const response = await fetch(routes.api.inspectPayCodeXRay, {
+            method: 'POST',
+            signal: xrayAbortController.signal,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({
+                code: voucherCode,
+                channel: 'claim',
+            }),
+        });
+        const data = await response.json();
+
+        if (!response.ok || data.success === false) {
+            xrayResult.value = null;
+            xrayError.value =
+                data.message || 'Unable to inspect this Pay Code.';
+
+            return;
+        }
+
+        xrayResult.value = data.data?.xray ?? data.data ?? data;
+    } catch (error: any) {
+        if (error?.name === 'AbortError') {
+            return;
+        }
+
+        xrayResult.value = null;
+        xrayError.value = 'Unable to inspect this Pay Code.';
+    } finally {
+        xrayLoading.value = false;
+    }
+}
+
+watch(
+    () => props.claimExperience,
+    (next) => {
+        reactiveClaimExperience.value = next ?? null;
+    },
+);
+
+watch(
+    () => normalizedCode.value,
+    (next, previous) => {
+        if (next === previous) {
+            return;
+        }
+
+        claimExperienceAbortController?.abort();
+        xrayAbortController?.abort();
+        claimExperienceLoading.value = false;
+        claimExperienceError.value = null;
+        xrayLoading.value = false;
+        xrayError.value = null;
+
+        if (next !== normalizedInitialCode.value) {
+            reactiveClaimExperience.value = null;
+            xrayResult.value = null;
+        }
+    },
+);
+
+watch(
+    () => voucherData.value,
+    (voucher) => {
+        const voucherCode = String(voucher?.code ?? normalizedCode.value)
+            .trim()
+            .toUpperCase();
+
+        if (!voucher || voucherCode.length < 4) {
+            xrayResult.value = null;
+
+            return;
+        }
+
+        canonicalizeResolvedClaimCode(voucherCode);
+
+        if (canonicalizingCode.value === voucherCode) {
+            reactiveClaimExperience.value = null;
+            xrayResult.value = null;
+
+            return;
+        }
+
+        if (voucher.status === 'redeemed' || voucher.status === 'expired') {
+            reactiveClaimExperience.value = null;
+            void fetchXRay(voucherCode);
+
+            return;
+        }
+
+        void fetchClaimExperience(voucherCode);
+        void fetchXRay(voucherCode);
+    },
+    { immediate: true },
+);
+</script>
+
+<template>
+    <div class="flex flex-col gap-6">
+        <!-- Viewer-aware claim surface: issuer console takes over entirely
+             once the backend has resolved the visitor as the issuer of an
+             already-claimed Pay Code. -->
+        <ClaimSurfaceRenderer
+            v-if="showIssuerConsole"
+            :surface="activeClaimSurface"
+            data-testid="claim-widget-surface-region"
+        />
+
+        <!-- Title -->
+        <div
+            v-if="!previewViewModel.isNonActive && !surfaceTakesOver"
+            class="space-y-2 text-center"
+        >
+            <h1 class="text-xl font-medium">Claim Pay Code</h1>
+        </div>
+
+        <!-- Form -->
+        <form
+            v-if="!previewViewModel.isNonActive && !surfaceTakesOver"
+            @submit.prevent="submitClaim"
+            class="space-y-6"
+        >
+            <div class="flex flex-col gap-2">
+                <Label for="code">Pay Code</Label>
+                <Input
+                    id="code"
+                    v-model="code"
+                    placeholder="Enter pay code"
+                    required
+                    autofocus
+                    ref="voucherInput"
+                    class="text-center text-lg tracking-wider"
+                />
+                <InputError :message="errors.code" class="mt-1" />
+            </div>
+
+            <Button
+                ref="submitButton"
+                type="submit"
+                class="fixed inset-x-0 z-30 mx-auto h-11 w-[calc(100%-2.5rem)] max-w-md rounded-full shadow-lg shadow-foreground/10"
+                style="bottom: max(0.2in, calc(env(safe-area-inset-bottom) + 1rem))"
+                data-testid="claim-widget-submit-button"
+                :disabled="submitViewModel.disabled"
+            >
+                {{ submitViewModel.label }}
+            </Button>
+
+            <div class="h-24 shrink-0" aria-hidden="true" />
+
+            <p
+                v-if="claimExperienceLoading"
+                data-testid="claim-experience-loading"
+                class="text-center text-sm text-muted-foreground"
+            >
+                Preparing claim options...
+            </p>
+
+            <InputError
+                v-if="claimExperienceError"
+                :message="claimExperienceError"
+                data-testid="claim-experience-error"
+            />
+        </form>
+
+        <XRayClaimPreview
+            v-if="
+                !surfaceTakesOver && (resolvedXRay || xrayLoading || xrayError)
+            "
+            :result="resolvedXRay"
+            :loading="xrayLoading && !resolvedXRay"
+            :error="xrayError"
+            :hide-slice-plan="hasSliceSelector"
+            data-testid="claim-widget-server-xray"
+        />
+
+        <ClaimSurfaceRenderer
+            v-if="showSurfaceOutcome"
+            :surface="activeClaimSurface"
+            data-testid="claim-widget-surface-region"
+        />
+
+        <!-- Voucher Preview -->
+        <div
+            v-if="showPreview && !surfaceTakesOver && !isCanonicalizingResolvedCode"
+            :class="previewViewModel.isNonActive ? '' : 'mt-6'"
+        >
+            <!-- Loading State -->
+            <div
+                v-if="previewMode === 'loading'"
+                class="flex items-center justify-center gap-2 py-8 text-muted-foreground"
+            >
+                <Spinner class="h-5 w-5" />
+                <span>Checking voucher...</span>
+            </div>
+
+            <!-- Error State -->
+            <Alert v-else-if="previewMode === 'error'" variant="destructive">
+                <AlertCircle class="h-4 w-4" />
+                <AlertDescription>
+                    {{ error }}
+                </AlertDescription>
+            </Alert>
+
+            <!-- Preview disabled notice -->
+            <Alert v-else-if="previewMode === 'preview-disabled'">
+                <AlertDescription>
+                    {{
+                        voucherData.preview.message ||
+                        'Preview disabled by issuer.'
+                    }}
+                </AlertDescription>
+            </Alert>
+
+            <!-- Non-Active State: Stamp + Rider Content -->
+            <div v-else-if="previewMode === 'non-active'" class="space-y-2.5">
+                <VoucherStatusStamp
+                    :status="voucherData.status as 'redeemed' | 'expired'"
+                    :status-date="previewViewModel.statusDate"
+                    :voucher-code="voucherData.code"
+                    :formatted-amount="
+                        voucherData.instructions?.formatted_amount
+                    "
+                />
+
+                <!-- Rider Content (only for returning redeemers) -->
+                <template v-if="isReturningRedeemer">
+                    <!-- Rider Message -->
+                    <Card v-if="voucherData.instructions?.rider?.message">
+                        <CardContent class="pt-3 pb-3">
+                            <p
+                                class="text-sm leading-relaxed font-medium text-foreground"
+                            >
+                                {{ voucherData.instructions.rider.message }}
+                            </p>
+                        </CardContent>
+                    </Card>
+                </template>
+            </div>
+
+            <!-- Active State: Tabbed preview -->
+            <div v-else-if="previewMode === 'active'">
+                <!-- Rider pre-claim content from compiled/legacy rider intro -->
+                <Card
+                    v-if="previewViewModel.hasPreClaimContent"
+                    data-testid="pre-claim-rider-region"
+                    class="mb-4 border-primary/10 bg-primary/5"
+                >
+                    <CardContent class="pt-4 pb-4">
+                        <RiderRuntimeSequencer :stages="preClaimVisualStages" />
+                    </CardContent>
+                </Card>
+
+                <!-- Preview Message (if provided by issuer) -->
+                <Alert
+                    v-if="voucherData.preview && voucherData.preview.message"
+                    class="mb-4"
+                    variant="default"
+                >
+                    <AlertDescription>
+                        <strong class="font-semibold">Note from issuer:</strong>
+                        {{ voucherData.preview.message }}
+                    </AlertDescription>
+                </Alert>
+            </div>
+        </div>
+
+        <!-- Runtime Sequencer -->
+        <div
+            v-if="runtimeStages.length > 0 && !surfaceTakesOver && !isCanonicalizingResolvedCode"
+            data-testid="claim-widget-runtime-region"
+        >
+            <RiderRuntimeSequencer :stages="contextualRuntimeStages" />
+        </div>
+
+        <div
+            v-if="redirectStages.length > 0 && !surfaceTakesOver && !isCanonicalizingResolvedCode"
+            data-testid="claim-widget-redirect-region"
+        >
+            <RiderRuntimeSequencer :stages="contextualRedirectStages" />
+        </div>
+
+        <div
+            v-if="formFlowSection.visible && !surfaceTakesOver && !isCanonicalizingResolvedCode"
+            data-testid="claim-widget-form-flow-boundary-region"
+            :class="formFlowSection.className"
+        >
+            <Card
+                v-if="formFlowSection.compiledVisible"
+                data-testid="compiled-form-flow-visible-region"
+                class="border-primary/10 bg-background"
+            >
+                <CardContent class="space-y-4 pt-4 pb-4">
+                    <div class="space-y-1 text-center">
+                        <h2 class="text-base font-medium">
+                            {{ compiledFormTitle }}
+                        </h2>
+                        <p class="text-sm text-muted-foreground">
+                            {{ compiledFormDescription }}
+                        </p>
+                    </div>
+
+                    <FormFlowRenderer
+                        :form-flow="compiledForm.normalizedFlow.value"
+                        @update:values="compiledForm.updateValues"
+                    />
+                </CardContent>
+            </Card>
+
+            <div
+                v-if="compiledFormSubmitError"
+                data-testid="claim-widget-submit-error"
+            >
+                {{ compiledFormSubmitError }}
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,354 @@
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import RiderRenderer from './RiderRenderer.vue';
+import type { RawRiderStage, RiderRuntimeAction } from './types';
+import { useRiderRuntimeActions } from './useRiderRuntimeActions';
+
+const props = defineProps({
+  stage: {
+    type: Object as () => RawRiderStage,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['dismissed']);
+
+const dismissed = ref(false);
+
+const imageFailed = ref(false);
+
+function handleImageError(): void {
+  imageFailed.value = true;
+}
+
+const presentation = computed(() =>
+    String(
+        props.stage.payload?.presentation
+        ?? props.stage.presentation
+        ?? 'inline'
+    ).trim().toLowerCase()
+);
+
+const isModal = computed(() => presentation.value === 'modal');
+const isFullscreen = computed(() => presentation.value === 'fullscreen');
+const isBlockingPresentation = computed(() => isModal.value || isFullscreen.value);
+
+const dialogLabel = computed(() =>
+    String(
+        props.stage.payload?.aria_label
+        ?? props.stage.payload?.label
+        ?? props.stage.key
+        ?? 'Rider experience'
+    )
+);
+
+const label = computed(() =>
+    String(props.stage.payload?.label ?? props.stage.label ?? 'Continue')
+);
+
+const url = computed(() =>
+    String(props.stage.payload?.url ?? props.stage.url ?? props.stage.src ?? '')
+);
+
+const imageSrc = computed(() =>
+    String(props.stage.src ?? props.stage.payload?.src ?? '')
+);
+
+const imageAlt = computed(() =>
+    String(props.stage.alt ?? props.stage.payload?.alt ?? 'Rider image')
+);
+
+const stageContent = computed(() => ({
+  enabled: props.stage.enabled !== false,
+  type: String(
+      props.stage.content_type
+      ?? props.stage.payload?.content_type
+      ?? 'markdown'
+  ),
+  content: String(
+      props.stage.content
+      ?? props.stage.payload?.content
+      ?? ''
+  ),
+  meta: {
+    ...(props.stage.payload?.meta ?? {}),
+    ...(props.stage.meta ?? {}),
+  },
+}));
+
+const hasStageContent = computed(() =>
+    Boolean(stageContent.value.content)
+);
+
+const contextCode = computed(() =>
+    String(props.stage.payload?.context_code ?? '').trim()
+);
+
+const contextLabel = computed(() =>
+    String(props.stage.payload?.context_label ?? '').trim()
+);
+
+const contextCaption = computed(() =>
+    String(props.stage.payload?.context_caption ?? '').trim()
+);
+
+const contextCodeDisplayStyle = computed(() => {
+    const length = contextCode.value.length;
+    let fontSize = '4.5rem';
+
+    if (length > 4 && length <= 6) {
+        fontSize = '3.75rem';
+    }
+
+    if (length > 6 && length <= 10) {
+        fontSize = '3rem';
+    }
+
+    if (length > 10 && length <= 16) {
+        fontSize = '2.25rem';
+    }
+
+    if (length > 16) {
+        fontSize = '1.875rem';
+    }
+
+    return {
+        fontSize,
+        letterSpacing: '0.08em',
+    };
+});
+
+const remainingSeconds = ref(0);
+let countdownTimer: number | null = null;
+
+const redirectTimeout = computed(() =>
+    Number(props.stage.payload?.timeout ?? props.stage.timeout ?? 0)
+);
+
+const isRedirect = computed(() =>
+    props.stage.type === 'redirect'
+);
+
+const runtime = useRiderRuntimeActions({
+  userGesture: true,
+  onError: (error: unknown, action: RiderRuntimeAction) => {
+    console.warn('[x-rider] click action failed', action, error);
+  },
+});
+
+const clickActions = computed(() =>
+    runtime.actionsForTiming(props.stage.actions, 'on_click')
+);
+
+const hasClickActions = computed(() =>
+    clickActions.value.length > 0
+);
+
+async function handleClickAction(event: Event): Promise<void> {
+  if (!hasClickActions.value) {
+    return;
+  }
+
+  event.preventDefault();
+
+  await runtime.executeMany(clickActions.value);
+}
+
+function dismiss(): void {
+  dismissed.value = true;
+  emit('dismissed');
+}
+
+onMounted(() => {
+  if (props.stage.type !== 'redirect') {
+    return;
+  }
+
+  remainingSeconds.value = redirectTimeout.value;
+
+  if (remainingSeconds.value <= 0) {
+    return;
+  }
+
+  countdownTimer = window.setInterval(() => {
+    remainingSeconds.value -= 1;
+
+    if (remainingSeconds.value <= 0 && countdownTimer !== null) {
+      window.clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+  }, 1000);
+});
+
+onUnmounted(() => {
+  if (countdownTimer !== null) {
+    window.clearInterval(countdownTimer);
+    countdownTimer = null;
+  }
+});
+
+const copyActions = computed(() =>
+    runtime.actionsForTiming(props.stage.actions, 'on_click')
+        .filter((action) => action.type === 'copy_to_clipboard')
+);
+
+const hasCopyActions = computed(() =>
+    copyActions.value.length > 0
+);
+
+const copyLabel = computed(() =>
+    String(copyActions.value[0]?.payload?.label ?? 'Copy')
+);
+
+async function handleCopyAction(): Promise<void> {
+  if (!hasCopyActions.value) {
+    return;
+  }
+
+  await runtime.executeMany(copyActions.value);
+}
+</script>
+
+<template>
+  <template v-if="!dismissed">
+    <div
+        :role="isBlockingPresentation ? 'dialog' : undefined"
+        :aria-modal="isBlockingPresentation ? 'true' : undefined"
+        :aria-label="isBlockingPresentation ? dialogLabel : undefined"
+        :class="{
+            'fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4': isModal,
+            'fixed inset-0 z-50 flex items-center justify-center bg-background px-6': isFullscreen,
+        }"
+    >
+      <div
+          :class="{
+              'w-full max-w-md rounded-2xl bg-background p-5 shadow-xl': isModal,
+              'mx-auto w-full max-w-3xl space-y-7 text-center': isFullscreen,
+              'space-y-3': !isModal && !isFullscreen,
+          }"
+      >
+        <div
+            v-if="contextCode"
+            data-testid="rider-stage-context-code"
+            class="mx-auto w-full space-y-3 text-center"
+        >
+          <p
+              v-if="contextLabel"
+              class="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-foreground/80"
+          >
+            {{ contextLabel }}
+          </p>
+
+          <div class="flex w-full items-center gap-3 sm:gap-4">
+            <span class="h-0.5 min-w-4 flex-1 rounded-full bg-foreground/80" />
+            <span
+                :style="contextCodeDisplayStyle"
+                class="min-w-0 max-w-full break-all font-mono font-black uppercase leading-none text-foreground"
+            >
+              {{ contextCode }}
+            </span>
+            <span class="h-0.5 min-w-4 flex-1 rounded-full bg-foreground/80" />
+          </div>
+
+          <p
+              v-if="contextCaption"
+              class="text-xs font-medium leading-relaxed text-foreground/75"
+          >
+            {{ contextCaption }}
+          </p>
+        </div>
+
+        <RiderRenderer
+            v-if="hasStageContent && !isRedirect"
+            :content="stageContent"
+        />
+
+        <button
+            v-else-if="hasCopyActions"
+            type="button"
+            class="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            :aria-label="copyLabel"
+            @click="handleCopyAction"
+        >
+          {{ copyLabel }}
+        </button>
+
+        <img
+            v-else-if="stage.type === 'image' && imageSrc && !imageFailed"
+            :src="imageSrc"
+            :alt="imageAlt"
+            class="w-full rounded-xl object-cover"
+            @error="handleImageError"
+        />
+
+        <div
+            v-else-if="stage.type === 'image' && imageFailed"
+            data-test="image-fallback"
+            role="img"
+            :aria-label="imageAlt"
+            class="rounded-xl border border-dashed bg-muted/40 p-6 text-center text-sm text-muted-foreground"
+        >
+          Unable to load image.
+        </div>
+
+        <a
+            v-else-if="stage.type === 'link' && url"
+            :href="url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex text-sm font-medium text-primary underline"
+            @click="handleClickAction"
+        >
+          {{ label }}
+        </a>
+
+        <a
+            v-else-if="stage.type === 'cta' && url"
+            :href="url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            @click="handleClickAction"
+        >
+          {{ label }}
+        </a>
+
+        <div
+            v-if="isRedirect"
+            class="rounded-2xl border bg-card p-5 text-center shadow-sm"
+        >
+          <RiderRenderer
+              v-if="hasStageContent"
+              :content="stageContent"
+          />
+
+          <p
+              v-else
+              class="text-sm font-medium text-foreground"
+          >
+            Redirecting you now...
+          </p>
+
+          <p
+              v-if="redirectTimeout > 0"
+              class="mt-1 text-xs text-muted-foreground"
+              aria-live="polite"
+          >
+            Redirecting in {{ Math.max(remainingSeconds, 0) }} seconds.
+          </p>
+        </div>
+
+        <button
+            v-if="isModal || isFullscreen"
+            type="button"
+            data-test="dismiss"
+            class="w-full rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+            aria-label="Continue"
+            @click="dismiss"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  </template>
+</template>

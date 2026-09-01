@@ -1,0 +1,124 @@
+name: demo
+version: 1.0.0
+
+rider:
+  stages:
+    - type: splash
+      key: demo-pre-claim
+      phase: pre_claim
+      presentation: inline
+      content: |
+        PRE-CLAIM DEMO: Please review this before continuing.
+      content_type: markdown
+      timeout: 3
+
+    - type: image
+      key: demo-image
+      phase: pre_claim
+      presentation: inline
+      payload:
+        src: https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&auto=format&fit=crop&q=80
+        alt: Demo rider image
+
+    - type: link
+      key: demo-link
+      phase: pre_claim
+      payload:
+        label: Learn more
+        url: https://example.com
+
+    - type: cta
+      key: demo-cta
+      phase: pre_claim
+      presentation: inline
+      payload:
+        label: Open Reward
+        url: https://example.com/reward
+      actions:
+        - key: demo-cta-open
+          type: open_url
+          timing: on_click
+          requires_user_gesture: true
+          payload:
+            url: https://example.com/reward
+            target: _blank
+
+    - type: splash
+      key: demo-modal
+      phase: pre_claim
+      presentation: modal
+      content: |
+        MODAL DEMO: This appears as a dismissible Rider modal.
+      content_type: markdown
+      timeout: 3
+
+    - type: splash
+      key: demo-fullscreen
+      phase: pre_claim
+      presentation: fullscreen
+      meta:
+        trusted_html: true
+      content_type: html
+      content: |
+        <div class="text-center">
+          <img
+            src="https://cataas.com/cat?width=600&height=400"
+            alt="Cat"
+            class="mx-auto rounded-lg shadow-lg mb-4"
+            style="max-width: 500px;"
+          />
+
+          <h2 class="text-2xl font-bold mb-2">
+            Für Anaïs
+          </h2>
+
+          <p class="text-lg">
+            Dans une autre vie, sinon dans celle-ci,
+            <span class="font-mono font-bold text-red-500">
+              cushla machree
+            </span>
+
+            <span class="font-mono">
+              -
+            </span>
+
+            <span class="font-mono font-bold text-green-600">
+              :wq!
+            </span>
+          </p>
+        </div>
+
+    - type: message
+      key: demo-success-message
+      phase: success
+      content: |
+        SUCCESS DEMO: Thank you for claiming.
+      content_type: markdown
+
+    - type: redirect
+      key: demo-redirect
+      phase: redirect
+      payload:
+        url: https://example.com/success
+        timeout: 8
+        external: true
+
+  success:
+    enabled: true
+    type: markdown
+    content: |
+      Demo claim received.
+
+  pending:
+    enabled: true
+    type: markdown
+    content: |
+      Demo claim is being processed.
+
+  redirect:
+    enabled: false
+    timeout: 5
+    fallback_url: /x/claim
+
+  analytics:
+    enabled: true
