@@ -1,16 +1,19 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/vue-starter-kit",
+    "name": "3neti/x-payout",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A thin Laravel 13 host for x-PayOut powered by 3neti/x-change.",
     "keywords": [
-        "laravel",
-        "framework"
+        "x-payout",
+        "x-change",
+        "payroll",
+        "payouts",
+        "laravel"
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.3",
-        "3neti/x-change": "v1.0.0-beta.305",
+        "php": "^8.4",
+        "3neti/x-change": "v1.0.0-beta.306",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/chisel": "^0.1.0",
         "laravel/fortify": "^1.37.2",
@@ -46,12 +49,7 @@
     },
     "scripts": {
         "setup": [
-            "composer install",
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php artisan key:generate",
-            "@php artisan migrate --force",
-            "npm install",
-            "npm run build"
+            "@x-payout:bootstrap"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
@@ -90,12 +88,28 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@x-payout:bootstrap"
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "x-payout:bootstrap": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan key:generate --ansi --force",
+            "@php artisan migrate --graceful --ansi",
+            "@php artisan x-change:install --force --no-interaction",
+            "npm install",
+            "npm run build",
+            "@x-payout:doctor"
+        ],
+        "x-payout:doctor": [
+            "@php artisan about --only=environment",
+            "@php artisan route:list --path=x --compact"
+        ],
+        "x-payout:verify": [
+            "composer validate",
+            "@php artisan test --compact"
         ]
     },
     "extra": {
