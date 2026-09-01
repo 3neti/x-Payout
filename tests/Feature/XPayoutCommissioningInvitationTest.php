@@ -29,5 +29,11 @@ it('mints maker and checker onboarding invitation pay codes idempotently', funct
         ->and($roles->all())->toBe(['checker', 'maker'])
         ->and($vouchers->every(fn (Voucher $voucher): bool => $voucher->redeemed_at === null))->toBeTrue()
         ->and($vouchers->every(fn (Voucher $voucher): bool => data_get($voucher->metadata, 'instructions.onboarding') === true))->toBeTrue()
+        ->and($vouchers->every(fn (Voucher $voucher): bool => data_get($voucher->metadata, 'instructions.metadata.flow_type') === 'disbursable'))->toBeTrue()
         ->and($vouchers->every(fn (Voucher $voucher): bool => data_get($voucher->metadata, 'instructions.execution.driver') === 'onboarding_account_provisioning'))->toBeTrue();
+
+    $vouchers->each(function (Voucher $voucher): void {
+        $this->get(route('x-change.claim.show', ['code' => $voucher->code]))
+            ->assertSuccessful();
+    });
 });

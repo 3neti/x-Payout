@@ -115,7 +115,7 @@ class CommissionXPayout extends Command
                 'profile' => 'voucher.claim.v1',
             ],
             'metadata' => [
-                'flow_type' => 'commissioning_invitation',
+                'flow_type' => 'disbursable',
                 'issuer_id' => (string) $issuer->getKey(),
                 'custom' => [
                     'x_payout_commissioning' => [
