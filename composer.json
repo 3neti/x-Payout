@@ -98,7 +98,7 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan key:generate --ansi --force",
             "@php artisan migrate --graceful --ansi",
-            "@php artisan x-change:install --force --no-interaction",
+            "@php artisan x-change:install --force --no-interaction --provision-system-principal --confirm-system-principal --system-principal-name=\"x-PayOut System\"",
             "npm install",
             "npm run build",
             "@x-payout:doctor"
