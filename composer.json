@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.4",
         "3neti/form-flow": "v1.9.25",
-        "3neti/x-change": "v1.0.0-beta.320",
+        "3neti/x-change": "v1.0.0-beta.321",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/chisel": "^0.1.0",
         "laravel/fortify": "^1.37.2",
@@ -88,22 +88,11 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "post-create-project-cmd": [
-            "@x-payout:bootstrap"
-        ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
         ],
         "x-payout:bootstrap": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan key:generate --ansi --force",
-            "@php artisan migrate --graceful --ansi",
-            "@php artisan x-change:install --force --no-interaction --provision-system-principal --confirm-system-principal --system-principal-name=\"x-PayOut System\"",
-            "@php artisan x-payout:commission",
-            "npm install",
-            "npm run build",
-            "@x-payout:doctor"
+            "@php artisan x-payout:bootstrap"
         ],
         "x-payout:doctor": [
             "@php artisan about --only=environment",
