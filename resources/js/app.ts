@@ -7,11 +7,23 @@ import { initializeFlashToast } from '@/lib/flashToast';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+function isPublicPackagePage(name: string): boolean {
+    return [
+        'x-change/claim/',
+        'x-change/provisioning/',
+        'x-change/onboarding/',
+        'form-flow/',
+        'x-rider/',
+    ].some((prefix) => name.startsWith(prefix));
+}
+
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
             case name === 'Welcome':
+                return null;
+            case isPublicPackagePage(name):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
