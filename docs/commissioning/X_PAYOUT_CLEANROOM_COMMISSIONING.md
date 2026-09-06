@@ -126,6 +126,14 @@ The bootstrap performs the following controlled gates:
 
 The install gate performs a live Treasury provider preflight. If DNS or outbound network access is blocked, the bootstrap fails before the instance is treated as commissioned.
 
+In non-interactive environments, such as Laravel Cloud or CI, the bootstrap force-runs the migration step with Laravel's official production safeguard:
+
+```text
+php artisan migrate --graceful --ansi --force
+```
+
+Interactive local runs keep the normal migration behavior unless the operator explicitly passes `--force`.
+
 ## Expected output
 
 A successful commissioning run prints an invitation table similar to:
@@ -186,7 +194,7 @@ In local sandboxed environments, the same command may need explicit network perm
 
 ### Funding aliases are missing after bootstrap
 
-Confirm the installed `3neti/x-change` version includes manifest `same_as` support and prepared environment propagation. The `^1.0@beta` line should select a compatible release that contains those bootstrap fixes.
+Confirm the installed `3neti/x-change` version includes manifest `same_as` support, prepared environment propagation, and forceful non-interactive bootstrap migrations. The `^1.0@beta` line should select a compatible release that contains those bootstrap fixes.
 
 ### The app key is duplicated or quoted incorrectly
 
@@ -198,24 +206,48 @@ That is a public onboarding polish defect. The intended behavior is a public inv
 
 ## Laravel Cloud deployment notes
 
-Cloud deployment should follow the same commissioning principle:
+Cloud deployment should follow the same commissioning principle, but the happy path should remain a single commissioning command after the Cloud environment is complete.
 
 1. create the Laravel Cloud app;
 2. set the required NetBank environment variables in the Cloud environment;
-3. deploy the published x-PayOut project;
-4. run the same strict X-Change doctor gates;
-5. mint or confirm Maker and Checker onboarding Pay Codes;
-6. claim both invitations;
-7. verify the Cockpit loads for onboarded users.
+3. set `APP_NAME`, `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, and `SESSION_SECURE_COOKIE=true`;
+4. deploy the published x-PayOut project;
+5. run the no-stopping bootstrap:
+
+```bash
+composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --force --no-interaction
+```
+
+The command prepares the environment, runs strict doctor gates, migrates with `--force`, installs X-Change, provisions the system principal, and mints or confirms the Maker and Checker onboarding Pay Codes.
+
+After bootstrap:
+
+1. run `php artisan x-change:doctor --strict`;
+2. record the Maker and Checker onboarding Pay Codes;
+3. claim both invitations through the public onboarding flow;
+4. verify the Cockpit loads for onboarded users.
 
 Do not treat a cloud deployment as ready until NetBank readiness and the final strict doctor pass.
 
+### Fallback for older bootstrap releases
+
+If the installed `3neti/x-change` release does not support forceful non-interactive bootstrap migrations, use the split sequence below instead of weakening production settings:
+
+```bash
+php artisan migrate --force
+php artisan x-change:install --force --profile=netbank --no-migrate --provision-system-principal --system-principal-name="x-PayOut System" --confirm-system-principal --no-interaction
+php artisan x-payout:commission --manifest=commissioning/default.yaml --json --no-interaction
+php artisan x-change:doctor --strict
+```
+
+Never set `APP_ENV=local` in Cloud to bypass production migration prompts.
+
 ## Last verified cleanroom baseline
 
-This guide is written for the `^1.0@beta` x-PayOut line. The latest verified local cleanroom path used:
+This guide is written for the `^1.0@beta` x-PayOut line. The latest verified commissioning path used:
 
-- `3neti/x-payout v1.0.0-beta.21`;
-- `3neti/x-change v1.0.0-beta.329`;
+- `3neti/x-payout v1.0.0-beta.23`;
+- `3neti/x-change v1.0.0-beta.330`;
 - `3neti/form-flow v1.9.25`;
 - manifest: `commissioning/default.yaml`;
 - NetBank profile: `netbank`;
