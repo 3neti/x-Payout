@@ -53,7 +53,7 @@ If you are testing a specific package version, replace `^1.0@beta` with the vers
 After installation, check the actual package versions Composer selected:
 
 ```bash
-composer show 3neti/x-payout
+composer show --self
 composer show 3neti/x-change
 composer show 3neti/form-flow
 ```
@@ -248,11 +248,11 @@ Never set `APP_ENV=local` in Cloud to bypass production migration prompts.
 
 This guide is written for the `^1.0@beta` x-PayOut line. The latest verified commissioning path used:
 
-- `3neti/x-payout v1.0.0-beta.23`;
+- `3neti/x-payout v1.0.0-beta.25`;
 - `3neti/x-change v1.0.0-beta.330`;
 - `3neti/form-flow v1.9.25`;
 - manifest: `commissioning/default.yaml`;
 - NetBank profile: `netbank`;
 - strict doctor: 30 checks, 0 failed checks.
 
-The baseline records what was last proven. It is not meant to freeze new installations forever. Use `composer show 3neti/x-payout`, `composer show 3neti/x-change`, and `composer show 3neti/form-flow` after installation to see what Composer actually installed.
+The baseline records what was last proven. It is not meant to freeze new installations forever. Use `composer show --self`, `composer show 3neti/x-change`, and `composer show 3neti/form-flow` after installation to see what Composer actually installed.
