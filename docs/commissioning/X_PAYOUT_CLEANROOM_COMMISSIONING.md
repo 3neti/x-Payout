@@ -35,7 +35,7 @@ The web app should not be considered usable without NetBank credentials. The str
 Use the current published beta line:
 
 ```bash
-composer create-project 3neti/x-payout my-payout-app "^1.0@beta" --stability=beta --prefer-stable --no-interaction \
+composer create-project 3neti/x-payout my-payout-app "^1.0@beta" --stability=beta --no-interaction \
   && cd my-payout-app \
   && composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --no-interaction
 ```
@@ -43,7 +43,7 @@ composer create-project 3neti/x-payout my-payout-app "^1.0@beta" --stability=bet
 For local verification without building frontend assets during the first pass, add `--skip-build`:
 
 ```bash
-composer create-project 3neti/x-payout my-payout-app "^1.0@beta" --stability=beta --prefer-stable --no-interaction \
+composer create-project 3neti/x-payout my-payout-app "^1.0@beta" --stability=beta --no-interaction \
   && cd my-payout-app \
   && composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction
 ```
@@ -53,7 +53,9 @@ If you are testing a specific package version, replace `^1.0@beta` with the vers
 After installation, check the actual package versions Composer selected:
 
 ```bash
-composer show 3neti/x-payout 3neti/x-change 3neti/form-flow
+composer show 3neti/x-payout
+composer show 3neti/x-change
+composer show 3neti/form-flow
 ```
 
 ## Manifest
@@ -253,4 +255,4 @@ This guide is written for the `^1.0@beta` x-PayOut line. The latest verified com
 - NetBank profile: `netbank`;
 - strict doctor: 30 checks, 0 failed checks.
 
-The baseline records what was last proven. It is not meant to freeze new installations forever. Use `composer show 3neti/x-payout 3neti/x-change 3neti/form-flow` after installation to see what Composer actually installed.
+The baseline records what was last proven. It is not meant to freeze new installations forever. Use `composer show 3neti/x-payout`, `composer show 3neti/x-change`, and `composer show 3neti/form-flow` after installation to see what Composer actually installed.
