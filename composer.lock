@@ -1509,16 +1509,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.0-beta.333",
+            "version": "v1.0.0-beta.334",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "3d9330298f923bb4de27d4ea536d3b716a01c233"
+                "reference": "94cdccdc7d93ddad9df86216fb11a43d844601c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/3d9330298f923bb4de27d4ea536d3b716a01c233",
-                "reference": "3d9330298f923bb4de27d4ea536d3b716a01c233",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/94cdccdc7d93ddad9df86216fb11a43d844601c9",
+                "reference": "94cdccdc7d93ddad9df86216fb11a43d844601c9",
                 "shasum": ""
             },
             "require": {
@@ -1607,9 +1607,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.0-beta.333"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.0-beta.334"
             },
-            "time": "2026-09-06T06:41:00+00:00"
+            "time": "2026-09-06T10:13:02+00:00"
         },
         {
             "name": "3neti/x-commerce",
