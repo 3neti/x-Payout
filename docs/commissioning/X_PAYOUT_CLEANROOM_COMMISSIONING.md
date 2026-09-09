@@ -119,11 +119,15 @@ The bootstrap performs the following controlled gates:
 2. clear configuration;
 3. run the strict pre-install doctor;
 4. run migrations;
-5. install X-Change with the NetBank profile;
-6. provision the system principal;
-7. mint the Maker and Checker onboarding Pay Codes;
-8. run the strict final doctor;
-9. print the environment summary and X-Change routes.
+5. run the strict pre-commission doctor;
+6. install frontend build dependencies and build the production assets;
+7. install X-Change with the NetBank profile;
+8. provision the system principal;
+9. mint the Maker and Checker onboarding Pay Codes;
+10. run the strict final doctor;
+11. print the environment summary and X-Change routes.
+
+The build gate runs before any financial or invitation mutation. If Vite, Vite Plus, npm, or another frontend build dependency is unavailable, the bootstrap stops before Maker or Checker Pay Codes are minted.
 
 The install gate performs a live Treasury provider preflight. If DNS or outbound network access is blocked, the bootstrap fails before the instance is treated as commissioned.
 
@@ -219,7 +223,7 @@ Cloud deployment should follow the same commissioning principle, but the happy p
 composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --force --no-interaction
 ```
 
-The command prepares the environment, runs strict doctor gates, migrates with `--force`, installs X-Change, provisions the system principal, and mints or confirms the Maker and Checker onboarding Pay Codes.
+The command prepares the environment, runs strict doctor gates, migrates with `--force`, builds the production assets, installs X-Change, provisions the system principal, and mints or confirms the Maker and Checker onboarding Pay Codes. The `--force` flag is accepted by x-PayOut and forwarded to the X-Change bootstrap command.
 
 After bootstrap:
 
@@ -247,8 +251,8 @@ Never set `APP_ENV=local` in Cloud to bypass production migration prompts.
 
 This guide is written for the `^1.0@beta` x-PayOut line. The latest verified commissioning path used:
 
-- `3neti/x-payout v1.0.0-beta.27`;
-- `3neti/x-change v1.0.0-beta.330`;
+- `3neti/x-payout v1.0.0-beta.33`;
+- `3neti/x-change v1.0.0-beta.346`;
 - `3neti/form-flow v1.9.25`;
 - manifest: `commissioning/default.yaml`;
 - NetBank profile: `netbank`;
