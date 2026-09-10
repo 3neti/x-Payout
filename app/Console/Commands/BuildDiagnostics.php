@@ -27,7 +27,7 @@ class BuildDiagnostics extends Command
         $this->report('XCHANGE_DEPLOYMENT_PROFILE', (string) config('x-change.deployment.profile', 'missing'));
         $this->report('3neti/x-change', $this->packageVersion('3neti/x-change'));
         $this->report('vendor/bin', is_dir(base_path('vendor/bin')) ? 'present' : 'missing');
-        $this->report('node_modules/.bin/vp', is_file(base_path('node_modules/.bin/vp')) ? 'present' : 'missing');
+        $this->report('node_modules/.bin/vite', is_file(base_path('node_modules/.bin/vite')) ? 'present' : 'missing');
 
         if ((bool) $this->option('skip-wayfinder')) {
             return self::SUCCESS;

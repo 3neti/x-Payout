@@ -18,7 +18,7 @@ it('prints safe build diagnostics without exposing secret values', function (): 
         ->expectsOutputToContain('XCHANGE_DEPLOYMENT_PROFILE: netbank')
         ->expectsOutputToContain('3neti/x-change:')
         ->expectsOutputToContain('vendor/bin:')
-        ->expectsOutputToContain('node_modules/.bin/vp:')
+        ->expectsOutputToContain('node_modules/.bin/vite:')
         ->doesntExpectOutputToContain('base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=')
         ->assertSuccessful();
 });
@@ -44,4 +44,20 @@ it('pins the cloud frontend build runtime to the supported node line', function 
     expect(data_get($package, 'engines.node'))->toBe('22.x')
         ->and(data_get($package, 'engines.npm'))->toBe('10.x')
         ->and(trim(file_get_contents(base_path('.node-version'))))->toBe('22');
+});
+
+it('uses plain Vite for the production asset build path', function (): void {
+    $package = json_decode(
+        file_get_contents(base_path('package.json')),
+        true,
+        512,
+        JSON_THROW_ON_ERROR,
+    );
+    $viteConfig = file_get_contents(base_path('vite.config.ts'));
+
+    expect(data_get($package, 'scripts.build'))->toBe('vite build')
+        ->and(data_get($package, 'scripts.build:ssr'))->toBe('vite build && vite build --ssr')
+        ->and($viteConfig)->toContain("import { defineConfig } from 'vite';")
+        ->not->toContain("import { defineConfig, lazyPlugins } from 'vite-plus';")
+        ->not->toContain('lazyPlugins(() =>');
 });

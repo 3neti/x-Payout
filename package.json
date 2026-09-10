@@ -7,8 +7,8 @@
         "npm": "10.x"
     },
     "scripts": {
-        "build": "vp build",
-        "build:ssr": "vp build && vp build --ssr",
+        "build": "vite build",
+        "build:ssr": "vite build && vite build --ssr",
         "dev": "vp dev",
         "check": "vp check",
         "check:fix": "vp check --fix",
