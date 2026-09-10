@@ -32,3 +32,16 @@ it('runs Wayfinder as the loud pre-build diagnostic gate', function (): void {
         ->toContain('-vvv')
         ->toContain('return $successful ? self::SUCCESS : self::FAILURE;');
 });
+
+it('pins the cloud frontend build runtime to the supported node line', function (): void {
+    $package = json_decode(
+        file_get_contents(base_path('package.json')),
+        true,
+        512,
+        JSON_THROW_ON_ERROR,
+    );
+
+    expect(data_get($package, 'engines.node'))->toBe('22.x')
+        ->and(data_get($package, 'engines.npm'))->toBe('10.x')
+        ->and(trim(file_get_contents(base_path('.node-version'))))->toBe('22');
+});
