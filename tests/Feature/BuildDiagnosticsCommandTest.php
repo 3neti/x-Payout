@@ -61,3 +61,19 @@ it('uses plain Vite for the production asset build path', function (): void {
         ->not->toContain("import { defineConfig, lazyPlugins } from 'vite-plus';")
         ->not->toContain('lazyPlugins(() =>');
 });
+
+it('ships a production Vite manifest for Cloud deployments', function (): void {
+    $manifestPath = base_path('public/build/manifest.json');
+
+    expect($manifestPath)->toBeFile();
+
+    $manifest = json_decode(
+        file_get_contents($manifestPath),
+        true,
+        512,
+        JSON_THROW_ON_ERROR,
+    );
+
+    expect($manifest)->toHaveKey('resources/js/app.ts')
+        ->and($manifest)->toHaveKey('resources/css/app.css');
+});

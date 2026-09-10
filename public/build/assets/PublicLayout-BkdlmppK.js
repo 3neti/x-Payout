@@ -1,0 +1,1 @@
+import{b as e,mt as t,xt as n}from"./runtime-core.esm-bundler-CaODJcyn.js";import{z as r}from"./app-DhzmrlO0.js";var i={},a={class:`min-h-svh bg-background`};function o(r,i){return t(),e(`div`,a,[n(r.$slots,`default`)])}var s=r(i,[[`render`,o]]);export{s as t};

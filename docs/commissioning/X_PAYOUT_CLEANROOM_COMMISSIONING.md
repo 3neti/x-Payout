@@ -216,23 +216,20 @@ Cloud deployment should follow the same commissioning principle, but the happy p
 1. create the Laravel Cloud app;
 2. set the required NetBank environment variables in the Cloud environment;
 3. set `APP_NAME`, `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, and `SESSION_SECURE_COOKIE=true`;
-4. deploy the published x-PayOut project with the diagnostic build command;
+4. deploy the published x-PayOut project with the packaged production assets;
 5. run the no-stopping bootstrap:
 
-Use this Cloud build command so Wayfinder or Laravel bootstrap failures are visible before Vite Plus wraps them:
+The released x-PayOut package ships `public/build/manifest.json` and production assets. Laravel Cloud should not compile frontend assets during deployment; keep the Cloud build command PHP-only so opaque Node/Vite failures cannot block financial commissioning.
 
 ```bash
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-npm ci --include=dev --audit false
-php artisan x-payout:build-diagnostics
-npm run build -- --debug
 ```
 
 ```bash
-composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --force --no-interaction
+composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction
 ```
 
-The bootstrap command prepares the environment, runs strict doctor gates, migrates with `--force`, builds the production assets, installs X-Change, provisions the system principal, and mints or confirms the Maker and Checker onboarding Pay Codes. The `--force` flag is accepted by x-PayOut and forwarded to the X-Change bootstrap command.
+The bootstrap command prepares the environment, runs strict doctor gates, migrates with `--force`, installs X-Change, provisions the system principal, and mints or confirms the Maker and Checker onboarding Pay Codes. The `--skip-build` flag is intentional in Cloud because assets are already bundled in the released host package.
 
 After bootstrap:
 
