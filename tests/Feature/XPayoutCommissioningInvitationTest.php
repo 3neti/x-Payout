@@ -8,11 +8,13 @@ it('mints maker and checker onboarding invitation pay codes idempotently', funct
     config()->set('x-change.payout.system_user_id', 'system@example.test');
     config()->set('x-change.payout.system_wallet_slug', 'platform');
 
-    $this->artisan('x-payout:commission')
+    $manifest = xPayoutZeroFundedCommissioningManifest();
+
+    $this->artisan('x-payout:commission', ['--manifest' => $manifest])
         ->expectsOutputToContain('x-PayOut commissioning invitation Pay Codes are ready.')
         ->assertSuccessful();
 
-    $this->artisan('x-payout:commission')->assertSuccessful();
+    $this->artisan('x-payout:commission', ['--manifest' => $manifest])->assertSuccessful();
 
     $vouchers = Voucher::query()->get();
     $roles = $vouchers
@@ -36,3 +38,22 @@ it('mints maker and checker onboarding invitation pay codes idempotently', funct
             ->toContain('/x/claim/'.(string) $voucher->code);
     });
 });
+
+function xPayoutZeroFundedCommissioningManifest(): string
+{
+    $path = storage_path('framework/testing/x-payout-commissioning-'.str()->uuid().'.yaml');
+
+    if (! is_dir(dirname($path))) {
+        mkdir(dirname($path), 0755, true);
+    }
+
+    file_put_contents($path, implode("\n", [
+        'extends: x-change://commissioning/manifests/x-payout.default.yaml',
+        'onboarding:',
+        '  invitation_amount: 0',
+        '  currency: PHP',
+        '',
+    ]));
+
+    return $path;
+}
