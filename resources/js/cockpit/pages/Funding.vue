@@ -18,7 +18,7 @@ import {
     Search,
     TicketCheck,
 } from 'lucide-vue-next';
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue';
 import { store as storeVerificationCheck } from '@/routes/x-change/cockpit/funding/intents/verification-checks';
 import { store as refreshFundingLiquidityRoute } from '@/routes/x-change/cockpit/funding/liquidity-refreshes';
 import { store as claimPayCodeFundingRoute } from '@/routes/x-change/cockpit/funding/pay-code-claims';
@@ -462,12 +462,6 @@ onUnmounted(() => {
 
     if (standingHistoryCooldownTimer !== null) {
         clearInterval(standingHistoryCooldownTimer);
-    }
-});
-
-onMounted(() => {
-    if (props.standing_funding_address?.available === true) {
-        void openStandingFundingAddress();
     }
 });
 
@@ -1833,7 +1827,11 @@ async function safeJson(response: Response): Promise<Record<string, unknown>> {
                                 class="size-3.5 shrink-0"
                                 aria-hidden="true"
                             />
-                            Try again
+                            {{
+                                standingAddressError === null
+                                    ? 'Show QR Ph'
+                                    : 'Try again'
+                            }}
                         </button>
                         <button
                             v-if="standingAddress"
@@ -2758,8 +2756,29 @@ async function safeJson(response: Response): Promise<Record<string, unknown>> {
                 </article>
             </section>
 
-            <CockpitFundingActivity
+            <section
+                v-if="funding_activity === undefined"
                 v-show="activeFundingMode !== 'simulation'"
+                class="space-y-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+                aria-label="Loading funding activity"
+                data-testid="cockpit-funding-activity-loading"
+            >
+                <div
+                    class="h-5 w-40 animate-pulse rounded bg-slate-200 dark:bg-slate-700"
+                ></div>
+                <div
+                    class="h-16 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800"
+                ></div>
+                <div
+                    class="h-16 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800"
+                ></div>
+            </section>
+
+            <CockpitFundingActivity
+                v-show="
+                    funding_activity !== undefined &&
+                    activeFundingMode !== 'simulation'
+                "
                 :activity="fundingActivity"
                 :initial-filter="fundingActivityFilter"
                 :processing-key="fundingActivityProcessingKey"
