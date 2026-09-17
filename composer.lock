@@ -1509,16 +1509,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.5",
+            "version": "v1.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "c9ec942eb5872c21ffd9387e78ae9a277b5e3a8d"
+                "reference": "74c4aa425cb776b7b9d6682b13917d555f038595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/c9ec942eb5872c21ffd9387e78ae9a277b5e3a8d",
-                "reference": "c9ec942eb5872c21ffd9387e78ae9a277b5e3a8d",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/74c4aa425cb776b7b9d6682b13917d555f038595",
+                "reference": "74c4aa425cb776b7b9d6682b13917d555f038595",
                 "shasum": ""
             },
             "require": {
@@ -1545,7 +1545,7 @@
                 "3neti/x-campaign": "^1.0",
                 "3neti/x-commerce": "^1.2",
                 "3neti/x-feedback": "^1.0",
-                "3neti/x-journal": "^1.0",
+                "3neti/x-journal": "^1.1",
                 "3neti/x-provisioning": "^1.0",
                 "3neti/x-ray": "^1.0.1",
                 "3neti/x-rider": "^1.0",
@@ -1611,9 +1611,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.5"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.16"
             },
-            "time": "2026-09-15T03:03:19+00:00"
+            "time": "2026-09-17T03:14:12+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -1733,16 +1733,16 @@
         },
         {
             "name": "3neti/x-journal",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-journal.git",
-                "reference": "5cdebe0bc02d02cd7994b50bf2049fe9539e4a5a"
+                "reference": "02803bebeb78fbfbad21e0391fccbbe414f11d71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-journal/zipball/5cdebe0bc02d02cd7994b50bf2049fe9539e4a5a",
-                "reference": "5cdebe0bc02d02cd7994b50bf2049fe9539e4a5a",
+                "url": "https://api.github.com/repos/3neti/x-journal/zipball/02803bebeb78fbfbad21e0391fccbbe414f11d71",
+                "reference": "02803bebeb78fbfbad21e0391fccbbe414f11d71",
                 "shasum": ""
             },
             "require": {
@@ -1785,9 +1785,9 @@
             "description": "Evidentiary journal package for the x-change Settlement Operating System",
             "support": {
                 "issues": "https://github.com/3neti/x-journal/issues",
-                "source": "https://github.com/3neti/x-journal/tree/v1.0.0"
+                "source": "https://github.com/3neti/x-journal/tree/v1.1.0"
             },
-            "time": "2026-07-31T08:47:42+00:00"
+            "time": "2026-09-17T01:55:10+00:00"
         },
         {
             "name": "3neti/x-provisioning",
