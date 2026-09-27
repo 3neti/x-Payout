@@ -11,7 +11,8 @@ A successful cleanroom commissioning run produces:
 - a Laravel 13 x-PayOut application;
 - a configured `.env`;
 - an installed X-Change runtime;
-- a non-interactive system principal;
+- a non-interactive System Principal;
+- a non-interactive Commercial Principal with its Commercial Revenue Account;
 - NetBank-backed Treasury readiness;
 - one Maker onboarding Pay Code;
 - one Checker onboarding Pay Code.
@@ -122,10 +123,11 @@ The bootstrap performs the following controlled gates:
 5. run the strict pre-commission doctor;
 6. install frontend build dependencies and build the production assets;
 7. install X-Change with the NetBank profile;
-8. provision the system principal;
-9. mint the Maker and Checker onboarding Pay Codes;
-10. run the strict final doctor;
-11. print the environment summary and X-Change routes.
+8. provision the System Principal;
+9. provision the Commercial Principal and Commercial Revenue Account;
+10. mint the Maker and Checker onboarding Pay Codes;
+11. run the strict final doctor;
+12. print the environment summary and X-Change routes.
 
 The build gate runs before any financial or invitation mutation. If Vite, Vite Plus, npm, or another frontend build dependency is unavailable, the bootstrap stops before Maker or Checker Pay Codes are minted.
 

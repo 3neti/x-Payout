@@ -1,6 +1,21 @@
 <?php
 
 use LBHurtado\Voucher\Models\Voucher;
+use LBHurtado\XChange\Services\Commissioning\CommissioningManifestRepository;
+
+it('declares the billable commercial principal in the cleanroom manifest', function (): void {
+    $manifest = app(CommissioningManifestRepository::class)
+        ->load(base_path('commissioning/default.yaml'));
+
+    expect(data_get($manifest, 'bootstrap.environment.defaults'))
+        ->toMatchArray([
+            'XCHANGE_COMMERCIAL_BILLING_MODE' => 'billable',
+            'XCHANGE_COMMERCIAL_PRINCIPAL_REFERENCE' => 'commercial-primary',
+            'XCHANGE_COMMERCIAL_PRINCIPAL_LEGAL_NAME' => '3neti R&D OPC',
+            'XCHANGE_COMMERCIAL_PRINCIPAL_AUTHORIZATION_REFERENCE' => 'commissioning:x-payout:commercial-principal:v1',
+            'XCHANGE_COMMERCIAL_REVENUE_ACCOUNT_SLUG' => 'commercial-revenue',
+        ]);
+});
 
 it('mints maker and checker onboarding invitation pay codes idempotently', function (): void {
     config()->set('app.key', 'base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=');

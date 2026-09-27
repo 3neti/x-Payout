@@ -4,3 +4,11 @@ application:
   name: x-PayOut
 system_principal:
   name: x-PayOut System
+bootstrap:
+  environment:
+    defaults:
+      XCHANGE_COMMERCIAL_BILLING_MODE: billable
+      XCHANGE_COMMERCIAL_PRINCIPAL_REFERENCE: commercial-primary
+      XCHANGE_COMMERCIAL_PRINCIPAL_LEGAL_NAME: 3neti R&D OPC
+      XCHANGE_COMMERCIAL_PRINCIPAL_AUTHORIZATION_REFERENCE: commissioning:x-payout:commercial-principal:v1
+      XCHANGE_COMMERCIAL_REVENUE_ACCOUNT_SLUG: commercial-revenue
