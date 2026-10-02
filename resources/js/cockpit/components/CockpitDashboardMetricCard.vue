@@ -42,3 +42,4 @@ const toneClass = (tone: CockpitDashboardMetric['tone'] = 'neutral'): string => 
         </p>
     </article>
 </template>
+

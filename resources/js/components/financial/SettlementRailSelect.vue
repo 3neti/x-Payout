@@ -44,17 +44,17 @@ const estimatedFee = computed(() => fees[effectiveRail.value as keyof typeof fee
 const validation = computed(() => {
     const rail = effectiveRail.value;
     const amount = props.amount;
-
+    
     if (rail === 'PESONET') {
         const bankIsEMI = isEMI(props.bankCode);
-
+        
         if (amount > AMOUNT_LIMITS.INSTAPAY.max) {
             return {
                 type: 'warning',
                 message: `Note: EMIs (GCash, PayMaya, etc.) do not support PESONET. Redeemers with EMI accounts cannot claim this voucher as the amount (₱${amount.toLocaleString()}) exceeds the INSTAPAY limit (₱${AMOUNT_LIMITS.INSTAPAY.max.toLocaleString()}).`,
             };
         }
-
+        
         if (bankIsEMI || !props.bankCode) {
             return {
                 type: 'info',
@@ -62,7 +62,7 @@ const validation = computed(() => {
             };
         }
     }
-
+    
     return null;
 });
 </script>
@@ -85,11 +85,11 @@ const validation = computed(() => {
                 </SelectItem>
             </SelectContent>
         </Select>
-
+        
         <p class="text-xs text-muted-foreground">
             Selected: <strong>{{ effectiveRail }}</strong> · Est. fee: ₱{{ estimatedFee }}
         </p>
-
+        
         <!-- Validation warning -->
         <Alert
             v-if="validation"

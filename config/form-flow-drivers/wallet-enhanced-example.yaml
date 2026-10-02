@@ -1,6 +1,6 @@
 # Example: Enhanced Wallet Form with Split Layout UI
 # This demonstrates the new UI metadata fields introduced for visual hierarchy
-#
+# 
 # New field properties:
 #   - emphasis: "hero" | "normal" - Makes field prominent with large styling
 #   - group: string - Groups related fields in a fieldset
@@ -33,7 +33,7 @@ steps:
         condition_values:
           - "GXCHPHM2XXX"  # GCash SWIFT code
         debounce_ms: 1500
-
+      
       fields:
         # Summary badges at top (readonly info)
         - name: "amount"
@@ -42,21 +42,21 @@ steps:
           default: "{{ amount }}"
           readonly: true
           variant: "readonly-badge"  # NEW: Shows as badge in summary section
-
+        
         - name: "settlement_rail"
           type: "settlement_rail"
           label: "Settlement Method"
           default: "INSTAPAY"
           readonly: true
           variant: "readonly-badge"  # NEW: Shows as badge in summary section
-
+        
         - name: "recipient_country"
           type: "recipient_country"
           label: "Country"
           default: "PH"
           readonly: true
           variant: "readonly-badge"  # NEW: Shows as badge in summary section
-
+        
         # Hero field - Mobile Number (PRIMARY ACTION)
         - name: "mobile"
           type: "text"
@@ -67,7 +67,7 @@ steps:
           help_text: "Enter your mobile number to receive the cash"  # NEW: Helper text
           validation:
             - "regex:/^(\\+639|09)\\d{9}$/"
-
+        
         # Bank account fields grouped together (SECONDARY ACTION)
         - name: "bank_account"
           type: "bank_account"
@@ -76,7 +76,7 @@ steps:
           group: "bank_details"  # NEW: Groups fields in fieldset
           help_text: "Select your bank or e-wallet provider"  # NEW: Helper text
           default: "GXCHPHM2XXX"  # Default to GCash
-
+        
         - name: "account_number"
           type: "text"
           label: "Account Number"

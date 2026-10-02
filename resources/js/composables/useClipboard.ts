@@ -2,7 +2,7 @@ import { ref } from 'vue';
 
 /**
  * Composable for copying text to clipboard with fallback support
- *
+ * 
  * @param timeout - How long to show "copied" state (ms)
  */
 export function useClipboard(timeout = 2000) {
@@ -21,15 +21,15 @@ export function useClipboard(timeout = 2000) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 await navigator.clipboard.writeText(text);
                 copiedText.value = text;
-
+                
                 // Reset after timeout
                 setTimeout(() => {
                     copiedText.value = null;
                 }, timeout);
-
+                
                 return true;
             }
-
+            
             // Fallback for non-secure contexts (http://, .test domains)
             const textArea = document.createElement('textarea');
             textArea.value = text;
@@ -39,12 +39,12 @@ export function useClipboard(timeout = 2000) {
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-
+            
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
                     copiedText.value = text;
-
+                    
                     // Reset after timeout
                     setTimeout(() => {
                         copiedText.value = null;

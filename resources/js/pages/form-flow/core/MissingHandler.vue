@@ -19,7 +19,7 @@ const handleSkip = () => {
     step_index: props.step_index,
     handler_name: props.handler_name,
   })
-
+  
   // Submit minimal data to skip this step (must have at least one field)
   router.post(`/form-flow/${props.flow_id}/step/${props.step_index}`, {
     data: {

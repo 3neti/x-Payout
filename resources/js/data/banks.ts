@@ -13,10 +13,10 @@ export interface Bank {
  */
 export function parseBanks(): Bank[] {
     const banks: Bank[] = [];
-
+    
     for (const [code, bankData] of Object.entries(banksJson.banks)) {
         const rails = Object.keys(bankData.settlement_rail) as ('INSTAPAY' | 'PESONET')[];
-
+        
         banks.push({
             code,
             name: bankData.full_name,
@@ -24,7 +24,7 @@ export function parseBanks(): Bank[] {
             isEMI: code in EMI_RESTRICTIONS,
         });
     }
-
+    
     return banks.sort((a, b) => a.name.localeCompare(b.name));
 }
 

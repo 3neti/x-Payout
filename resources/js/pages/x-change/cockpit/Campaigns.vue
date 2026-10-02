@@ -8,6 +8,7 @@ Changes will be overwritten by php artisan x-change:publish --scope=build --forc
 -->
 <script setup lang="ts">
 import Campaigns from '../../../cockpit/pages/Campaigns.vue';
+import type { CampaignWorkflowDraftCatalog } from '../../../cockpit/components/CockpitCampaignWorkflowDraftEditor.vue';
 import type { CockpitHeaderPageProps } from '../../../cockpit/types';
 
 type CampaignWorksheet = {
@@ -26,6 +27,13 @@ type CampaignWorksheet = {
 type CampaignsPageProps = CockpitHeaderPageProps & {
     worksheets: CampaignWorksheet[];
     active_intake?: Record<string, unknown>;
+    campaign_usage_profiles?: Record<string, unknown>[];
+    endpoint_capabilities?: Record<string, unknown>[];
+    pay_code_templates?: Record<string, unknown>[];
+    endpoint_campaigns?: Record<string, unknown>[];
+    endpoint_campaign_form?: Record<string, unknown>;
+    workflow_drafts?: CampaignWorkflowDraftCatalog;
+    commercial_pay_code_scenario_runner_enabled?: boolean;
 };
 
 const props = defineProps<CampaignsPageProps>();

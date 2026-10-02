@@ -64,7 +64,7 @@ const effectiveKeypadMode = computed(() => {
 const effectiveKeypadTitle = computed(() => {
   // Use custom title if provided
   if (props.keypadTitle) return props.keypadTitle;
-
+  
   // Fall back to context-based title
   if (props.suffix === '%') return 'Enter Percentage';
   if (props.prefix === '₱') return 'Enter Amount';
@@ -114,7 +114,7 @@ const handleConfirm = (value: number) => {
       >
         {{ prefix }}
       </span>
-
+      
       <!-- Formatted Display Input -->
       <input
         type="text"
@@ -130,7 +130,7 @@ const handleConfirm = (value: number) => {
         readonly
         @click="handleClick"
       >
-
+      
       <!-- Suffix -->
       <span
         v-if="suffix"
@@ -139,7 +139,7 @@ const handleConfirm = (value: number) => {
         {{ suffix }}
       </span>
     </div>
-
+    
     <NumericKeypad
       :open="showKeypad"
       @update:open="(val) => showKeypad = val"

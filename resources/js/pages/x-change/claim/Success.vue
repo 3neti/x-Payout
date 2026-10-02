@@ -7,9 +7,9 @@ Do not edit this published host copy directly.
 Changes will be overwritten by php artisan x-change:publish --scope=build --force.
 -->
 <script setup lang="ts">
-import { computed, toRef } from 'vue';
+import { computed } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import { CheckCircle2, Clock3 } from 'lucide-vue-next';
+import { AlertTriangle, CheckCircle2, Clock3 } from 'lucide-vue-next';
 import ClaimStepShell from '@/components/x-change/ClaimStepShell.vue';
 import RiderRenderer from '@/components/x-rider/RiderRenderer.vue';
 import RiderCountdown from '@/components/x-rider/RiderCountdown.vue';
@@ -20,6 +20,7 @@ import type {
     RiderExperience,
 } from '@/components/x-rider/types';
 import { useClaimSuccessRedirect } from './useClaimSuccessRedirect';
+import { useCompletionStatusPoll } from './useCompletionStatusPoll';
 import { resolveSuccessRedirectOwnershipViewModel } from '@/components/x-change/successRedirectOwnershipViewModel';
 import {
     resolveRedirectRuntimeStages,
@@ -52,8 +53,10 @@ interface VoucherProps {
 }
 
 interface Props {
+    paired_payment?: boolean;
     voucher: VoucherProps;
     claimOutcome?: string;
+    claimWorkflowKey?: string | null;
     rider?: RiderExperience | null;
     redirectEndpoint?: string | null;
     claim_experience?: Record<string, any> | null;
@@ -65,6 +68,8 @@ interface Props {
     compiled_claim_result?: CompiledClaimResultPayload;
     destination?: PayoutDestinationSnapshot | null;
     success_presentation?: {
+        state?: string | null;
+        suppress_legacy_rider?: boolean;
         intent?: string | null;
         eyebrow?: string | null;
         title?: string | null;
@@ -81,6 +86,7 @@ interface Props {
     } | null;
     success_action?: {
         key?: string | null;
+        intent?: string | null;
         label?: string | null;
         enabled?: boolean | null;
         target?: {
@@ -93,8 +99,34 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const riderContent = computed(() => props.rider?.success ?? null);
-const riderRedirect = computed(() => props.rider?.redirect ?? null);
+const completionProcessing = computed(() =>
+    props.claimWorkflowKey === 'campaign.coverage-completion.v1'
+    && props.success_presentation?.suppress_legacy_rider === true
+    && props.success_presentation?.state === 'processing',
+);
+const completionPoll = useCompletionStatusPoll(completionProcessing);
+
+const suppressLegacyRider = computed(() => props.success_presentation?.suppress_legacy_rider === true);
+const hasPaymentHandoff = computed(() =>
+    props.success_action?.key === 'x-change.claim-success.continue-to-payment'
+    && props.success_action.enabled !== false
+    && Boolean(props.success_action.label?.trim())
+    && Boolean(props.success_action.target?.url?.trim()),
+);
+const suppressAutomaticRedirects = computed(() =>
+    props.paired_payment || hasPaymentHandoff.value || suppressLegacyRider.value,
+);
+
+const riderContent = computed(() => suppressLegacyRider.value ? null : props.rider?.success ?? null);
+const riderRedirect = computed(() =>
+    suppressAutomaticRedirects.value ? null : props.rider?.redirect ?? null,
+);
+const effectiveRedirect = computed(() =>
+    suppressAutomaticRedirects.value ? null : props.redirect ?? null,
+);
+const effectiveRedirectEndpoint = computed(() =>
+    suppressAutomaticRedirects.value ? null : props.redirectEndpoint ?? null,
+);
 
 const displayedRiderContent = computed(() =>
     resolveSuccessRiderMessage(riderContent.value, {
@@ -104,14 +136,16 @@ const displayedRiderContent = computed(() =>
 );
 
 const successVisualStages = computed<RawRiderStage[]>(() =>
-    resolveSuccessVisualStages(props.claim_experience, props.rider, {
+    suppressLegacyRider.value ? [] : resolveSuccessVisualStages(props.claim_experience, props.rider, {
         claimOutcome: props.claimOutcome,
         riderState: props.rider?.state,
     }),
 );
 
 const redirectRuntimeStages = computed<RawRiderStage[]>(() =>
-    resolveRedirectRuntimeStages(props.rider, props.claim_experience),
+    suppressAutomaticRedirects.value
+        ? []
+        : resolveRedirectRuntimeStages(props.rider, props.claim_experience),
 );
 
 const hasRiderMessage = computed(() =>
@@ -120,8 +154,8 @@ const hasRiderMessage = computed(() =>
 
 const { countdownRedirect, hasRedirect } = useClaimSuccessRedirect(
     riderRedirect,
-    toRef(props, 'redirect'),
-    toRef(props, 'redirectEndpoint'),
+    effectiveRedirect,
+    effectiveRedirectEndpoint,
 );
 
 const successViewModel = computed(() =>
@@ -146,13 +180,13 @@ const shouldShowVoucherCodeBadge = computed(
 );
 
 const redirectOwnership = computed(() =>
-    resolveSuccessRedirectOwnershipViewModel(props.redirect ?? null),
+    resolveSuccessRedirectOwnershipViewModel(effectiveRedirect.value),
 );
 
 const countdownViewModel = computed(() =>
     resolveSuccessCountdownViewModel({
         countdownRedirect: countdownRedirect.value,
-        redirectEndpoint: props.redirectEndpoint ?? null,
+        redirectEndpoint: effectiveRedirectEndpoint.value,
         redirectOwnership: redirectOwnership.value,
     }),
 );
@@ -170,6 +204,7 @@ const formattedAmount = computed(() =>
 const fallbackTitle = computed(() =>
     resolveSuccessFallbackTitle(props.voucher, {
         claimOutcome: props.claimOutcome,
+        claimWorkflowKey: props.claimWorkflowKey,
         riderState: props.rider?.state,
     }),
 );
@@ -188,7 +223,9 @@ const pageTone = computed(() =>
     resolveSuccessPageTone({
         compiledClaimStatus: compiledClaimResult.value.status,
         claimOutcome: props.claimOutcome,
+        claimWorkflowKey: props.claimWorkflowKey,
         riderState: props.rider?.state,
+        successPresentationState: props.success_presentation?.state,
     }),
 );
 
@@ -217,6 +254,9 @@ const successPresentation = computed(() => {
 
 const successAction = computed(() => {
     const action = props.success_action;
+    if (suppressLegacyRider.value && action?.intent !== 'demo_policy_summary') {
+        return null;
+    }
     const url = action?.target?.url?.trim();
 
     if (!action?.label?.trim() || !url || action.enabled === false) {
@@ -235,7 +275,7 @@ const successAction = computed(() => {
     <Head :title="successPresentation?.title ?? 'Claim Successful'" />
 
     <ClaimStepShell
-        :tone="pageTone.isPending ? 'warning' : 'success'"
+        :tone="pageTone.isWarning ? 'warning' : 'success'"
         :brand-placement="successPresentation ? 'center' : 'top_left'"
         :brand-size="successPresentation ? 'brand' : 'header'"
         :show-theme-picker="!successPresentation"
@@ -244,7 +284,7 @@ const successAction = computed(() => {
         <div class="space-y-8">
             <div class="space-y-4 pt-4 text-center">
                 <component
-                    :is="pageTone.isPending ? Clock3 : CheckCircle2"
+                    :is="pageTone.isAttention ? AlertTriangle : pageTone.isPending ? Clock3 : CheckCircle2"
                     class="mx-auto h-12 w-12"
                     :class="pageTone.iconClass"
                 />
@@ -314,15 +354,6 @@ const successAction = computed(() => {
                         {{ successPresentation.body }}
                     </p>
 
-                    <a
-                        v-if="successAction"
-                        :href="successAction.url"
-                        data-testid="claim-success-primary-action"
-                        class="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
-                        {{ successAction.label }}
-                    </a>
-
                     <p
                         v-if="successPresentation.receiptLabel"
                         data-testid="claim-success-receipt"
@@ -370,6 +401,31 @@ const successAction = computed(() => {
                     <p class="text-center text-lg font-medium text-foreground">
                         {{ fallbackTitle }}
                     </p>
+                </div>
+
+                <a
+                    v-if="successAction"
+                    :href="successAction.url"
+                    referrerpolicy="no-referrer"
+                    data-testid="claim-success-primary-action"
+                    class="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                    {{ successAction.label }}
+                </a>
+
+                <div v-if="completionProcessing" data-testid="completion-status-check" class="space-y-3">
+                    <p role="status" aria-live="polite" class="text-sm text-muted-foreground">
+                        {{ completionPoll.message.value }}
+                    </p>
+                    <button
+                        v-if="completionPoll.stopped.value"
+                        type="button"
+                        :disabled="completionPoll.checking.value"
+                        class="inline-flex min-h-11 items-center justify-center rounded-md border px-6 py-2 text-sm font-semibold disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-ring"
+                        @click="completionPoll.check"
+                    >
+                        {{ completionPoll.checking.value ? 'Checking…' : 'Check status' }}
+                    </button>
                 </div>
 
                 <div
@@ -434,7 +490,7 @@ const successAction = computed(() => {
             <RiderRuntimeSequencer
                 v-if="hasRedirectRuntimeStages"
                 :stages="redirectRuntimeStages"
-                :redirect-endpoint="redirectEndpoint"
+                :redirect-endpoint="effectiveRedirectEndpoint"
             />
 
             <div

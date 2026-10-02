@@ -93,8 +93,8 @@ const formatDate = (dateString: string | undefined) => {
             </CardHeader>
             <CardContent :class="compact ? 'py-3' : ''">
                 <div class="flex flex-wrap gap-2">
-                    <Badge
-                        v-for="(name, code) in metadata?.licenses"
+                    <Badge 
+                        v-for="(name, code) in metadata?.licenses" 
                         :key="code"
                         variant="secondary"
                         class="px-3 py-1"
@@ -135,15 +135,15 @@ const formatDate = (dateString: string | undefined) => {
                 </CardDescription>
             </CardHeader>
             <CardContent :class="compact ? 'py-3 space-y-2' : 'space-y-3'">
-                <div
-                    v-for="(url, method) in metadata?.redemption_urls"
+                <div 
+                    v-for="(url, method) in metadata?.redemption_urls" 
                     :key="method"
                     class="flex items-center justify-between gap-2"
                 >
                     <span :class="compact ? 'text-xs' : 'text-sm'" class="text-muted-foreground capitalize">{{ method }}</span>
                     <div class="flex items-center gap-2">
-                        <a
-                            :href="url"
+                        <a 
+                            :href="url" 
                             target="_blank"
                             :class="compact ? 'text-xs' : 'text-sm'"
                             class="text-primary hover:underline truncate max-w-xs"

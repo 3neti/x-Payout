@@ -14,7 +14,7 @@ export function useCamera() {
             return stream.value;
         } catch (err: any) {
             console.error('Camera error:', err);
-
+            
             if (err.name === 'NotAllowedError') {
                 error.value = 'Camera access denied. Please allow camera access in your browser settings.';
             } else if (err.name === 'NotFoundError') {
@@ -22,7 +22,7 @@ export function useCamera() {
             } else {
                 error.value = 'Failed to access camera. Please try again.';
             }
-
+            
             throw err;
         } finally {
             loading.value = false;

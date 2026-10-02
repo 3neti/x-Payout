@@ -15,13 +15,13 @@ const FIELD_LABELS: Record<string, string> = {
     amount: 'Amount',
     settlement_rail: 'Payment Method',
     recipient_country: 'Country',
-
+    
     // Personal fields
     full_name: 'Full Name',
     email: 'Email Address',
     birth_date: 'Date of Birth',
     address: 'Address',
-
+    
     // Verification fields
     latitude: 'Latitude',
     longitude: 'Longitude',
@@ -39,16 +39,16 @@ export interface HeroData {
 export function useFormFlowSummary() {
     function flattenCollectedData(collectedData: any[]): Record<string, any> {
         const flattened: Record<string, any> = {}
-
+        
         collectedData.forEach((stepData) => {
             if (stepData && typeof stepData === 'object') {
                 Object.assign(flattened, stepData)
             }
         })
-
+        
         return flattened
     }
-
+    
     /**
      * Extract hero-level fields for prominent display.
      * Returns formatted amount, bank name, and settlement rail.
@@ -60,30 +60,30 @@ export function useFormFlowSummary() {
             settlementRail: 'settlement_rail' in data ? settlementRailLabel(data.settlement_rail) : null,
         }
     }
-
+    
     function formatFieldValue(key: string, value: any): string {
         if (value === null || value === undefined) return 'N/A'
-
+        
         switch (key) {
             case 'amount':
                 return `₱${Number(value).toFixed(2)}`
-
+            
             case 'mobile': {
                 const s = String(value)
                 // Format +639173011987 → +63 (917) 301-1987
                 const match = s.match(/^\+(\d{2})(\d{3})(\d{3})(\d{4})$/)
                 return match ? `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}` : s
             }
-
+            
             case 'bank_code':
                 return destinationInstitution(value).shortLabel
-
+            
             case 'settlement_rail':
                 return settlementRailLabel(value)
-
+            
             case 'recipient_country':
                 return value === 'PH' ? 'Philippines' : value
-
+            
             case 'birth_date':
                 try {
                     return new Date(value).toLocaleDateString('en-US', {
@@ -94,29 +94,29 @@ export function useFormFlowSummary() {
                 } catch {
                     return value
                 }
-
+            
             case 'latitude':
             case 'longitude':
                 return Number(value).toFixed(6)
-
+            
             case 'selfie':
             case 'signature':
-                return typeof value === 'string' && value.length > 50
-                    ? '✓ Captured'
+                return typeof value === 'string' && value.length > 50 
+                    ? '✓ Captured' 
                     : value
-
+            
             default:
                 return String(value)
         }
     }
-
+    
     function getFieldLabel(key: string): string {
         return FIELD_LABELS[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
     }
-
+    
     function groupDataBySection(data: Record<string, any>): DataSection[] {
         const sections: DataSection[] = []
-
+        
         // Wallet section
         const walletKeys = ['mobile', 'bank_code', 'account_number', 'amount', 'settlement_rail', 'recipient_country']
         const walletFields = walletKeys
@@ -126,7 +126,7 @@ export function useFormFlowSummary() {
                 label: getFieldLabel(key),
                 value: formatFieldValue(key, data[key])
             }))
-
+        
         if (walletFields.length > 0) {
             sections.push({
                 title: 'Redemption Details',
@@ -134,7 +134,7 @@ export function useFormFlowSummary() {
                 fields: walletFields
             })
         }
-
+        
         // Personal info section
         const personalKeys = ['full_name', 'email', 'birth_date', 'address']
         const personalFields = personalKeys
@@ -144,7 +144,7 @@ export function useFormFlowSummary() {
                 label: getFieldLabel(key),
                 value: formatFieldValue(key, data[key])
             }))
-
+        
         if (personalFields.length > 0) {
             sections.push({
                 title: 'Personal Information',
@@ -152,7 +152,7 @@ export function useFormFlowSummary() {
                 fields: personalFields
             })
         }
-
+        
         // Location section
         const locationKeys = ['latitude', 'longitude', 'address']
         const locationFields = locationKeys
@@ -162,7 +162,7 @@ export function useFormFlowSummary() {
                 label: getFieldLabel(key),
                 value: formatFieldValue(key, data[key])
             }))
-
+        
         if (locationFields.length > 0 || 'address' in data) {
             // Combine lat/long into coordinates
             const hasCoords = 'latitude' in data && 'longitude' in data
@@ -180,17 +180,17 @@ export function useFormFlowSummary() {
                     }
                 ]
                 : locationFields
-
+            
             sections.push({
                 title: 'Location Verification',
                 icon: MapPin,
                 fields: finalFields
             })
         }
-
+        
         // Verification section (selfie, signature, KYC)
         const verificationFields: Array<{ key: string; label: string; value: string }> = []
-
+        
         if ('selfie' in data) {
             verificationFields.push({
                 key: 'selfie',
@@ -198,7 +198,7 @@ export function useFormFlowSummary() {
                 value: formatFieldValue('selfie', data.selfie)
             })
         }
-
+        
         if ('signature' in data) {
             verificationFields.push({
                 key: 'signature',
@@ -206,7 +206,7 @@ export function useFormFlowSummary() {
                 value: formatFieldValue('signature', data.signature)
             })
         }
-
+        
         if ('otp_code' in data) {
             verificationFields.push({
                 key: 'otp_code',
@@ -214,7 +214,7 @@ export function useFormFlowSummary() {
                 value: '✓ Confirmed'
             })
         }
-
+        
         if (verificationFields.length > 0) {
             sections.push({
                 title: 'Identity Verification',
@@ -222,10 +222,10 @@ export function useFormFlowSummary() {
                 fields: verificationFields
             })
         }
-
+        
         return sections
     }
-
+    
     return {
         flattenCollectedData,
         extractHeroData,

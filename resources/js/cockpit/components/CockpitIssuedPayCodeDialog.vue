@@ -11,17 +11,23 @@ import {
     Check,
     ExternalLink,
     LoaderCircle,
-    Minimize2,
+    ReceiptText,
     ScanQrCode,
     X,
 } from 'lucide-vue-next';
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import type {
+    XChangePayCodeQrArtifacts,
+    XChangeQrArtifactData,
+} from '@/components/x-change/qrArtifacts';
+import XChangeQrArtifact from '@/components/x-change/XChangeQrArtifact.vue';
 import type { PayCodeCostEstimate } from '../../composables/usePayCodeCostEstimate';
 import type {
     RiderStampPreview,
     RiderStampPreviewSource,
 } from '../riderStampPreview';
 import CockpitPayCodeCanvas from './CockpitPayCodeCanvas.vue';
+import CockpitExpandedStampQr from './CockpitExpandedStampQr.vue';
 import CockpitPayCodeShareCard from './CockpitPayCodeShareCard.vue';
 
 const props = withDefaults(
@@ -41,6 +47,7 @@ const props = withDefaults(
         riderDesignDocument?: string;
         riderStamp?: RiderStampPreview | null;
         claimQr?: string | null;
+        qrArtifacts?: XChangePayCodeQrArtifacts | null;
         claimUrl?: string | null;
         shareCardUrl?: string | null;
         detailUrl?: string | null;
@@ -48,6 +55,17 @@ const props = withDefaults(
         paymentUrl?: string | null;
         costEstimate?: PayCodeCostEstimate | null;
         quantity?: string | number;
+        fundingReceipt?: {
+            order_reference: string;
+            expected_payment_minor: number;
+            currency: string;
+            provider_transaction_id: string | null;
+            verified_at: string | null;
+            settled_at: string | null;
+            issued_at: string | null;
+        } | null;
+        publicReceiptUrl?: string | null;
+        publicAccountUrl?: string | null;
     }>(),
     {
         code: null,
@@ -60,6 +78,7 @@ const props = withDefaults(
         riderDesignDocument: '',
         riderStamp: null,
         claimQr: null,
+        qrArtifacts: null,
         claimUrl: null,
         shareCardUrl: null,
         detailUrl: null,
@@ -67,16 +86,21 @@ const props = withDefaults(
         paymentUrl: null,
         costEstimate: null,
         quantity: 1,
+        fundingReceipt: null,
+        publicReceiptUrl: null,
+        publicAccountUrl: null,
     },
 );
 
 const emit = defineEmits<{
     close: [];
+    generateAnother: [];
 }>();
 
 const dialog = ref<HTMLElement | null>(null);
-const showStampButton = ref<HTMLButtonElement | null>(null);
+const showStampButton = ref<{ focus: () => void } | null>(null);
 const qrExpanded = ref(false);
+const expandedQrMode = ref<'direct_claim' | 'claim_entry'>('direct_claim');
 const paymentQr = ref<string | null>(null);
 const paymentQrStatus = ref<'idle' | 'loading' | 'ready' | 'failed'>('idle');
 const paymentQrMessage = ref('');
@@ -94,6 +118,32 @@ const normalizedClaimQr = computed<string | null>(() => {
     const value = props.claimQr?.trim();
 
     return value ? value : null;
+});
+const legacyDirectClaimArtifact = computed<XChangeQrArtifactData | null>(() => {
+    if (normalizedClaimQr.value === null) {
+        return null;
+    }
+
+    return {
+        kind: 'pay_code',
+        destination: normalizedClaimUrl.value ?? '',
+        image_data_uri: normalizedClaimQr.value,
+        title: 'Scan to claim',
+        description: `Scan to open Pay Code ${normalizedCode.value} directly.`,
+        identifier: normalizedCode.value,
+        center_mark: 'pay_code',
+    };
+});
+const directClaimArtifact = computed<XChangeQrArtifactData | null>(() => {
+    return props.qrArtifacts?.direct_claim ?? legacyDirectClaimArtifact.value;
+});
+const claimEntryArtifact = computed<XChangeQrArtifactData | null>(() => {
+    return props.qrArtifacts?.claim_entry ?? null;
+});
+const activeQrArtifact = computed<XChangeQrArtifactData | null>(() => {
+    return expandedQrMode.value === 'claim_entry'
+        ? claimEntryArtifact.value
+        : directClaimArtifact.value;
 });
 const normalizedShareCardUrl = computed<string | null>(() => {
     const value = props.shareCardUrl?.trim();
@@ -124,13 +174,16 @@ const shareContextText = computed<string>(() => {
     return `${action} \u00b7 ${formattedAmount.value}`;
 });
 const isCollectible = computed<boolean>(() => {
-    return props.voucherType === 'payable' || props.voucherType === 'settlement';
+    return (
+        props.voucherType === 'payable' || props.voucherType === 'settlement'
+    );
 });
 
 watch(
     () => props.open,
     async (open): Promise<void> => {
         qrExpanded.value = false;
+        expandedQrMode.value = 'direct_claim';
 
         if (!open) {
             return;
@@ -241,7 +294,7 @@ function close(): void {
 }
 
 async function showQr(): Promise<void> {
-    if (normalizedClaimQr.value) {
+    if (directClaimArtifact.value) {
         qrTriggerTestId =
             document.activeElement instanceof HTMLElement
                 ? (document.activeElement.dataset.testid ?? null)
@@ -250,6 +303,14 @@ async function showQr(): Promise<void> {
         await nextTick();
         showStampButton.value?.focus();
     }
+}
+
+function selectExpandedQrMode(mode: 'direct_claim' | 'claim_entry'): void {
+    if (mode === 'claim_entry' && claimEntryArtifact.value === null) {
+        return;
+    }
+
+    expandedQrMode.value = mode;
 }
 
 async function showStamp(): Promise<void> {
@@ -336,60 +397,67 @@ function handleEscape(): void {
                 <div
                     class="grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_17rem]"
                 >
-                    <div
-                        v-if="qrExpanded && normalizedClaimQr"
-                        class="flex min-h-80 flex-col rounded-3xl border border-slate-200 bg-slate-100/80 p-3 shadow-inner dark:border-slate-800 dark:bg-slate-900/80 sm:min-h-[38rem] lg:col-span-2"
-                        data-testid="cockpit-issued-pay-code-expanded-qr"
+                    <CockpitExpandedStampQr
+                        v-if="qrExpanded && activeQrArtifact"
+                        ref="showStampButton"
+                        class="min-h-80 sm:min-h-[38rem] lg:col-span-2"
+                        :src="activeQrArtifact.image_data_uri"
+                        :alt="`${activeQrArtifact.title} for Pay Code ${normalizedCode}`"
+                        :kind="activeQrArtifact.kind"
+                        :identifier="activeQrArtifact.identifier"
+                        :title="activeQrArtifact.title"
+                        :description="activeQrArtifact.description"
+                        test-id="cockpit-issued-pay-code-expanded-qr"
+                        return-label="Show Stamp"
+                        return-test-id="cockpit-issued-pay-code-show-stamp"
+                        @restore="showStamp"
                     >
-                        <div
-                            class="mb-3 flex items-start justify-between gap-3 px-1"
-                        >
-                            <div>
-                                <p
-                                    class="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400"
-                                >
-                                    Claim QR
-                                </p>
-                                <p
-                                    class="text-xs text-slate-600 dark:text-slate-300"
-                                >
-                                    Scan to open Pay Code {{ normalizedCode }}.
-                                </p>
-                            </div>
-                            <button
-                                ref="showStampButton"
-                                type="button"
-                                class="inline-flex min-h-9 shrink-0 items-center justify-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-900"
-                                data-testid="cockpit-issued-pay-code-show-stamp"
-                                @click="showStamp"
+                        <template v-if="claimEntryArtifact" #toolbar>
+                            <div
+                                class="inline-flex rounded-full border border-slate-200 bg-white p-1 dark:border-slate-700 dark:bg-slate-950"
+                                role="tablist"
+                                aria-label="Pay Code QR destination"
+                                data-testid="cockpit-issued-pay-code-qr-mode"
                             >
-                                <Minimize2
-                                    class="size-3.5"
-                                    aria-hidden="true"
-                                />
-                                Show Stamp
-                            </button>
-                        </div>
-                        <button
-                            type="button"
-                            class="group flex min-h-80 flex-1 items-center justify-center overflow-hidden rounded-[1.4rem] bg-white p-4 shadow-xl shadow-slate-900/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 sm:min-h-[34rem] sm:p-6"
-                            aria-label="Show finalized Stamp"
-                            aria-pressed="true"
-                            data-testid="cockpit-issued-pay-code-expanded-qr-button"
-                            @click="showStamp"
-                        >
-                            <img
-                                :src="normalizedClaimQr"
-                                :alt="`Claim QR for Pay Code ${normalizedCode}`"
-                                class="aspect-square w-full max-w-2xl object-contain"
-                                width="1024"
-                                height="1024"
-                                decoding="async"
-                                data-testid="cockpit-issued-pay-code-expanded-qr-image"
-                            />
-                        </button>
-                    </div>
-
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    :aria-selected="
+                                        expandedQrMode === 'direct_claim'
+                                    "
+                                    class="min-h-8 rounded-full px-3 text-xs font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                    :class="
+                                        expandedQrMode === 'direct_claim'
+                                            ? 'bg-emerald-600 text-white'
+                                            : 'text-slate-600 dark:text-slate-300'
+                                    "
+                                    data-testid="cockpit-issued-pay-code-qr-mode-direct"
+                                    @click="
+                                        selectExpandedQrMode('direct_claim')
+                                    "
+                                >
+                                    Scan to claim
+                                </button>
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    :aria-selected="
+                                        expandedQrMode === 'claim_entry'
+                                    "
+                                    class="min-h-8 rounded-full px-3 text-xs font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                    :class="
+                                        expandedQrMode === 'claim_entry'
+                                            ? 'bg-emerald-600 text-white'
+                                            : 'text-slate-600 dark:text-slate-300'
+                                    "
+                                    data-testid="cockpit-issued-pay-code-qr-mode-entry"
+                                    @click="selectExpandedQrMode('claim_entry')"
+                                >
+                                    Enter Pay Code
+                                </button>
+                            </div>
+                        </template>
+                    </CockpitExpandedStampQr>
                     <div
                         v-else-if="normalizedShareCardUrl"
                         class="rounded-3xl border border-slate-200 bg-slate-100/80 p-3 shadow-inner dark:border-slate-800 dark:bg-slate-900/80"
@@ -484,23 +552,35 @@ function handleEscape(): void {
                             >
                                 Payment QR
                             </p>
-                            <p class="mt-1 text-xs text-sky-900 dark:text-sky-100">
-                                For the payer to scan. This is separate from the claim QR.
+                            <p
+                                class="mt-1 text-xs text-sky-900 dark:text-sky-100"
+                            >
+                                For the payer to scan. This is separate from the
+                                claim QR.
                             </p>
                             <div
                                 v-if="paymentQrStatus === 'loading'"
                                 class="mt-3 flex min-h-28 items-center justify-center gap-2 text-xs text-sky-800 dark:text-sky-200"
                                 data-testid="cockpit-issued-pay-code-payment-loading"
                             >
-                                <LoaderCircle class="size-4 animate-spin" aria-hidden="true" />
+                                <LoaderCircle
+                                    class="size-4 animate-spin"
+                                    aria-hidden="true"
+                                />
                                 Preparing QR Ph…
                             </div>
-                            <img
-                                v-else-if="paymentQrStatus === 'ready' && paymentQr"
+                            <XChangeQrArtifact
+                                v-else-if="
+                                    paymentQrStatus === 'ready' && paymentQr
+                                "
                                 :src="paymentQr"
                                 :alt="`Payment QR for Pay Code ${normalizedCode}`"
-                                class="mx-auto mt-3 aspect-square w-full max-w-48 rounded-xl bg-white object-contain p-2"
-                                data-testid="cockpit-issued-pay-code-payment-qr"
+                                kind="qrph_payment"
+                                :title="`Pay ${formattedAmount}`"
+                                description="Provider-generated payment QR"
+                                class="mx-auto mt-3"
+                                test-id="cockpit-issued-pay-code-payment-artifact"
+                                image-test-id="cockpit-issued-pay-code-payment-qr"
                             />
                             <p
                                 v-else-if="paymentQrStatus === 'failed'"
@@ -518,7 +598,10 @@ function handleEscape(): void {
                                 class="mt-3 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-sky-300 bg-white px-3 text-xs font-semibold text-sky-900 transition hover:bg-sky-100 dark:border-sky-800 dark:bg-slate-950 dark:text-sky-100 dark:hover:bg-sky-950"
                                 data-testid="cockpit-issued-pay-code-payment-link"
                             >
-                                <ExternalLink class="size-3.5" aria-hidden="true" />
+                                <ExternalLink
+                                    class="size-3.5"
+                                    aria-hidden="true"
+                                />
                                 Open public payment page
                             </a>
                         </section>
@@ -540,6 +623,98 @@ function handleEscape(): void {
                             <ExternalLink class="size-4" aria-hidden="true" />
                             View Pay Code Details
                         </a>
+
+                        <details
+                            v-if="fundingReceipt"
+                            class="rounded-xl border border-slate-200 bg-white p-3 text-xs dark:border-slate-700 dark:bg-slate-950"
+                            data-testid="cockpit-issued-pay-code-funding-receipt"
+                        >
+                            <summary
+                                class="cursor-pointer font-semibold text-slate-700 dark:text-slate-200"
+                            >
+                                Funding receipt
+                            </summary>
+                            <dl
+                                class="mt-3 grid gap-2 text-slate-600 dark:text-slate-300"
+                            >
+                                <div class="flex justify-between gap-3">
+                                    <dt>Order</dt>
+                                    <dd class="font-mono text-right">
+                                        {{ fundingReceipt.order_reference }}
+                                    </dd>
+                                </div>
+                                <div
+                                    v-if="
+                                        fundingReceipt.provider_transaction_id
+                                    "
+                                    class="flex justify-between gap-3"
+                                >
+                                    <dt>Provider transaction</dt>
+                                    <dd class="font-mono text-right">
+                                        {{
+                                            fundingReceipt.provider_transaction_id
+                                        }}
+                                    </dd>
+                                </div>
+                                <div
+                                    v-if="fundingReceipt.verified_at"
+                                    class="flex justify-between gap-3"
+                                >
+                                    <dt>Verified</dt>
+                                    <dd class="text-right">
+                                        {{
+                                            new Date(
+                                                fundingReceipt.verified_at,
+                                            ).toLocaleString()
+                                        }}
+                                    </dd>
+                                </div>
+                                <div
+                                    v-if="fundingReceipt.issued_at"
+                                    class="flex justify-between gap-3"
+                                >
+                                    <dt>Issued</dt>
+                                    <dd class="text-right">
+                                        {{
+                                            new Date(
+                                                fundingReceipt.issued_at,
+                                            ).toLocaleString()
+                                        }}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </details>
+
+                        <a
+                            v-if="publicReceiptUrl"
+                            :href="publicReceiptUrl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 transition hover:border-emerald-400 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200"
+                            data-testid="public-issued-pay-code-receipt-link"
+                        >
+                            <ReceiptText class="size-4" aria-hidden="true" />
+                            Open issuance receipt
+                        </a>
+
+                        <a
+                            v-if="publicAccountUrl"
+                            :href="publicAccountUrl"
+                            class="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 px-4 text-sm font-bold text-emerald-800 transition hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200"
+                            data-testid="public-issued-pay-code-account-link"
+                        >
+                            Go professional · Open an Account
+                        </a>
+
+                        <button
+                            v-if="fundingReceipt"
+                            type="button"
+                            class="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-emerald-600 px-4 text-sm font-bold text-white hover:bg-emerald-700"
+                            data-testid="cockpit-issued-pay-code-generate-another"
+                            @click="emit('generateAnother')"
+                        >
+                            Generate another
+                        </button>
                     </aside>
                 </div>
             </section>

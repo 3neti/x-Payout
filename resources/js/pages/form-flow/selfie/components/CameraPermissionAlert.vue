@@ -29,7 +29,7 @@ defineExpose({ open, close });
                 <AlertDialogTitle>Camera Access Required</AlertDialogTitle>
                 <AlertDialogDescription class="space-y-4">
                     <p>This feature requires access to your camera to capture a selfie.</p>
-
+                    
                     <div class="text-sm">
                         <p class="font-semibold mb-2">To enable camera access:</p>
                         <ol class="list-decimal list-inside space-y-1 ml-2">

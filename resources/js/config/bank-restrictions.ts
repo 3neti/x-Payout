@@ -1,9 +1,9 @@
 /**
  * Bank Rail Restrictions Configuration (Frontend)
- *
+ * 
  * This mirrors the backend config in packages/payment-gateway/config/bank-restrictions.php
  * to provide frontend validation for settlement rail selection.
- *
+ * 
  * IMPORTANT: Keep this synchronized with the backend config.
  */
 
@@ -83,12 +83,12 @@ export function isEMI(bankCode: string | null | undefined): boolean {
  */
 export function getAllowedRails(bankCode: string | null | undefined): string[] {
     if (!bankCode) return ['INSTAPAY', 'PESONET'];
-
+    
     const restriction = EMI_RESTRICTIONS[bankCode];
     if (restriction) {
         return restriction.allowed_rails;
     }
-
+    
     // Traditional banks support both rails
     return ['INSTAPAY', 'PESONET'];
 }
