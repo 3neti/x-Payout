@@ -10,6 +10,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 function isPublicPackagePage(name: string): boolean {
     return [
         'x-change/claim/',
+        'x-change/public/',
         'x-change/provisioning/',
         'x-change/onboarding/',
         'form-flow/',

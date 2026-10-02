@@ -75,5 +75,12 @@ it('ships a production Vite manifest for Cloud deployments', function (): void {
     );
 
     expect($manifest)->toHaveKey('resources/js/app.ts')
-        ->and($manifest)->toHaveKey('resources/css/app.css');
+        ->and($manifest)->toHaveKey('resources/css/app.css')
+        ->and($manifest)->toHaveKey('resources/js/pages/x-change/public/AutoGenerate.vue');
+});
+
+it('renders x-change public pages without the authenticated application shell', function (): void {
+    $applicationEntry = file_get_contents(resource_path('js/app.ts'));
+
+    expect($applicationEntry)->toContain("'x-change/public/'");
 });
