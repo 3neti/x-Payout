@@ -1,157 +1,192 @@
-# x-PayOut Public Cloud Deployment Compass
+# x-PayOut Retirement and Cleanroom Redeployment Compass
 
-**Last updated:** 2026-10-02  
-**Current position:** Corrective release ready; storage recovery required before Gate 4  
-**Overall status:** Blocked fail-closed; deployment succeeded, but commissioning is prohibited  
-**Target:** `https://payout.disburse.cash`
+**Last updated:** 2026-10-03
+
+**Current position:** Gate 2 — corrective dispositions required
+
+**Overall status:** Audit complete; unresolved ledger obligations block retirement
+
+**Current public host:** `https://payout.disburse.cash`
 
 ## Purpose
 
-This compass is the durable operational memory for the first public x-PayOut
-cleanroom deployment. Update it after every completed, blocked, rolled-back, or
-explicitly deferred gate.
+This compass is the durable operational memory for retiring the current public
+x-PayOut beta and recreating it as a cleanroom demonstration for banks and
+EMIs. Update it after every completed, blocked, rolled-back, or deferred gate.
 
 The governing plan is
 [X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md](X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md).
 
-## Current facts
+## Current verified facts
 
-- Laravel Cloud application `x-PayOut` now exists as
-  `app-a2e24259-f715-4445-97e9-1a52680273d9` in `ap-southeast-1`.
-- Its production environment is
-  `env-a2e2425b-d774-44b2-a667-31abaa36a224` with generated URL
-  `https://x-payout-production-mixtag.laravel.cloud`.
-- No current Laravel Cloud environment has a custom domain attached.
-- `payout.disburse.cash` has no attachment conflict inside the current Laravel
-  Cloud organization.
-- External DNS ownership and records have not yet been verified.
-- The proven nearby topology is `ap-southeast-1`.
-- `x-change-testing / testing` remains running and must not be modified by this
-  deployment.
-- A clean canonical checkout at tag `v1.0.0-beta.51` was recovered into branch
-  `codex/x-payout-beta52-release`.
-- The corrective release candidate requires `3neti/x-change ^1.0.95`
-  and `3neti/x-mcp ^0.2.0`, contains no Composer path repository, and locks
-  those packages to `v1.0.95` and `v0.2.0` respectively.
-- Composer strict validation passes. The focused build, bootstrap,
-  commissioning-invitation, and release-contract suite passes with 10 tests
-  and 62 assertions. The full host suite passes with 49 tests and 220
-  assertions when supplied a test-only application key.
-- Packagist publishes `3neti/x-payout v1.0.0-beta.51`; its tag and `main`
-  resolve to commit `ef09567d1dc4319fcdf6fd983affd0f2560f67be` and its
-  published Composer metadata requires `3neti/x-change:^1.0`.
-- The intended x-change release at planning time is `v1.0.95`; the first Cloud
-  deployment must still prove the exact lock and installed runtime version.
-- Historical balances, users, and Pay Codes will not be restored into this
-  cleanroom.
-- Dedicated PostgreSQL cluster `frosty-king-61929244`, schema `1149023`, and
-  private Valkey cache `cache-a2e24572-88d9-4882-85d0-2a0dce8505f4` are
-  attached to the production environment.
-- Private bucket `fls-a2e246fb-aa54-4b75-abb0-ab45681d3e35` was created for
-  x-PayOut claim evidence. Its credentials are attached through encrypted
-  Laravel Cloud secrets, but bounded runtime diagnostics prove that it is not
-  operational from the environment.
-- First deployment `depl-a2e24ea7-75aa-4fa1-a487-cf2dd564c763` succeeded from
-  source commit `ef09567d1dc4319fcdf6fd983affd0f2560f67be`.
-- The deployed runtime contains `3neti/x-change v1.0.64`, not the intended
-  `v1.0.95`, and does not contain `3neti/x-mcp`. It must not be commissioned.
-- `public/build/manifest.json` is present in the deployed release.
-- The generated URL redirects to the protected commissioning surface and the
-  instance remains financially locked.
+- Laravel Cloud application:
+  `app-a2e24259-f715-4445-97e9-1a52680273d9`.
+- Production environment:
+  `env-a2e2425b-d774-44b2-a667-31abaa36a224`.
+- Public URL: `https://payout.disburse.cash`.
+- x-PayOut: `v1.0.0-beta.59`, commit `39c56c1`.
+- x-change: `v1.0.98`, commit `5565cf14`.
+- Active deployment:
+  `depl-a2e2e354-98c3-4633-bb23-5098fed89b76`.
+- Queue worker:
+  `process-a2e2caf6-a96d-46ff-bb49-d118c1feca12` consuming
+  `x-change-funding,x-change-feedback,default`.
+- The release lock is Packagist-backed. The temporary Composer Git repository
+  override was removed.
+- PostgreSQL, durable cache, and separately controlled private DigitalOcean
+  Space are part of the working topology.
+- Public On-Demand Issuance and the public claim route have been exercised with
+  real money.
+
+## ZLXD lifecycle evidence
+
+- Funding order: `01M3YETGTHB17A1EE65MRDRDNG`.
+- Provider transaction: `438868770`.
+- Payment: `PHP 40.00`.
+- Pay Code: `ZLXD`.
+- Principal: `PHP 25.00`.
+- Commercial charge: `PHP 15.00`.
+- Exactly one Commercial Sale was observed when issuance completed.
+- The service-provider payable allocation was `PHP 15.00`.
+- The user confirmed that ZLXD was claimed and redeemed.
+- The user confirmed receipt of the `PHP 25.00` bank transfer in GCash.
+
+**Disposition:** The external principal obligation is fulfilled. NetBank
+reports the payout as completed and the user confirmed receipt, but the local
+reconciliation remains `pending`. The persisted payout and Treasury release
+must be synchronized exactly once before deletion.
 
 ## Gate ledger
 
-| Gate | State | Evidence required before completion |
+| Gate | State | Remaining evidence or action |
 | --- | --- | --- |
-| 0. Release integrity | Ready for publication | Corrective beta candidate locks x-change `v1.0.95` and x-mcp `v0.2.0`; validation and full host tests pass |
-| 1. Cloud foundation | **Complete** | New app/environment, dedicated PostgreSQL, and private Valkey are present and attached |
-| 2. Production configuration | **Blocked** | Runtime values and secrets are applied, but the private evidence bucket fails real writes in both S3 addressing modes |
-| 3. Deploy before commissioning | **Complete** | Deployment `depl-a2e24ea7-75aa-4fa1-a487-cf2dd564c763` succeeded and the protected commissioning surface is active |
-| 4. Commission once | Pending | Pre-commission pass, bootstrap result, final strict-doctor pass, principals and reserves |
-| 5. Generated-domain lifecycle | Pending | Maker/Checker claims, EULA, low-value lifecycle, balance report, final doctor |
-| 6. Custom-domain connection | Pending | Cloud domain ID, DNS records applied, hostname/SSL/origin connected, primary domain set |
-| 7. Public-domain acceptance | Pending | Browser and runtime acceptance through `payout.disburse.cash` |
+| 1. Record proven deployment | In progress | Finalize sanitized deployment record from captured audit evidence |
+| 2. Close and reconcile current host | **Blocked** | Synchronize ZLXD; dispose of `PHP 40.00` Client Funds; resolve two funded invitations; disable new orders |
+| 3. Capture retirement evidence | Pending | Recovery point, reports and hashes, Space inventory, cutover watermark |
+| 4. Freeze deployment kit | In progress | Cloud and Forge adapters are tested locally; Packagist-only reinstall and live adapter proof remain |
+| 5. Controlled retirement | Not authorized | Present exact deletion set and obtain fresh explicit approval |
+| 6. Fresh hosting foundation | Pending | Choose Cloud or Forge; create isolated database/cache/storage, worker, scheduler, and deploy |
+| 7. Safe commissioning | Pending | Cutover boundary, pre-doctor, principals, Treasury, final doctor |
+| 8. Generated-domain acceptance | Pending | Browser, storage, worker, MCP, and report acceptance |
+| 9. Restore custom domain | Pending | Domain, DNS, TLS, primary URL, final acceptance |
+| 10. Institutional handoff | Pending | Sanitized repeatability and ownership bundle |
 
 ## Safety posture
 
-- The target Cloud application and isolated infrastructure exist.
-- No commissioning mutation has occurred.
-- No onboarding invitations have been created.
-- No balances or records have been transferred.
-- No DNS record has been changed.
-- Public traffic has not been switched.
-- The private evidence bucket has not accepted any verified object.
-- The existing testing instance remains the only active x-change host in scope.
+- Do not delete the current app merely because the visible ZLXD lifecycle
+  succeeded.
+- No new public funding order should be created during retirement evidence
+  capture.
+- The retained private DigitalOcean Space and recovery point are outside the
+  application-deletion set.
+- Shared NetBank history must not be replayed or recapitalized by the
+  replacement instance.
+- A new real-money acceptance run requires separate authorization.
+- Application deletion requires fresh explicit authorization after the exact
+  resource set and final reconciliation are shown.
 
 ## Decisions
 
-### 2026-10-02 — Separate proof from traffic switching
+### 2026-10-02 — Preserve the successful lifecycle as evidence
 
-The generated Laravel Cloud URL is used for deployment, commissioning, and
-lifecycle proof. `payout.disburse.cash` is attached only after those gates pass.
+ZLXD is the first completed public-production-beta proof for this retirement
+cycle. Its payment, issuance, Commercial Sale, redemption, and payout evidence
+must be preserved in the handoff bundle.
 
-### 2026-10-02 — Released packages only
+### 2026-10-02 — User-confirmed receipt is necessary but not the deletion gate
 
-The cleanroom must originate from an exact published x-PayOut release. Local
-path repositories and `@dev` dependencies are disallowed.
+Receipt of the payout establishes the external outcome. Database, journal,
+provider, and queue evidence remain necessary before destructive retirement.
 
-### 2026-10-02 — Fresh operational state
+### 2026-10-02 — Provider cutover is a financial control
 
-No database, account, Pay Code, or balance restoration is part of this
-deployment. Continuity evidence may be retained separately, but it is not an
-authorization to recreate balances.
+Because the NetBank provider identity may be shared across hosts, the fresh
+instance requires an explicit transaction watermark or cutover time. A fresh
+database alone does not prevent recognition of historical provider activity.
 
-### 2026-10-02 — Fail closed
+### 2026-10-02 — Recreate from published artifacts
 
-Failed deployment, readiness, commissioning, storage, provider, or domain gates
-must not be converted into partial public operation.
+The cleanroom uses exact Packagist releases, packaged assets, a synchronized
+lock, and no local repositories. This is the repeatability claim shown to
+banks and EMIs.
 
-## Known blockers and risks
+### 2026-10-02 — Keep destructive authority narrow
 
-1. `v1.0.0-beta.51` deploys successfully but installs `3neti/x-change
-   v1.0.64`; the accepted release target is `v1.0.95`. `3neti/x-mcp` is also
-   absent. A corrected x-PayOut release is required before commissioning.
-2. The dedicated private bucket is nonfunctional from the runtime. Diagnostic
-   command `comm-a2e254b1-34d9-4e1e-b97d-45b98eac23fe` returned
-   `written=false` for both virtual-hosted and path-style addressing. The
-   preceding check `comm-a2e25411-3966-4a34-8848-ed87713f8b01` failed with
-   `League\\Flysystem\\UnableToCheckFileExistence`.
-3. External DNS access for `disburse.cash` will be required at Gate 6.
-4. Shared NetBank credentials can expose one provider inventory to multiple
-   x-change hosts. Treasury snapshots must therefore be interpreted as
-   instance evidence, not exclusive ownership of the bank balance.
-5. Real-money lifecycle acceptance requires a separately authorized amount and
-   must not be inferred from approval of this plan.
+Approval to document or reconcile is not approval to delete. The application,
+database, cache, custom domain, or any retained evidence resource may be
+deleted only when explicitly named in a later authorization.
 
-## Immediate next move
+### 2026-10-03 — Adopt Laravel Forge as the client-owned-server adapter
 
-Complete two corrective, non-financial prerequisites:
+The deployment kit now has two first-class targets. Laravel Cloud remains the
+adapter for the shared `payout.disburse.cash` service. Laravel Forge is the
+adapter for a bank- or EMI-controlled VPS with its own infrastructure,
+credentials, database, Redis, workers, scheduler, SSL, and backups.
 
-1. prepare and publish the next x-PayOut beta with an exact release lock for
-   `3neti/x-change v1.0.95` and the intended `3neti/x-mcp` release;
-2. replace or repair evidence storage and require a successful bounded
-   write/read/delete proof;
-3. redeploy and verify exact runtime packages, assets, HTTPS canonical URLs,
-   and the strict pre-commission doctor; and
-4. stop without commissioning if any of those checks fails.
+Forge owns server and release operations. x-PayOut retains the exact-version
+lock, pre-commission readiness, one-time commissioning, strict doctor, balance
+evidence, and provider cutover controls. The recurring Forge deployment path
+cannot invoke commissioning. Deployer is not combined with Forge and remains a
+future adapter for unmanaged SSH or multi-server environments.
 
-Do not change the authoritative nameservers for `disburse.cash`. After all
-generated-domain lifecycle gates pass, attach `payout.disburse.cash` in Laravel
-Cloud, publish only the exact CNAME/TXT records returned by Cloud at the current
-DNS provider, verify the domain, and then make it primary.
+### 2026-10-03 — Start the cleanroom deployment record
 
-The corrective files are prepared in a clean canonical Git branch. Publication
-still requires explicit authorization to push the release commit and create
-the next x-PayOut beta tag. The older dirty backup repository remains
-untouched.
+The Laravel Cloud adapter completed a non-destructive preflight. The current
+application remains running and no infrastructure was changed. The execution
+log records the exact current topology, retained DigitalOcean Space, managed
+secret IDs without values, failed unattached domain record, and a newly
+allocated instance-scoped evidence prefix.
+
+The preflight exposed one configuration correction for the replacement:
+Laravel Cloud reports the existing app scheduler disabled even though scheduled
+x-change activity is configured. The cleanroom foundation must explicitly
+enable it. The deployment kit must be committed and published before it is
+used for the source-only cleanroom proof.
+
+## Known risks and deferred scope
+
+1. ZLXD is redeemed and externally settled, but its local disbursement
+   reconciliation remains `pending`; `PHP 25.00` remains in Pay Code Reserve.
+2. An expired funding order credited `PHP 40.00` to Client Funds. That balance
+   requires an explicit customer disposition before retirement.
+3. Two funded onboarding invitations remain active and unredeemed, reserving
+   `PHP 200.00`.
+4. One historical failed issuance-resume job remains as incident evidence. Its
+   order later issued successfully and the job must not be retried.
+5. The provider snapshot is stale, so the final balance report is incomplete.
+6. Provider inventory is shared across instances and is not proof of exclusive
+   ownership by this host.
+7. Balance migration is explicitly deferred; retirement evidence is not
+   authority to recreate Client Funds in the replacement host.
+8. A cleanroom demonstration does not replace a bank or EMI's licensing,
+   governance, credential ownership, reconciliation, and incident-response
+   duties.
+
+## Immediate next controlled move
+
+The read-only audit is recorded in
+[PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md](PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md).
+
+The next controlled gate is a separately authorized corrective disposition:
+
+1. synchronize ZLXD's provider-completed result without creating a second
+   payout;
+2. choose how to return or otherwise honor the `PHP 40.00` Client Funds balance;
+3. cancel or claim the two funded onboarding invitations;
+4. disable new public issuance;
+5. refresh the provider snapshot; and
+6. rerun the read-only report and require a complete closing posture.
+
+Do not clean failed jobs, delete resources, or recreate the application in the
+same gate.
 
 ## Update protocol
 
 After every gate:
 
-1. change **Current position** and **Overall status**;
+1. update **Current position** and **Overall status**;
 2. update the gate ledger;
 3. record exact evidence and identifiers;
-4. add new decisions, blockers, or risks without deleting history;
-5. state the next bounded move; and
-6. distinguish read-only evidence from external or financial mutations.
+4. append decisions, blockers, and accepted risks without deleting history;
+5. distinguish read-only evidence from financial or external mutations; and
+6. state the next bounded move and its authorization requirement.

@@ -1,259 +1,325 @@
-# x-PayOut Public Cloud Cleanroom Deployment Plan
+# x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** In execution; Cloud foundation and first deployment complete, commissioning blocked  
-**Recorded:** 2026-10-02  
-**Target application:** `x-PayOut`  
-**Target environment:** `production`  
-**Target public URL:** `https://payout.disburse.cash`  
-**Target region:** `ap-southeast-1`
+**Status:** Ready for final retirement evidence; destructive removal not yet authorized
+
+**Updated:** 2026-10-03
+
+**Current public host:** `https://payout.disburse.cash`
+
+**Current x-PayOut:** `v1.0.0-beta.59` (`39c56c1`)
+
+**Current x-change:** `v1.0.98` (`5565cf14`)
 
 ## Objective
 
-Deploy a genuinely clean x-PayOut host to Laravel Cloud, commission it from
-released packages, prove the financial and onboarding lifecycle on the
-Cloud-generated URL, and only then connect `payout.disburse.cash`.
+Preserve a bank/EMI-grade record of the working x-PayOut deployment, retire the
+current Laravel Cloud application without losing financial or recovery
+evidence, and reproduce it from published packages in a new cleanroom.
 
-This deployment does not transfer users, balances, Pay Codes, or database
-records from x-change testing or any earlier x-PayOut instance.
+The final proof is not merely that a Laravel application can be recreated. It
+must show that an institution can deploy, commission, operate, retire, and
+recover an x-PayOut host using an auditable and fail-closed procedure.
 
-The generated `laravel.cloud` URL is the deployment and commissioning proving
-ground. The custom domain is a separately controlled traffic-switch gate.
+The deployment kit supports two first-class hosting adapters:
+
+- **Laravel Cloud** for the shared `payout.disburse.cash` service; and
+- **Laravel Forge** for a bank- or EMI-controlled VPS.
+
+Deployer remains a future portability option for unmanaged SSH or multi-server
+targets. It is not layered on top of a Forge-managed server.
 
 ## Non-negotiable boundaries
 
-- Deploy an exact published x-PayOut release, never a local path repository or
-  `@dev` dependency.
-- Use a fresh database and independently configured durable infrastructure.
-- Do not copy historical balances or operational records.
-- Do not commission after a failed deployment.
-- Do not attach public traffic before strict doctor and lifecycle acceptance.
-- Do not expose secret values in commands, logs, or reports.
-- Keep the instance fail-closed when any readiness gate fails.
-- Do not repeat financial mutations merely because a later gate fails.
+- Do not delete the current application while an unresolved real-money
+  obligation, funding order, Pay Code, Commercial Sale, or queued financial job
+  remains.
+- Do not infer a payer refund from an internal ledger reversal or credit.
+- Preserve the database recovery point and private DigitalOcean Space before
+  deleting Laravel Cloud resources.
+- Deploy only exact published releases resolved through Packagist.
+- Never copy plaintext secrets into reports, source control, or command output.
+- Commission once. A failed later gate does not authorize repeating an earlier
+  financial mutation.
+- Establish a provider cutover boundary so the replacement host cannot
+  recognize or capitalize transactions belonging to the retired host.
+- Keep deletion and any new real-money acceptance as separately authorized
+  actions.
 
-## Gate 0 — Release integrity
+## Gate 1 — Record the proven deployment
 
-Prepare and prove the exact x-PayOut release that Laravel Cloud will deploy.
-
-1. Start from the canonical `3neti/x-payout` repository.
-2. Require a released `3neti/x-change` version, currently expected to be
-   `v1.0.95`, rather than `@dev`.
-3. Remove local Composer path repositories from the release artifact.
-4. Synchronize `composer.json` and `composer.lock`.
-5. Confirm that production frontend assets and `public/build/manifest.json`
-   are included.
-6. Run Composer validation and the focused cleanroom tests.
-7. Publish an exact x-PayOut beta tag to GitHub and Packagist.
-8. Install that exact tag into an empty temporary directory using Packagist
-   only.
-9. Record the selected x-PayOut, x-change, form-flow, x-mcp, and other direct
-   runtime versions.
-
-**Acceptance:** The release installs without reading any local package path,
-and its lock resolves the intended released dependencies.
-
-## Gate 1 — Cloud foundation
-
-Create a new Laravel Cloud application because no current application matches
-`x-PayOut` or `x-payout`.
-
-- Application display name: `x-PayOut`
-- Expected application slug: `x-payout`
-- Source: `3neti/x-payout`, exact release branch or commit
-- Region: `ap-southeast-1`
-- Environment: `production`
-- Fresh PostgreSQL database
-- Durable cache and queue configuration
-- Private durable claim-evidence storage
-
-The existing `x-change-testing / testing` environment must remain untouched.
-
-**Acceptance:** The application, environment, and dedicated infrastructure
-exist, and no operational or financial records have been created.
-
-## Gate 2 — Production configuration
-
-Attach existing managed secrets only where they are valid for this new host:
-
-- NetBank;
-- EngageSpark;
-- TXTCMDR;
-- HyperVerge;
-- Mapbox;
-- OpenCage; and
-- private storage credentials.
-
-Configure at least:
-
-- `APP_ENV=production`;
-- `APP_DEBUG=false`;
-- secure session cookies;
-- durable session, cache, and queue drivers;
-- the NetBank production deployment profile;
-- private durable claim-evidence storage;
-- System Principal and Commercial Principal commissioning values;
-- funded Maker and Checker invitation amounts;
-- EULA enforcement; and
-- the intended public-issuance policy.
-
-Secrets must be attached through Laravel Cloud secret management. Reports may
-name a configured capability but must never reveal its credential value.
-
-**Acceptance:** The pre-deployment configuration inventory is complete and no
-secret appears in the deployment record.
-
-## Gate 3 — Deploy before commissioning
-
-Use the exact released host and its packaged production assets. Laravel Cloud
-must not compile frontend assets during this deployment.
-
-Build command:
-
-```bash
-composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-```
-
-Deploy command:
-
-```bash
-php artisan migrate --force
-```
-
-Verify that:
-
-- the deployment becomes active;
-- `public/build/manifest.json` exists;
-- the home and commissioning surfaces respond;
-- no npm, Vite, or Vite Plus build ran in Cloud; and
-- installed package versions match the release lock.
-
-**Stop condition:** A failed build or deploy ends this gate. Commissioning must
-not run.
-
-## Gate 4 — Commission once
-
-Run the protected readiness and commissioning sequence:
-
-```bash
-php artisan x-change:doctor --pre-commission --strict
-composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction
-php artisan x-change:doctor --strict
-```
-
-Record without exposing credentials:
-
-- provider opening inventory;
-- Account Funding Reserve;
-- Pay Code Reserve;
-- issuance guard and provider-liquidity state;
-- System Principal;
-- Commercial Principal;
-- Maker invitation;
-- Checker invitation; and
-- strict-doctor pass and failure totals.
-
-**Stop condition:** Any failed strict gate leaves the instance fail-closed.
-Do not rerun commissioning until the failure and mutation posture are known.
-
-## Gate 5 — Generated-domain lifecycle proof
-
-Before connecting the public domain:
-
-1. Claim the Maker invitation.
-2. Claim the Checker invitation.
-3. Accept the EULA for each interactive user.
-4. Confirm the configured onboarding Client Funds.
-5. Confirm Maker and Checker land in their correct workspaces.
-6. Generate one separately authorized low-value Pay Code.
-7. Verify its accounting, presentation, and claim route.
-8. Run the read-only balance report and preserve its hashes.
-9. Rerun strict doctor.
-
-No custom DNS is required for this proof. Use the generated Cloud URL.
-
-**Acceptance:** The clean host works independently of `disburse.cash`, strict
-doctor passes, and the balance report agrees with the observed lifecycle.
-
-## Gate 6 — Connect `payout.disburse.cash`
-
-Only after Gates 0 through 5 pass:
-
-1. Add `payout.disburse.cash` to the production environment.
-2. Retrieve Laravel Cloud's exact DNS records.
-3. Add those records to the authoritative `disburse.cash` DNS zone.
-4. Verify hostname ownership, SSL, and origin routing.
-5. Set the verified domain as the environment's primary domain.
-6. Set `APP_URL=https://payout.disburse.cash`.
-7. Redeploy or clear cached configuration as required.
-8. Rerun strict doctor and confirm commissioning-manifest freshness.
-
-Laravel Cloud is responsible for provisioning and renewing HTTPS after the
-domain is correctly connected. Do not invent DNS targets; use the records
-returned for this environment.
-
-Keep the existing authoritative nameservers for `disburse.cash`. This gate is
-not a nameserver migration. Add only the exact `payout` CNAME and any ownership
-TXT record returned by Laravel Cloud at the current DNS provider. When the DNS
-provider offers proxying, keep the record DNS-only until Laravel Cloud reports
-hostname, certificate, and origin verification as complete.
-
-**Acceptance:** Laravel Cloud reports hostname, SSL, and origin as connected,
-and all application-generated public URLs use the custom domain.
-
-## Gate 7 — Final public-domain acceptance
-
-Verify through `https://payout.disburse.cash`:
-
-- home page and pricing;
-- Claim entry and claim QR;
-- public On-Demand Issuance;
-- Maker and Checker authentication;
-- the Cockpit;
-- Pay Code share links and stamps;
-- secure cookies and redirects;
-- public AI/MCP discovery;
-- queue workers and scheduled processes;
-- strict doctor; and
-- the read-only balance report.
-
-Any new real-money payment, SMS, Pay Code issuance, or claim during acceptance
-requires its own explicit authorization and stated maximum exposure.
-
-## Rollback
-
-If domain verification or application acceptance fails:
-
-1. preserve the generated Cloud URL;
-2. remove or disable only the custom-domain traffic record;
-3. leave financial operations fail-closed;
-4. do not recreate the environment automatically;
-5. do not repeat commissioning automatically; and
-6. diagnose against the existing fresh database and recorded evidence.
-
-If a rollback follows a financial mutation, first record the current Treasury,
-invitation, Pay Code, and journal posture. A DNS rollback is not a financial
-rollback.
-
-## Required final report
-
-The handoff report must include:
+Create a durable, sanitized deployment record containing:
 
 - application and environment IDs;
 - generated and custom URLs;
-- exact package versions and release commits;
-- deployment ID and status;
-- database, cache, queue, and private-storage readiness without credentials;
-- pre-commission and final strict-doctor results;
-- opening inventory and reserve figures;
-- Maker and Checker claim URLs and redemption states;
-- lifecycle evidence;
-- balance-report timestamp and hashes;
-- custom-domain hostname, SSL, and origin status; and
-- every remaining warning, blocker, or deferred item.
+- exact source commits and package versions;
+- deployment and worker topology;
+- database, cache, and private-storage topology without credentials;
+- commissioning and strict-doctor results;
+- System and Commercial Principal posture;
+- opening inventory and Treasury positions;
+- public On-Demand Issuance and MCP posture;
+- known corrections made during the deployment; and
+- the successful ZLXD lifecycle.
+
+The command-level reconstruction procedure belongs in the cleanroom runbook;
+the deployment record describes what actually happened.
+
+**Acceptance:** Another operator can distinguish proven facts, configuration
+requirements, historical incidents, and deferred work without access to this
+conversation.
+
+## Gate 2 — Close and reconcile the current host
+
+Before retirement:
+
+1. disable creation of new public On-Demand Issuance orders;
+2. stop initiating new financial acceptance scenarios;
+3. verify the database state of every open funding order and Pay Code;
+4. verify the queue has no pending or failed financial jobs requiring
+   disposition;
+5. reconcile Commercial Sales and service-provider payable allocations;
+6. run strict doctor and the read-only balance report;
+7. record provider inventory as shared-provider evidence, not exclusive cash
+   ownership; and
+8. record every warning or accepted exception.
+
+### ZLXD disposition
+
+The user confirmed the following real-money lifecycle on 2026-10-02:
+
+- funding order: `01M3YETGTHB17A1EE65MRDRDNG`;
+- provider transaction: `438868770`;
+- exact payment: `PHP 40.00`;
+- Pay Code: `ZLXD`;
+- principal: `PHP 25.00`;
+- commercial charge: `PHP 15.00`;
+- Pay Code claimed and redeemed; and
+- the `PHP 25.00` bank transfer was received in the claimant's GCash account.
+
+This closes the observed principal obligation externally. The retirement audit
+confirmed the redemption, single Commercial Sale, and single allocation, but
+also found that the local disbursement reconciliation remains `pending` while
+NetBank reports `completed`. That result must be synchronized exactly once
+before deletion.
+
+**Acceptance:** No unresolved principal liability or ambiguous funding order
+remains, and the final reports have timestamps and integrity hashes.
+
+## Gate 3 — Capture the retirement evidence set
+
+Preserve, without exposing secrets:
+
+- an encrypted database recovery point or supported snapshot;
+- the final continuity balance report and hashes;
+- active, redeemed, cancelled, and attention-required Pay Code counts;
+- funding-order states and provider transaction references;
+- Commercial Sales and charge allocations;
+- queue and scheduler posture;
+- strict-doctor output;
+- the installation manifest and configuration fingerprint;
+- an inventory of private DigitalOcean Space objects; and
+- a cutover timestamp and provider transaction watermark.
+
+The private DigitalOcean Space is retained. Deleting the Cloud application
+must not delete or make the evidence set unreadable.
+
+**Acceptance:** Recovery evidence has been independently read-checked and the
+provider cutover boundary is explicit.
+
+## Gate 4 — Freeze a secret-free deployment kit
+
+The demonstration kit must identify:
+
+- `3neti/x-payout v1.0.0-beta.59` or a later explicitly approved release;
+- `3neti/x-change v1.0.98` or its later approved lock;
+- the complete stable Composer lock;
+- packaged frontend assets and `public/build/manifest.json`;
+- the commissioning manifest;
+- required environment-variable names, never values;
+- PostgreSQL, cache, queue worker, scheduler, and private-object-storage
+  requirements;
+- the pre-commission, commissioning, and final-doctor commands; and
+- rollback and incident-response checkpoints.
+
+The kit must expose a common lifecycle across its supported adapters:
+
+`plan → foundation → configure → deploy → commission → verify → domain`
+
+Adapter ownership is explicit:
+
+| Responsibility | Laravel Cloud adapter | Forge adapter |
+| --- | --- | --- |
+| Infrastructure | Cloud CLI | Forge dashboard/API |
+| Source release | Cloud Git build | Forge Git deployment |
+| Database/cache | Attached Cloud resources | Forge-managed or client-owned resources |
+| Worker/scheduler | Cloud instance/process | Forge worker and scheduler |
+| Secrets | Cloud managed secrets | Forge-managed site `.env` |
+| Application deploy | `deploy-production-cleanroom.sh` | `deploy-production-forge.sh` |
+| Commissioning | x-PayOut bootstrap, once | x-PayOut bootstrap, once |
+| Verification | strict doctor and balance report | strict doctor and balance report |
+
+The Forge recurring deployment must never call the commissioning command.
+Commissioning remains a separately confirmed, one-time financial ceremony.
+
+The kit must install in an empty directory from Packagist without local path or
+Git repository overrides.
+
+**Acceptance:** A clean dependency install reproduces the intended exact
+runtime versions and packaged assets.
+
+## Gate 5 — Controlled retirement
+
+This is destructive and requires fresh, explicit authorization after Gates 2
+through 4 pass.
+
+1. place the application in retired or maintenance posture;
+2. detach `payout.disburse.cash` without changing its authoritative
+   nameservers;
+3. record final Laravel Cloud resource identifiers;
+4. confirm the recovery point and private Space remain accessible;
+5. delete the Laravel Cloud application and only the explicitly approved
+   application-owned resources; and
+6. verify that the public hostname no longer routes to the retired runtime.
+
+Do not delete shared secrets, shared NetBank configuration, the retained
+DigitalOcean Space, or provider-side history as part of this gate.
+
+## Gate 6 — Fresh hosting foundation
+
+Select exactly one approved hosting adapter for a cleanroom run.
+
+### Gate 6A — Laravel Cloud
+
+Create a new application from the published x-PayOut release:
+
+- fresh Laravel Cloud application and production environment;
+- fresh PostgreSQL database;
+- fresh durable cache;
+- private DigitalOcean Space attachment;
+- web instance, scheduler, and queue worker for
+  `x-change-funding,x-change-feedback,default`;
+- encrypted secret attachments; and
+- generated Cloud URL for initial verification.
+
+Build with packaged assets. Do not run npm, Vite, or Vite Plus in Cloud.
+
+**Acceptance:** Deployment is active, migration succeeds, packaged assets are
+present, exact versions match the release lock, and no commissioning mutation
+has occurred.
+
+### Gate 6B — Laravel Forge
+
+For a client-owned VPS:
+
+- provision or attach an Ubuntu server through Forge;
+- create the site, database, Redis connection, SSL certificate, backups, and
+  health check;
+- configure one supervised Redis queue worker for
+  `x-change-funding,x-change-feedback,default`;
+- enable the Laravel scheduler;
+- install the Forge-managed application `.env` without committing secrets;
+- use the package's committed frontend assets; and
+- run the Forge adapter's `install` phase, which stops at the strict
+  pre-commission doctor.
+
+The Forge deployment-control worksheet is not the Laravel application `.env`.
+It contains only deployment confirmations, paths, the expected release, and
+the provider cutover evidence.
+
+**Acceptance:** The server is healthy, migrations succeed, the queue worker and
+scheduler are supervised, packaged assets exist, the exact x-change version
+matches the lock, pre-commission doctor passes, and no commissioning mutation
+has occurred.
+
+## Gate 7 — Safe commissioning
+
+1. apply the intended `netbank` deployment profile and production runtime
+   tier;
+2. set the new provider cutover boundary before any recognition step;
+3. run the strict pre-commission doctor;
+4. provision the System Principal and Commercial Principal;
+5. establish the Commercial Revenue Account;
+6. capitalize only provider inventory authorized for this new instance;
+7. optionally issue funded Maker and Checker invitations when the rehearsal
+   calls for them;
+8. persist the installation manifest; and
+9. run final strict doctor.
+
+The replacement instance must not replay or recapitalize provider transactions
+that belong to the retired instance.
+
+**Acceptance:** Strict doctor passes, principal and Treasury controls reconcile,
+and no historical provider transaction was recognized twice.
+
+## Gate 8 — Generated-domain acceptance
+
+Verify through the generated Cloud URL:
+
+- home, pricing, Claim, and public On-Demand Issuance surfaces;
+- Maker and Checker onboarding when included;
+- EULA enforcement;
+- Cockpit access and role routing;
+- worker and scheduler execution;
+- private evidence storage write/read/delete;
+- public MCP discovery and a read-only MCP-client call;
+- strict doctor; and
+- the read-only balance report.
+
+Use rollback-only or simulated scenarios first. Any real payment, SMS, Pay Code
+issuance, or claim requires separate authorization and a stated maximum
+exposure.
+
+## Gate 9 — Restore `payout.disburse.cash`
+
+Only after Gate 8 passes:
+
+1. attach `payout.disburse.cash` to the new environment;
+2. publish only Laravel Cloud's exact DNS records;
+3. verify hostname, certificate, and origin;
+4. set the custom domain as primary;
+5. update `APP_URL` and clear cached configuration as required; and
+6. rerun strict doctor and public-surface acceptance.
+
+## Gate 10 — Institutional handoff proof
+
+Produce a sanitized demonstration bundle containing:
+
+- elapsed time per gate;
+- exact-version bill of materials;
+- infrastructure and credential ownership matrices;
+- commissioning and balance reports;
+- cutover and rollback procedures;
+- a clean command transcript with secrets removed;
+- known limitations and deferred continuity features; and
+- named operational responsibilities for the bank or EMI.
+
+The claim is limited to repeatable deployment and commissioning. It is not a
+claim that licensing, governance, reconciliation, or institutional operating
+responsibility is supplied by the software alone.
+
+## Current next move
+
+The read-only audit is complete and recorded in
+[PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md](PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md).
+
+Gate 2 now requires a separately authorized corrective disposition:
+
+1. synchronize ZLXD's provider-completed payout exactly once;
+2. return or otherwise honor the `PHP 40.00` Client Funds balance created by
+   the expired first order;
+3. claim or cancel the two funded onboarding invitations totalling
+   `PHP 200.00`;
+4. disable new public issuance;
+5. refresh the provider snapshot; and
+6. rerun strict doctor and the read-only balance report.
+
+Do not delete the Laravel Cloud application yet. After Gates 2 through 4 are
+complete, present the exact resources proposed for deletion and obtain fresh
+explicit authorization.
 
 ## Operating record
 
-Progress, evidence, blockers, and the next authorized move are maintained in
+Progress and evidence are maintained in
 [X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md](X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md).
-The established command-level procedure remains in
+The command-level commissioning procedure remains in
 [X_PAYOUT_CLEANROOM_COMMISSIONING.md](X_PAYOUT_CLEANROOM_COMMISSIONING.md).

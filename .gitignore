@@ -16,6 +16,7 @@
 .env.backup
 .env.x-change.backup.*
 .env.production
+.env.forge.production
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
