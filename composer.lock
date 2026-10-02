@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7bf4653bfdbd0528df507d7a5c4cf86",
+    "content-hash": "75bdd1b2275ef79222586ab90f0f9915",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1666,7 +1666,7 @@
             "version": "v1.0.98",
             "source": {
                 "type": "git",
-                "url": "git@github.com:3neti/x-change.git",
+                "url": "https://github.com/3neti/x-change.git",
                 "reference": "5565cf14e5ff7cf18dd5ba6f384f170570a60905"
             },
             "dist": {
@@ -1737,15 +1737,15 @@
             ],
             "type": "library",
             "extra": {
-                "x-change": {
-                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
-                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md",
-                    "adopt-command": "x-change:adopt"
-                },
                 "laravel": {
                     "providers": [
                         "LBHurtado\\XChange\\Providers\\XChangeServiceProvider"
                     ]
+                },
+                "x-change": {
+                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
+                    "adopt-command": "x-change:adopt",
+                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md"
                 }
             },
             "autoload": {
@@ -1753,22 +1753,7 @@
                     "LBHurtado\\XChange\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LBHurtado\\XChange\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "php -d memory_limit=2G vendor/bin/pest"
-                ],
-                "test:unit": [
-                    "php -d memory_limit=2G vendor/bin/pest"
-                ],
-                "test:coverage": [
-                    "php -d memory_limit=2G vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1782,6 +1767,10 @@
                 }
             ],
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
+            "support": {
+                "issues": "https://github.com/3neti/x-change/issues",
+                "source": "https://github.com/3neti/x-change/tree/v1.0.98"
+            },
             "time": "2026-10-02T14:44:37+00:00"
         },
         {
