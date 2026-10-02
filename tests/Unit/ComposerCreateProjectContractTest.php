@@ -67,3 +67,27 @@ it('creates the local environment and SQLite database during create-project', fu
         @rmdir($projectPath);
     }
 });
+
+it('ships only released x-change runtime packages in its Composer lock', function (): void {
+    $projectRoot = dirname(__DIR__, 2);
+    $composer = json_decode(
+        file_get_contents($projectRoot.'/composer.json'),
+        true,
+        512,
+        JSON_THROW_ON_ERROR,
+    );
+    $lock = json_decode(
+        file_get_contents($projectRoot.'/composer.lock'),
+        true,
+        512,
+        JSON_THROW_ON_ERROR,
+    );
+    $packages = collect($lock['packages'])->keyBy('name');
+
+    expect($composer)
+        ->not->toHaveKey('repositories')
+        ->and(data_get($composer, 'require.3neti/x-change'))->toBe('^1.0.95')
+        ->and(data_get($composer, 'require.3neti/x-mcp'))->toBe('^0.2.0')
+        ->and(data_get($packages->get('3neti/x-change'), 'version'))->toBe('v1.0.95')
+        ->and(data_get($packages->get('3neti/x-mcp'), 'version'))->toBe('v0.2.0');
+});
