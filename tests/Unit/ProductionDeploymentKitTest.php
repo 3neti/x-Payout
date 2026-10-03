@@ -21,7 +21,8 @@ it('ships a secret-free production environment worksheet', function (): void {
         ->toContain('XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED=false')
         ->toContain('DEPLOY_DNS_NAMESERVERS_PRESERVED=true')
         ->toContain('DEPLOY_CONFIRM_PRODUCTION=NO')
-        ->toContain('DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=APP_KEY,')
+        ->toContain('DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=AWS_ACCESS_KEY_ID,')
+        ->not->toMatch('/^DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=(?:[^,\n]+,)*APP_KEY(?:,|$)/m')
         ->toContain('APP_URL=REPLACE_WITH_CURRENT_LARAVEL_CLOUD_URL')
         ->not->toMatch('/^(APP_KEY|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|NETBANK_CLIENT_SECRET|TXTCMDR_API_TOKEN)=.+$/m');
 });
@@ -83,6 +84,19 @@ it('rejects production secret values in the deployment control worksheet', funct
         ->toContain('no local production .env');
 });
 
+it('ships a gitignored one-time re-entry worksheet without app key or values', function (): void {
+    $worksheet = file_get_contents(productionDeploymentKitPath('deployment.production.secrets.example'));
+    $gitignore = file_get_contents(productionDeploymentKitPath('.gitignore'));
+
+    expect($worksheet)
+        ->toContain('AWS_ACCESS_KEY_ID=')
+        ->toContain('NETBANK_CLIENT_SECRET=')
+        ->toContain('XCHANGE_COMMISSIONING_ACCESS_TOKEN=')
+        ->not->toMatch('/^APP_KEY=/m')
+        ->not->toMatch('/^[A-Z][A-Z0-9_]*=.+$/m')
+        ->and($gitignore)->toContain('deployment.production.secrets.local');
+});
+
 it('provides a continuous fail-closed orchestration path', function (): void {
     $script = file_get_contents(productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'));
 
@@ -106,7 +120,7 @@ it('stops before commissioning when a required managed secret is not attached', 
     );
     $worksheet = preg_replace(
         '/^DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=.*$/m',
-        'DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=APP_KEY',
+        'DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=AWS_ACCESS_KEY_ID',
         $worksheet,
     );
 
@@ -140,7 +154,7 @@ BASH);
     expect($process->isSuccessful())->toBeFalse()
         ->and($process->getErrorOutput())
         ->toContain('Required Laravel Cloud managed secrets are not attached:')
-        ->toContain('APP_KEY')
+        ->toContain('AWS_ACCESS_KEY_ID')
         ->toContain('no local production .env fallback');
 });
 

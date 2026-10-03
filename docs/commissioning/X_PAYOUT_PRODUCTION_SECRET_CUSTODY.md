@@ -19,7 +19,7 @@ configuration.
 
 | Material | Active location | Recovery authority | Deployment behavior |
 | --- | --- | --- | --- |
-| `APP_KEY` | Laravel Cloud managed secret | Controlled continuity record or deliberate recovery ceremony | Attach by secret ID; never regenerate silently |
+| `APP_KEY` | Laravel Cloud-managed application environment | Laravel Cloud application recovery | Never export, copy, or include in the re-entry worksheet |
 | NetBank credentials and signing material | Laravel Cloud managed secrets | NetBank operator portal/support | Attach by ID; rotate at provider if lost |
 | EngageSpark and TXTCMDR credentials | Laravel Cloud managed secrets | Respective provider account | Attach by ID; rotate at provider if lost |
 | HyperVerge credentials | Laravel Cloud managed secrets | HyperVerge account | Attach by ID; rotate at provider if lost |
@@ -47,6 +47,16 @@ means regenerating or rotating the credential at its issuing provider and
 creating a replacement Cloud managed secret. It never means reconstructing a
 plaintext production `.env`.
 
+`APP_KEY` is outside this attachment inventory. Laravel Cloud generates and
+manages it for the application environment; the deployment kit verifies its
+runtime readiness through strict doctor without copying its value.
+
+For the one-time migration from direct environment variables, copy
+`deployment.production.secrets.example` to the gitignored
+`deployment.production.secrets.local`, restrict it to mode `600`, populate it
+from authoritative provider sources, and remove it after successful creation
+and attachment of the managed secrets.
+
 ## Operator ceremony
 
 1. Authenticate to the correct Laravel Cloud organization.
@@ -66,7 +76,8 @@ plaintext production `.env`.
 - Every managed secret must identify an issuing provider and a named owner.
 - Rotation must create and attach the replacement before revoking the old
   credential when the provider supports overlap.
-- `APP_KEY` and private signing keys must not be rotated as ordinary API keys.
+- `APP_KEY` must remain Laravel Cloud-managed; private signing keys must not be
+  rotated as ordinary API keys.
 - Database recovery uses supported snapshots and application-level continuity
   evidence, not a credential export.
 - No secret value may appear in Git, documentation, chat transcripts, command

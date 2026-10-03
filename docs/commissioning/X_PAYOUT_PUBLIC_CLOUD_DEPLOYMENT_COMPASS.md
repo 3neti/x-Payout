@@ -118,11 +118,10 @@ treat masked variables as recoverable secret custody and did not attempt to
 read them.
 
 The approved re-entry inventory found candidate values for only part of the
-required set. Eight values have no authoritative local source, and the local
-x-PayOut `APP_KEY` cannot be proven to match production without turning the
-runtime into a credential-verification oracle. No partial secret set was
-created or attached because an unverified `APP_KEY` or incomplete override
-could damage an otherwise healthy environment.
+required set. Eight values have no authoritative local source. `APP_KEY` is
+Laravel Cloud-managed and is deliberately excluded from re-entry. No partial
+secret set was created or attached because an incomplete override could damage
+an otherwise healthy environment.
 
 ## Safety posture
 

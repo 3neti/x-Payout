@@ -14,6 +14,7 @@ To create a fresh local x-PayOut instance, validate NetBank readiness, and mint 
 - [payout.disburse.cash Retirement Audit — 2026-10-02](docs/commissioning/PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md)
 - [Cleanroom deployment execution log — 2026-10-03](docs/commissioning/X_PAYOUT_CLEANROOM_DEPLOYMENT_LOG_2026_10_03.md)
 - [Production cleanroom control worksheet](deployment.production.example)
+- [One-time production credential re-entry worksheet](deployment.production.secrets.example)
 - [Production cleanroom deploy cheat sheet](scripts/deploy-production-cleanroom.sh)
 - [Production secret custody and recovery inventory](docs/commissioning/X_PAYOUT_PRODUCTION_SECRET_CUSTODY.md)
 - [Forge deployment-control worksheet](.env.forge.production.example)
