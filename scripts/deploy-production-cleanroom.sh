@@ -6,7 +6,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PHASE="${1:-plan}"
 shift || true
 
-ENV_FILE="${PAYOUT_PRODUCTION_ENV_FILE:-${ROOT_DIR}/.env.production}"
+CONTROL_FILE="${PAYOUT_DEPLOYMENT_CONTROL_FILE:-${ROOT_DIR}/deployment.production.local}"
 APPLY=false
 RENDER_ONLY=false
 
@@ -18,8 +18,11 @@ for argument in "$@"; do
         --render-only)
             RENDER_ONLY=true
             ;;
+        --control=*)
+            CONTROL_FILE="${argument#--control=}"
+            ;;
         --env=*)
-            ENV_FILE="${argument#--env=}"
+            CONTROL_FILE="${argument#--env=}"
             ;;
         *)
             echo "Unknown option: ${argument}" >&2
@@ -28,14 +31,14 @@ for argument in "$@"; do
     esac
 done
 
-if [[ ! -f "${ENV_FILE}" ]]; then
-    echo "Missing ${ENV_FILE}. Copy .env.production.example to .env.production first." >&2
+if [[ ! -f "${CONTROL_FILE}" ]]; then
+    echo "Missing ${CONTROL_FILE}. Copy deployment.production.example to deployment.production.local first." >&2
     exit 66
 fi
 
 set -a
 # shellcheck disable=SC1090
-source "${ENV_FILE}"
+source "${CONTROL_FILE}"
 set +a
 
 CLOUD_BIN="${CLOUD_BIN:-cloud}"
@@ -80,23 +83,60 @@ runtime_variables=(
     LOCATION_HANDLER_MAP_PROVIDER
 )
 
+secret_runtime_keys=(
+    APP_KEY AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
+    ENGAGESPARK_API_KEY ENGAGESPARK_ORGANIZATION_ID TXTCMDR_API_TOKEN
+    HYPERVERGE_APP_ID HYPERVERGE_APP_KEY MAPBOX_TOKEN OPENCAGE_API_KEY
+    NETBANK_BALANCE_ENDPOINT NETBANK_CLIENT_ALIAS NETBANK_CLIENT_ID
+    NETBANK_CLIENT_SECRET NETBANK_DISBURSEMENT_ENDPOINT
+    NETBANK_FUNDING_BALANCE_ENDPOINT NETBANK_FUNDING_CLIENT_ID
+    NETBANK_FUNDING_CLIENT_SECRET NETBANK_FUNDING_CORPORATE_ACCOUNT_NUMBER
+    NETBANK_FUNDING_STANDING_HMAC_KEY NETBANK_FUNDING_STANDING_HMAC_KEY_ID
+    NETBANK_FUNDING_VCA_ALIAS NETBANK_QR_ENDPOINT NETBANK_SENDER_CUSTOMER_ID
+    NETBANK_SOURCE_ACCOUNT_NUMBER NETBANK_STATUS_ENDPOINT NETBANK_TOKEN_ENDPOINT
+    XCHANGE_COMMISSIONING_ACCESS_TOKEN XCHANGE_INSTANCE_KEEPSAKE_PUBLIC_KEY
+    XCHANGE_REDEMPTION_FEEDBACK_WEBHOOK_SECRET
+)
+
+assert_control_file_is_secret_free() {
+    local key
+
+    for key in "${secret_runtime_keys[@]}"; do
+        if grep -Eq "^[[:space:]]*${key}[[:space:]]*=[[:space:]]*[^[:space:]#]+" "${CONTROL_FILE}"; then
+            echo "${CONTROL_FILE} contains a value for production secret ${key}." >&2
+            echo "Store the value in Laravel Cloud managed secrets; keep only its name and secret ID here." >&2
+            echo "There is no local production .env fallback." >&2
+            exit 78
+        fi
+    done
+}
+
+assert_control_file_is_secret_free
+
 usage() {
     cat <<'EOF'
 x-PayOut production cleanroom deployment cheat sheet
 
 Usage:
-  scripts/deploy-production-cleanroom.sh plan [--env=FILE] [--render-only]
-  scripts/deploy-production-cleanroom.sh foundation --apply [--env=FILE]
-  scripts/deploy-production-cleanroom.sh configure --apply [--env=FILE]
-  scripts/deploy-production-cleanroom.sh deploy --apply [--env=FILE]
-  scripts/deploy-production-cleanroom.sh commission --apply [--env=FILE]
-  scripts/deploy-production-cleanroom.sh verify [--env=FILE]
-  scripts/deploy-production-cleanroom.sh domain-create --apply [--env=FILE]
-  scripts/deploy-production-cleanroom.sh domain-verify --apply [--env=FILE]
+  scripts/deploy-production-cleanroom.sh plan [--control=FILE] [--render-only]
+  scripts/deploy-production-cleanroom.sh foundation --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh configure --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh deploy --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh pre-commission [--control=FILE]
+  scripts/deploy-production-cleanroom.sh commission --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh verify [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-create --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-verify --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh continuous --apply [--control=FILE]
+
+The control file contains identifiers, confirmations, and non-secret runtime
+configuration only. Production secret values belong exclusively in Laravel
+Cloud managed secrets.
 
 The script never deletes a Laravel Cloud or DigitalOcean resource. Mutating
 phases require --apply and DEPLOY_CONFIRM_PRODUCTION=YES. Commissioning and
-domain cutover have additional independent confirmations.
+domain cutover have additional independent confirmations. The continuous phase
+runs without pausing after those authorities and prerequisites are present.
 EOF
 }
 
@@ -118,7 +158,7 @@ require_value() {
     value="$(value_of "${key}")"
 
     if [[ -z "${value}" || "${value}" == REPLACE_* ]]; then
-        echo "Set ${key} in ${ENV_FILE}." >&2
+        echo "Set ${key} in ${CONTROL_FILE}." >&2
         exit 65
     fi
 }
@@ -131,7 +171,7 @@ require_resolved_value() {
     require_value "${key}"
 
     if [[ "${value}" == *REPLACE_* ]]; then
-        echo "Resolve the placeholder in ${key} inside ${ENV_FILE}." >&2
+        echo "Resolve the placeholder in ${key} inside ${CONTROL_FILE}." >&2
         exit 65
     fi
 }
@@ -177,9 +217,9 @@ upsert_local_state() {
         index($0, key "=") == 1 { print key "=" value; found = 1; next }
         { print }
         END { if (found == 0) print key "=" value }
-    ' "${ENV_FILE}" > "${temporary}"
+    ' "${CONTROL_FILE}" > "${temporary}"
 
-    mv "${temporary}" "${ENV_FILE}"
+    mv "${temporary}" "${CONTROL_FILE}"
     export "${key}=${value}"
 }
 
@@ -195,6 +235,8 @@ Public domain:    ${DEPLOY_PUBLIC_DOMAIN:-payout.disburse.cash}
 DNS zone:         ${DEPLOY_DNS_ZONE:-disburse.cash} (nameservers preserved)
 Evidence Space:   ${DEPLOY_DIGITALOCEAN_SPACE:-not configured}
 Evidence prefix:  ${DEPLOY_EVIDENCE_PREFIX:-not configured}
+Control file:     ${CONTROL_FILE}
+Secret authority: Laravel Cloud managed secrets (names and IDs only here)
 
 Phases:
   1. foundation     Create a fresh app/environment/database/cache/compute.
@@ -204,6 +246,10 @@ Phases:
   5. verify         Versions, assets, doctor, balance evidence.
   6. domain-create  Ask Laravel Cloud for DNS records; do not change nameservers.
   7. domain-verify  Verify hostname, TLS, and origin after DNS is updated.
+
+Continuous mode:
+  foundation → configure → deploy → pre-commission checkpoint
+  → separately authorized commission → verify → optional domain cutover
 
 Persistent external resources:
   - DigitalOcean Space and its archived/active prefixes
@@ -320,7 +366,40 @@ foundation() {
     cloud_json instance:update "${DEPLOY_CLOUD_INSTANCE_ID}" \
         --uses-scheduler=true --force >/dev/null
 
-    echo "Foundation ready. Generated identifiers were written to ${ENV_FILE}."
+    echo "Foundation ready. Generated identifiers were written to ${CONTROL_FILE}."
+}
+
+attached_secret_names() {
+    require_value DEPLOY_CLOUD_ENVIRONMENT_ID
+
+    cloud_json environment-secret:list "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
+        | jq -r '.. | objects | .name? // empty' \
+        | sort -u
+}
+
+assert_managed_secret_attachments() {
+    require_resolved_value DEPLOY_REQUIRED_CLOUD_SECRET_NAMES
+
+    local attached_names missing name
+    attached_names="$(attached_secret_names)"
+    missing=()
+
+    while IFS= read -r name; do
+        [[ -z "${name}" ]] && continue
+
+        if ! grep -Fxq "${name}" <<<"${attached_names}"; then
+            missing+=("${name}")
+        fi
+    done < <(tr ',' '\n' <<<"${DEPLOY_REQUIRED_CLOUD_SECRET_NAMES}" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+    if (( ${#missing[@]} > 0 )); then
+        echo "Required Laravel Cloud managed secrets are not attached:" >&2
+        printf '  - %s\n' "${missing[@]}" >&2
+        echo "Attach them at the authorized bootstrap checkpoint; no local production .env fallback is permitted." >&2
+        exit 79
+    fi
+
+    echo "Managed-secret attachment gate passed. Values were not read."
 }
 
 configure() {
@@ -350,6 +429,8 @@ configure() {
     # shellcheck disable=SC2086
     cloud_json environment-secret:attach "${DEPLOY_CLOUD_ENVIRONMENT_ID}" ${secret_ids} >/dev/null
 
+    assert_managed_secret_attachments
+
     if [[ -z "${DEPLOY_CLOUD_WORKER_PROCESS_ID:-}" ]]; then
         local processes process_id payload
         processes="$(cloud_json background-process:list "${DEPLOY_CLOUD_INSTANCE_ID}")"
@@ -369,6 +450,14 @@ configure() {
         --uses-scheduler=true --force >/dev/null
 
     echo "Runtime variables, managed secrets, worker, and scheduler are configured."
+}
+
+pre_commission() {
+    require_value DEPLOY_CLOUD_ENVIRONMENT_ID
+    assert_managed_secret_attachments
+
+    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
+        --cmd='php artisan x-change:doctor --pre-commission --strict --json'
 }
 
 deploy() {
@@ -402,7 +491,7 @@ commission() {
     fi
 
     if [[ "${XCHANGE_TREASURY_OPENING_CAPITALIZATION_ALLOW_PRODUCTION:-false}" != "true" ]]; then
-        echo "Opening capitalization remains disabled in ${ENV_FILE}." >&2
+        echo "Opening capitalization remains disabled in ${CONTROL_FILE}." >&2
         exit 77
     fi
 
@@ -412,8 +501,7 @@ Commissioning boundary:
   Last retired provider: ${DEPLOY_PROVIDER_CUTOVER_TRANSACTION_ID}
 EOF
 
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='php artisan x-change:doctor --pre-commission --strict --json'
+    pre_commission
     cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
         --cmd='composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction'
     cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
@@ -440,6 +528,11 @@ domain_create() {
         exit 77
     fi
 
+    if [[ -n "${DEPLOY_CLOUD_DOMAIN_ID:-}" ]]; then
+        echo "Using existing Laravel Cloud domain ${DEPLOY_CLOUD_DOMAIN_ID}."
+        return
+    fi
+
     local payload domain_id
     payload="$(cloud_json domain:create "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
         --name="${DEPLOY_PUBLIC_DOMAIN}" \
@@ -451,6 +544,47 @@ domain_create() {
     echo "Laravel Cloud DNS records for the existing ${DEPLOY_DNS_ZONE} zone:"
     jq '.dnsRecords' <<<"${payload}"
     echo "Keep the DigitalOcean nameservers unchanged. Apply only these records, then run domain-verify."
+}
+
+continuous() {
+    require_apply
+    local_preflight
+    foundation
+    configure
+    deploy
+    pre_commission
+
+    if [[ "${DEPLOY_CONFIRM_COMMISSIONING:-NO}" != "YES" ]]; then
+        cat <<'EOF'
+Continuous deployment reached the accountable commissioning checkpoint.
+Review provider cutover evidence, then set DEPLOY_CONFIRM_COMMISSIONING=YES to
+authorize the one-time financial ceremony. No commissioning mutation ran.
+EOF
+        return
+    fi
+
+    commission
+    verify
+
+    if [[ "${DEPLOY_CONFIRM_DOMAIN_CUTOVER:-NO}" == "YES" ]]; then
+        require_resolved_value DEPLOY_PUBLIC_DOMAIN
+
+        if [[ "${APP_URL}" != "https://${DEPLOY_PUBLIC_DOMAIN}" ]]; then
+            echo "Set APP_URL=https://${DEPLOY_PUBLIC_DOMAIN} before the authorized domain cutover." >&2
+            exit 65
+        fi
+
+        domain_create
+        domain_verify
+        configure
+        deploy
+        verify
+    else
+        cat <<'EOF'
+Generated-domain deployment is commissioned and verified. Domain cutover did
+not run because DEPLOY_CONFIRM_DOMAIN_CUTOVER is not YES.
+EOF
+    fi
 }
 
 domain_verify() {
@@ -484,6 +618,9 @@ case "${PHASE}" in
     deploy)
         deploy
         ;;
+    pre-commission)
+        pre_commission
+        ;;
     commission)
         commission
         ;;
@@ -495,6 +632,9 @@ case "${PHASE}" in
         ;;
     domain-verify)
         domain_verify
+        ;;
+    continuous)
+        continuous
         ;;
     *)
         usage >&2

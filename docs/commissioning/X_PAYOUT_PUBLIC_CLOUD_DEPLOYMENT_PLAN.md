@@ -1,6 +1,6 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Ready for final retirement evidence; destructive removal not yet authorized
+**Status:** Cleanroom proven; turnkey continuous handoff hardening in progress
 
 **Updated:** 2026-10-03
 
@@ -44,6 +44,13 @@ targets. It is not layered on top of a Forge-managed server.
   recognize or capitalize transactions belonging to the retired host.
 - Keep deletion and any new real-money acceptance as separately authorized
   actions.
+- Laravel Cloud managed secrets are the sole runtime secret authority for the
+  shared production host.
+- A local `.env` is for development and sandbox use only. There is no local
+  plaintext production `.env` fallback.
+- The production deployment control worksheet may contain resource IDs,
+  secret IDs, confirmations, and non-secret configuration, but never a secret
+  value.
 
 ## Gate 1 — Record the proven deployment
 
@@ -145,6 +152,12 @@ The kit must expose a common lifecycle across its supported adapters:
 
 `plan → foundation → configure → deploy → commission → verify → domain`
 
+The Laravel Cloud adapter also exposes a `continuous` phase. Once an
+authorized operator has authenticated, attached the required managed secrets,
+and supplied the independent production, commissioning, and domain
+confirmations, that phase executes the gates in order without conversational
+pauses. It stops safely at commissioning when financial authority is absent.
+
 Adapter ownership is explicit:
 
 | Responsibility | Laravel Cloud adapter | Forge adapter |
@@ -153,13 +166,34 @@ Adapter ownership is explicit:
 | Source release | Cloud Git build | Forge Git deployment |
 | Database/cache | Attached Cloud resources | Forge-managed or client-owned resources |
 | Worker/scheduler | Cloud instance/process | Forge worker and scheduler |
-| Secrets | Cloud managed secrets | Forge-managed site `.env` |
+| Secrets | Cloud managed secrets; attachment names and IDs only in the control worksheet | Forge-managed site `.env` |
 | Application deploy | `deploy-production-cleanroom.sh` | `deploy-production-forge.sh` |
 | Commissioning | x-PayOut bootstrap, once | x-PayOut bootstrap, once |
 | Verification | strict doctor and balance report | strict doctor and balance report |
 
 The Forge recurring deployment must never call the commissioning command.
 Commissioning remains a separately confirmed, one-time financial ceremony.
+
+### Production secret custody
+
+Keeper Business and HashiCorp Cloud were evaluated but are not dependencies of
+the deployment kit. Keeper purchasing could not be completed for the
+Philippines tenant, while HashiCorp's production Vault Dedicated offering is
+disproportionate to this host.
+
+Production custody is therefore:
+
+- Laravel Cloud managed secrets for active runtime credentials;
+- issuing provider portals for regeneration and rotation;
+- Laravel Cloud-managed database credentials for attached databases;
+- DigitalOcean for the private Space and DNS resources; and
+- a committed, value-free inventory describing each secret's purpose, owner,
+  issuing provider, rotation procedure, and required Cloud secret name.
+
+Laravel Cloud secret values cannot be read back. Loss is handled by provider
+recovery or rotation, not by exporting a production `.env`. `APP_KEY` and
+private signing keys require explicit continuity handling because replacing
+them may invalidate encrypted data or signatures.
 
 The kit must install in an empty directory from Packagist without local path or
 Git repository overrides.
@@ -299,23 +333,19 @@ responsibility is supplied by the software alone.
 
 ## Current next move
 
-The read-only audit is complete and recorded in
-[PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md](PAYOUT_DISBURSE_CASH_RETIREMENT_AUDIT_2026_10_02.md).
+Finalize Gate 10 as a source-only handoff proof:
 
-Gate 2 now requires a separately authorized corrective disposition:
+1. review the value-free production secret inventory;
+2. populate a local `deployment.production.local` control worksheet with
+   resource and secret IDs only;
+3. prove that plaintext production secrets are rejected;
+4. prove that missing Cloud secret attachments stop before deployment;
+5. exercise the `continuous` phase through its non-financial commissioning
+   checkpoint; and
+6. preserve a sanitized transcript suitable for a bank or EMI DevOps team.
 
-1. synchronize ZLXD's provider-completed payout exactly once;
-2. return or otherwise honor the `PHP 40.00` Client Funds balance created by
-   the expired first order;
-3. claim or cancel the two funded onboarding invitations totalling
-   `PHP 200.00`;
-4. disable new public issuance;
-5. refresh the provider snapshot; and
-6. rerun strict doctor and the read-only balance report.
-
-Do not delete the Laravel Cloud application yet. After Gates 2 through 4 are
-complete, present the exact resources proposed for deletion and obtain fresh
-explicit authorization.
+Do not create, rotate, reveal, or migrate production secret values as part of
+this source hardening gate.
 
 ## Operating record
 
@@ -323,3 +353,5 @@ Progress and evidence are maintained in
 [X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md](X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md).
 The command-level commissioning procedure remains in
 [X_PAYOUT_CLEANROOM_COMMISSIONING.md](X_PAYOUT_CLEANROOM_COMMISSIONING.md).
+The secret custody and recovery inventory is maintained in
+[X_PAYOUT_PRODUCTION_SECRET_CUSTODY.md](X_PAYOUT_PRODUCTION_SECRET_CUSTODY.md).

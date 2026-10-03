@@ -140,7 +140,7 @@ attach the custom domain only at the dedicated cutover gate.
 
 ## Prepared replacement worksheet
 
-The ignored `.env.production` now contains:
+The ignored `.env.production` used during this historical run contained:
 
 - the retained Space name;
 - the new stable instance ID and isolated prefixes;

@@ -16,6 +16,8 @@
 .env.backup
 .env.x-change.backup.*
 .env.production
+.deployment.production
+deployment.production.local
 .env.forge.production
 .phpactor.json
 .phpunit.result.cache

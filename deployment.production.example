@@ -1,8 +1,9 @@
-# x-PayOut production deployment worksheet
+# x-PayOut production deployment control worksheet
 #
-# Copy this file to .env.production. The destination is gitignored.
-# This committed example contains no credentials. Secret values belong in
-# Laravel Cloud managed secrets; list only their Cloud secret IDs below.
+# Copy this file to deployment.production.local. The destination is gitignored.
+# This is not a Laravel application .env and must never contain production
+# credentials. Secret values belong exclusively in Laravel Cloud managed
+# secrets; this worksheet records only their names and Cloud secret IDs.
 
 # -----------------------------------------------------------------------------
 # Deployment control plane — consumed by scripts/deploy-production-cleanroom.sh
@@ -23,6 +24,7 @@ DEPLOY_CLOUD_CACHE_ID=
 DEPLOY_CLOUD_WORKER_PROCESS_ID=
 DEPLOY_CLOUD_DOMAIN_ID=
 DEPLOY_CLOUD_SECRET_IDS=
+DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=APP_KEY,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,ENGAGESPARK_API_KEY,ENGAGESPARK_ORGANIZATION_ID,TXTCMDR_API_TOKEN,HYPERVERGE_APP_ID,HYPERVERGE_APP_KEY,MAPBOX_TOKEN,OPENCAGE_API_KEY,NETBANK_BALANCE_ENDPOINT,NETBANK_CLIENT_ALIAS,NETBANK_CLIENT_ID,NETBANK_CLIENT_SECRET,NETBANK_DISBURSEMENT_ENDPOINT,NETBANK_FUNDING_BALANCE_ENDPOINT,NETBANK_FUNDING_CLIENT_ID,NETBANK_FUNDING_CLIENT_SECRET,NETBANK_FUNDING_CORPORATE_ACCOUNT_NUMBER,NETBANK_FUNDING_STANDING_HMAC_KEY,NETBANK_FUNDING_STANDING_HMAC_KEY_ID,NETBANK_FUNDING_VCA_ALIAS,NETBANK_QR_ENDPOINT,NETBANK_SENDER_CUSTOMER_ID,NETBANK_SOURCE_ACCOUNT_NUMBER,NETBANK_STATUS_ENDPOINT,NETBANK_TOKEN_ENDPOINT,XCHANGE_COMMISSIONING_ACCESS_TOKEN,XCHANGE_INSTANCE_KEEPSAKE_PUBLIC_KEY,XCHANGE_REDEMPTION_FEEDBACK_WEBHOOK_SECRET
 
 DEPLOY_GIT_REPOSITORY=3neti/x-Payout
 DEPLOY_GIT_BRANCH=main
@@ -149,8 +151,9 @@ KYC_USE_FAKE=false
 LOCATION_HANDLER_MAP_PROVIDER=mapbox
 
 # -----------------------------------------------------------------------------
-# Required Laravel Cloud managed-secret keys — values are intentionally absent.
-# Attach their secret IDs through DEPLOY_CLOUD_SECRET_IDS.
+# Laravel Cloud managed-secret inventory — values are intentionally absent.
+# Attach their secret IDs through DEPLOY_CLOUD_SECRET_IDS. The continuous gate
+# verifies every name in DEPLOY_REQUIRED_CLOUD_SECRET_NAMES before deployment.
 # -----------------------------------------------------------------------------
 # APP_KEY
 # AWS_ACCESS_KEY_ID

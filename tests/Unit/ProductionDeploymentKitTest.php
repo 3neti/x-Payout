@@ -8,7 +8,7 @@ function productionDeploymentKitPath(string $path): string
 }
 
 it('ships a secret-free production environment worksheet', function (): void {
-    $environment = file_get_contents(productionDeploymentKitPath('.env.production.example'));
+    $environment = file_get_contents(productionDeploymentKitPath('deployment.production.example'));
 
     expect($environment)
         ->toContain('APP_ENV=production')
@@ -21,6 +21,7 @@ it('ships a secret-free production environment worksheet', function (): void {
         ->toContain('XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED=false')
         ->toContain('DEPLOY_DNS_NAMESERVERS_PRESERVED=true')
         ->toContain('DEPLOY_CONFIRM_PRODUCTION=NO')
+        ->toContain('DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=APP_KEY,')
         ->toContain('APP_URL=REPLACE_WITH_CURRENT_LARAVEL_CLOUD_URL')
         ->not->toMatch('/^(APP_KEY|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|NETBANK_CLIENT_SECRET|TXTCMDR_API_TOKEN)=.+$/m');
 });
@@ -31,12 +32,14 @@ it('renders a non destructive deployment plan by default', function (): void {
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'plan',
         '--render-only',
-        '--env='.productionDeploymentKitPath('.env.production.example'),
+        '--control='.productionDeploymentKitPath('deployment.production.example'),
     ]);
     $process->mustRun();
 
     expect($process->getOutput())
         ->toContain('X-PAYOUT CLEANROOM DEPLOYMENT')
+        ->toContain('Secret authority: Laravel Cloud managed secrets')
+        ->toContain('pre-commission checkpoint')
         ->toContain('DigitalOcean Space and its archived/active prefixes')
         ->toContain('Never automated by this script')
         ->not->toContain('application:delete')
@@ -49,12 +52,96 @@ it('refuses production mutations without explicit confirmation', function (): vo
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'foundation',
         '--apply',
-        '--env='.productionDeploymentKitPath('.env.production.example'),
+        '--control='.productionDeploymentKitPath('deployment.production.example'),
     ]);
     $process->run();
 
     expect($process->isSuccessful())->toBeFalse()
         ->and($process->getErrorOutput())->toContain('DEPLOY_CONFIRM_PRODUCTION=YES');
+});
+
+it('rejects production secret values in the deployment control worksheet', function (): void {
+    $controlFile = tempnam(sys_get_temp_dir(), 'x-payout-deployment-control-');
+    $worksheet = file_get_contents(productionDeploymentKitPath('deployment.production.example'));
+
+    file_put_contents($controlFile, $worksheet."\nAPP_KEY=base64:must-not-live-here\n");
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'plan',
+        '--render-only',
+        '--control='.$controlFile,
+    ]);
+    $process->run();
+
+    unlink($controlFile);
+
+    expect($process->isSuccessful())->toBeFalse()
+        ->and($process->getErrorOutput())
+        ->toContain('contains a value for production secret APP_KEY')
+        ->toContain('no local production .env');
+});
+
+it('provides a continuous fail-closed orchestration path', function (): void {
+    $script = file_get_contents(productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'));
+
+    expect($script)
+        ->toContain('continuous()')
+        ->toContain('assert_managed_secret_attachments')
+        ->toContain('Continuous deployment reached the accountable commissioning checkpoint.')
+        ->toContain('Generated-domain deployment is commissioned and verified.')
+        ->toContain('environment-secret:list')
+        ->not->toContain('secret:get');
+});
+
+it('stops before commissioning when a required managed secret is not attached', function (): void {
+    $controlFile = tempnam(sys_get_temp_dir(), 'x-payout-deployment-control-');
+    $cloudBinary = tempnam(sys_get_temp_dir(), 'x-payout-fake-cloud-');
+    $worksheet = file_get_contents(productionDeploymentKitPath('deployment.production.example'));
+    $worksheet = preg_replace(
+        '/^DEPLOY_CLOUD_ENVIRONMENT_ID=.*$/m',
+        'DEPLOY_CLOUD_ENVIRONMENT_ID=env-test',
+        $worksheet,
+    );
+    $worksheet = preg_replace(
+        '/^DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=.*$/m',
+        'DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=APP_KEY',
+        $worksheet,
+    );
+
+    file_put_contents($controlFile, $worksheet);
+    file_put_contents($cloudBinary, <<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then
+    exit 0
+fi
+
+if [[ "${1:-}" == "environment-secret:list" ]]; then
+    printf '[]\n'
+    exit 0
+fi
+
+exit 1
+BASH);
+    chmod($cloudBinary, 0755);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'pre-commission',
+        '--control='.$controlFile,
+    ], env: ['CLOUD_BIN' => $cloudBinary]);
+    $process->run();
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+
+    expect($process->isSuccessful())->toBeFalse()
+        ->and($process->getErrorOutput())
+        ->toContain('Required Laravel Cloud managed secrets are not attached:')
+        ->toContain('APP_KEY')
+        ->toContain('no local production .env fallback');
 });
 
 it('contains no destructive cloud resource command', function (): void {
