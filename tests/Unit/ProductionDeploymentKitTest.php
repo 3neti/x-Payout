@@ -16,6 +16,7 @@ it('ships a secret-free production environment worksheet', function (): void {
         ->toContain('SESSION_DRIVER=redis')
         ->toContain('QUEUE_CONNECTION=redis')
         ->toContain('CACHE_STORE=redis')
+        ->toContain('DEPLOY_CACHE_EVICTION_POLICY=allkeys-lru')
         ->toContain('FILESYSTEM_DISK=s3')
         ->toContain('AWS_ENDPOINT=https://sgp1.digitaloceanspaces.com')
         ->toContain('XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED=false')
@@ -111,6 +112,16 @@ it('provides a continuous fail-closed orchestration path', function (): void {
         ->toContain('Generated-domain deployment is commissioned and verified.')
         ->toContain('environment-secret:list')
         ->not->toContain('secret:get');
+});
+
+it('supports the current cloud foundation lifecycle', function (): void {
+    $script = file_get_contents(productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'));
+
+    expect($script)
+        ->toContain('application:get')
+        ->toContain('wait_for_database_cluster_available')
+        ->toContain('wait_for_cache_available')
+        ->toContain('--eviction-policy="${DEPLOY_CACHE_EVICTION_POLICY:-allkeys-lru}"');
 });
 
 it('stops before commissioning when a required managed secret is not attached', function (): void {

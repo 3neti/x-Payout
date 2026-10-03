@@ -206,6 +206,44 @@ cloud_mutation() {
     "${CLOUD_BIN}" "${command}" "$@" -n
 }
 
+wait_for_database_cluster_available() {
+    local cluster_id="$1"
+    local attempt payload status
+
+    for attempt in {1..30}; do
+        payload="$(cloud_json database-cluster:get "${cluster_id}")"
+        status="$(jq -r '.status // empty' <<<"${payload}")"
+
+        if [[ "${status}" == "available" ]]; then
+            return
+        fi
+
+        sleep 2
+    done
+
+    echo "Database cluster ${cluster_id} did not become available in time." >&2
+    exit 75
+}
+
+wait_for_cache_available() {
+    local cache_id="$1"
+    local attempt payload status
+
+    for attempt in {1..30}; do
+        payload="$(cloud_json cache:get "${cache_id}")"
+        status="$(jq -r '.status // empty' <<<"${payload}")"
+
+        if [[ "${status}" == "available" ]]; then
+            return
+        fi
+
+        sleep 2
+    done
+
+    echo "Cache ${cache_id} did not become available in time." >&2
+    exit 75
+}
+
 upsert_local_state() {
     local key="$1"
     local value="$2"
@@ -305,6 +343,11 @@ foundation() {
         application_id="$(jq -r '.id' <<<"${payload}")"
         upsert_local_state DEPLOY_CLOUD_APPLICATION_ID "${application_id}"
         environment_id="$(jq -r '.defaultEnvironmentId // .environments[0].id // empty' <<<"${payload}")"
+
+        if [[ -z "${environment_id}" ]]; then
+            payload="$(cloud_json application:get "${application_id}")"
+            environment_id="$(jq -r '.defaultEnvironmentId // .environments[0].id // empty' <<<"${payload}")"
+        fi
     fi
 
     if [[ -z "${environment_id}" ]]; then
@@ -325,6 +368,7 @@ foundation() {
     fi
 
     if [[ -z "${DEPLOY_CLOUD_DATABASE_ID:-}" ]]; then
+        wait_for_database_cluster_available "${DEPLOY_CLOUD_DATABASE_CLUSTER_ID}"
         payload="$(cloud_json database:create "${DEPLOY_CLOUD_DATABASE_CLUSTER_ID}" --name=x_payout)"
         upsert_local_state DEPLOY_CLOUD_DATABASE_ID "$(jq -r '.id' <<<"${payload}")"
     fi
@@ -336,9 +380,12 @@ foundation() {
             --region="${DEPLOY_CLOUD_REGION}" \
             --size="${DEPLOY_CACHE_SIZE}" \
             --auto-upgrade-enabled=true \
-            --is-public=false)"
+            --is-public=false \
+            --eviction-policy="${DEPLOY_CACHE_EVICTION_POLICY:-allkeys-lru}")"
         upsert_local_state DEPLOY_CLOUD_CACHE_ID "$(jq -r '.id' <<<"${payload}")"
     fi
+
+    wait_for_cache_available "${DEPLOY_CLOUD_CACHE_ID}"
 
     cloud_json environment:update "${environment_id}" \
         --database-id="${DEPLOY_CLOUD_DATABASE_ID}" \
