@@ -1,10 +1,10 @@
 # x-PayOut Public Cloud Deployment Compass
 
-**Last updated:** 2026-10-03
+**Last updated:** 2026-10-04
 
-**Current position:** Gate 10 — turnkey continuous handoff hardening
+**Current position:** Gate 10 — managed-secret bootstrap required
 
-**Overall status:** Production cleanroom proven; operator-grade automation and custody evidence in progress
+**Overall status:** Turnkey adapter published; first live rehearsal failed closed before commissioning
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -50,7 +50,7 @@ each run. Never copy historical identifiers into a new run without inspection.
 | 7. Safe commissioning | Complete | Pre-doctor, principals, Treasury, funded invitations, and final doctor proved |
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
-| 10. Institutional handoff | **In progress** | Prove the secret-free continuous operator path and preserve a sanitized transcript |
+| 10. Institutional handoff | **Blocked safely** | Attach required Laravel Cloud managed secrets, then repeat the continuous rehearsal |
 
 ## Turnkey operating contract
 
@@ -96,6 +96,26 @@ credential is lost, rotate it at the issuing provider and replace the managed
 secret. `APP_KEY` and private signing keys require controlled recovery custody
 because blind rotation can invalidate encrypted data or signatures.
 
+## First sanitized continuous rehearsal — 2026-10-04
+
+- Published commit: `ff0e78d`.
+- Published release: `v1.0.0-beta.61`.
+- Target application: `app-a2e3963b-0a2a-4c81-a49c-7e3b01273bd5`.
+- Target environment: `env-a2e3963c-f6d5-4ffd-a4a6-a414deb445c8`.
+- Environment status before rehearsal: `running`.
+- Managed-secret attachment inventory: empty.
+- Attachment checkpoint result: exit code `79`.
+- Remote strict doctor: not run.
+- Deployment: not run.
+- Commissioning: not run.
+- Domain, financial records, provider activity, claims, SMS, and storage: not
+  mutated.
+
+The environment has masked runtime variables, but those variables are not
+Laravel Cloud managed-secret attachments. The new adapter correctly refused to
+treat masked variables as recoverable secret custody and did not attempt to
+read them.
+
 ## Safety posture
 
 - Never put production credential values in Git, the deployment control file,
@@ -129,15 +149,16 @@ because blind rotation can invalidate encrypted data or signatures.
 
 ## Immediate next controlled move
 
-Complete Gate 10 without mutating production:
+Complete the managed-secret bootstrap as a separate authorized checkpoint:
 
-1. validate the deployment script syntax and source metadata;
-2. prove plaintext production secrets are rejected;
-3. prove a missing managed-secret attachment stops before commissioning;
-4. render the continuous plan using the value-free example worksheet;
-5. preserve test output and a sanitized operator transcript; and
-6. request separate authority before any live continuous run, commissioning,
-   domain cutover, real-money acceptance, or resource deletion.
+1. create or identify the required organization-managed secret records;
+2. populate them by approved re-entry or provider-side rotation, never by
+   exporting the current masked environment values;
+3. attach their IDs to the target environment;
+4. rerun the attachment checkpoint and strict pre-commission doctor;
+5. repeat the continuous rehearsal through the non-financial checkpoint; and
+6. request separate authority before commissioning, domain cutover,
+   real-money acceptance, or resource deletion.
 
 ## Update protocol
 
