@@ -105,7 +105,8 @@ because blind rotation can invalidate encrypted data or signatures.
 - Environment status before rehearsal: `running`.
 - Managed-secret attachment inventory: empty.
 - Attachment checkpoint result: exit code `79`.
-- Remote strict doctor: not run.
+- An independent read-only remote strict pre-commission doctor subsequently
+  passed `27/27`, proving the current direct runtime variables remain healthy.
 - Deployment: not run.
 - Commissioning: not run.
 - Domain, financial records, provider activity, claims, SMS, and storage: not
@@ -115,6 +116,13 @@ The environment has masked runtime variables, but those variables are not
 Laravel Cloud managed-secret attachments. The new adapter correctly refused to
 treat masked variables as recoverable secret custody and did not attempt to
 read them.
+
+The approved re-entry inventory found candidate values for only part of the
+required set. Eight values have no authoritative local source, and the local
+x-PayOut `APP_KEY` cannot be proven to match production without turning the
+runtime into a credential-verification oracle. No partial secret set was
+created or attached because an unverified `APP_KEY` or incomplete override
+could damage an otherwise healthy environment.
 
 ## Safety posture
 
