@@ -17,6 +17,7 @@ it('ships a secret-free production environment worksheet', function (): void {
         ->toContain('QUEUE_CONNECTION=redis')
         ->toContain('CACHE_STORE=redis')
         ->toContain('DEPLOY_CACHE_EVICTION_POLICY=allkeys-lru')
+        ->toContain('XCHANGE_SYSTEM_USER_ID=system@x-payout.test')
         ->toContain('FILESYSTEM_DISK=s3')
         ->toContain('AWS_ENDPOINT=https://sgp1.digitaloceanspaces.com')
         ->toContain('XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED=false')
