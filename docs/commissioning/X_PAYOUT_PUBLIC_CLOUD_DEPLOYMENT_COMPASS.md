@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 10 — managed-secret bootstrap required
+**Current position:** Gate 10 — managed-secret bootstrap proved; publish correction
 
-**Overall status:** Turnkey adapter published; first live rehearsal failed closed before commissioning
+**Overall status:** Sanitized redeploy and strict pre-commission rehearsal passed; commissioning remains separately gated
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -50,7 +50,7 @@ each run. Never copy historical identifiers into a new run without inspection.
 | 7. Safe commissioning | Complete | Pre-doctor, principals, Treasury, funded invitations, and final doctor proved |
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
-| 10. Institutional handoff | **Blocked safely** | Attach required Laravel Cloud managed secrets, then repeat the continuous rehearsal |
+| 10. Institutional handoff | **In progress** | Managed-secret and pre-commission rehearsal passed; publish the corrected Cloud secret/runtime boundary |
 
 ## Turnkey operating contract
 
@@ -123,6 +123,26 @@ Laravel Cloud-managed and is deliberately excluded from re-entry. No partial
 secret set was created or attached because an incomplete override could damage
 an otherwise healthy environment.
 
+## Managed-secret bootstrap rehearsal — 2026-10-04
+
+- The working testing environment became the first authority for shared
+  integration credentials.
+- `APP_KEY`, database credentials, cache credentials, and session state were
+  not copied.
+- A new least-privilege DigitalOcean Spaces key was limited to the retained
+  production evidence bucket.
+- Laravel Cloud's 30-attached-secret ceiling was reached and diagnosed.
+- The deployment contract was corrected so only credentials and private keys
+  require managed-secret custody; public and non-sensitive provider topology
+  is now ordinary runtime configuration.
+- Deployment `depl-a2e588f1-2f6b-46a7-9d26-c87649e4fe38` succeeded.
+- The managed-secret attachment gate passed.
+- Strict pre-commission doctor passed `27/27` under command
+  `comm-a2e5898a-6e85-4804-8502-bc2763f723ea`.
+- A real private-Space write/read/delete probe passed under command
+  `comm-a2e589bd-2bdf-4f23-9224-bb8dd125ecd1` and removed its probe object.
+- No commissioning or financial workflow was executed.
+
 ## Safety posture
 
 - Never put production credential values in Git, the deployment control file,
@@ -156,16 +176,10 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Complete the managed-secret bootstrap as a separate authorized checkpoint:
-
-1. create or identify the required organization-managed secret records;
-2. populate them by approved re-entry or provider-side rotation, never by
-   exporting the current masked environment values;
-3. attach their IDs to the target environment;
-4. rerun the attachment checkpoint and strict pre-commission doctor;
-5. repeat the continuous rehearsal through the non-financial checkpoint; and
-6. request separate authority before commissioning, domain cutover,
-   real-money acceptance, or resource deletion.
+Publish the corrected deployment-kit contract, then repeat the sanitized
+continuous rehearsal from that exact published source through the
+pre-commission checkpoint. Request separate authority before commissioning,
+domain cutover, real-money acceptance, or resource deletion.
 
 ## Update protocol
 

@@ -23,6 +23,9 @@ it('ships a secret-free production environment worksheet', function (): void {
         ->toContain('DEPLOY_CONFIRM_PRODUCTION=NO')
         ->toContain('DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=AWS_ACCESS_KEY_ID,')
         ->not->toMatch('/^DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=(?:[^,\n]+,)*APP_KEY(?:,|$)/m')
+        ->not->toMatch('/^DEPLOY_REQUIRED_CLOUD_SECRET_NAMES=.*NETBANK_BALANCE_ENDPOINT/m')
+        ->toContain('NETBANK_BALANCE_ENDPOINT=REPLACE_WITH_NETBANK_BALANCE_ENDPOINT')
+        ->toContain('XCHANGE_INSTANCE_KEEPSAKE_PUBLIC_KEY=REPLACE_WITH_KEEPSAKE_PUBLIC_KEY')
         ->toContain('APP_URL=REPLACE_WITH_CURRENT_LARAVEL_CLOUD_URL')
         ->not->toMatch('/^(APP_KEY|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|NETBANK_CLIENT_SECRET|TXTCMDR_API_TOKEN)=.+$/m');
 });
@@ -103,6 +106,7 @@ it('provides a continuous fail-closed orchestration path', function (): void {
     expect($script)
         ->toContain('continuous()')
         ->toContain('assert_managed_secret_attachments')
+        ->toContain('.key? // .name? // empty')
         ->toContain('Continuous deployment reached the accountable commissioning checkpoint.')
         ->toContain('Generated-domain deployment is commissioned and verified.')
         ->toContain('environment-secret:list')

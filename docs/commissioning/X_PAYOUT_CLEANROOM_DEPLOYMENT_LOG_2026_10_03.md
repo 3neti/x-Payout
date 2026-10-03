@@ -8,8 +8,8 @@
 
 **Started:** 2026-10-03 07:06 Asia/Manila
 
-**Current state:** Preflight complete; no Cloud resource has been mutated or
-deleted in this run
+**Current state:** Managed-secret bootstrap and sanitized redeployment complete;
+strict pre-commission doctor passed; commissioning remains untouched
 
 ## Logging rules
 
@@ -158,3 +158,53 @@ Publish the deployment kit in the next x-PayOut beta, then decide the exact
 retirement boundary for the running beta. Do not create a replacement from an
 uncommitted local script, and do not delete the running application in the same
 operation as commissioning the replacement.
+
+## Run 3 — Managed-secret bootstrap and sanitized rehearsal
+
+### Sources and custody
+
+- The working `x-change-testing · testing` environment was used as the first
+  authority for shared provider credentials.
+- The current x-PayOut runtime and approved local development files supplied
+  only values that were absent from testing.
+- Laravel Cloud retained ownership of `APP_KEY`; it was never copied into the
+  re-entry worksheet or recreated as a second secret.
+- Fresh production-only commissioning and feedback webhook credentials were
+  generated locally and transferred without printing their values.
+- A new DigitalOcean Spaces key was created with read/write/delete permission
+  limited to `x-payout-production-evidence-20261002`.
+- The gitignored one-time worksheet remained mode `0600`, contained no blank
+  fields, and was confirmed ignored by Git.
+
+### Laravel Cloud capacity correction
+
+Laravel Cloud rejected the thirty-first attached managed secret. The deploy
+contract had incorrectly classified endpoint URLs, aliases, provider account
+identifiers, an HMAC key ID, and a public keepsake verification key as secrets.
+
+The corrected contract keeps credentials and private keys in managed secrets
+while treating non-sensitive provider topology as ordinary environment
+configuration. Two production-only frontend-token secret slots were safely
+repurposed for the commissioning token and redemption-feedback webhook secret;
+their public frontend values remain ordinary runtime variables.
+
+### Deployment and evidence
+
+- Deployment: `depl-a2e588f1-2f6b-46a7-9d26-c87649e4fe38`
+- Deployment result: succeeded in `01:10`
+- Managed-secret attachment gate: passed; values were not read
+- Strict pre-commission command:
+  `comm-a2e5898a-6e85-4804-8502-bc2763f723ea`
+- Strict pre-commission result: `27 passed / 0 failed`
+- Private Space write/read/delete probe:
+  `comm-a2e589bd-2bdf-4f23-9224-bb8dd125ecd1`
+- Storage probe result: `STORAGE_READINESS_PASS`; the probe object was deleted
+- Focused deployment-kit tests: `9 passed / 56 assertions`
+- Commissioning, claims, payments, SMS, Treasury postings, and domain changes:
+  not performed
+
+### Next bounded action
+
+Commit and publish the corrected deployment contract, then run one sanitized
+continuous rehearsal from the published source through the same pre-commission
+checkpoint. Commissioning still requires its own explicit authority.
