@@ -1,6 +1,6 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Cleanroom and continuous deployment proven; portable compiled-mode parity green and optional pre-commission workflow simplified
+**Status:** Cleanroom and continuous deployment proven; optional compiled pre-commission workflow verified live
 
 **Updated:** 2026-10-04
 
@@ -581,23 +581,23 @@ package is introduced at this stage.
 
 ## Current next move
 
-Publish the workflow simplification, remove the synthetic
-`PAYOUT_SECRETS_ENV` GitHub secret, and store only the private production
-`instance.yaml`, the value-free platform control worksheet, and the Laravel
-Cloud token in the deployment environment. Then run the optional workflow once
-to verify the strict pre-commission checkpoint on the environment already
-deployed by Laravel Cloud.
+The optional workflow is verified through the strict pre-commission checkpoint
+against the live environment. It does not deploy, configure, commission, or
+modify DNS. Normal application releases continue through Laravel Cloud
+push-to-deploy.
 
-Normal application releases continue through Laravel Cloud push-to-deploy and
-do not require GitHub reviewers, Maker/Checker contact details, or a local
-`secrets.env`. The controller validates that every secret name required by the
-compiled profile is already attached as a Laravel Cloud managed secret.
+Recurring deployment and pre-commission verification do not require GitHub
+reviewers, Maker/Checker contact details, or a local `secrets.env`. The
+controller validates that every runtime secret name required by the compiled
+profile is already attached as a Laravel Cloud managed secret.
 
 Initial secret import/recovery and one-time commissioning remain separate,
 explicitly authorized operator procedures. The existing commissioning GitHub
 Environment may remain dormant as a future governance option, but it is not a
-dependency of deployment or pre-commission verification. The published
-beta.68 tag remains the rollback reference.
+dependency of deployment or pre-commission verification. The remaining proof
+is a separately authorized cleanroom from `instance.yaml`, one-time
+`secrets.env`, and native platform tooling. The published beta.68 tag remains
+the rollback reference.
 
 ## Operating record
 

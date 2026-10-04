@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 11 — optional workflow corrected to stop at pre-commission; exact-release rehearsal next
+**Current position:** Gate 11 — optional compile and pre-commission workflow proved; Laravel Cloud remains the deployment engine
 
-**Overall status:** Legacy, compiled controller, and simplified workflow contracts are locally green; corrective publication pending
+**Overall status:** Corrective boundary is published and verified against the live environment; no commissioning mutation ran
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -51,7 +51,7 @@ each run. Never copy historical identifiers into a new run without inspection.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and optional pre-commission workflow complete locally; exact-release rehearsal remains |
+| 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and live optional pre-commission verification complete; two-input cleanroom remains |
 
 ## Turnkey operating contract
 
@@ -265,8 +265,28 @@ forbidden until one exact-release two-file cleanroom passes.
   commissioning GitHub Environment is dormant and does not impede deployment
   or pre-commission verification.
 - Focused compiler, workflow, controller-parity, and deployment-kit coverage
-  passed 48 tests and 242 assertions. Composer validation, shell syntax,
+  passed 48 tests and 249 assertions. Composer validation, shell syntax,
   formatting, and diff checks passed.
+- Published corrective commits `848d48c` and `c649457` to `main`.
+- Removed the synthetic `PAYOUT_SECRETS_ENV`. The deployment environment now
+  holds only the private instance profile, the value-free platform worksheet,
+  and the Laravel Cloud CLI token.
+- The first attempted live rehearsal proved that Laravel Cloud's environment
+  selector requires a live branch rather than the immutable beta.68 tag. The
+  private Cloud profile now tracks `main`; the workflow commit SHA remains the
+  immutable evidence reference.
+- A second attempt exposed an unreadable HTML response from Laravel Cloud's
+  variables endpoint. That proved configuration replay did not belong in the
+  optional workflow and caused the final narrowing to compile plus
+  pre-commission verification only.
+- GitHub Actions run `37210059107` completed successfully at commit
+  `c6494577bfc91a1861bfd3f0fa3f2c404a0a4e37`. Strict pre-commission doctor
+  passed `27/27`; profile fingerprint
+  `0fae0e409abdd9df7021848234ab99d12ba4319bc19bb453699e71e0e713327b`.
+  Sanitized pre-commission evidence was uploaded with seven-day retention.
+- The successful workflow performed no foundation, variable configuration,
+  release deployment, DNS, domain, commissioning, Treasury, invitation,
+  payment, or messaging mutation.
 
 ## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
 
@@ -468,12 +488,12 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Publish the corrective workflow, remove the synthetic `PAYOUT_SECRETS_ENV`,
-install the private production `instance.yaml`, platform control worksheet,
-and Laravel Cloud token in the deployment environment, then use the optional
-workflow to verify the strict pre-commission checkpoint on the environment
-already deployed by Laravel Cloud. Do not deploy or commission from that
-workflow.
+Keep ordinary releases on Laravel Cloud push-to-deploy. The optional GitHub
+workflow is now complete for compile and strict pre-commission evidence and
+needs no reviewer, Maker/Checker contact, or private provider-value bundle.
+The remaining Gate 11 proof is a separately authorized two-input cleanroom
+using `instance.yaml`, one-time `secrets.env`, and native platform tooling;
+commissioning remains a distinct one-time ceremony.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
