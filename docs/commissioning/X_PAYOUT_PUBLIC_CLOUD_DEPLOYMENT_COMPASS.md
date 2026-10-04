@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 11 — optional compile and pre-commission workflow proved; Laravel Cloud remains the deployment engine
+**Current position:** Gate 12 — anonymous read-only Public Issuance MCP is live; institutional Partner MCP remains governed and disabled
 
-**Overall status:** Laravel Cloud push-to-deploy and custom-domain acceptance are green at current main; no commissioning mutation ran
+**Overall status:** Laravel Cloud push-to-deploy, custom domain, public issuance, and the read-only MCP transport are green; no MCP acceptance call created an order or Pay Code
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -313,6 +313,34 @@ forbidden until one exact-release two-file cleanroom passes.
   transports remain disabled by production configuration. A browser GET to
   `/mcp/x-change/public` therefore returns 404 by design; transport enablement
   is a separate product/configuration gate.
+
+### Public MCP activation acceptance — 2026-10-04
+
+- The portable profile now couples `features.public_on_demand_issuance` to the
+  browser and MCP runtime switches and requires an HTTPS public-issuance API
+  base URL. The deployment controller owns all five non-secret public MCP
+  runtime settings, preventing a later cleanroom deployment from silently
+  disabling the transport.
+- Focused deployment coverage passed `45` tests and `221` assertions. The
+  private production profile compiled and verified with fingerprint
+  `b6b6b40c1919b24f270428735ac22e68ed98e1ba855afe8fcfd3ba1b803c9809`.
+- Laravel Cloud deployment `depl-a2e6f352-633b-4355-934d-b2eac6cb3c05`
+  succeeded at exact commit `287ce84ba0a13e5b730983bd433ae52d90a53df7` after the runtime settings were
+  applied.
+- A standards-based MCP JSON-RPC handshake negotiated protocol `2025-06-18`
+  with server `X-Change Public Issuance MCP` version `0.2.0`.
+- `tools/list` returned exactly three tools: discovery, authoritative estimate,
+  and browser handoff. Every tool declares read-only, non-destructive,
+  idempotent, closed-world annotations.
+- A live read-only estimate for `PHP 25.00` returned `PHP 15.00` in service
+  fees and `PHP 40.00` total required. The handoff returned
+  `/x/auto-generate?amount=25.00&currency=PHP`. Both responses explicitly
+  reported `creates_order=false`; no funding order, payment, Treasury hold, or
+  Pay Code was created.
+- The anonymous transport is limited to `30` requests per minute per client IP.
+  The institutional Partner MCP and Partner API remain disabled until their
+  contract version, Passport signing keys, governed client, scopes, and issuer
+  mandate are reconciled and accepted separately.
 
 ## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
 
