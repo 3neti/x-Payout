@@ -211,6 +211,8 @@ BASH);
         ->and($commands)
         ->toContain('environment:variables env-test --action=set --key=APP_NAME --value=Example PayOut')
         ->toContain('environment:variables env-test --action=set --key=APP_URL --value=https://payout.example.com')
+        ->toContain('environment:variables env-test --action=set --key=XMCP_PUBLIC_ISSUANCE_ENABLED --value=false')
+        ->toContain('environment:variables env-test --action=set --key=XMCP_PUBLIC_ISSUANCE_API_BASE_URL --value=https://payout.example.com/api/x/v1/public-issuance')
         ->toContain('environment-secret:attach env-test secret-test')
         ->not->toContain('private-test-value');
 

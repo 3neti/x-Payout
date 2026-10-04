@@ -112,6 +112,7 @@ final class InstanceProfileCompiler
         }
 
         $this->assertEnvironmentMapping($profile['runtime'] ?? [], 'runtime');
+        $this->assertFeatureRuntimeConsistency($profile);
         $this->collectSecretReferences($profile['secret_refs'] ?? [], 'secret_refs', $requiredSecrets);
         $this->rejectSensitivePlaintext($profile);
 
@@ -123,6 +124,27 @@ final class InstanceProfileCompiler
         sort($profile['required_secrets'], SORT_STRING);
 
         return $this->canonicalize($profile);
+    }
+
+    /** @param array<string, mixed> $profile */
+    private function assertFeatureRuntimeConsistency(array $profile): void
+    {
+        if (($profile['features']['public_on_demand_issuance'] ?? false) !== true) {
+            return;
+        }
+
+        $runtime = $profile['runtime'] ?? [];
+
+        foreach (['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED', 'XMCP_PUBLIC_ISSUANCE_ENABLED'] as $key) {
+            if (($runtime[$key] ?? null) !== true) {
+                throw new InstanceProfileException("runtime.{$key} must be true when features.public_on_demand_issuance is enabled.");
+            }
+        }
+
+        $this->assertHttpsUrl(
+            $runtime['XMCP_PUBLIC_ISSUANCE_API_BASE_URL'] ?? null,
+            'runtime.XMCP_PUBLIC_ISSUANCE_API_BASE_URL',
+        );
     }
 
     /** @return array{fingerprint: string, files: array<string, string>} */

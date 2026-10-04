@@ -29,6 +29,11 @@ runtime:
   XCHANGE_RUNTIME_TIER: production
   XCHANGE_INSTANCE_ID: example-payments-host
   XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED: false
+  XMCP_PUBLIC_ISSUANCE_ENABLED: false
+  XMCP_PUBLIC_ISSUANCE_DISCOVERY_ENABLED: true
+  XMCP_PUBLIC_ISSUANCE_ENDPOINT: /mcp/x-change/public
+  XMCP_PUBLIC_ISSUANCE_API_BASE_URL: https://payout.example.com/api/x/v1/public-issuance
+  XMCP_PUBLIC_ISSUANCE_RATE_LIMIT_PER_MINUTE: 30
 
 providers:
   active: primary-payout

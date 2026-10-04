@@ -102,6 +102,27 @@ it('compiles deployment artifacts without requiring secret values', function ():
         ->not->toContain('private-test-value');
 });
 
+it('requires a complete public MCP runtime when public on-demand issuance is enabled', function (): void {
+    $profile = validInstanceProfile();
+    $profile['features']['public_on_demand_issuance'] = true;
+    $profile['runtime']['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED'] = true;
+    $profile['runtime']['XMCP_PUBLIC_ISSUANCE_ENABLED'] = true;
+    $profile['runtime']['XMCP_PUBLIC_ISSUANCE_API_BASE_URL'] = 'https://payout.example.com/api/x/v1/public-issuance';
+    $path = writeInstanceProfile($profile);
+
+    $validated = (new InstanceProfileCompiler)->validate($path);
+
+    expect($validated['runtime']['XMCP_PUBLIC_ISSUANCE_ENABLED'])->toBeTrue();
+
+    $profile['runtime']['XMCP_PUBLIC_ISSUANCE_ENABLED'] = false;
+    file_put_contents($path, Yaml::dump($profile, 10, 2));
+
+    expect(fn () => (new InstanceProfileCompiler)->validate($path))
+        ->toThrow(InstanceProfileException::class, 'runtime.XMCP_PUBLIC_ISSUANCE_ENABLED must be true');
+
+    unlink($path);
+});
+
 it('rejects missing drivers capabilities and plaintext credentials', function (Closure $mutate, string $message): void {
     $profile = validInstanceProfile();
     $mutate($profile);
