@@ -1,6 +1,6 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Cleanroom and continuous deployment proven; portable compiled-mode parity and protected workflow green locally
+**Status:** Cleanroom and continuous deployment proven; portable compiled-mode parity green and optional pre-commission workflow simplified
 
 **Updated:** 2026-10-04
 
@@ -423,7 +423,9 @@ responsibility is supplied by the software alone.
 ### Objectives
 
 1. Reduce the operator-maintained installation contract to one portable
-   `instance.yaml` and one private `secrets.env`.
+   `instance.yaml`; use one private `secrets.env` only for initial secret
+   import, credential recovery, or an explicitly authorized commissioning
+   ceremony.
 2. Make the instance definition independent of Laravel Cloud, Forge, a bank,
    an EMI, or any one provider while still allowing installed drivers to
    declare and validate their own requirements.
@@ -446,9 +448,9 @@ The operator supplies:
 - `instance.yaml`: non-secret institution identity, branding, canonical URL,
   connection drivers and capabilities, routing, commissioning intent, feature
   switches, and platform-neutral runtime requirements; and
-- `secrets.env`: private provider credentials, storage credentials, and
-  Maker/Checker identities used only for controlled secret import and initial
-  commissioning.
+- `secrets.env`: private provider credentials, storage credentials, and any
+  commissioning identities used only for controlled initial secret import,
+  credential recovery, or initial commissioning.
 
 `instance.yaml` must not contain plaintext secret values. `secrets.env` is
 gitignored, owner-only (`0600`), and is not reopened by an ordinary recurring
@@ -465,7 +467,7 @@ readiness checks.
 ### Wiring
 
 ```text
-instance.yaml + secrets.env
+instance.yaml + optional secrets.env
              |
              v
 portable profile validator/compiler
@@ -549,9 +551,11 @@ package is introduced at this stage.
 6. **Complete locally.** Prove parity against the beta.68 behavior: exact release, managed-secret
    gate, bounded monitor, operational skip or verified adoption, strict doctor,
    balance report, DNS reconciliation, and public acceptance.
-7. **Complete locally.** Add a reusable GitHub Actions workflow that calls the same local
-   commands, uses protected environments for commissioning authority, and
-   uploads only sanitized evidence.
+7. **Complete locally.** Add an optional reusable GitHub Actions workflow that calls the same
+   compiler and controller, stops at the strict pre-commission checkpoint,
+   and uploads only sanitized evidence. Laravel Cloud push-to-deploy remains
+   the ordinary recurring deployment mechanism. Commissioning is never part
+   of this recurring workflow.
 8. Adapt Forge only after Laravel Cloud parity is green; use Forge and Deployer
    for server mechanics rather than reproducing them.
 9. Run one exact-release cleanroom from only the two operator inputs and native
@@ -576,25 +580,22 @@ package is introduced at this stage.
 
 ## Current next move
 
-The two GitHub Environments and their `main`-only branch policies are now
-configured. The commissioning environment requires review and prevents
-self-review. The first compile-only dispatch passed with deployment and
-commissioning skipped.
+Publish the workflow simplification, remove the synthetic
+`PAYOUT_SECRETS_ENV` GitHub secret, and store only the private production
+`instance.yaml`, the value-free platform control worksheet, and the Laravel
+Cloud token in the deployment environment. Then run the optional workflow once
+through the strict pre-commission checkpoint.
 
-Before an exact-release Laravel Cloud rehearsal, add a second eligible GitHub
-collaborator as the independent commissioning reviewer, replace the synthetic
-compile-only secret bundle with authoritative two-file production input, and
-review the production `instance.yaml`. Do not execute deployment or
-commissioning without separate authority. The published beta.68 tag remains
-the rollback reference.
+Normal application releases continue through Laravel Cloud push-to-deploy and
+do not require GitHub reviewers, Maker/Checker contact details, or a local
+`secrets.env`. The controller validates that every secret name required by the
+compiled profile is already attached as a Laravel Cloud managed secret.
 
-The deployment environment holds `PAYOUT_SECRETS_ENV`,
-`PAYOUT_PLATFORM_CONTROL_ENV`, and `LARAVEL_CLOUD_TOKEN`. The commissioning
-environment holds fresh copies of `PAYOUT_PLATFORM_CONTROL_ENV` and
-`LARAVEL_CLOUD_TOKEN`. The protected job reconstructs its worksheet after
-approval; that worksheet and all raw credentials are never uploaded as
-artifacts. Enabling `authorize_commissioning` requests the ceremony but cannot
-bypass the environment reviewer.
+Initial secret import/recovery and one-time commissioning remain separate,
+explicitly authorized operator procedures. The existing commissioning GitHub
+Environment may remain dormant as a future governance option, but it is not a
+dependency of deployment or pre-commission verification. The published
+beta.68 tag remains the rollback reference.
 
 ## Operating record
 

@@ -56,6 +56,7 @@ final class InstanceProfileCompiler
 
         $connectionNames = [];
         $requiredSecrets = [];
+        $commissioningSecrets = [];
 
         foreach ($connections as $index => $connection) {
             if (! is_array($connection)) {
@@ -106,36 +107,49 @@ final class InstanceProfileCompiler
             }
 
             $this->assertPositiveInteger($invitation['amount_minor'] ?? null, "commissioning.invitations.{$role}.amount_minor");
-            $this->assertSecretReference($invitation['email_secret'] ?? null, "commissioning.invitations.{$role}.email_secret", $requiredSecrets);
-            $this->assertSecretReference($invitation['mobile_secret'] ?? null, "commissioning.invitations.{$role}.mobile_secret", $requiredSecrets);
+            $this->assertSecretReference($invitation['email_secret'] ?? null, "commissioning.invitations.{$role}.email_secret", $commissioningSecrets);
+            $this->assertSecretReference($invitation['mobile_secret'] ?? null, "commissioning.invitations.{$role}.mobile_secret", $commissioningSecrets);
         }
 
         $this->assertEnvironmentMapping($profile['runtime'] ?? [], 'runtime');
         $this->collectSecretReferences($profile['secret_refs'] ?? [], 'secret_refs', $requiredSecrets);
         $this->rejectSensitivePlaintext($profile);
 
-        $profile['required_secrets'] = array_values(array_unique($requiredSecrets));
+        $profile['deployment_required_secrets'] = array_values(array_unique($requiredSecrets));
+        $profile['commissioning_required_secrets'] = array_values(array_unique($commissioningSecrets));
+        $profile['required_secrets'] = array_values(array_unique(array_merge($requiredSecrets, $commissioningSecrets)));
+        sort($profile['deployment_required_secrets'], SORT_STRING);
+        sort($profile['commissioning_required_secrets'], SORT_STRING);
         sort($profile['required_secrets'], SORT_STRING);
 
         return $this->canonicalize($profile);
     }
 
     /** @return array{fingerprint: string, files: array<string, string>} */
-    public function compile(string $instancePath, string $secretsPath, string $outputDirectory): array
+    public function compile(string $instancePath, ?string $secretsPath, string $outputDirectory): array
     {
         $profile = $this->validate($instancePath);
-        $this->assertPrivateSecretsFile($secretsPath);
-        $secretValues = $this->parseSecretFile($secretsPath);
         $requiredSecrets = $profile['required_secrets'];
+        $deploymentRequiredSecrets = $profile['deployment_required_secrets'];
+        $commissioningRequiredSecrets = $profile['commissioning_required_secrets'];
 
-        foreach ($requiredSecrets as $secretName) {
-            if (! isset($secretValues[$secretName]) || trim($secretValues[$secretName]) === '') {
-                throw new InstanceProfileException("Required secret [{$secretName}] is missing or empty.");
+        if ($secretsPath !== null) {
+            $this->assertPrivateSecretsFile($secretsPath);
+            $secretValues = $this->parseSecretFile($secretsPath);
+
+            foreach ($requiredSecrets as $secretName) {
+                if (! isset($secretValues[$secretName]) || trim($secretValues[$secretName]) === '') {
+                    throw new InstanceProfileException("Required secret [{$secretName}] is missing or empty.");
+                }
             }
         }
 
         $sanitizedProfile = $profile;
-        unset($sanitizedProfile['required_secrets']);
+        unset(
+            $sanitizedProfile['required_secrets'],
+            $sanitizedProfile['deployment_required_secrets'],
+            $sanitizedProfile['commissioning_required_secrets'],
+        );
         $fingerprint = hash('sha256', $this->encodeCanonicalJson($sanitizedProfile));
         $compiledInstance = [
             'schema' => self::SCHEMA,
@@ -175,9 +189,10 @@ final class InstanceProfileCompiler
             'compiled-instance.json' => $this->encodeCanonicalJson($compiledInstance)."\n",
             'runtime.env' => $this->renderEnvironment($runtime),
             'required-secrets.json' => $this->encodeCanonicalJson([
-                'schema' => 'x-payout.required-secrets.v1',
+                'schema' => 'x-payout.required-secrets.v2',
                 'profile_fingerprint' => $fingerprint,
-                'required' => $requiredSecrets,
+                'required' => $deploymentRequiredSecrets,
+                'commissioning_required' => $commissioningRequiredSecrets,
             ])."\n",
             'commissioning.yaml' => Yaml::dump($this->canonicalize($commissioning), 8, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK),
         ];
@@ -253,7 +268,12 @@ final class InstanceProfileCompiler
             throw new InstanceProfileException('Compiled artifact fingerprints do not agree.');
         }
 
-        foreach ($requiredSecrets['required'] ?? [] as $secretName) {
+        $secretNames = array_merge(
+            $requiredSecrets['required'] ?? [],
+            $requiredSecrets['commissioning_required'] ?? [],
+        );
+
+        foreach ($secretNames as $secretName) {
             if (preg_match('/^'.preg_quote((string) $secretName, '/').'=/m', $contents['runtime.env']) === 1) {
                 throw new InstanceProfileException("Runtime artifact contains secret key [{$secretName}].");
             }

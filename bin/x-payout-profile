@@ -18,7 +18,7 @@ foreach (array_slice($argv, 2) as $argument) {
 $usage = <<<'TEXT'
 Usage:
   bin/x-payout-profile validate --instance=/path/to/instance.yaml
-  bin/x-payout-profile compile --instance=/path/to/instance.yaml --secrets=/path/to/secrets.env --output=/path/to/build
+  bin/x-payout-profile compile --instance=/path/to/instance.yaml [--secrets=/path/to/secrets.env] --output=/path/to/build
   bin/x-payout-profile verify --compiled=/path/to/build
 TEXT;
 
@@ -54,11 +54,15 @@ try {
         $secretsPath = $options['secrets'] ?? null;
         $outputDirectory = $options['output'] ?? null;
 
-        if (! is_string($secretsPath) || $secretsPath === '' || ! is_string($outputDirectory) || $outputDirectory === '') {
-            throw new InstanceProfileException("Compile requires --secrets and --output.\n\n{$usage}");
+        if (! is_string($outputDirectory) || $outputDirectory === '') {
+            throw new InstanceProfileException("Compile requires --output.\n\n{$usage}");
         }
 
-        $result = $compiler->compile($instancePath, $secretsPath, $outputDirectory);
+        $result = $compiler->compile(
+            $instancePath,
+            is_string($secretsPath) && $secretsPath !== '' ? $secretsPath : null,
+            $outputDirectory,
+        );
         fwrite(STDOUT, "Compiled sanitized deployment artifacts.\nProfile fingerprint: {$result['fingerprint']}\nOutput: {$outputDirectory}\n");
 
         exit(0);

@@ -44,6 +44,9 @@ it('validates the sanitized portable profile without booting Laravel', function 
 
     expect($profile['schema'])->toBe('x-payout.instance.v1')
         ->and($profile['providers']['active'])->toBe('primary-payout')
+        ->and($profile['deployment_required_secrets'])->toContain('NETBANK_CLIENT_SECRET')
+        ->not->toContain('X_PAYOUT_MAKER_MOBILE')
+        ->and($profile['commissioning_required_secrets'])->toContain('X_PAYOUT_MAKER_MOBILE')
         ->and($profile['required_secrets'])->toContain('NETBANK_CLIENT_SECRET', 'X_PAYOUT_MAKER_MOBILE');
 
     $executable = file_get_contents(instanceProfilePath('bin/x-payout-profile'));
@@ -77,6 +80,26 @@ it('compiles deterministic sanitized artifacts without serializing secret values
         ->not->toContain('NETBANK_CLIENT_SECRET');
 
     unlink($secretsPath);
+});
+
+it('compiles deployment artifacts without requiring secret values', function (): void {
+    $compiler = new InstanceProfileCompiler;
+    $directory = sys_get_temp_dir().'/x-payout-deployment-only-'.bin2hex(random_bytes(4));
+    $compiled = $compiler->compile(
+        instanceProfilePath('ops/deployment/examples/instance.yaml'),
+        null,
+        $directory,
+    );
+
+    $requiredSecrets = json_decode($compiled['files']['required-secrets.json'], true, flags: JSON_THROW_ON_ERROR);
+
+    expect($requiredSecrets['required'])
+        ->toContain('NETBANK_CLIENT_SECRET')
+        ->not->toContain('X_PAYOUT_MAKER_MOBILE')
+        ->and($requiredSecrets['commissioning_required'])
+        ->toContain('X_PAYOUT_MAKER_MOBILE')
+        ->and(implode("\n", $compiled['files']))
+        ->not->toContain('private-test-value');
 });
 
 it('rejects missing drivers capabilities and plaintext credentials', function (Closure $mutate, string $message): void {

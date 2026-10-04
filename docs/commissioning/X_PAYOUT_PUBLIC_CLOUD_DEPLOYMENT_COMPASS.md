@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 11 — protected compile-only workflow proved on GitHub; production input and independent reviewer next
+**Current position:** Gate 11 — optional workflow corrected to stop at pre-commission; exact-release rehearsal next
 
-**Overall status:** Legacy, compiled controller, and workflow contracts are locally green; no external mutation has run
+**Overall status:** Legacy, compiled controller, and simplified workflow contracts are locally green; corrective publication pending
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -51,7 +51,7 @@ each run. Never copy historical identifiers into a new run without inspection.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and protected reusable workflow complete locally; GitHub environment setup and exact-release rehearsal remain |
+| 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and optional pre-commission workflow complete locally; exact-release rehearsal remains |
 
 ## Turnkey operating contract
 
@@ -100,9 +100,12 @@ Custom code is limited to:
 - enforcing exact releases and financial authority; and
 - collecting doctor, balance, domain, and public-surface evidence.
 
-GitHub Actions coordinates release validation and protected approvals. Thin
-platform targets invoke official infrastructure tools. The x-change doctor,
-commissioning commands, and balance report remain the financial authority.
+Laravel Cloud push-to-deploy remains the ordinary recurring deployment path.
+GitHub Actions is an optional validation and pre-commission orchestration
+surface, not a replacement deployment platform and not a commissioning
+authority. Thin platform targets invoke official infrastructure tools. The
+x-change doctor, separately authorized commissioning commands, and balance
+report remain the financial authority.
 
 ### Initial local-file inventory
 
@@ -136,9 +139,10 @@ forbidden until one exact-release two-file cleanroom passes.
 
 - Added the provider- and platform-neutral `x-payout.instance.v1` schema and a
   sanitized institution example.
-- Added a gitignored, owner-only `secrets.env` contract. The compiler accepts
-  secret-name references from YAML and verifies required values without ever
-  serializing them.
+- Added a gitignored, owner-only `secrets.env` contract for initial import,
+  recovery, and commissioning validation. Ordinary compilation accepts
+  secret-name references from YAML without requiring secret values; the target
+  verifies those names are already attached as platform-managed secrets.
 - Added `bin/x-payout-profile`, which loads Composer only and does not boot
   Laravel, connect to a database or cache, or invoke any platform/provider.
 - Compilation produces only deterministic sanitized artifacts:
@@ -211,14 +215,11 @@ forbidden until one exact-release two-file cleanroom passes.
 - The deployment job invokes the existing compatibility controller through
   the strict pre-commission checkpoint with commissioning, DNS mutation, and
   domain cutover authority forced off.
-- The commissioning job is distinct, requires the caller to request
-  commissioning, and targets the separately protected
-  `x-payout-production-commissioning` GitHub Environment. Repository
-  administrators must configure required reviewers and prevent self-review;
-  the workflow cannot weaken or emulate that control.
-- The protected job reconstructs its controller worksheet from protected
-  secrets after approval. No private secrets file, controller worksheet, raw
-  command transcript, or provider response is uploaded.
+- The initial design included a distinct protected commissioning job. That
+  design was subsequently superseded by the corrective simplification below;
+  this paragraph is retained only as historical evidence.
+- No private secrets file, controller worksheet, raw command transcript, or
+  provider response is uploaded.
 - Focused workflow-contract verification passed 4 tests and 32 assertions.
   No GitHub, Laravel Cloud, DNS, DigitalOcean, NetBank, commissioning,
   financial, invitation, messaging, or credential mutation occurred.
@@ -246,6 +247,25 @@ forbidden until one exact-release two-file cleanroom passes.
   `ecf47056c904d8ff07a92a8a750269e1943394a77bff0bf02c072b694c50fe62`.
 - No Laravel Cloud, DNS, DigitalOcean, NetBank, commissioning, financial,
   invitation, messaging, or real credential mutation occurred.
+
+### Corrective deployment-boundary simplification — 2026-10-04
+
+- Laravel Cloud push-to-deploy remains the normal continuous deployment
+  mechanism and is not gated by GitHub reviewers or Maker/Checker identities.
+- The reusable GitHub workflow is optional and contains only profile
+  compilation plus deployment through the strict pre-commission checkpoint.
+  It contains no commissioning job, commissioning input, or financial
+  authority.
+- Profile compilation can emit the required managed-secret inventory without
+  reading secret values. A private `secrets.env` is needed only for initial
+  secret import, credential recovery, or a separately authorized one-time
+  commissioning validation.
+- Commissioning remains a distinct operator command. The previously created
+  commissioning GitHub Environment is dormant and does not impede deployment
+  or pre-commission verification.
+- Focused compiler, workflow, controller-parity, and deployment-kit coverage
+  passed 48 tests and 242 assertions. Composer validation, shell syntax,
+  formatting, and diff checks passed.
 
 ## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
 
@@ -447,10 +467,11 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Add an independent eligible GitHub reviewer, replace the synthetic validation
-input with the reviewed production `instance.yaml` and private `secrets.env`,
-and prepare—but do not execute without separate authority—the first
-exact-release Laravel Cloud rehearsal through the pre-commission checkpoint.
+Publish the corrective workflow, remove the synthetic `PAYOUT_SECRETS_ENV`,
+install the private production `instance.yaml`, platform control worksheet,
+and Laravel Cloud token in the deployment environment, then run the optional
+exact-release rehearsal only through the strict pre-commission checkpoint.
+Do not commission as part of that workflow.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
