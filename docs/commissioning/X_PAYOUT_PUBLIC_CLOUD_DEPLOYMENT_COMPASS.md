@@ -144,6 +144,25 @@ It must never mutate NS, MX, mail-verification, `netbank.disburse.cash`, Spaces,
 or any unrelated record. Manual DNS remains the fail-safe default until this
 adapter and its rollback tests are implemented.
 
+### DigitalOcean CLI initialization — 2026-10-04
+
+- Installed DigitalOcean `doctl` `1.167.0` on the controlled operator Mac.
+- Created the 90-day custom-scoped token `x-payout-production-dns` with only
+  Domain create, read, update, and delete permissions.
+- Initialized the local named context `x-payout-production-dns`; the token is
+  absent from Git, Laravel Cloud, application variables, and deployment files.
+- Verified the local credential file is owner-readable and owner-writable only
+  (`0600`).
+- A read-only DNS query returned the expected allowlisted records: the
+  `payout` A record, `_acme-challenge.payout` CNAME, and `www.payout` A record.
+- No DNS record was created, changed, or deleted during initialization.
+- The token expires on January 2, 2027 and must be rotated or revoked earlier
+  if the operator Mac or credential boundary is no longer trusted.
+
+The credential is ready, but automated mutation remains disabled until the
+allowlisted adapter, dry-run diff, rollback coverage, and explicit live-change
+gate are implemented.
+
 ## Secret custody decision
 
 ### 2026-10-03 — Laravel Cloud is the runtime secret authority

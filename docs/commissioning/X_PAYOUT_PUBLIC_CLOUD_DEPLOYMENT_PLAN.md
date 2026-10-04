@@ -213,6 +213,19 @@ preferred. A persistent named context is acceptable only on a controlled
 operator machine with restricted local file access and an established token
 rotation procedure.
 
+Current operator prerequisite (initialized 2026-10-04):
+
+- `doctl` version: `1.167.0`;
+- named context: `x-payout-production-dns`;
+- token expiry: January 2, 2027;
+- credential file mode: `0600`; and
+- verified capability: read-only enumeration of the allowlisted
+  `payout.disburse.cash` records.
+
+The deployment code must reference the context name only. It must never read,
+copy, print, export, or transmit the stored token. Token rotation is an
+operator prerequisite and must not be coupled to an application deployment.
+
 ### Production secret custody
 
 Keeper Business and HashiCorp Cloud were evaluated but are not dependencies of
