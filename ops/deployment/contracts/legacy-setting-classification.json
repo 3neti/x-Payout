@@ -53,6 +53,7 @@
         "^FILESYSTEM_",
         "^AWS_",
         "^XCHANGE_",
+        "^XMCP_",
         "^X_FEEDBACK_"
       ]
     }

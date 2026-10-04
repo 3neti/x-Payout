@@ -34,6 +34,17 @@ runtime:
   XMCP_PUBLIC_ISSUANCE_ENDPOINT: /mcp/x-change/public
   XMCP_PUBLIC_ISSUANCE_API_BASE_URL: https://payout.example.com/api/x/v1/public-issuance
   XMCP_PUBLIC_ISSUANCE_RATE_LIMIT_PER_MINUTE: 30
+  XCHANGE_PARTNER_API_ENABLED: false
+  XCHANGE_PARTNER_API_PUBLIC_DISCOVERY_ENABLED: true
+  XCHANGE_PARTNER_API_ACCESS_CONTACT: api@example.com
+  XMCP_ENABLED: false
+  XMCP_PUBLIC_DISCOVERY_ENABLED: true
+  XMCP_ENDPOINT: /mcp/x-change
+  XMCP_API_BASE_URL: https://payout.example.com/api/partner/v1
+  XMCP_ACCESS_CONTACT: api@example.com
+  XMCP_EXPECTED_PARTNER_CONTRACT_VERSION: 1.4.0
+  XMCP_EXPECTED_PARTNER_CONTRACT_SHA256: f758f39f4c2122d5a3e33990dc4995e2870c209957ef7d20d44f85995b40d4d1
+  XMCP_RATE_LIMIT_PER_MINUTE: 30
 
 providers:
   active: primary-payout
@@ -99,5 +110,7 @@ commissioning:
 
 secret_refs:
   commissioning_access_token: XCHANGE_COMMISSIONING_ACCESS_TOKEN
+  passport_private_key: PASSPORT_PRIVATE_KEY
+  passport_public_key: PASSPORT_PUBLIC_KEY
   sms_api_key: ENGAGESPARK_API_KEY
   sms_organization_id: ENGAGESPARK_ORGANIZATION_ID

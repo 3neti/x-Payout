@@ -123,6 +123,35 @@ it('requires a complete public MCP runtime when public on-demand issuance is ena
     unlink($path);
 });
 
+it('requires a pinned same-origin Partner MCP contract and durable Passport keys', function (): void {
+    $profile = validInstanceProfile();
+    $profile['features']['partner_api'] = true;
+    $profile['runtime']['XCHANGE_PARTNER_API_ENABLED'] = true;
+    $profile['runtime']['XMCP_ENABLED'] = true;
+    $path = writeInstanceProfile($profile);
+
+    $validated = (new InstanceProfileCompiler)->validate($path);
+
+    expect($validated['runtime']['XMCP_EXPECTED_PARTNER_CONTRACT_VERSION'])->toBe('1.4.0')
+        ->and($validated['deployment_required_secrets'])
+        ->toContain('PASSPORT_PRIVATE_KEY', 'PASSPORT_PUBLIC_KEY');
+
+    $profile['runtime']['XMCP_API_BASE_URL'] = 'https://different.example.com/api/partner/v1';
+    file_put_contents($path, Yaml::dump($profile, 10, 2));
+
+    expect(fn () => (new InstanceProfileCompiler)->validate($path))
+        ->toThrow(InstanceProfileException::class, 'must use the canonical public host');
+
+    $profile['runtime']['XMCP_API_BASE_URL'] = 'https://payout.example.com/api/partner/v1';
+    unset($profile['secret_refs']['passport_private_key']);
+    file_put_contents($path, Yaml::dump($profile, 10, 2));
+
+    expect(fn () => (new InstanceProfileCompiler)->validate($path))
+        ->toThrow(InstanceProfileException::class, 'must include PASSPORT_PRIVATE_KEY');
+
+    unlink($path);
+});
+
 it('rejects missing drivers capabilities and plaintext credentials', function (Closure $mutate, string $message): void {
     $profile = validInstanceProfile();
     $mutate($profile);
@@ -224,4 +253,14 @@ it('retains an explicit legacy worksheet mode in the compatibility controller', 
         ->toContain('load_compiled_profile')
         ->toContain('source "${CONTROL_FILE}"')
         ->toContain('legacy worksheet');
+});
+
+it('ships Passport persistence and treats signing keys as managed secrets', function (): void {
+    $migrations = glob(instanceProfilePath('database/migrations/*_create_oauth_clients_table.php'));
+    $controller = file_get_contents(instanceProfilePath('scripts/deploy-production-cleanroom.sh'));
+    $worksheet = file_get_contents(instanceProfilePath('deployment.production.secrets.example'));
+
+    expect($migrations)->toHaveCount(1)
+        ->and($controller)->toContain('PASSPORT_PRIVATE_KEY PASSPORT_PUBLIC_KEY')
+        ->and($worksheet)->toContain('PASSPORT_PRIVATE_KEY=', 'PASSPORT_PUBLIC_KEY=');
 });

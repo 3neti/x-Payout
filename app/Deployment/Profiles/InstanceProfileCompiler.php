@@ -129,22 +129,63 @@ final class InstanceProfileCompiler
     /** @param array<string, mixed> $profile */
     private function assertFeatureRuntimeConsistency(array $profile): void
     {
-        if (($profile['features']['public_on_demand_issuance'] ?? false) !== true) {
+        $runtime = $profile['runtime'] ?? [];
+
+        if (($profile['features']['public_on_demand_issuance'] ?? false) === true) {
+            foreach (['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED', 'XMCP_PUBLIC_ISSUANCE_ENABLED'] as $key) {
+                if (($runtime[$key] ?? null) !== true) {
+                    throw new InstanceProfileException("runtime.{$key} must be true when features.public_on_demand_issuance is enabled.");
+                }
+            }
+
+            $this->assertHttpsUrl(
+                $runtime['XMCP_PUBLIC_ISSUANCE_API_BASE_URL'] ?? null,
+                'runtime.XMCP_PUBLIC_ISSUANCE_API_BASE_URL',
+            );
+        }
+
+        if (($profile['features']['partner_api'] ?? false) !== true) {
             return;
         }
 
-        $runtime = $profile['runtime'] ?? [];
-
-        foreach (['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED', 'XMCP_PUBLIC_ISSUANCE_ENABLED'] as $key) {
+        foreach (['XCHANGE_PARTNER_API_ENABLED', 'XMCP_ENABLED'] as $key) {
             if (($runtime[$key] ?? null) !== true) {
-                throw new InstanceProfileException("runtime.{$key} must be true when features.public_on_demand_issuance is enabled.");
+                throw new InstanceProfileException("runtime.{$key} must be true when features.partner_api is enabled.");
             }
         }
 
-        $this->assertHttpsUrl(
-            $runtime['XMCP_PUBLIC_ISSUANCE_API_BASE_URL'] ?? null,
-            'runtime.XMCP_PUBLIC_ISSUANCE_API_BASE_URL',
-        );
+        $this->assertHttpsUrl($runtime['XMCP_API_BASE_URL'] ?? null, 'runtime.XMCP_API_BASE_URL');
+
+        if (parse_url((string) $runtime['XMCP_API_BASE_URL'], PHP_URL_HOST)
+            !== parse_url((string) $profile['public']['canonical_url'], PHP_URL_HOST)) {
+            throw new InstanceProfileException('runtime.XMCP_API_BASE_URL must use the canonical public host.');
+        }
+
+        $endpoint = $runtime['XMCP_ENDPOINT'] ?? null;
+
+        if (! is_string($endpoint) || ! str_starts_with($endpoint, '/')) {
+            throw new InstanceProfileException('runtime.XMCP_ENDPOINT must be an absolute application path.');
+        }
+
+        $version = $runtime['XMCP_EXPECTED_PARTNER_CONTRACT_VERSION'] ?? null;
+
+        if (! is_string($version) || preg_match('/^\d+\.\d+\.\d+$/', $version) !== 1) {
+            throw new InstanceProfileException('runtime.XMCP_EXPECTED_PARTNER_CONTRACT_VERSION must be a semantic version.');
+        }
+
+        $sha256 = $runtime['XMCP_EXPECTED_PARTNER_CONTRACT_SHA256'] ?? null;
+
+        if (! is_string($sha256) || preg_match('/^[a-f0-9]{64}$/', $sha256) !== 1) {
+            throw new InstanceProfileException('runtime.XMCP_EXPECTED_PARTNER_CONTRACT_SHA256 must be a lowercase SHA-256 digest.');
+        }
+
+        $secretReferences = $profile['secret_refs'] ?? [];
+
+        foreach (['PASSPORT_PRIVATE_KEY', 'PASSPORT_PUBLIC_KEY'] as $requiredSecret) {
+            if (! in_array($requiredSecret, $secretReferences, true)) {
+                throw new InstanceProfileException("secret_refs must include {$requiredSecret} when features.partner_api is enabled.");
+            }
+        }
     }
 
     /** @return array{fingerprint: string, files: array<string, string>} */

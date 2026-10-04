@@ -213,6 +213,7 @@ BASH);
         ->toContain('environment:variables env-test --action=set --key=APP_URL --value=https://payout.example.com')
         ->toContain('environment:variables env-test --action=set --key=XMCP_PUBLIC_ISSUANCE_ENABLED --value=false')
         ->toContain('environment:variables env-test --action=set --key=XMCP_PUBLIC_ISSUANCE_API_BASE_URL --value=https://payout.example.com/api/x/v1/public-issuance')
+        ->toContain('environment:variables env-test --action=set --key=XMCP_EXPECTED_PARTNER_CONTRACT_VERSION --value=1.4.0')
         ->toContain('environment-secret:attach env-test secret-test')
         ->not->toContain('private-test-value');
 
