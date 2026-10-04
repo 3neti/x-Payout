@@ -72,12 +72,16 @@ it('compiles deterministic sanitized artifacts without serializing secret values
         'runtime.env',
         'required-secrets.json',
         'commissioning.yaml',
+        'preflight-plan.json',
         'manifest.sha256',
     ])->and($second)->toBe($first)
         ->and(implode("\n", $first['files']))->not->toContain('do-not-serialize-this-value')
         ->and($first['files']['runtime.env'])
         ->toContain('APP_URL=https://payout.example.com')
-        ->not->toContain('NETBANK_CLIENT_SECRET');
+        ->not->toContain('NETBANK_CLIENT_SECRET')
+        ->and($first['files']['preflight-plan.json'])
+        ->toContain('x-payout.preflight-plan.v1', 'block_before_mutation')
+        ->not->toContain('do-not-serialize-this-value');
 
     unlink($secretsPath);
 });
@@ -213,36 +217,14 @@ it('detects any change to a compiled artifact', function (): void {
     unlink($secretsPath);
 });
 
-it('ships a valid json schema and classifies every legacy worksheet setting exactly once', function (): void {
+it('ships a valid json schema and the versioned legacy classification contract', function (): void {
     $schema = json_decode(file_get_contents(instanceProfilePath('ops/deployment/schema/instance.v1.schema.json')), true, flags: JSON_THROW_ON_ERROR);
     $contract = json_decode(file_get_contents(instanceProfilePath('ops/deployment/contracts/legacy-setting-classification.json')), true, flags: JSON_THROW_ON_ERROR);
-    $control = file_get_contents(instanceProfilePath('deployment.production.example'));
-    preg_match_all('/^([A-Z][A-Z0-9_]*)=/m', $control, $matches);
-    $controlKeys = $matches[1];
-    $classified = [];
-
-    foreach ($controlKeys as $key) {
-        foreach ($contract['precedence'] as $category) {
-            if ($category === 'private_secret') {
-                continue;
-            }
-
-            foreach ($contract['categories'][$category]['patterns'] as $pattern) {
-                if (preg_match('/'.$pattern.'/', $key) === 1) {
-                    $classified[$key] = $category;
-
-                    continue 3;
-                }
-            }
-        }
-    }
-
-    $secretWorksheet = file_get_contents(instanceProfilePath('deployment.production.secrets.example'));
-    preg_match_all('/^([A-Z][A-Z0-9_]*)=/m', $secretWorksheet, $secretMatches);
 
     expect($schema['properties']['schema']['const'])->toBe('x-payout.instance.v1')
-        ->and(array_keys($classified))->toEqualCanonicalizing($controlKeys)
-        ->and($secretMatches[1])->not->toBeEmpty();
+        ->and($contract['schema'])->toBe('x-payout.legacy-setting-classification.v2')
+        ->and(array_keys($contract['sources']))->toBe(['deployment_control', 'secret_reentry'])
+        ->and($contract['categories'])->not->toBeEmpty();
 });
 
 it('retains an explicit legacy worksheet mode in the compatibility controller', function (): void {

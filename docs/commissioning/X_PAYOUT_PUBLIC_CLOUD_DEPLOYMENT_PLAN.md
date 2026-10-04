@@ -1,20 +1,45 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Cleanroom and continuous deployment proven; optional compiled pre-commission workflow verified live
+**Status:** Cleanroom and continuous deployment proven; two-input one-command safety foundations implemented
 
-**Updated:** 2026-10-04
+**Updated:** 2026-10-05
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.68` (`7863e8d1`)
+**Current x-PayOut:** `v1.0.0-beta.69` (`853c5b0`)
 
-**Current x-change:** `v1.0.98` (`5565cf14`)
+**Current x-change:** `v1.0.99` (`13e06cd3`)
 
 ## Objective
 
-Preserve a bank/EMI-grade record of the working x-PayOut deployment, retire the
-current Laravel Cloud application without losing financial or recovery
-evidence, and reproduce it from published packages in a new cleanroom.
+Deliver one fail-closed, resumable command that can reproduce an x-PayOut
+instance from one portable `instance.yaml` and one private, one-time
+`secrets.env` without a manually maintained deployment worksheet.
+
+The one command must:
+
+1. validate and compile the instance;
+2. import or reconcile managed secrets;
+3. create or discover Cloud infrastructure;
+4. configure only changed runtime values;
+5. deploy the exact release;
+6. run the strict pre-commission doctor;
+7. commission once when explicitly authorized;
+8. attach and verify the domain;
+9. run the final strict doctor and MCP doctor;
+10. save sanitized state and evidence; and
+11. succeed idempotently when rerun.
+
+Before any infrastructure mutation, the command must also prove that every
+declared external dependency is present, reachable where a safe probe exists,
+and internally consistent. A missing provider account, DNS authority, object
+store, SMS transport, identity-verification service, map provider, OAuth key,
+or required credential must fail during planning rather than during or after
+deployment.
+
+This cleanup extends the already proven retirement and cleanroom procedure. It
+does not weaken its financial, commissioning, evidence, or secret-custody
+boundaries.
 
 The final proof is not merely that a Laravel application can be recreated. It
 must show that an institution can deploy, commission, operate, retire, and
@@ -51,6 +76,228 @@ targets. It is not layered on top of a Forge-managed server.
 - The production deployment control worksheet may contain resource IDs,
   secret IDs, confirmations, and non-secret configuration, but never a secret
   value.
+
+## Two-input one-command cleanup
+
+### Cleanup Gate 0 — Classify every existing input
+
+Build a tested migration matrix for every setting currently found in
+`deployment.production.local` and `deployment.production.secrets.local`.
+Each setting must have exactly one destination:
+
+- portable desired state in `instance.yaml`;
+- private bootstrap value in `secrets.env`;
+- generated platform state;
+- ephemeral operator or CI authority;
+- sanitized evidence; or
+- retired legacy input.
+
+No setting may be silently dropped, read from two authorities, or copied into
+the generated state merely for convenience.
+
+**Acceptance:** The classification test covers every legacy setting and
+rejects duplicate or unclassified ownership.
+
+### Cleanup Gate 1 — Pre-mutation external-resource sanity checks
+
+Add a read-only `preflight` phase which runs before foundation creation or
+configuration. It must validate names, formats, references, and safe
+connectivity without issuing money, messages, identities, tokens, Pay Codes,
+or policies.
+
+The initial prerequisite catalog is:
+
+| Dependency | Required proof before deployment |
+| --- | --- |
+| NetBank | Declared corporate/source account, client aliases, endpoints, credential references, expected capabilities, and production/test mode are coherent; any provider probe must be read-only |
+| DNS | Canonical hostname is valid; authoritative zone exists; expected nameservers are preserved; automation credentials can affect only allowlisted records |
+| Private storage | Bucket/Space, region, endpoint, and managed-secret references exist; a bounded private write/read/delete can run only when separately enabled, otherwise configuration validation is read-only |
+| EngageSpark | API-key and organization secret references exist; no SMS is sent during preflight |
+| TXTCMDR | API endpoint and token reference exist; no OTP is sent during preflight |
+| HyperVerge | Application/key references and workflow/base URLs exist; no applicant or KYC session is created |
+| Mapbox/OpenCage | Required token references exist and the selected map/geocoding provider is coherent; no unnecessary billable lookup is made |
+| Passport/Partner MCP | Signing-key references, migrations, HTTPS endpoints, exact contract version/hash, and enabled feature switches agree |
+| Release | Repository/ref is immutable and resolves to the exact Composer lock and packaged frontend assets |
+| Commissioning | Opening policy, provider cutover evidence, principals, invitations, and explicit authorization are complete before the commissioning phase is eligible |
+
+Each check returns one of `ready`, `not_applicable`, `needs_attention`, or
+`blocked`, with a redacted reason and remediation. `needs_attention` and
+`blocked` stop an applied run unless the check has a documented, narrowly
+scoped exception contract. No raw secret value may enter the report.
+
+**Acceptance:** A missing or contradictory prerequisite stops before the first
+Cloud or DNS mutation. Fake transports prove every catalog entry, timeout,
+redaction rule, and fail-closed disposition.
+
+### Cleanup Gate 2 — Introduce machine-owned platform state
+
+Replace worksheet mutation with an ignored, owner-only state file such as
+`ops/deployment/state/<instance-id>.json`. It contains only profile
+fingerprint, adapter name, resource IDs, managed-secret IDs, last deployment
+ID, and timestamps. It contains no credential, runtime value, personal
+invitation detail, account number, or operator confirmation.
+
+Writes must be atomic and schema-validated. The file is a resume cache, not an
+authority. If missing, the adapter rediscovers resources by stable instance
+identity and reconstructs it. Multiple or conflicting matches fail closed.
+
+**Acceptance:** Delete the state file after a fake deployment; the next run
+rediscovers exactly one resource set, recreates state, and produces no
+duplicate infrastructure.
+
+### Cleanup Gate 3 — Add one-time managed-secret reconciliation
+
+Add an explicit secret-import phase consuming only the private `secrets.env`
+and the required secret-name inventory compiled from `instance.yaml`.
+
+It must:
+
+- require owner-only file permissions;
+- reject unknown, unused, empty, duplicate, or missing entries;
+- create, rotate, or attach Laravel Cloud managed secrets without printing
+  values;
+- record only managed-secret IDs in state;
+- support a read-only check mode; and
+- permit later ordinary deployments without retaining `secrets.env` locally.
+
+`APP_KEY`, generated database credentials, and other platform-owned values
+remain platform-owned and are not imported from the worksheet.
+
+**Acceptance:** Logs, process arguments, compiled artifacts, Git status, and
+uploaded evidence contain no secret value. A second import is an idempotent
+no-op unless an explicit rotation is requested.
+
+### Cleanup Gate 4 — Make compiled desired state authoritative
+
+The controller must accept `--instance`, `--adapter`, and optional `--state`;
+it must no longer source desired runtime configuration from a control
+worksheet. The verified compiler supplies runtime variables, exact release,
+domain, provider topology, required secret names, commissioning intent, and
+profile fingerprint.
+
+Confirmations become invocation authority (`--apply`, `--commission`, and
+`--activate-domain`) or protected CI-environment approval. They are never
+sticky booleans in a local file.
+
+Configuration reconciliation must compare desired and current values and
+write only changed keys. Secret values remain unreadable; attachment is
+reconciled by managed-secret identity and name.
+
+**Acceptance:** An unchanged second run performs no environment-variable,
+secret, infrastructure, DNS, commissioning, or domain mutation.
+
+### Cleanup Gate 5 — Execute the complete one-command lifecycle
+
+Provide one operator entry point with an explicit adapter, for example:
+
+```bash
+bin/x-payout-deploy continuous \
+  --instance=ops/deployment/instances/payout.disburse.cash.yaml \
+  --adapter=laravel-cloud \
+  --apply \
+  --commission \
+  --activate-domain
+```
+
+The command executes the objective in order and persists a checkpoint after
+each completed phase. A retry resumes from verified state. It never repeats
+opening capitalization, invitation issuance, domain creation, or managed
+secret creation merely because a later phase failed.
+
+Commissioning remains ineligible unless the profile authorizes it, provider
+cutover evidence is present, the pre-commission doctor passes, and the
+operator supplies current commissioning authority.
+
+**Acceptance:** Inject a recoverable failure after every phase. Each rerun
+continues safely and finishes with one commissioned instance, one domain
+attachment, and no duplicate financial or onboarding artifact.
+
+### Cleanup Gate 6 — Sanitize state and evidence
+
+Produce a bounded evidence bundle containing the exact Git SHA and release,
+profile fingerprint, prerequisite report, resource identities, changed-key
+names, deployment result, doctor summaries, MCP readiness, domain/TLS result,
+commissioning disposition, and final timestamps.
+
+Evidence must never include secret values, one-time client secrets, tokens,
+OTP values, private keys, full provider responses, or unnecessary personal
+information.
+
+**Acceptance:** Automated secret-pattern and schema checks pass before local
+retention or CI artifact upload.
+
+### Cleanup Gate 7 — Retire compatibility mode
+
+For one release, run legacy and two-input modes through the same fake Cloud,
+DNS, provider, and secret transports and compare their effective desired
+state and phase decisions. The new mode becomes default; legacy mode remains
+an explicit rollback path.
+
+After one exact-release cleanroom passes, remove:
+
+- `deployment.production.local`;
+- `deployment.production.secrets.local`;
+- their example files;
+- worksheet sourcing and `upsert_local_state()`;
+- duplicate runtime and confirmation parsing; and
+- tests whose only purpose is legacy worksheet behavior.
+
+**Acceptance:** A repository search finds no production controller dependency
+on either worksheet, while migration documentation still identifies the last
+release that supports them.
+
+### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
+
+From a clean checkout, supply only the private production `instance.yaml`, a
+one-time `secrets.env` when managed secrets need creation, and authenticated
+official CLIs. Run the complete command without conversational intervention.
+
+Verify exact release, prerequisite readiness, infrastructure, changed-only
+configuration, deployment, pre-doctor, one-time commissioning, custom domain,
+strict doctor, MCP doctor, sanitized evidence, and non-financial browser/MCP
+acceptance. Then rerun the same command and prove a no-op result.
+
+Delete the local state file and rerun once more to prove safe discovery and
+state reconstruction without duplication.
+
+**Acceptance:** The first run reaches the declared operational state, the
+second run is idempotent, and the recovery run reconstructs state while
+preserving the same application, financial, identity, domain, and secret
+artifacts.
+
+## Two-input implementation evidence — 2026-10-05
+
+The first implementation slice establishes the contracts that the continuous
+controller will consume before it is allowed to replace compatibility mode:
+
+- every key in both legacy worksheet shapes is assigned to exactly one final
+  authority; unknown, duplicate, or multiply owned keys fail validation;
+- compilation now emits a deterministic `preflight-plan.json` inside the
+  verified artifact manifest;
+- the preflight catalog covers exact release, DNS, private storage, managed
+  secret custody, every provider identity and capability set, SMS, OTP, KYC,
+  maps, geocoding, Partner MCP/Passport, and commissioning authority when the
+  corresponding feature is declared;
+- fake prerequisite transports prove that `needs_attention` and `blocked`
+  dispositions stop before a mutation callback, while report evidence is
+  restricted to an explicit value-free allowlist;
+- the generated-state store accepts only profile fingerprint, adapter,
+  resource IDs, managed-secret IDs, deployment ID, checkpoints, and timestamp;
+  writes are atomic with owner-only permissions;
+- the one-time secret loader requires an exact, owner-only input file and
+  rejects missing, unused, empty, duplicate, or malformed entries;
+- the managed-secret reconciler supports check-only, create-and-attach,
+  explicit rotation, unchanged no-op, and identity-conflict failure paths
+  without returning secret values; and
+- the focused compiler, controller, adapter, workflow, and new deployment
+  suites pass 82 tests and 383 assertions. Composer validation, formatting,
+  and whitespace checks also pass.
+
+This slice performs no Cloud, DNS, DigitalOcean, NetBank, provider,
+commissioning, financial, invitation, messaging, domain, or secret mutation.
+Gate 13 is not complete: the official Laravel Cloud, DNS, provider, and secret
+transports still need to consume these contracts, and state rediscovery must
+be proved before compatibility inputs can be removed.
 
 ## Gate 1 — Record the proven deployment
 
@@ -476,6 +723,7 @@ portable profile validator/compiler
              +-- runtime.env
              +-- required-secrets.json
              +-- commissioning.yaml
+             +-- preflight-plan.json
              +-- manifest.sha256
              |
              v

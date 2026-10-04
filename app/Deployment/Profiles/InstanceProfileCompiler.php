@@ -2,6 +2,7 @@
 
 namespace App\Deployment\Profiles;
 
+use App\Deployment\Preflight\PreflightCatalog;
 use JsonException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -188,6 +189,8 @@ final class InstanceProfileCompiler
         }
     }
 
+    public function __construct(private readonly PreflightCatalog $preflightCatalog = new PreflightCatalog) {}
+
     /** @return array{fingerprint: string, files: array<string, string>} */
     public function compile(string $instancePath, ?string $secretsPath, string $outputDirectory): array
     {
@@ -247,6 +250,7 @@ final class InstanceProfileCompiler
             'commercial_principal' => $profile['commissioning']['commercial_principal'],
             'invitations' => $profile['commissioning']['invitations'],
         ];
+        $preflightPlan = $this->preflightCatalog->build($profile, $fingerprint);
 
         $files = [
             'compiled-instance.json' => $this->encodeCanonicalJson($compiledInstance)."\n",
@@ -258,6 +262,7 @@ final class InstanceProfileCompiler
                 'commissioning_required' => $commissioningRequiredSecrets,
             ])."\n",
             'commissioning.yaml' => Yaml::dump($this->canonicalize($commissioning), 8, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK),
+            'preflight-plan.json' => $this->encodeCanonicalJson($preflightPlan)."\n",
         ];
 
         $manifestMaterial = '';
@@ -280,6 +285,7 @@ final class InstanceProfileCompiler
             'runtime.env',
             'required-secrets.json',
             'commissioning.yaml',
+            'preflight-plan.json',
         ];
         $contents = [];
 
@@ -315,6 +321,7 @@ final class InstanceProfileCompiler
         try {
             $compiled = json_decode($contents['compiled-instance.json'], true, flags: JSON_THROW_ON_ERROR);
             $requiredSecrets = json_decode($contents['required-secrets.json'], true, flags: JSON_THROW_ON_ERROR);
+            $preflightPlan = json_decode($contents['preflight-plan.json'], true, flags: JSON_THROW_ON_ERROR);
             $commissioning = Yaml::parse($contents['commissioning.yaml'], Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
         } catch (JsonException|ParseException $exception) {
             throw new InstanceProfileException('Compiled artifacts contain invalid structured data.', previous: $exception);
@@ -327,7 +334,8 @@ final class InstanceProfileCompiler
         }
 
         if (($requiredSecrets['profile_fingerprint'] ?? null) !== $fingerprint
-            || ($commissioning['profile_fingerprint'] ?? null) !== $fingerprint) {
+            || ($commissioning['profile_fingerprint'] ?? null) !== $fingerprint
+            || ($preflightPlan['profile_fingerprint'] ?? null) !== $fingerprint) {
             throw new InstanceProfileException('Compiled artifact fingerprints do not agree.');
         }
 

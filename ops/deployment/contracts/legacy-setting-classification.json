@@ -1,35 +1,62 @@
 {
-  "schema": "x-payout.legacy-setting-classification.v1",
-  "precedence": [
-    "private_secret",
-    "operator_authority",
-    "generated_state",
-    "evidence",
-    "provider_driver",
-    "platform_target",
-    "portable_profile"
-  ],
+  "schema": "x-payout.legacy-setting-classification.v2",
+  "sources": {
+    "deployment_control": "deployment.production.example",
+    "secret_reentry": "deployment.production.secrets.example"
+  },
   "categories": {
     "private_secret": {
-      "source": "deployment.production.secrets.example",
-      "patterns": [".*"]
-    },
-    "operator_authority": {
+      "destination": "secrets.env",
+      "sources": ["secret_reentry"],
       "patterns": [
-        "^DEPLOY_CONFIRM_",
-        "^DEPLOY_PROVIDER_CUTOVER_",
-        "^XCHANGE_TREASURY_OPENING_CAPITALIZATION_"
+        "^(AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|ENGAGESPARK_API_KEY|ENGAGESPARK_ORGANIZATION_ID|TXTCMDR_API_TOKEN|HYPERVERGE_APP_ID|HYPERVERGE_APP_KEY|MAPBOX_TOKEN|OPENCAGE_API_KEY|NETBANK_CLIENT_ID|NETBANK_CLIENT_SECRET|NETBANK_FUNDING_CLIENT_ID|NETBANK_FUNDING_CLIENT_SECRET|NETBANK_FUNDING_STANDING_HMAC_KEY|XCHANGE_COMMISSIONING_ACCESS_TOKEN|XCHANGE_REDEMPTION_FEEDBACK_WEBHOOK_SECRET|PASSPORT_PRIVATE_KEY|PASSPORT_PUBLIC_KEY)$"
       ]
     },
+    "operator_authority": {
+      "destination": "current_command_or_protected_environment",
+      "sources": ["deployment_control"],
+      "patterns": ["^DEPLOY_CONFIRM_"]
+    },
     "generated_state": {
+      "destination": "generated_platform_state",
+      "sources": ["deployment_control"],
       "patterns": [
         "^DEPLOY_CLOUD_(APPLICATION_ID|ENVIRONMENT_ID|INSTANCE_ID|DATABASE_CLUSTER_ID|DATABASE_ID|CACHE_ID|WORKER_PROCESS_ID|DOMAIN_ID|SECRET_IDS)$"
       ]
     },
-    "evidence": {
-      "patterns": ["^DEPLOY_EVIDENCE_PREFIX$"]
+    "compiled_derivation": {
+      "destination": "compiler_or_adapter_derivation",
+      "sources": ["deployment_control"],
+      "patterns": [
+        "^DEPLOY_REQUIRED_CLOUD_SECRET_NAMES$",
+        "^DEPLOY_EVIDENCE_PREFIX$"
+      ]
+    },
+    "controller_policy": {
+      "destination": "instance.yaml:operations",
+      "sources": ["deployment_control"],
+      "patterns": [
+        "^DEPLOY_(DOMAIN_VERIFY|MONITOR)_(ATTEMPTS|INTERVAL_SECONDS)$"
+      ]
+    },
+    "adapter_session": {
+      "destination": "operator_environment_or_native_cli_context",
+      "sources": ["deployment_control"],
+      "patterns": ["^DEPLOY_DOCTL_CONTEXT$"]
+    },
+    "platform_target": {
+      "destination": "instance.yaml:infrastructure",
+      "sources": ["deployment_control"],
+      "patterns": [
+        "^DEPLOY_CLOUD_(APPLICATION_NAME|ENVIRONMENT_NAME|REGION)$",
+        "^DEPLOY_(DATABASE_TYPE|DATABASE_ENGINE_VERSION|CACHE_TYPE|CACHE_SIZE|CACHE_EVICTION_POLICY|COMPUTE_SIZE)$",
+        "^DEPLOY_DNS_(PROVIDER|ZONE|NAMESERVERS_PRESERVED|AUTOMATION_ENABLED|RECORD_TTL)$",
+        "^DEPLOY_DIGITALOCEAN_(REGION|SPACE)$"
+      ]
     },
     "provider_driver": {
+      "destination": "instance.yaml:providers",
+      "sources": ["deployment_control"],
       "patterns": [
         "^NETBANK_",
         "^USE_OMNIPAY$",
@@ -39,11 +66,25 @@
         "^LOCATION_HANDLER_"
       ]
     },
-    "platform_target": {
-      "patterns": ["^DEPLOY_"]
+    "misplaced_provider_driver": {
+      "destination": "instance.yaml:providers",
+      "sources": ["secret_reentry"],
+      "patterns": [
+        "^NETBANK_(BALANCE_ENDPOINT|CLIENT_ALIAS|DISBURSEMENT_ENDPOINT|FUNDING_BALANCE_ENDPOINT|FUNDING_CORPORATE_ACCOUNT_NUMBER|FUNDING_STANDING_HMAC_KEY_ID|FUNDING_VCA_ALIAS|QR_ENDPOINT|SENDER_CUSTOMER_ID|SOURCE_ACCOUNT_NUMBER|STATUS_ENDPOINT|TOKEN_ENDPOINT)$"
+      ]
+    },
+    "misplaced_portable_profile": {
+      "destination": "instance.yaml",
+      "sources": ["secret_reentry"],
+      "patterns": ["^XCHANGE_INSTANCE_KEEPSAKE_PUBLIC_KEY$"]
     },
     "portable_profile": {
+      "destination": "instance.yaml",
+      "sources": ["deployment_control"],
       "patterns": [
+        "^DEPLOY_GIT_(REPOSITORY|BRANCH)$",
+        "^DEPLOY_PUBLIC_DOMAIN$",
+        "^DEPLOY_PROVIDER_CUTOVER_",
         "^APP_",
         "^LOG_",
         "^SESSION_",

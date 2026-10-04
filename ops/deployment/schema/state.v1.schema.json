@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://3neti.example/schemas/x-payout/deployment-state.v1.schema.json",
+  "title": "x-PayOut generated deployment state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "profile_fingerprint",
+    "adapter",
+    "resources",
+    "managed_secret_ids",
+    "last_deployment_id",
+    "checkpoints",
+    "updated_at"
+  ],
+  "properties": {
+    "schema": { "const": "x-payout.deployment-state.v1" },
+    "profile_fingerprint": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "adapter": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "application_id": { "$ref": "#/$defs/identifier" },
+        "environment_id": { "$ref": "#/$defs/identifier" },
+        "instance_id": { "$ref": "#/$defs/identifier" },
+        "database_cluster_id": { "$ref": "#/$defs/identifier" },
+        "database_id": { "$ref": "#/$defs/identifier" },
+        "cache_id": { "$ref": "#/$defs/identifier" },
+        "worker_process_id": { "$ref": "#/$defs/identifier" },
+        "domain_id": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "managed_secret_ids": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Z][A-Z0-9_]*$" },
+      "additionalProperties": { "$ref": "#/$defs/identifier" }
+    },
+    "last_deployment_id": {
+      "oneOf": [
+        { "$ref": "#/$defs/identifier" },
+        { "type": "null" }
+      ]
+    },
+    "checkpoints": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": {
+        "enum": ["pending", "complete", "skipped", "failed"]
+      }
+    },
+    "updated_at": {
+      "oneOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    }
+  },
+  "$defs": {
+    "identifier": { "type": "string", "minLength": 1 }
+  }
+}

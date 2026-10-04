@@ -1,10 +1,10 @@
 # x-PayOut Public Cloud Deployment Compass
 
-**Last updated:** 2026-10-04
+**Last updated:** 2026-10-05
 
-**Current position:** Gate 12 — anonymous read-only Public Issuance MCP is live; institutional Partner MCP remains governed and disabled
+**Current position:** Gate 13 — safety foundations implemented; live adapter wiring next
 
-**Overall status:** Laravel Cloud push-to-deploy, custom domain, public issuance, and the read-only MCP transport are green; no MCP acceptance call created an order or Pay Code
+**Overall status:** Production deployment, custom domain, public issuance, Partner MCP transport, and strict readiness are green; legacy worksheet compatibility remains the deployment cleanup target
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -33,9 +33,11 @@ The governing plan is
 - Previous production resources and financial evidence remain historical
   records; they are not instructions to replay transactions or balances.
 
-Exact application, environment, deployment, process, database, cache, domain,
-and secret IDs belong in the local value-free deployment control worksheet for
-each run. Never copy historical identifiers into a new run without inspection.
+Today, exact application, environment, deployment, process, database, cache,
+domain, and secret IDs still live in the local value-free compatibility
+worksheet. Gate 13 moves them into generated, reconstructible platform state.
+Historical identifiers must never be copied into a new run without discovery
+and identity checks.
 
 ## Gate ledger
 
@@ -52,6 +54,103 @@ each run. Never copy historical identifiers into a new run without inspection.
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
 | 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and live optional pre-commission verification complete; two-input cleanroom remains |
+| 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.99 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict doctor 37/37 and MCP doctor green; client issuance remains governed |
+| 13. Two-input one-command cleanup | **In progress** | Ownership, preflight, state, and secret-reconciliation contracts are green; official adapter wiring and resumable controller remain |
+
+## Gate 13 compass — two-input one-command cleanup
+
+### Objective
+
+One command must validate and compile the instance, reconcile managed secrets,
+create or discover infrastructure, apply only changed runtime configuration,
+deploy the exact release, pass pre-commission doctor, commission once when
+authorized, attach and verify the domain, pass strict and MCP doctors, retain
+sanitized evidence, and remain idempotent on rerun.
+
+### Current facts
+
+- The portable schema, compiler, examples, required-secret inventory, fake
+  transport parity, GitHub validation workflow, and current Laravel Cloud
+  controller already exist.
+- `deployment.production.local` still combines platform target, generated
+  resource state, confirmations, and duplicated non-secret runtime values.
+- `deployment.production.secrets.local` remains a local secure re-entry
+  worksheet; Laravel Cloud managed secrets are the production runtime
+  authority.
+- The current controller mutates the control worksheet through
+  `upsert_local_state()`.
+- The private `payout.disburse.cash.yaml` profile exists and is ignored from
+  Git, but compiled mode still depends on the legacy control worksheet for
+  parts of the run.
+- Partner MCP is no longer a deferred configuration item: production runs
+  x-change `v1.0.99`, x-mcp `v0.3.0`, contract `1.4.0`, strict doctor `37/37`,
+  and MCP doctor ready. Production OAuth client creation remains a separate
+  Maker/Checker-governed ceremony.
+
+### Required sequence
+
+| Slice | State | Exit evidence |
+| --- | --- | --- |
+| 13.0 Legacy-input classification | **Complete** | Both worksheet shapes have exact ownership; unknown, duplicate, and multiply owned keys fail |
+| 13.1 External prerequisite catalog | **In progress** | Deterministic catalog, value-free report, fake readiness/blocking transports, and pre-mutation stop are green; official read-only probes remain |
+| 13.2 Generated-state schema | **In progress** | Atomic owner-only value-free store is green; platform rediscovery and conflict handling remain |
+| 13.3 Managed-secret importer | **In progress** | Exact input, check/create/attach/rotate/no-op/conflict paths are green with fakes; Laravel Cloud transport wiring remains |
+| 13.4 Compiled-state authority | Not started | Controller no longer reads desired state or confirmations from worksheet |
+| 13.5 Resumable one-command controller | Not started | Failure injection after every phase proves safe continuation |
+| 13.6 Sanitized evidence contract | Not started | Evidence schema and secret-pattern scan green |
+| 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
+| 13.8 Exact-release cleanroom | Not started | First run operational, second run no-op, deleted-state run safely reconstructs |
+
+### External prerequisite policy
+
+Preflight is read-only by default and precedes every Cloud or DNS mutation.
+It validates the declared NetBank account and capabilities, canonical DNS and
+nameserver custody, private storage, EngageSpark, TXTCMDR, HyperVerge,
+Mapbox/OpenCage, Passport/Partner MCP, exact release, and commissioning
+authority. Safe connectivity probes are opt-in per driver and must never move
+money, send SMS/OTP, create KYC subjects, consume a paid map lookup, issue a
+token, generate a Pay Code, or write a policy.
+
+Every prerequisite reports `ready`, `not_applicable`, `needs_attention`, or
+`blocked`. The applied run stops on `needs_attention` or `blocked` unless a
+narrow, documented exception contract exists. Reports contain names,
+capabilities, hashes, and redacted dispositions only.
+
+### Safety invariants
+
+- `instance.yaml` is desired-state authority; generated state cannot override
+  it.
+- `secrets.env` is a one-time bootstrap/recovery input, never ordinary runtime
+  custody.
+- Laravel Cloud managed secrets remain authoritative after import.
+- Platform state is reconstructible and never contains secrets, account
+  numbers, personal invitation data, or sticky approvals.
+- Commissioning, domain activation, secret rotation, and destructive cleanup
+  remain explicit current-run authorities.
+- An unchanged rerun cannot recreate infrastructure, reattach an existing
+  domain, repeat capitalization, reissue invitations, rotate secrets, or
+  rewrite environment values.
+- Losing local state cannot authorize guessing between multiple matching
+  resources.
+
+### Immediate next slice
+
+Wire the official Laravel Cloud adapter to the new contracts without changing
+the proven phase order:
+
+1. discover an existing application, environment, database, cache, worker,
+   domain, and managed-secret attachments by stable instance identity;
+2. fail closed on zero-or-multiple matches where exactly one is required;
+3. run the catalog through read-only DNS, provider, storage-configuration,
+   integration-configuration, release, OAuth, and commissioning probes before
+   any create or update call;
+4. reconcile managed secrets from `secrets.env` only when creation or explicit
+   rotation is authorized; and
+5. persist checkpoints through the generated state store.
+
+Use fake Cloud, DNS, provider, and secret transports first. Do not run a live
+Cloud rehearsal until the unchanged rerun and deleted-state rediscovery tests
+prove no duplicate infrastructure, secret, domain, or commissioning action.
 
 ## Turnkey operating contract
 
