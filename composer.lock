@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75bdd1b2275ef79222586ab90f0f9915",
+    "content-hash": "630b98d6158f87b3ce4617622be747ec",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1663,16 +1663,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.98",
+            "version": "v1.0.99",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "5565cf14e5ff7cf18dd5ba6f384f170570a60905"
+                "reference": "13e06cd33307be4830b67d72152af2fda58ad01b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/5565cf14e5ff7cf18dd5ba6f384f170570a60905",
-                "reference": "5565cf14e5ff7cf18dd5ba6f384f170570a60905",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/13e06cd33307be4830b67d72152af2fda58ad01b",
+                "reference": "13e06cd33307be4830b67d72152af2fda58ad01b",
                 "shasum": ""
             },
             "require": {
@@ -1769,9 +1769,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.98"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.99"
             },
-            "time": "2026-10-02T14:44:37+00:00"
+            "time": "2026-10-04T22:03:37+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -1949,16 +1949,16 @@
         },
         {
             "name": "3neti/x-mcp",
-            "version": "v0.2.0",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-mcp.git",
-                "reference": "3bf4d032603a786ce98f00761cf58271ea30750b"
+                "reference": "dc218cce7dcf304785d94770b62e18df0bbca264"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-mcp/zipball/3bf4d032603a786ce98f00761cf58271ea30750b",
-                "reference": "3bf4d032603a786ce98f00761cf58271ea30750b",
+                "url": "https://api.github.com/repos/3neti/x-mcp/zipball/dc218cce7dcf304785d94770b62e18df0bbca264",
+                "reference": "dc218cce7dcf304785d94770b62e18df0bbca264",
                 "shasum": ""
             },
             "require": {
@@ -2003,9 +2003,9 @@
             "description": "AI-native MCP adapters for the X-Change Settlement Operating System.",
             "support": {
                 "issues": "https://github.com/3neti/x-mcp/issues",
-                "source": "https://github.com/3neti/x-mcp/tree/v0.2.0"
+                "source": "https://github.com/3neti/x-mcp/tree/v0.3.0"
             },
-            "time": "2026-10-02T03:35:56+00:00"
+            "time": "2026-10-04T22:03:45+00:00"
         },
         {
             "name": "3neti/x-provisioning",
@@ -2234,16 +2234,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.399.0",
+            "version": "3.399.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3010fb79822bf331de82e9413eaa2c898aeb02ec"
+                "reference": "cd7cf43b7d42e49579bf3f09ab58d4724d64152c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3010fb79822bf331de82e9413eaa2c898aeb02ec",
-                "reference": "3010fb79822bf331de82e9413eaa2c898aeb02ec",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/cd7cf43b7d42e49579bf3f09ab58d4724d64152c",
+                "reference": "cd7cf43b7d42e49579bf3f09ab58d4724d64152c",
                 "shasum": ""
             },
             "require": {
@@ -2325,9 +2325,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.399.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.399.1"
             },
-            "time": "2026-10-01T18:15:12+00:00"
+            "time": "2026-10-02T18:16:16+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
