@@ -1099,14 +1099,14 @@ domain_verify() {
     exit 75
 }
 
-domain_acceptance() {
+domain_acceptance() (
     require_resolved_value DEPLOY_PUBLIC_DOMAIN
     require_command "${CURL_BIN}"
 
     local base_url="https://${DEPLOY_PUBLIC_DOMAIN}"
     local path body_file
     body_file="$(mktemp)"
-    trap 'rm -f "${body_file}"' RETURN
+    trap 'rm -f "${body_file}"' EXIT
 
     for path in / /x/claim /.well-known/x-change-public-mcp; do
         "${CURL_BIN}" --fail --silent --show-error --location --max-time 20 \
@@ -1124,7 +1124,7 @@ domain_acceptance() {
     fi
 
     echo "Accepted ${base_url}/x/auto-generate without creating a funding order."
-}
+)
 
 case "${PHASE}" in
     help|-h|--help)

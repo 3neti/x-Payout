@@ -346,6 +346,54 @@ it('uses bounded custom-domain verification and preserves external nameservers',
         ->toContain('DEPLOY_DNS_NAMESERVERS_PRESERVED=true');
 });
 
+it('cleans up domain acceptance responses without leaking a return trap', function (): void {
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_PUBLIC_DOMAIN' => 'payout.example.test',
+        'XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED' => 'false',
+    ]);
+    $curlBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+output=''
+url=''
+
+while (($#)); do
+    case "$1" in
+        --output)
+            shift
+            output="${1:-}"
+            ;;
+        http://*|https://*)
+            url="$1"
+            ;;
+    esac
+
+    shift || true
+done
+
+if [[ "${url}" == */x/auto-generate ]]; then
+    printf 'Public issuance is unavailable.' >"${output}"
+else
+    printf 'Accepted.' >"${output}"
+fi
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'domain-acceptance',
+        '--control='.$controlFile,
+    ], env: ['CURL_BIN' => $curlBinary]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('Accepted https://payout.example.test/')
+        ->toContain('Accepted https://payout.example.test/x/auto-generate without creating a funding order.')
+        ->and($process->getErrorOutput())->not->toContain('unbound variable');
+
+    unlink($controlFile);
+    unlink($curlBinary);
+});
+
 it('supports the current cloud foundation lifecycle', function (): void {
     $script = file_get_contents(productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'));
 
