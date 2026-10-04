@@ -35,13 +35,16 @@ it('compiles privately and uploads only sanitized build and evidence artifacts',
 
     expect($workflow)
         ->toContain('chmod 0600 "${secrets_file}"')
-        ->toContain("trap 'rm -f \"\${secrets_file}\"' EXIT")
+        ->toContain('chmod 0600 "${private_instance_file}"')
+        ->toContain("trap 'rm -f \"\${private_instance_file}\" \"\${secrets_file}\"' EXIT")
+        ->toContain('PAYOUT_INSTANCE_YAML: ${{ secrets.PAYOUT_INSTANCE_YAML }}')
         ->toContain('bin/x-payout-profile verify --compiled=ops/deployment/build')
         ->toContain('workflow-compile-evidence.json')
         ->toContain('x-payout-deployment-evidence-')
         ->toContain('x-payout-commissioning-evidence-')
         ->not->toContain('x-payout-platform-state-')
         ->not->toContain('path: /tmp/secrets.env')
+        ->not->toContain('path: /tmp/instance.yaml')
         ->not->toContain('path: /tmp/x-payout-platform.env')
         ->not->toContain('set -x')
         ->not->toContain('continue-on-error');

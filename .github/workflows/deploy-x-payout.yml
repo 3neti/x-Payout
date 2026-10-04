@@ -34,6 +34,9 @@ on:
         type: number
         default: 7
     secrets:
+      PAYOUT_INSTANCE_YAML:
+        description: Optional private instance.yaml contents; overrides instance_path.
+        required: false
       PAYOUT_SECRETS_ENV:
         description: Complete private secrets.env contents used only during compilation.
         required: true
@@ -106,22 +109,28 @@ jobs:
       - name: Install production dependencies
         run: composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
 
-      - name: Validate portable profile
-        env:
-          INSTANCE_PATH: ${{ inputs.instance_path }}
-        run: bin/x-payout-profile validate --instance="${INSTANCE_PATH}"
-
-      - name: Compile sanitized artifacts
+      - name: Validate and compile sanitized artifacts
         id: profile
         env:
           INSTANCE_PATH: ${{ inputs.instance_path }}
+          PAYOUT_INSTANCE_YAML: ${{ secrets.PAYOUT_INSTANCE_YAML }}
           PAYOUT_SECRETS_ENV: ${{ secrets.PAYOUT_SECRETS_ENV }}
         run: |
           set -euo pipefail
+          private_instance_file=""
           secrets_file="$(mktemp)"
-          trap 'rm -f "${secrets_file}"' EXIT
+          trap 'rm -f "${private_instance_file}" "${secrets_file}"' EXIT
+
+          if [[ -n "${PAYOUT_INSTANCE_YAML}" ]]; then
+            private_instance_file="$(mktemp)"
+            chmod 0600 "${private_instance_file}"
+            printf '%s' "${PAYOUT_INSTANCE_YAML}" >"${private_instance_file}"
+            INSTANCE_PATH="${private_instance_file}"
+          fi
+
           chmod 0600 "${secrets_file}"
           printf '%s' "${PAYOUT_SECRETS_ENV}" >"${secrets_file}"
+          bin/x-payout-profile validate --instance="${INSTANCE_PATH}"
           bin/x-payout-profile compile \
             --instance="${INSTANCE_PATH}" \
             --secrets="${secrets_file}" \
