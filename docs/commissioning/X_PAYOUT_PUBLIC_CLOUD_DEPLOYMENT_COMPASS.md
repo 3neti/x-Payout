@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 11 — protected reusable workflow green locally; GitHub environment setup next
+**Current position:** Gate 11 — protected compile-only workflow proved on GitHub; production input and independent reviewer next
 
 **Overall status:** Legacy, compiled controller, and workflow contracts are locally green; no external mutation has run
 
@@ -223,6 +223,30 @@ forbidden until one exact-release two-file cleanroom passes.
   No GitHub, Laravel Cloud, DNS, DigitalOcean, NetBank, commissioning,
   financial, invitation, messaging, or credential mutation occurred.
 
+### GitHub compile-only acceptance evidence — 2026-10-04
+
+- Pushed Gate 11 commit `6c1dd21ef4c5a014359f1b22d577e22a40a059c7`
+  to `3neti/x-Payout` `main`.
+- Created `x-payout-production-deployment` and
+  `x-payout-production-commissioning`; both accept deployments only from
+  `main`.
+- Commissioning requires reviewer `3neti` and prevents self-review. Because
+  the repository currently has no second collaborator, commissioning is
+  intentionally blocked until an independent eligible reviewer is added.
+- Stored only a clearly synthetic compile-validation secret bundle in the
+  deployment environment. No Laravel Cloud token, platform controller
+  worksheet, or production provider credential was added.
+- GitHub Actions run `37205922353` completed successfully at the exact Gate 11
+  commit. The compile job passed; deployment and commissioning jobs were both
+  skipped.
+- The sole artifact contained `compiled-instance.json`, `runtime.env`,
+  `required-secrets.json`, `commissioning.yaml`, `manifest.sha256`, and the
+  minimal workflow evidence record. Manifest verification and an explicit
+  synthetic-secret scan passed. Profile fingerprint:
+  `ecf47056c904d8ff07a92a8a750269e1943394a77bff0bf02c072b694c50fe62`.
+- No Laravel Cloud, DNS, DigitalOcean, NetBank, commissioning, financial,
+  invitation, messaging, or real credential mutation occurred.
+
 ## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
 
 - Application: `app-a2e593f4-0252-40a9-816a-135de5b47d3c`.
@@ -423,11 +447,10 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Configure the deployment and commissioning GitHub Environments and their
-secrets. Require a reviewer and prevent self-review for commissioning, then
-run the workflow in compile-only mode. After that non-mutating proof is green,
-prepare—but do not execute without separate authority—the first exact-release
-Laravel Cloud rehearsal from the two-file input contract.
+Add an independent eligible GitHub reviewer, replace the synthetic validation
+input with the reviewed production `instance.yaml` and private `secrets.env`,
+and prepare—but do not execute without separate authority—the first
+exact-release Laravel Cloud rehearsal through the pre-commission checkpoint.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 

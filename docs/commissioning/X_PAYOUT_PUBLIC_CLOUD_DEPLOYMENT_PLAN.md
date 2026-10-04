@@ -576,12 +576,17 @@ package is introduced at this stage.
 
 ## Current next move
 
-Configure the two GitHub Environments required by
-`.github/workflows/deploy-x-payout.yml`, including required reviewers and
-prevent-self-review on `x-payout-production-commissioning`. Exercise the
-compile-only dispatch first. Then prepare—but do not execute without separate
-authority—the first exact-release Laravel Cloud rehearsal from the two-file
-input contract. The published beta.68 tag remains the rollback reference.
+The two GitHub Environments and their `main`-only branch policies are now
+configured. The commissioning environment requires review and prevents
+self-review. The first compile-only dispatch passed with deployment and
+commissioning skipped.
+
+Before an exact-release Laravel Cloud rehearsal, add a second eligible GitHub
+collaborator as the independent commissioning reviewer, replace the synthetic
+compile-only secret bundle with authoritative two-file production input, and
+review the production `instance.yaml`. Do not execute deployment or
+commissioning without separate authority. The published beta.68 tag remains
+the rollback reference.
 
 The deployment environment holds `PAYOUT_SECRETS_ENV`,
 `PAYOUT_PLATFORM_CONTROL_ENV`, and `LARAVEL_CLOUD_TOKEN`. The commissioning
