@@ -279,10 +279,42 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Publish the corrected deployment-kit contract, then repeat the sanitized
-continuous rehearsal from that exact published source through the
-pre-commission checkpoint. Request separate authority before commissioning,
-domain cutover, real-money acceptance, or resource deletion.
+Publish the rehearsal hardening as the next beta, then repeat continuous mode
+against the already operational instance. The run must recognize operational
+commissioning state, skip the one-time ceremony, exit its deployment monitor
+after a terminal result, and complete domain acceptance without operator
+intervention. A fresh destructive cleanroom remains a separately authorized
+demonstration.
+
+## Beta.65 continuous rehearsal evidence — 2026-10-04
+
+- Published x-PayOut `v1.0.0-beta.65` at commit `0a77d85`.
+- Laravel Cloud deployment `depl-a2e5e5ac-d3e3-4e5f-a633-76b165961eae`
+  reached `deployment.succeeded` at the exact commit.
+- Strict pre-commission doctor passed `27/27`.
+- The first continuous implementation exposed two fail-closed gaps:
+  Laravel Cloud's command wrapper reported success while the inner bootstrap
+  exited `1`, and `deploy:monitor` remained attached after emitting terminal
+  success.
+- The repeated bootstrap correctly made no duplicate capitalization, but it
+  left the commissioning manifest stale because an already initialized
+  Treasury could not be capitalized again without authoritative opening
+  reconciliation.
+- Read-only balance evidence remained complete: provider inventory equaled
+  Treasury positions, the provider snapshot was fresh, and no blockers or
+  warnings were present.
+- The existing-installation adoption command repaired only the stale
+  commissioning manifest. Commissioning returned to `operational`, and final
+  strict doctor passed `37/37`.
+- DigitalOcean DNS reconciliation was an exact no-op. Laravel Cloud continued
+  to report `origin=pending`, but verified TLS and the live origin probe passed.
+- Home, Claim, public MCP discovery, and public On-Demand Issuance acceptance
+  passed at `https://payout.disburse.cash` without creating a funding order.
+
+The next script revision treats the inner `exitCode` as authoritative, skips
+bootstrap when commissioning status is already operational, and bounds the
+Cloud monitor with deployment-status polling. These controls are covered by
+focused regression tests before the next release.
 
 ## Update protocol
 

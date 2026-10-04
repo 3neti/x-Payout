@@ -420,19 +420,22 @@ responsibility is supplied by the software alone.
 
 ## Current next move
 
-Finalize Gate 10 as a source-only handoff proof:
+Finalize Gate 10 with the beta.65 rehearsal corrections:
 
-1. review the value-free production secret inventory;
-2. populate a local `deployment.production.local` control worksheet with
-   resource and secret IDs only;
-3. prove that plaintext production secrets are rejected;
-4. prove that missing Cloud secret attachments stop before deployment;
-5. exercise the `continuous` phase through its non-financial commissioning
-   checkpoint; and
+1. inspect every Laravel Cloud remote command's inner `exitCode` and stop on a
+   non-zero application result even when the Cloud wrapper says success;
+2. inspect commissioning status before bootstrap and skip the one-time
+   ceremony when the installation is already operational;
+3. run `deploy:monitor`, but bound it with authoritative `deployment:get`
+   polling so a terminal deployment cannot leave automation attached forever;
+4. retain exact DNS no-op reconciliation and the verified-TLS/live-origin
+   fallback while Cloud reconciles `origin=pending` metadata;
+5. repeat continuous mode from the exact next published beta; and
 6. preserve a sanitized transcript suitable for a bank or EMI DevOps team.
 
-Do not create, rotate, reveal, or migrate production secret values as part of
-this source hardening gate.
+Do not rerun opening capitalization on an operational installation. Do not
+create, rotate, reveal, or migrate production secret values as part of this
+source hardening gate.
 
 ## Operating record
 

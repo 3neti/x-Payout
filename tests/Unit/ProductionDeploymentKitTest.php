@@ -147,8 +147,131 @@ it('provides a continuous fail-closed orchestration path', function (): void {
         ->toContain('domain_acceptance')
         ->toContain('/.well-known/x-change-public-mcp')
         ->toContain('without creating a funding order')
+        ->toContain('REMOTE_COMMAND_EXIT_CODE')
+        ->toContain('Installation is already operational; skipping the one-time commissioning ceremony.')
+        ->toContain('deployment:get')
         ->toContain('environment-secret:list')
         ->not->toContain('secret:get');
+});
+
+it('fails closed when cloud reports success around a failed remote process', function (): void {
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CLOUD_ENVIRONMENT_ID' => 'env-test',
+        'DEPLOY_REQUIRED_CLOUD_SECRET_NAMES' => 'FAKE_SECRET',
+    ]);
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "environment-secret:list" ]]; then printf '[{"key":"FAKE_SECRET"}]\n'; exit 0; fi
+if [[ "${1:-}" == "command:run" ]]; then
+    printf '%s\n' '{"command_id":"command-test","status":"command.running"}'
+    printf '%s\n' '{"id":"command-test","status":"command.success","output":"failed\n","exitCode":1}'
+    exit 0
+fi
+exit 1
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'pre-commission',
+        '--control='.$controlFile,
+    ], env: ['CLOUD_BIN' => $cloudBinary]);
+    $process->run();
+
+    expect($process->isSuccessful())->toBeFalse()
+        ->and($process->getErrorOutput())
+        ->toContain('Remote command failed with inner exit code 1');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+});
+
+it('does not rerun commissioning when the installation is already operational', function (): void {
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-cloud-command-log-');
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
+        'DEPLOY_CONFIRM_COMMISSIONING' => 'YES',
+        'DEPLOY_CLOUD_ENVIRONMENT_ID' => 'env-test',
+        'DEPLOY_PROVIDER_CUTOVER_AT' => '2026-10-04T00:00:00Z',
+        'DEPLOY_PROVIDER_CUTOVER_TRANSACTION_ID' => 'test-watermark',
+        'XCHANGE_TREASURY_OPENING_CAPITALIZATION_ALLOW_PRODUCTION' => 'true',
+    ]);
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "command:run" ]]; then
+    printf '%s\n' "$*" >>"${FAKE_CLOUD_COMMAND_LOG}"
+    if [[ "$*" == *"commissioning:status"* ]]; then
+        printf '%s\n' '{"id":"status","status":"command.success","output":"{\"operational\":true}\n","exitCode":0}'
+    else
+        printf '%s\n' '{"id":"doctor","status":"command.success","output":"{\"success\":true}\n","exitCode":0}'
+    fi
+    exit 0
+fi
+exit 1
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'commission',
+        '--apply',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'FAKE_CLOUD_COMMAND_LOG' => $commandLog,
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('already operational; skipping the one-time commissioning ceremony')
+        ->and(file_get_contents($commandLog))
+        ->toContain('commissioning:status')
+        ->toContain('doctor --strict')
+        ->not->toContain('x-payout:bootstrap');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($commandLog);
+});
+
+it('bounds the cloud monitor after a terminally successful deployment', function (): void {
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
+        'DEPLOY_CLOUD_APPLICATION_ID' => 'app-test',
+        'DEPLOY_CLOUD_ENVIRONMENT_ID' => 'env-test',
+        'DEPLOY_CLOUD_ENVIRONMENT_NAME' => 'production',
+        'DEPLOY_MONITOR_ATTEMPTS' => '2',
+        'DEPLOY_MONITOR_INTERVAL_SECONDS' => '0',
+    ]);
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+case "${1:-}" in
+    environment:update) printf '{}\n' ;;
+    deploy) printf '%s\n' '{"deployment_id":"deployment-test","status":"initiated"}' ;;
+    deploy:monitor) sleep 30 ;;
+    deployment:get) printf '%s\n' '{"id":"deployment-test","status":"deployment.succeeded"}' ;;
+    *) exit 1 ;;
+esac
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'deploy',
+        '--apply',
+        '--control='.$controlFile,
+    ], env: ['CLOUD_BIN' => $cloudBinary]);
+    $process->setTimeout(10);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('Deployment deployment-test 1/2: deployment.succeeded');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
 });
 
 it('uses bounded custom-domain verification and preserves external nameservers', function (): void {

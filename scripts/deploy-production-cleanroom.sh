@@ -218,6 +218,40 @@ cloud_mutation() {
     "${CLOUD_BIN}" "${command}" "$@" -n
 }
 
+REMOTE_COMMAND_RESPONSE=''
+REMOTE_COMMAND_OUTPUT=''
+REMOTE_COMMAND_EXIT_CODE=''
+
+capture_remote_command() {
+    local command="$1"
+    local final status
+
+    require_command jq
+    REMOTE_COMMAND_RESPONSE="$(cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" --cmd="${command}")"
+    printf '%s\n' "${REMOTE_COMMAND_RESPONSE}"
+
+    final="$(jq -sc 'last' <<<"${REMOTE_COMMAND_RESPONSE}")"
+    status="$(jq -r '.status // empty' <<<"${final}")"
+    REMOTE_COMMAND_OUTPUT="$(jq -r '.output // empty' <<<"${final}")"
+    REMOTE_COMMAND_EXIT_CODE="$(jq -r 'if has("exitCode") then .exitCode else empty end' <<<"${final}")"
+
+    if [[ "${status}" != "command.success" || -z "${REMOTE_COMMAND_EXIT_CODE}" ]]; then
+        echo "Laravel Cloud did not return a completed remote-command result." >&2
+        return 75
+    fi
+}
+
+require_remote_command_success() {
+    local command="$1"
+
+    capture_remote_command "${command}"
+
+    if [[ "${REMOTE_COMMAND_EXIT_CODE}" != "0" ]]; then
+        echo "Remote command failed with inner exit code ${REMOTE_COMMAND_EXIT_CODE}: ${command}" >&2
+        return 75
+    fi
+}
+
 wait_for_database_cluster_available() {
     local cluster_id="$1"
     local attempt payload status
@@ -521,8 +555,7 @@ pre_commission() {
     require_value DEPLOY_CLOUD_ENVIRONMENT_ID
     assert_managed_secret_attachments
 
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='php artisan x-change:doctor --pre-commission --strict --json'
+    require_remote_command_success 'php artisan x-change:doctor --pre-commission --strict --json'
 }
 
 deploy() {
@@ -530,7 +563,8 @@ deploy() {
     require_value DEPLOY_CLOUD_APPLICATION_ID
     require_value DEPLOY_CLOUD_ENVIRONMENT_ID
 
-    local build_command deploy_command
+    local build_command deploy_command deployment_response deployment_id
+    local monitor_log monitor_pid attempt deployment_payload deployment_status
     build_command='composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader'
     deploy_command='php artisan migrate --force'
 
@@ -540,8 +574,54 @@ deploy() {
         --deploy-command="${deploy_command}" \
         --force >/dev/null
 
-    cloud_mutation deploy "${DEPLOY_CLOUD_APPLICATION_ID}" "${DEPLOY_CLOUD_ENVIRONMENT_NAME}"
-    cloud_mutation deploy:monitor "${DEPLOY_CLOUD_APPLICATION_ID}" "${DEPLOY_CLOUD_ENVIRONMENT_NAME}"
+    deployment_response="$(cloud_mutation deploy "${DEPLOY_CLOUD_APPLICATION_ID}" "${DEPLOY_CLOUD_ENVIRONMENT_NAME}")"
+    printf '%s\n' "${deployment_response}"
+    deployment_id="$(jq -sr 'last | .deployment_id // .id // empty' <<<"${deployment_response}")"
+
+    if [[ -z "${deployment_id}" ]]; then
+        echo "Laravel Cloud did not return a deployment ID." >&2
+        exit 75
+    fi
+
+    cloud_help deploy:monitor
+    monitor_log="$(mktemp)"
+    "${CLOUD_BIN}" deploy:monitor "${DEPLOY_CLOUD_APPLICATION_ID}" \
+        "${DEPLOY_CLOUD_ENVIRONMENT_NAME}" -n >"${monitor_log}" 2>&1 &
+    monitor_pid=$!
+
+    for ((attempt = 1; attempt <= ${DEPLOY_MONITOR_ATTEMPTS:-90}; attempt++)); do
+        deployment_payload="$(cloud_json deployment:get "${deployment_id}" \
+            --fields=id,status,commitHash,commitMessage,finishedAt,failureReason,environment.url)"
+        deployment_status="$(jq -r '.status // empty' <<<"${deployment_payload}")"
+        echo "Deployment ${deployment_id} ${attempt}/${DEPLOY_MONITOR_ATTEMPTS:-90}: ${deployment_status}"
+
+        case "${deployment_status}" in
+            deployment.succeeded)
+                kill "${monitor_pid}" 2>/dev/null || true
+                wait "${monitor_pid}" 2>/dev/null || true
+                cat "${monitor_log}"
+                rm -f "${monitor_log}"
+                return
+                ;;
+            build.failed|deployment.failed|deployment.cancelled|deployment.canceled)
+                kill "${monitor_pid}" 2>/dev/null || true
+                wait "${monitor_pid}" 2>/dev/null || true
+                cat "${monitor_log}" >&2
+                jq . <<<"${deployment_payload}" >&2
+                rm -f "${monitor_log}"
+                exit 75
+                ;;
+        esac
+
+        sleep "${DEPLOY_MONITOR_INTERVAL_SECONDS:-2}"
+    done
+
+    kill "${monitor_pid}" 2>/dev/null || true
+    wait "${monitor_pid}" 2>/dev/null || true
+    cat "${monitor_log}" >&2
+    rm -f "${monitor_log}"
+    echo "Deployment ${deployment_id} did not reach a terminal state in time." >&2
+    exit 75
 }
 
 commission() {
@@ -560,6 +640,16 @@ commission() {
         exit 77
     fi
 
+    capture_remote_command 'php artisan x-change:commissioning:status --json'
+    local commissioning_operational
+    commissioning_operational="$(jq -r '.operational // false' <<<"${REMOTE_COMMAND_OUTPUT}" 2>/dev/null || printf 'false')"
+
+    if [[ "${commissioning_operational}" == "true" ]]; then
+        echo "Installation is already operational; skipping the one-time commissioning ceremony."
+        require_remote_command_success 'php artisan x-change:doctor --strict --json'
+        return
+    fi
+
     cat <<EOF
 Commissioning boundary:
   Cutover at:             ${DEPLOY_PROVIDER_CUTOVER_AT}
@@ -567,21 +657,16 @@ Commissioning boundary:
 EOF
 
     pre_commission
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction'
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='php artisan x-change:doctor --strict --json'
+    require_remote_command_success 'composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction'
+    require_remote_command_success 'php artisan x-change:doctor --strict --json'
 }
 
 verify() {
     require_value DEPLOY_CLOUD_ENVIRONMENT_ID
 
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='composer show 3neti/x-change --format=json && test -f public/build/manifest.json && echo FRONTEND_MANIFEST_PRESENT'
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='php artisan x-change:doctor --strict --json'
-    cloud_mutation command:run "${DEPLOY_CLOUD_ENVIRONMENT_ID}" \
-        --cmd='php artisan x-change:continuity:balance-report --json --pretty'
+    require_remote_command_success 'composer show 3neti/x-change --format=json && test -f public/build/manifest.json && echo FRONTEND_MANIFEST_PRESENT'
+    require_remote_command_success 'php artisan x-change:doctor --strict --json'
+    require_remote_command_success 'php artisan x-change:continuity:balance-report --json --pretty'
 }
 
 domain_create() {
