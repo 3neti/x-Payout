@@ -22,6 +22,7 @@ deployment.production.secrets.local
 /ops/deployment/**/secrets.env
 !/ops/deployment/examples/secrets.env.example
 /ops/deployment/build/
+/ops/deployment/instances/payout.disburse.cash.yaml
 .env.forge.production
 .phpactor.json
 .phpunit.result.cache
