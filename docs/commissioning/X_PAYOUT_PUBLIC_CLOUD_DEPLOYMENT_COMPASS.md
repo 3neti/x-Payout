@@ -4,7 +4,7 @@
 
 **Current position:** Gate 11 — optional compile and pre-commission workflow proved; Laravel Cloud remains the deployment engine
 
-**Overall status:** Corrective boundary is published and verified against the live environment; no commissioning mutation ran
+**Overall status:** Laravel Cloud push-to-deploy and custom-domain acceptance are green at current main; no commissioning mutation ran
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -287,6 +287,32 @@ forbidden until one exact-release two-file cleanroom passes.
 - The successful workflow performed no foundation, variable configuration,
   release deployment, DNS, domain, commissioning, Treasury, invitation,
   payment, or messaging mutation.
+
+### Continuous push-to-deploy acceptance — 2026-10-04
+
+- Laravel Cloud push-to-deploy automatically deployed `main` commit
+  `8dd89b0a259303fb4dc87cf1de7fea351a408728` as deployment
+  `depl-a2e6e04e-44ec-41e6-837d-0a6d7ebbc3b2`; the production environment is
+  running and its current deployment points to that commit.
+- GitHub verification run `37210690426` compiled profile fingerprint
+  `0fae0e409abdd9df7021848234ab99d12ba4319bc19bb453699e71e0e713327b`
+  and passed the live strict pre-commission checkpoint without deployment or
+  commissioning mutation.
+- The generated Laravel Cloud hostname returned HTTPS 200. The stale custom
+  domain record `domain-a2e5a1a4-f6a5-4892-aef8-3dcaa3abd5fd` was explicitly
+  authorized for deletion after Cloud reported it detached and failed.
+- Recreated `payout.disburse.cash` as
+  `domain-a2e6e72a-e912-492d-9d76-bac6b4a139f2`. Existing DigitalOcean A and
+  ACME records already matched Cloud, so no DNS or nameserver write was
+  required. Hostname and TLS are verified; live homepage, public issuance,
+  claim, and both MCP discovery documents return HTTPS 200.
+- Cloud still reports `originStatus=pending` and an empty `environmentId`
+  despite successful live routing. This remains a control-plane metadata lag,
+  not a live availability failure.
+- Partner and public-issuance MCP discovery are available, but both MCP
+  transports remain disabled by production configuration. A browser GET to
+  `/mcp/x-change/public` therefore returns 404 by design; transport enablement
+  is a separate product/configuration gate.
 
 ## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
 
