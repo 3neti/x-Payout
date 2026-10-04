@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 10 — fresh beta.64 cleanroom and custom-domain acceptance proved
+**Current position:** Gate 11 — protected reusable workflow green locally; GitHub environment setup next
 
-**Overall status:** Fresh host is commissioned and verified; institutional handoff packaging remains
+**Overall status:** Legacy, compiled controller, and workflow contracts are locally green; no external mutation has run
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -50,7 +50,8 @@ each run. Never copy historical identifiers into a new run without inspection.
 | 7. Safe commissioning | Complete | Pre-doctor, principals, Treasury, funded invitations, and final doctor proved |
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
-| 10. Institutional handoff | **In progress** | Managed-secret and pre-commission rehearsal passed; publish the corrected Cloud secret/runtime boundary |
+| 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
+| 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and protected reusable workflow complete locally; GitHub environment setup and exact-release rehearsal remain |
 
 ## Turnkey operating contract
 
@@ -78,6 +79,149 @@ DigitalOcean nameservers, waits within a bounded window, and accepts lingering
 Laravel Cloud `origin=pending` metadata only when hostname and TLS are verified
 and the live HTTPS origin probe succeeds. Its acceptance checks do not create a
 funding order, Pay Code, claim, provider mutation, or message.
+
+## Portable deployment disposition — 2026-10-04
+
+### Decision
+
+The next handoff form is one provider- and platform-neutral `instance.yaml`
+plus one private `secrets.env`. The project will not build a replacement for
+GitHub Actions, Laravel Cloud CLI, Forge, Deployer, Terraform, or provider
+portals.
+
+Custom code is limited to:
+
+- validating and deterministically compiling the instance profile;
+- delegating provider-specific validation and runtime translation to installed
+  drivers;
+- producing sanitized runtime, secret-name, commissioning, and fingerprint
+  artifacts;
+- selecting the correct commissioning-state path;
+- enforcing exact releases and financial authority; and
+- collecting doctor, balance, domain, and public-surface evidence.
+
+GitHub Actions coordinates release validation and protected approvals. Thin
+platform targets invoke official infrastructure tools. The x-change doctor,
+commissioning commands, and balance report remain the financial authority.
+
+### Initial local-file inventory
+
+The proven beta.68 operator machine has 16 deployment-related files outside
+Git:
+
+- one owner-only deployment-control worksheet;
+- one owner-only secure re-entry worksheet containing 29 named entries;
+- twelve generated DNS before/after evidence snapshots;
+- one Laravel Cloud CLI authentication file; and
+- one DigitalOcean CLI authentication file.
+
+Only the control worksheet and two native CLI authentication files are needed
+for an ordinary recurring run. The secure re-entry worksheet is needed only
+when provider credentials must be created or replaced. DNS snapshots are
+evidence, not inputs. Both deployment scripts are tracked in Git.
+
+The Laravel Cloud CLI authentication file was found with mode `0644` and must
+be restricted to `0600` before it is accepted as part of the portable handoff.
+No credential value was read or recorded during this inventory.
+
+### Migration boundary
+
+The beta.68 controller is the behavioral reference and rollback path. The
+first implementation slice may add schema, examples, compiler, tests, and a
+compatibility loader, but must not change live Cloud resources, DNS, provider
+state, commissioning, invitations, or Treasury. Legacy worksheet removal is
+forbidden until one exact-release two-file cleanroom passes.
+
+### Portable compiler evidence — 2026-10-04
+
+- Added the provider- and platform-neutral `x-payout.instance.v1` schema and a
+  sanitized institution example.
+- Added a gitignored, owner-only `secrets.env` contract. The compiler accepts
+  secret-name references from YAML and verifies required values without ever
+  serializing them.
+- Added `bin/x-payout-profile`, which loads Composer only and does not boot
+  Laravel, connect to a database or cache, or invoke any platform/provider.
+- Compilation produces only deterministic sanitized artifacts:
+  `compiled-instance.json`, `runtime.env`, `required-secrets.json`,
+  `commissioning.yaml`, and `manifest.sha256`.
+- Added a precedence-based legacy-setting classification contract. Focused
+  coverage proves every setting in both legacy worksheets is classified as
+  portable profile, provider-driver configuration, private secret, generated
+  state, operator authority, platform target, or evidence.
+- The compiler rejects missing drivers, missing capabilities, plaintext secret
+  values, incomplete secret sets, and permissive secret-file modes.
+- Focused profile and deployment-controller verification passed 29 tests and
+  144 assertions. The proven beta.68 controller remains byte-for-byte equal to
+  its published tag.
+- No Cloud, DNS, DigitalOcean, NetBank, commissioning, financial, invitation,
+  messaging, or secret mutation occurred in this slice.
+
+### Laravel Cloud compatibility evidence — 2026-10-04
+
+- The existing cleanroom controller now accepts `--compiled=DIR` or
+  `PAYOUT_COMPILED_PROFILE_DIRECTORY` as an opt-in input mode.
+- In compiled mode, verified artifacts supply runtime variables, exact source
+  repository/ref, canonical public domain, required managed-secret names,
+  provider cutover evidence, and opening-capitalization intent.
+- The legacy control worksheet remains the authority for Cloud resource IDs,
+  platform sizing/topology, generated state, DNS adapter state, and explicit
+  operator confirmations. Without `--compiled`, legacy behavior is unchanged.
+- The controller verifies the artifact manifest and shared profile fingerprint
+  before evaluating any phase. A changed artifact fails closed.
+- Generated `runtime.env` values are shell-safe single-quoted; secret keys are
+  excluded and a permissive or incomplete private secrets file is rejected at
+  compilation.
+- A fake-Cloud configure proof confirmed that compiled runtime values and the
+  compiled managed-secret inventory reach the existing configure path without
+  exposing secret values.
+- Focused profile/controller verification passed 34 tests and 165 assertions;
+  shell syntax and formatting passed.
+- No Laravel Cloud, DigitalOcean, DNS, NetBank, provider, commissioning,
+  financial, invitation, messaging, or credential mutation occurred.
+
+### Compiled-mode controller parity evidence — 2026-10-04
+
+- A dedicated fake-transport matrix exercised compiled-mode foundation,
+  generated-state persistence, configuration, exact release/ref selection,
+  bounded deployment monitoring, pre-commission doctor, commissioning safe
+  stop, already-operational skip, verified stale-manifest adoption, final
+  strict doctor, balance reporting, domain creation, DNS no-op reconciliation,
+  bounded domain verification, and public-surface acceptance.
+- A complete compiled `continuous` rehearsal ran foundation through the
+  accountable pre-commission checkpoint without conversational intervention.
+  With commissioning authority absent, it created no commissioning command,
+  invitation, Treasury action, or domain mutation.
+- Domain tests proved the portable canonical hostname reaches Laravel Cloud
+  and DigitalOcean adapters while nameservers remain external and untouched.
+- The compiled release ref reached the existing Cloud environment/deployment
+  commands, and tampered artifact manifests continued to fail before a phase.
+- Combined legacy, compiler, and compiled-controller suites passed 43 tests
+  and 209 assertions. Shell syntax, formatting, Composer validation, and diff
+  checks passed.
+- Every platform, DNS, provider, financial, messaging, and credential
+  interaction in this gate was simulated locally; no external mutation ran.
+
+### Protected GitHub Actions workflow evidence — 2026-10-04
+
+- Added `.github/workflows/deploy-x-payout.yml` as both a reusable
+  `workflow_call` and an operator-invoked `workflow_dispatch` workflow.
+- The compile job runs the same portable profile validator, compiler, and
+  manifest verifier used locally. It uploads only compiler-verified,
+  secret-free artifacts plus a minimal JSON evidence record.
+- The deployment job invokes the existing compatibility controller through
+  the strict pre-commission checkpoint with commissioning, DNS mutation, and
+  domain cutover authority forced off.
+- The commissioning job is distinct, requires the caller to request
+  commissioning, and targets the separately protected
+  `x-payout-production-commissioning` GitHub Environment. Repository
+  administrators must configure required reviewers and prevent self-review;
+  the workflow cannot weaken or emulate that control.
+- The protected job reconstructs its controller worksheet from protected
+  secrets after approval. No private secrets file, controller worksheet, raw
+  command transcript, or provider response is uploaded.
+- Focused workflow-contract verification passed 4 tests and 32 assertions.
+  No GitHub, Laravel Cloud, DNS, DigitalOcean, NetBank, commissioning,
+  financial, invitation, messaging, or credential mutation occurred.
 
 ## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
 
@@ -279,12 +423,11 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Publish the rehearsal hardening as the next beta, then repeat continuous mode
-against the already operational instance. The run must recognize operational
-commissioning state, skip the one-time ceremony, exit its deployment monitor
-after a terminal result, and complete domain acceptance without operator
-intervention. A fresh destructive cleanroom remains a separately authorized
-demonstration.
+Configure the deployment and commissioning GitHub Environments and their
+secrets. Require a reviewer and prevent self-review for commissioning, then
+run the workflow in compile-only mode. After that non-mutating proof is green,
+prepare—but do not execute without separate authority—the first exact-release
+Laravel Cloud rehearsal from the two-file input contract.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
@@ -342,6 +485,49 @@ the full event stream. Stale installation manifests now use verified adoption
 instead of bootstrap, and an existing domain no longer causes a redundant
 second deployment. Those post-tag controller fixes require the next beta for
 exact-release reproducibility.
+
+## Beta.67 exact-release evidence — 2026-10-04
+
+- Published x-PayOut `v1.0.0-beta.67` at commit `8b77d201`.
+- Deployment `depl-a2e60f70-dc2b-440a-9cb2-c722517a22ca` reached
+  `deployment.succeeded` at that exact commit.
+- Strict pre-commission doctor passed `27/27`.
+- A stale installation manifest was verified and adopted without bootstrap or
+  opening capitalization; final strict doctor passed `37/37`.
+- The balance report was complete with fresh liquidity, matched Treasury
+  control, no blockers, and no warnings.
+- DNS reconciliation was a no-op; verified TLS and the live-origin probe
+  passed despite delayed Cloud `origin=pending` metadata.
+- Home, Claim, public MCP discovery, and public issuance acceptance passed.
+- The controller then exited non-zero because a `RETURN` trap referenced the
+  local `body_file` variable after its function scope ended. The deployment
+  was operational, but the automation rehearsal was correctly not called
+  completely green.
+
+## Beta.68 uninterrupted continuous evidence — 2026-10-04
+
+- The response-file cleanup was isolated in a subshell and changed to an
+  `EXIT` trap. A focused regression executes the real domain-acceptance phase
+  and proves no return trap escapes.
+- The focused deployment-controller suite passed 21 tests and 118 assertions;
+  shell syntax, formatting, and diff checks passed.
+- Published x-PayOut `v1.0.0-beta.68` at commit `7863e8d1` without altering
+  beta.67.
+- Deployment `depl-a2e61ee5-c65e-43f2-8f48-3903cf23e0f0` reached
+  `deployment.succeeded` at the exact commit in 1 minute 21 seconds.
+- Strict pre-commission doctor passed `27/27`.
+- Commissioning status was already operational; bootstrap and opening
+  capitalization were skipped.
+- Final strict doctor passed `37/37`.
+- The read-only balance report was complete with no blockers or warnings;
+  provider inventory equaled Treasury positions and liquidity was fresh.
+- DNS reconciliation was an exact no-op. Verified TLS and the live-origin
+  probe satisfied the documented Cloud metadata fallback.
+- Home, Claim, public MCP discovery, and public issuance safe-state acceptance
+  passed without creating a funding order.
+- The exact continuous controller completed with exit code `0`, with no
+  intervening edits or manual phase substitutions. The repository remained
+  clean and the remote tag resolved to the deployed commit.
 
 ## Update protocol
 

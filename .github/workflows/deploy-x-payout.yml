@@ -1,0 +1,306 @@
+name: portable x-PayOut deployment
+
+on:
+  workflow_call:
+    inputs:
+      instance_path:
+        description: Tracked portable instance profile.
+        required: false
+        type: string
+        default: ops/deployment/examples/instance.yaml
+      execute_deployment:
+        description: Run through the strict pre-commission checkpoint.
+        required: false
+        type: boolean
+        default: false
+      authorize_commissioning:
+        description: Request the separately protected commissioning job.
+        required: false
+        type: boolean
+        default: false
+      deployment_environment:
+        description: GitHub Environment holding deployment credentials.
+        required: false
+        type: string
+        default: x-payout-production-deployment
+      commissioning_environment:
+        description: GitHub Environment with required commissioning reviewers.
+        required: false
+        type: string
+        default: x-payout-production-commissioning
+      artifact_retention_days:
+        description: Retention for sanitized evidence.
+        required: false
+        type: number
+        default: 7
+    secrets:
+      PAYOUT_SECRETS_ENV:
+        description: Complete private secrets.env contents used only during compilation.
+        required: true
+      PAYOUT_PLATFORM_CONTROL_ENV:
+        description: Transitional secret-free Laravel Cloud control worksheet.
+        required: false
+      LARAVEL_CLOUD_TOKEN:
+        description: Least-privilege Laravel Cloud automation token.
+        required: false
+  workflow_dispatch:
+    inputs:
+      instance_path:
+        description: Tracked portable instance profile.
+        required: true
+        type: string
+        default: ops/deployment/examples/instance.yaml
+      execute_deployment:
+        description: Run through the strict pre-commission checkpoint.
+        required: true
+        type: boolean
+        default: false
+      authorize_commissioning:
+        description: Request the separately protected commissioning job.
+        required: true
+        type: boolean
+        default: false
+      deployment_environment:
+        description: GitHub Environment holding deployment credentials.
+        required: true
+        type: string
+        default: x-payout-production-deployment
+      commissioning_environment:
+        description: GitHub Environment with required commissioning reviewers.
+        required: true
+        type: string
+        default: x-payout-production-commissioning
+      artifact_retention_days:
+        description: Retention for sanitized evidence.
+        required: true
+        type: number
+        default: 7
+
+permissions:
+  contents: read
+
+concurrency:
+  group: x-payout-${{ inputs.deployment_environment }}
+  cancel-in-progress: false
+
+jobs:
+  compile:
+    name: Validate and compile portable profile
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.deployment_environment }}
+      deployment: false
+    outputs:
+      profile_fingerprint: ${{ steps.profile.outputs.fingerprint }}
+    steps:
+      - name: Checkout exact workflow revision
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install production dependencies
+        run: composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
+
+      - name: Validate portable profile
+        env:
+          INSTANCE_PATH: ${{ inputs.instance_path }}
+        run: bin/x-payout-profile validate --instance="${INSTANCE_PATH}"
+
+      - name: Compile sanitized artifacts
+        id: profile
+        env:
+          INSTANCE_PATH: ${{ inputs.instance_path }}
+          PAYOUT_SECRETS_ENV: ${{ secrets.PAYOUT_SECRETS_ENV }}
+        run: |
+          set -euo pipefail
+          secrets_file="$(mktemp)"
+          trap 'rm -f "${secrets_file}"' EXIT
+          chmod 0600 "${secrets_file}"
+          printf '%s' "${PAYOUT_SECRETS_ENV}" >"${secrets_file}"
+          bin/x-payout-profile compile \
+            --instance="${INSTANCE_PATH}" \
+            --secrets="${secrets_file}" \
+            --output=ops/deployment/build
+          bin/x-payout-profile verify --compiled=ops/deployment/build
+          fingerprint="$(jq -er '.profile_fingerprint' ops/deployment/build/compiled-instance.json)"
+          printf 'fingerprint=%s\n' "${fingerprint}" >>"${GITHUB_OUTPUT}"
+
+      - name: Record sanitized compile evidence
+        env:
+          GIT_SHA: ${{ github.sha }}
+          GIT_REF: ${{ github.ref }}
+        run: |
+          jq -n \
+            --arg schema x-payout.workflow-evidence.v1 \
+            --arg phase compile \
+            --arg status succeeded \
+            --arg git_sha "${GIT_SHA}" \
+            --arg git_ref "${GIT_REF}" \
+            --arg profile_fingerprint "${{ steps.profile.outputs.fingerprint }}" \
+            '{schema:$schema,phase:$phase,status:$status,git_sha:$git_sha,git_ref:$git_ref,profile_fingerprint:$profile_fingerprint}' \
+            >ops/deployment/build/workflow-compile-evidence.json
+
+      - name: Upload sanitized compiled profile
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-payout-compiled-${{ steps.profile.outputs.fingerprint }}
+          path: ops/deployment/build/
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifact_retention_days }}
+
+  deploy_to_checkpoint:
+    name: Deploy through pre-commission checkpoint
+    if: ${{ inputs.execute_deployment }}
+    needs: compile
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.deployment_environment }}
+    steps:
+      - name: Checkout exact workflow revision
+        uses: actions/checkout@v6
+
+      - name: Setup PHP and Laravel Cloud CLI
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install production dependencies and Cloud CLI
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
+          composer global require laravel/cloud-cli --no-interaction --no-progress
+
+      - name: Download verified compiled profile
+        uses: actions/download-artifact@v5
+        with:
+          name: x-payout-compiled-${{ needs.compile.outputs.profile_fingerprint }}
+          path: ops/deployment/build
+
+      - name: Prepare transitional platform state
+        env:
+          PAYOUT_PLATFORM_CONTROL_ENV: ${{ secrets.PAYOUT_PLATFORM_CONTROL_ENV }}
+        run: |
+          set -euo pipefail
+          test -n "${PAYOUT_PLATFORM_CONTROL_ENV}"
+          install -m 0600 /dev/null /tmp/x-payout-platform.env
+          printf '%s' "${PAYOUT_PLATFORM_CONTROL_ENV}" >/tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_COMMISSIONING=.*/DEPLOY_CONFIRM_COMMISSIONING=NO/' /tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_DOMAIN_CUTOVER=.*/DEPLOY_CONFIRM_DOMAIN_CUTOVER=NO/' /tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_DNS_WRITE=.*/DEPLOY_CONFIRM_DNS_WRITE=NO/' /tmp/x-payout-platform.env
+
+      - name: Deploy continuously to the accountable checkpoint
+        env:
+          LARAVEL_CLOUD_TOKEN: ${{ secrets.LARAVEL_CLOUD_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "${LARAVEL_CLOUD_TOKEN}"
+          scripts/deploy-production-cleanroom.sh continuous \
+            --apply \
+            --control=/tmp/x-payout-platform.env \
+            --compiled=ops/deployment/build
+
+      - name: Record sanitized deployment evidence
+        env:
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          mkdir -p /tmp/x-payout-evidence
+          jq -n \
+            --arg schema x-payout.workflow-evidence.v1 \
+            --arg phase pre-commission-checkpoint \
+            --arg status succeeded \
+            --arg git_sha "${GIT_SHA}" \
+            --arg profile_fingerprint "${{ needs.compile.outputs.profile_fingerprint }}" \
+            '{schema:$schema,phase:$phase,status:$status,git_sha:$git_sha,profile_fingerprint:$profile_fingerprint}' \
+            >/tmp/x-payout-evidence/deployment.json
+
+      - name: Upload sanitized deployment evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-payout-deployment-evidence-${{ needs.compile.outputs.profile_fingerprint }}
+          path: /tmp/x-payout-evidence/
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifact_retention_days }}
+
+  commission:
+    name: Protected one-time commissioning
+    if: ${{ inputs.execute_deployment && inputs.authorize_commissioning }}
+    needs: [compile, deploy_to_checkpoint]
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ inputs.commissioning_environment }}
+    steps:
+      - name: Checkout exact workflow revision
+        uses: actions/checkout@v6
+
+      - name: Setup PHP and Laravel Cloud CLI
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          tools: composer:v2
+          coverage: none
+
+      - name: Install production dependencies and Cloud CLI
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist --no-progress --optimize-autoloader
+          composer global require laravel/cloud-cli --no-interaction --no-progress
+
+      - name: Download verified compiled profile
+        uses: actions/download-artifact@v5
+        with:
+          name: x-payout-compiled-${{ needs.compile.outputs.profile_fingerprint }}
+          path: ops/deployment/build
+
+      - name: Restore protected platform state and commissioning authority
+        env:
+          PAYOUT_PLATFORM_CONTROL_ENV: ${{ secrets.PAYOUT_PLATFORM_CONTROL_ENV }}
+        run: |
+          set -euo pipefail
+          test -n "${PAYOUT_PLATFORM_CONTROL_ENV}"
+          install -m 0600 /dev/null /tmp/x-payout-platform.env
+          printf '%s' "${PAYOUT_PLATFORM_CONTROL_ENV}" >/tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_PRODUCTION=.*/DEPLOY_CONFIRM_PRODUCTION=YES/' /tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_COMMISSIONING=.*/DEPLOY_CONFIRM_COMMISSIONING=YES/' /tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_DOMAIN_CUTOVER=.*/DEPLOY_CONFIRM_DOMAIN_CUTOVER=NO/' /tmp/x-payout-platform.env
+          sed -i 's/^DEPLOY_CONFIRM_DNS_WRITE=.*/DEPLOY_CONFIRM_DNS_WRITE=NO/' /tmp/x-payout-platform.env
+
+      - name: Commission once and verify
+        env:
+          LARAVEL_CLOUD_TOKEN: ${{ secrets.LARAVEL_CLOUD_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "${LARAVEL_CLOUD_TOKEN}"
+          scripts/deploy-production-cleanroom.sh commission \
+            --apply \
+            --control=/tmp/x-payout-platform.env \
+            --compiled=ops/deployment/build
+          scripts/deploy-production-cleanroom.sh verify \
+            --control=/tmp/x-payout-platform.env \
+            --compiled=ops/deployment/build
+
+      - name: Record sanitized commissioning evidence
+        env:
+          GIT_SHA: ${{ github.sha }}
+        run: |
+          mkdir -p /tmp/x-payout-evidence
+          jq -n \
+            --arg schema x-payout.workflow-evidence.v1 \
+            --arg phase commissioning \
+            --arg status succeeded \
+            --arg git_sha "${GIT_SHA}" \
+            --arg profile_fingerprint "${{ needs.compile.outputs.profile_fingerprint }}" \
+            '{schema:$schema,phase:$phase,status:$status,git_sha:$git_sha,profile_fingerprint:$profile_fingerprint}' \
+            >/tmp/x-payout-evidence/commissioning.json
+
+      - name: Upload sanitized commissioning evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-payout-commissioning-evidence-${{ needs.compile.outputs.profile_fingerprint }}
+          path: /tmp/x-payout-evidence/
+          if-no-files-found: error
+          retention-days: ${{ inputs.artifact_retention_days }}

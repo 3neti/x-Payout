@@ -1,0 +1,98 @@
+schema: x-payout.instance.v1
+
+identity:
+  id: example-payments-host
+  legal_name: Example Payments Institution Inc.
+  display_name: Example PayOut
+
+release:
+  repository: example/x-payout
+  ref: v1.0.0
+
+public:
+  canonical_url: https://payout.example.com
+  locale: en
+  currencies: [PHP]
+
+features:
+  public_on_demand_issuance: false
+  partner_api: false
+  sms_feedback: true
+
+runtime:
+  APP_NAME: Example PayOut
+  APP_ENV: production
+  APP_DEBUG: false
+  APP_URL: https://payout.example.com
+  APP_LOCALE: en
+  APP_FALLBACK_LOCALE: en
+  XCHANGE_RUNTIME_TIER: production
+  XCHANGE_INSTANCE_ID: example-payments-host
+  XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED: false
+
+providers:
+  active: primary-payout
+  connections:
+    - name: primary-payout
+      driver: netbank
+      currency: PHP
+      capabilities:
+        - balance
+        - disbursement
+        - funding
+        - qr_ph
+      runtime:
+        XCHANGE_DEPLOYMENT_PROFILE: netbank
+        NETBANK_FUNDING_API_URL: https://api.example-provider.invalid
+        NETBANK_FUNDING_CORPORATE_ACCOUNT_NAME: Example PayOut Treasury
+        NETBANK_FUNDING_CORPORATE_ACCOUNT_NUMBER: REPLACE_WITH_PROVIDER_ACCOUNT_NUMBER
+        NETBANK_TEST_MODE: false
+      secrets:
+        client_id: NETBANK_CLIENT_ID
+        client_secret: NETBANK_CLIENT_SECRET
+        funding_client_id: NETBANK_FUNDING_CLIENT_ID
+        funding_client_secret: NETBANK_FUNDING_CLIENT_SECRET
+        funding_hmac_key: NETBANK_FUNDING_STANDING_HMAC_KEY
+
+storage:
+  evidence:
+    driver: s3
+    runtime:
+      FILESYSTEM_DISK: s3
+      AWS_DEFAULT_REGION: sgp1
+      AWS_ENDPOINT: https://sgp1.digitaloceanspaces.com
+      AWS_BUCKET: example-private-evidence
+      AWS_USE_PATH_STYLE_ENDPOINT: false
+      XCHANGE_CLAIM_EVIDENCE_DISK: s3
+      XCHANGE_CLAIM_EVIDENCE_DIRECTORY: x-payout/active/example-payments-host/claim-evidence
+      XCHANGE_INSTANCE_KEEPSAKE_DISK: s3
+      XCHANGE_INSTANCE_KEEPSAKE_DIRECTORY: x-payout/active/example-payments-host/instance-keepsakes
+    secrets:
+      access_key_id: AWS_ACCESS_KEY_ID
+      secret_access_key: AWS_SECRET_ACCESS_KEY
+
+commissioning:
+  opening:
+    policy: system-capital
+    connection: primary-payout
+    allow_production: false
+    cutover_at: REPLACE_WITH_APPROVED_ISO_8601_TIMESTAMP
+    cutover_transaction_id: REPLACE_WITH_APPROVED_PROVIDER_WATERMARK
+  commercial_principal:
+    reference: commercial-primary
+    legal_name: Example Payments Institution Inc.
+    revenue_account_slug: commercial-revenue
+  invitations:
+    maker:
+      amount_minor: 10000
+      email_secret: X_PAYOUT_MAKER_EMAIL
+      mobile_secret: X_PAYOUT_MAKER_MOBILE
+    checker:
+      amount_minor: 10000
+      email_secret: X_PAYOUT_CHECKER_EMAIL
+      mobile_secret: X_PAYOUT_CHECKER_MOBILE
+
+secret_refs:
+  commissioning_access_token: XCHANGE_COMMISSIONING_ACCESS_TOKEN
+  sms_api_key: ENGAGESPARK_API_KEY
+  sms_organization_id: ENGAGESPARK_ORGANIZATION_ID

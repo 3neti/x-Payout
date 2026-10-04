@@ -1,0 +1,60 @@
+{
+  "schema": "x-payout.legacy-setting-classification.v1",
+  "precedence": [
+    "private_secret",
+    "operator_authority",
+    "generated_state",
+    "evidence",
+    "provider_driver",
+    "platform_target",
+    "portable_profile"
+  ],
+  "categories": {
+    "private_secret": {
+      "source": "deployment.production.secrets.example",
+      "patterns": [".*"]
+    },
+    "operator_authority": {
+      "patterns": [
+        "^DEPLOY_CONFIRM_",
+        "^DEPLOY_PROVIDER_CUTOVER_",
+        "^XCHANGE_TREASURY_OPENING_CAPITALIZATION_"
+      ]
+    },
+    "generated_state": {
+      "patterns": [
+        "^DEPLOY_CLOUD_(APPLICATION_ID|ENVIRONMENT_ID|INSTANCE_ID|DATABASE_CLUSTER_ID|DATABASE_ID|CACHE_ID|WORKER_PROCESS_ID|DOMAIN_ID|SECRET_IDS)$"
+      ]
+    },
+    "evidence": {
+      "patterns": ["^DEPLOY_EVIDENCE_PREFIX$"]
+    },
+    "provider_driver": {
+      "patterns": [
+        "^NETBANK_",
+        "^USE_OMNIPAY$",
+        "^TXTCMDR_",
+        "^HYPERVERGE_",
+        "^KYC_",
+        "^LOCATION_HANDLER_"
+      ]
+    },
+    "platform_target": {
+      "patterns": ["^DEPLOY_"]
+    },
+    "portable_profile": {
+      "patterns": [
+        "^APP_",
+        "^LOG_",
+        "^SESSION_",
+        "^QUEUE_",
+        "^CACHE_",
+        "^BROADCAST_",
+        "^FILESYSTEM_",
+        "^AWS_",
+        "^XCHANGE_",
+        "^X_FEEDBACK_"
+      ]
+    }
+  }
+}

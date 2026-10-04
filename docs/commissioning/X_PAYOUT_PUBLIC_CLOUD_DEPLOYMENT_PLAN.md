@@ -1,12 +1,12 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Cleanroom proven; turnkey continuous handoff hardening in progress
+**Status:** Cleanroom and continuous deployment proven; portable compiled-mode parity and protected workflow green locally
 
 **Updated:** 2026-10-04
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.64` (`d612bb6c`)
+**Current x-PayOut:** `v1.0.0-beta.68` (`7863e8d1`)
 
 **Current x-change:** `v1.0.98` (`5565cf14`)
 
@@ -418,27 +418,178 @@ The claim is limited to repeatable deployment and commissioning. It is not a
 claim that licensing, governance, reconciliation, or institutional operating
 responsibility is supplied by the software alone.
 
+## Gate 11 — Portable instance profile and standard deployment tooling
+
+### Objectives
+
+1. Reduce the operator-maintained installation contract to one portable
+   `instance.yaml` and one private `secrets.env`.
+2. Make the instance definition independent of Laravel Cloud, Forge, a bank,
+   an EMI, or any one provider while still allowing installed drivers to
+   declare and validate their own requirements.
+3. Use GitHub Actions, Laravel Cloud CLI, Forge, Deployer, and provider-native
+   tools for infrastructure work instead of building a competing provisioning
+   framework.
+4. Keep custom x-PayOut code limited to deterministic profile translation,
+   exact-release enforcement, commissioning-state decisions, financial safety
+   gates, readiness checks, and evidence collection.
+5. Preserve the proven beta.68 continuous controller until the replacement
+   path produces equivalent evidence from the same exact release.
+6. Give a bank, EMI, enterprise, cooperative, or public institution a
+   repeatable handoff that does not depend on conversational memory or
+   machine-specific file placement.
+
+### Two-file operator contract
+
+The operator supplies:
+
+- `instance.yaml`: non-secret institution identity, branding, canonical URL,
+  connection drivers and capabilities, routing, commissioning intent, feature
+  switches, and platform-neutral runtime requirements; and
+- `secrets.env`: private provider credentials, storage credentials, and
+  Maker/Checker identities used only for controlled secret import and initial
+  commissioning.
+
+`instance.yaml` must not contain plaintext secret values. `secrets.env` is
+gitignored, owner-only (`0600`), and is not reopened by an ordinary recurring
+deployment after its values become platform-managed secrets. `APP_KEY`,
+database credentials, cache credentials, and platform-native signing material
+remain under their platform's own authority.
+
+The portable profile may select a provider driver such as `netbank`, but the
+common schema understands only connection references, capabilities, routing,
+configuration maps, and secret references. The selected provider package owns
+its configuration schema, required secret slots, runtime translation, and
+readiness checks.
+
+### Wiring
+
+```text
+instance.yaml + secrets.env
+             |
+             v
+portable profile validator/compiler
+             |
+             +-- compiled-instance.json
+             +-- runtime.env
+             +-- required-secrets.json
+             +-- commissioning.yaml
+             +-- manifest.sha256
+             |
+             v
+GitHub Actions or the local deployment runner
+             |
+             v
+thin platform target
+  +-- Laravel Cloud CLI
+  +-- Forge/Deployer
+  +-- future institutional target
+             |
+             v
+platform-neutral x-PayOut commissioning controller
+             |
+             +-- pre-commission doctor
+             +-- commission once / verified adoption / operational skip
+             +-- strict doctor
+             +-- balance report
+             +-- domain and public-surface acceptance
+             v
+sanitized evidence bundle
+```
+
+The compiler is deterministic: the same normalized profile produces the same
+manifest fingerprint. It may read secret names but must not serialize secret
+values. Its outputs are ephemeral build artifacts, not additional
+operator-maintained configuration files.
+
+The platform target owns infrastructure provisioning, runtime variables,
+secret attachment, release deployment, workers, scheduler, domains, remote
+command transport, and platform evidence. It does not decide opening
+capitalization, Treasury treatment, invitation funding, or whether a financial
+ceremony may be repeated.
+
+The platform-neutral commissioning controller owns those financial decisions.
+It uses the target only to execute an approved remote command and return its
+exit code and evidence.
+
+### Repository shape
+
+```text
+bin/
+  x-payout-profile
+  x-payout-deploy
+ops/deployment/
+  schema/instance.v1.schema.json
+  examples/instance.yaml
+  examples/secrets.env.example
+  targets/laravel-cloud.sh
+  targets/forge.sh
+  commissioning.sh
+.github/workflows/
+  deploy-x-payout.yml
+```
+
+The existing `scripts/deploy-production-cleanroom.sh` and
+`scripts/deploy-production-forge.sh` remain compatibility wrappers and the
+behavioral reference until parity is proven. No new standalone deployment
+package is introduced at this stage.
+
+### Implementation sequence
+
+1. **Complete.** Inventory every existing deployment setting and classify it as portable
+   profile data, provider-driver configuration, private secret, generated
+   infrastructure state, operator authority, or evidence.
+2. **Complete.** Define and test `instance.v1` plus sanitized example files.
+3. **Complete.** Implement the standalone profile validator/compiler without booting the
+   Laravel application or requiring a database, cache, or commissioned host.
+4. **Complete.** Add deterministic-output, schema, plaintext-secret rejection, missing
+   driver, missing capability, and secret-reference tests.
+5. **Complete.** Make the existing Laravel Cloud controller consume compiled artifacts while
+   retaining its current command and legacy worksheet compatibility.
+6. **Complete locally.** Prove parity against the beta.68 behavior: exact release, managed-secret
+   gate, bounded monitor, operational skip or verified adoption, strict doctor,
+   balance report, DNS reconciliation, and public acceptance.
+7. **Complete locally.** Add a reusable GitHub Actions workflow that calls the same local
+   commands, uses protected environments for commissioning authority, and
+   uploads only sanitized evidence.
+8. Adapt Forge only after Laravel Cloud parity is green; use Forge and Deployer
+   for server mechanics rather than reproducing them.
+9. Run one exact-release cleanroom from only the two operator inputs and native
+   CLI authentication.
+10. Deprecate the legacy worksheet only after that cleanroom passes; retain a
+    compatibility error with a migration path for at least one release.
+
+### Acceptance
+
+- A fresh operator can validate and deploy from one YAML and one private
+  `.env` without editing deployment scripts.
+- No generated artifact, log, workflow output, or evidence bundle contains a
+  secret value.
+- The same compiled profile can target Laravel Cloud or Forge without changing
+  business or commissioning semantics.
+- Recurring deployment skips the one-time ceremony on an operational host.
+- An uncommissioned host cannot cross the financial gate without explicit
+  authority and provider cutover evidence.
+- The exact deployed tag and commit, profile fingerprint, doctor results,
+  balance evidence, domain result, and acceptance result are preserved.
+- The beta.68 controller remains available as rollback until parity is proven.
+
 ## Current next move
 
-Finalize Gate 10 with the beta.66 acceptance corrections:
+Configure the two GitHub Environments required by
+`.github/workflows/deploy-x-payout.yml`, including required reviewers and
+prevent-self-review on `x-payout-production-commissioning`. Exercise the
+compile-only dispatch first. Then prepare—but do not execute without separate
+authority—the first exact-release Laravel Cloud rehearsal from the two-file
+input contract. The published beta.68 tag remains the rollback reference.
 
-1. inspect every Laravel Cloud remote command's inner `exitCode` and stop on a
-   non-zero application result even when the Cloud wrapper says success;
-2. inspect commissioning status before bootstrap and skip the one-time
-   ceremony when the installation is already operational;
-3. run `deploy:monitor`, but bound it with authoritative `deployment:get`
-   polling so a terminal deployment cannot leave automation attached forever;
-4. retain exact DNS no-op reconciliation and the verified-TLS/live-origin
-   fallback while Cloud reconciles `origin=pending` metadata;
-5. publish the full-stream deployment-ID parser, stale-manifest adoption path,
-   and single-deployment domain flow as the next beta;
-6. repeat continuous mode from that exact release without intervening edits;
-   and
-7. preserve a sanitized transcript suitable for a bank or EMI DevOps team.
-
-Do not rerun opening capitalization on an operational installation. Do not
-create, rotate, reveal, or migrate production secret values as part of this
-source hardening gate.
+The deployment environment holds `PAYOUT_SECRETS_ENV`,
+`PAYOUT_PLATFORM_CONTROL_ENV`, and `LARAVEL_CLOUD_TOKEN`. The commissioning
+environment holds fresh copies of `PAYOUT_PLATFORM_CONTROL_ENV` and
+`LARAVEL_CLOUD_TOKEN`. The protected job reconstructs its worksheet after
+approval; that worksheet and all raw credentials are never uploaded as
+artifacts. Enabling `authorize_commissioning` requests the ceremony but cannot
+bypass the environment reviewer.
 
 ## Operating record
 

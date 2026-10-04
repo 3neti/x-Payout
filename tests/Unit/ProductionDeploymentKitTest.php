@@ -1,5 +1,6 @@
 <?php
 
+use App\Deployment\Profiles\InstanceProfileCompiler;
 use Symfony\Component\Process\Process;
 
 function productionDeploymentKitPath(string $path): string
@@ -38,6 +39,27 @@ function productionDeploymentFakeExecutable(string $contents): string
     chmod($path, 0755);
 
     return $path;
+}
+
+/** @return array{directory: string, secrets: string} */
+function productionCompiledProfile(): array
+{
+    $compiler = new InstanceProfileCompiler;
+    $instance = productionDeploymentKitPath('ops/deployment/examples/instance.yaml');
+    $profile = $compiler->validate($instance);
+    $secrets = tempnam(sys_get_temp_dir(), 'x-payout-compiled-secrets-');
+    $contents = '';
+
+    foreach ($profile['required_secrets'] as $secretName) {
+        $contents .= "{$secretName}=private-test-value\n";
+    }
+
+    file_put_contents($secrets, $contents);
+    chmod($secrets, 0600);
+    $directory = sys_get_temp_dir().'/x-payout-compiled-controller-'.bin2hex(random_bytes(4));
+    $compiler->compile($instance, $secrets, $directory);
+
+    return ['directory' => $directory, 'secrets' => $secrets];
 }
 
 it('ships a secret-free production environment worksheet', function (): void {
@@ -83,6 +105,119 @@ it('renders a non destructive deployment plan by default', function (): void {
         ->toContain('Never automated by this script')
         ->not->toContain('application:delete')
         ->not->toContain('database:delete');
+});
+
+it('retains legacy worksheet behavior when no compiled profile is supplied', function (): void {
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'plan',
+        '--render-only',
+        '--control='.productionDeploymentKitPath('deployment.production.example'),
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('Input mode:       legacy worksheet')
+        ->toContain('Repository:       3neti/x-Payout')
+        ->toContain('Public domain:    payout.disburse.cash');
+});
+
+it('consumes verified compiled artifacts in compatibility mode', function (): void {
+    $compiled = productionCompiledProfile();
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'plan',
+        '--render-only',
+        '--control='.productionDeploymentKitPath('deployment.production.example'),
+        '--compiled='.$compiled['directory'],
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('Input mode:       compiled profile compatibility')
+        ->toContain('Repository:       example/x-payout')
+        ->toContain('Branch:           v1.0.0')
+        ->toContain('Public domain:    payout.example.com')
+        ->toMatch('/Profile:\s+[a-f0-9]{64}/')
+        ->not->toContain('private-test-value');
+
+    unlink($compiled['secrets']);
+});
+
+it('rejects tampered compiled artifacts before evaluating a deployment phase', function (): void {
+    $compiled = productionCompiledProfile();
+    file_put_contents($compiled['directory'].'/runtime.env', "APP_NAME=tampered\n", FILE_APPEND);
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'plan',
+        '--render-only',
+        '--control='.productionDeploymentKitPath('deployment.production.example'),
+        '--compiled='.$compiled['directory'],
+    ]);
+    $process->run();
+
+    expect($process->isSuccessful())->toBeFalse()
+        ->and($process->getErrorOutput())->toContain('manifest does not match');
+
+    unlink($compiled['secrets']);
+});
+
+it('uses compiled runtime and secret requirements during cloud configuration', function (): void {
+    $compiled = productionCompiledProfile();
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-compiled-cloud-log-');
+    $requiredSecrets = json_decode(file_get_contents($compiled['directory'].'/required-secrets.json'), true, flags: JSON_THROW_ON_ERROR);
+    $attachedSecrets = array_map(
+        static fn (string $name): array => ['key' => $name],
+        $requiredSecrets['required'],
+    );
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
+        'DEPLOY_CLOUD_ENVIRONMENT_ID' => 'env-test',
+        'DEPLOY_CLOUD_INSTANCE_ID' => 'instance-test',
+        'DEPLOY_CLOUD_WORKER_PROCESS_ID' => 'worker-test',
+        'DEPLOY_CLOUD_SECRET_IDS' => 'secret-test',
+        'DEPLOY_DIGITALOCEAN_SPACE' => 'existing-space',
+    ]);
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+printf '%s\n' "$*" >>"${FAKE_CLOUD_COMMAND_LOG}"
+if [[ "${1:-}" == "environment-secret:list" ]]; then printf '%s\n' "${FAKE_ATTACHED_SECRETS}"; exit 0; fi
+if [[ "${1:-}" == "environment-secret:attach" ]]; then printf '%s\n' '[]'; exit 0; fi
+if [[ "${1:-}" == "environment:variables" ]]; then exit 0; fi
+if [[ "${1:-}" == "instance:update" ]]; then printf '%s\n' '{}'; exit 0; fi
+exit 1
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'configure',
+        '--apply',
+        '--control='.$controlFile,
+        '--compiled='.$compiled['directory'],
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'FAKE_CLOUD_COMMAND_LOG' => $commandLog,
+        'FAKE_ATTACHED_SECRETS' => json_encode($attachedSecrets, JSON_THROW_ON_ERROR),
+    ]);
+    $process->mustRun();
+    $commands = file_get_contents($commandLog);
+
+    expect($process->getOutput())->toContain('Managed-secret attachment gate passed')
+        ->and($commands)
+        ->toContain('environment:variables env-test --action=set --key=APP_NAME --value=Example PayOut')
+        ->toContain('environment:variables env-test --action=set --key=APP_URL --value=https://payout.example.com')
+        ->toContain('environment-secret:attach env-test secret-test')
+        ->not->toContain('private-test-value');
+
+    unlink($compiled['secrets']);
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($commandLog);
 });
 
 it('refuses production mutations without explicit confirmation', function (): void {

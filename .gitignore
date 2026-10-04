@@ -19,6 +19,9 @@
 .deployment.production
 deployment.production.local
 deployment.production.secrets.local
+/ops/deployment/**/secrets.env
+!/ops/deployment/examples/secrets.env.example
+/ops/deployment/build/
 .env.forge.production
 .phpactor.json
 .phpunit.result.cache

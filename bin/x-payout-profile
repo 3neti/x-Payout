@@ -1,0 +1,72 @@
+#!/usr/bin/env php
+<?php
+
+use App\Deployment\Profiles\InstanceProfileCompiler;
+use App\Deployment\Profiles\InstanceProfileException;
+
+require dirname(__DIR__).'/vendor/autoload.php';
+
+$command = $argv[1] ?? null;
+$options = [];
+
+foreach (array_slice($argv, 2) as $argument) {
+    if (preg_match('/^--([^=]+)=(.*)$/', $argument, $matches) === 1) {
+        $options[$matches[1]] = $matches[2];
+    }
+}
+
+$usage = <<<'TEXT'
+Usage:
+  bin/x-payout-profile validate --instance=/path/to/instance.yaml
+  bin/x-payout-profile compile --instance=/path/to/instance.yaml --secrets=/path/to/secrets.env --output=/path/to/build
+  bin/x-payout-profile verify --compiled=/path/to/build
+TEXT;
+
+try {
+    $compiler = new InstanceProfileCompiler;
+    $instancePath = $options['instance'] ?? null;
+
+    if ($command === 'verify') {
+        $compiledDirectory = $options['compiled'] ?? null;
+
+        if (! is_string($compiledDirectory) || $compiledDirectory === '') {
+            throw new InstanceProfileException("Verify requires --compiled.\n\n{$usage}");
+        }
+
+        $result = $compiler->verifyCompiledArtifacts($compiledDirectory);
+        fwrite(STDOUT, "Verified compiled deployment artifacts.\nProfile fingerprint: {$result['fingerprint']}\n");
+
+        exit(0);
+    }
+
+    if (! is_string($instancePath) || $instancePath === '') {
+        throw new InstanceProfileException("Missing --instance option.\n\n{$usage}");
+    }
+
+    if ($command === 'validate') {
+        $compiler->validate($instancePath);
+        fwrite(STDOUT, "Valid x-payout.instance.v1 profile.\n");
+
+        exit(0);
+    }
+
+    if ($command === 'compile') {
+        $secretsPath = $options['secrets'] ?? null;
+        $outputDirectory = $options['output'] ?? null;
+
+        if (! is_string($secretsPath) || $secretsPath === '' || ! is_string($outputDirectory) || $outputDirectory === '') {
+            throw new InstanceProfileException("Compile requires --secrets and --output.\n\n{$usage}");
+        }
+
+        $result = $compiler->compile($instancePath, $secretsPath, $outputDirectory);
+        fwrite(STDOUT, "Compiled sanitized deployment artifacts.\nProfile fingerprint: {$result['fingerprint']}\nOutput: {$outputDirectory}\n");
+
+        exit(0);
+    }
+
+    throw new InstanceProfileException("Unknown command.\n\n{$usage}");
+} catch (Throwable $exception) {
+    fwrite(STDERR, 'x-payout-profile: '.$exception->getMessage()."\n");
+
+    exit(1);
+}
