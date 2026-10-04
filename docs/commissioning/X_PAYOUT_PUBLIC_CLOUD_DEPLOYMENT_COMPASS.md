@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-04
 
-**Current position:** Gate 10 — managed-secret bootstrap proved; publish correction
+**Current position:** Gate 10 — fresh beta.64 cleanroom and custom-domain acceptance proved
 
-**Overall status:** Sanitized redeploy and strict pre-commission rehearsal passed; commissioning remains separately gated
+**Overall status:** Fresh host is commissioned and verified; institutional handoff packaging remains
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -56,7 +56,7 @@ each run. Never copy historical identifiers into a new run without inspection.
 
 The Laravel Cloud adapter executes:
 
-`plan → foundation → configure → deploy → pre-commission → commission → verify → domain`
+`plan → foundation → configure → deploy → pre-commission → commission → verify → domain → domain acceptance`
 
 The `continuous` phase runs these steps without conversational pauses after an
 authorized operator supplies the prerequisites. It remains fail-closed:
@@ -72,6 +72,31 @@ authorized operator supplies the prerequisites. It remains fail-closed:
 If commissioning authority is absent, continuous execution stops after the
 strict pre-commission doctor. That checkpoint is a successful safe stop, not a
 partially commissioned host.
+
+The domain gate is now part of the same continuous contract. It preserves the
+DigitalOcean nameservers, waits within a bounded window, and accepts lingering
+Laravel Cloud `origin=pending` metadata only when hostname and TLS are verified
+and the live HTTPS origin probe succeeds. Its acceptance checks do not create a
+funding order, Pay Code, claim, provider mutation, or message.
+
+## Fresh beta.64 cleanroom custom-domain evidence — 2026-10-04
+
+- Application: `app-a2e593f4-0252-40a9-816a-135de5b47d3c`.
+- Environment: `env-a2e593f5-ce84-4cbb-a6e0-522ed343126f`.
+- Published x-PayOut release: `v1.0.0-beta.64` at `d612bb6c`.
+- Installed x-change: `v1.0.98`.
+- Final strict doctor after custom `APP_URL`: `37/37`.
+- Balance report: complete, read-only, no blockers.
+- Domain attachment: `domain-a2e5a1a4-f6a5-4892-aef8-3dcaa3abd5fd`.
+- DigitalOcean nameservers and unrelated records were preserved.
+- Existing A and ACME records were reusable; one obsolete Cloud ownership TXT
+  record from the deleted host was removed, then the attachment was recreated.
+- Hostname and TLS became verified. Cloud origin metadata remained pending,
+  while valid TLS and live HTTP 200 routing were independently proved.
+- Homepage, claim entry, public MCP discovery, and the disabled public-issuance
+  surface passed on `https://payout.disburse.cash`.
+- The funded Maker and Checker invitations remained the only two Pay Codes;
+  neither was claimed and commissioning was not replayed.
 
 ## Secret custody decision
 

@@ -111,8 +111,28 @@ it('provides a continuous fail-closed orchestration path', function (): void {
         ->toContain('.key? // .name? // empty')
         ->toContain('Continuous deployment reached the accountable commissioning checkpoint.')
         ->toContain('Generated-domain deployment is commissioned and verified.')
+        ->toContain('domain_acceptance')
+        ->toContain('/.well-known/x-change-public-mcp')
+        ->toContain('without creating a funding order')
         ->toContain('environment-secret:list')
         ->not->toContain('secret:get');
+});
+
+it('uses bounded custom-domain verification and preserves external nameservers', function (): void {
+    $script = file_get_contents(productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'));
+    $environment = file_get_contents(productionDeploymentKitPath('deployment.production.example'));
+
+    expect($script)
+        ->toContain('DEPLOY_DOMAIN_VERIFY_ATTEMPTS')
+        ->toContain('DEPLOY_DOMAIN_VERIFY_INTERVAL_SECONDS')
+        ->toContain('Keep ${DEPLOY_DNS_ZONE} nameservers unchanged')
+        ->toContain('origin metadata remains pending, but verified TLS and the live origin probe passed')
+        ->not->toContain('domain-record:create')
+        ->not->toContain('domain-record:delete')
+        ->and($environment)
+        ->toContain('DEPLOY_DOMAIN_VERIFY_ATTEMPTS=12')
+        ->toContain('DEPLOY_DOMAIN_VERIFY_INTERVAL_SECONDS=5')
+        ->toContain('DEPLOY_DNS_NAMESERVERS_PRESERVED=true');
 });
 
 it('supports the current cloud foundation lifecycle', function (): void {

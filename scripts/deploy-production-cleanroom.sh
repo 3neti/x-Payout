@@ -42,6 +42,15 @@ source "${CONTROL_FILE}"
 set +a
 
 CLOUD_BIN="${CLOUD_BIN:-cloud}"
+CURL_BIN="${CURL_BIN:-}"
+
+if [[ -z "${CURL_BIN}" ]]; then
+    CURL_BIN="$(command -v curl || true)"
+fi
+
+if [[ -z "${CURL_BIN}" && -x /usr/bin/curl ]]; then
+    CURL_BIN=/usr/bin/curl
+fi
 
 runtime_variables=(
     APP_NAME APP_ENV APP_DEBUG APP_URL APP_LOCALE APP_FALLBACK_LOCALE
@@ -127,6 +136,7 @@ Usage:
   scripts/deploy-production-cleanroom.sh verify [--control=FILE]
   scripts/deploy-production-cleanroom.sh domain-create --apply [--control=FILE]
   scripts/deploy-production-cleanroom.sh domain-verify --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-acceptance [--control=FILE]
   scripts/deploy-production-cleanroom.sh continuous --apply [--control=FILE]
 
 The control file contains identifiers, confirmations, and non-secret runtime
@@ -283,11 +293,14 @@ Phases:
   4. commission     Pre-doctor, one bootstrap, final strict doctor.
   5. verify         Versions, assets, doctor, balance evidence.
   6. domain-create  Ask Laravel Cloud for DNS records; do not change nameservers.
-  7. domain-verify  Verify hostname, TLS, and origin after DNS is updated.
+  7. domain-verify  Wait for hostname, TLS, and origin after DNS is updated.
+  8. domain-acceptance
+                    Verify public pages and MCP discovery without money movement.
 
 Continuous mode:
   foundation → configure → deploy → pre-commission checkpoint
   → separately authorized commission → verify → optional domain cutover
+  → non-financial custom-domain acceptance
 
 Persistent external resources:
   - DigitalOcean Space and its archived/active prefixes
@@ -593,6 +606,17 @@ domain_create() {
     echo "Keep the DigitalOcean nameservers unchanged. Apply only these records, then run domain-verify."
 }
 
+domain_status_is_ready() {
+    case "$1" in
+        active|ready|verified)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
 continuous() {
     require_apply
     local_preflight
@@ -626,6 +650,7 @@ EOF
         configure
         deploy
         verify
+        domain_acceptance
     else
         cat <<'EOF'
 Generated-domain deployment is commissioned and verified. Domain cutover did
@@ -637,13 +662,78 @@ EOF
 domain_verify() {
     require_apply
     require_value DEPLOY_CLOUD_DOMAIN_ID
+    require_command "${CURL_BIN}"
 
     if [[ "${DEPLOY_CONFIRM_DOMAIN_CUTOVER:-NO}" != "YES" ]]; then
         echo "Set DEPLOY_CONFIRM_DOMAIN_CUTOVER=YES after DNS records are present." >&2
         exit 77
     fi
 
-    cloud_json domain:verify "${DEPLOY_CLOUD_DOMAIN_ID}"
+    local attempt payload hostname_status ssl_status origin_status
+    local attempts="${DEPLOY_DOMAIN_VERIFY_ATTEMPTS:-12}"
+    local interval_seconds="${DEPLOY_DOMAIN_VERIFY_INTERVAL_SECONDS:-5}"
+
+    for ((attempt = 1; attempt <= attempts; attempt++)); do
+        payload="$(cloud_json domain:verify "${DEPLOY_CLOUD_DOMAIN_ID}")"
+        hostname_status="$(jq -r '.hostnameStatus // empty' <<<"${payload}")"
+        ssl_status="$(jq -r '.sslStatus // empty' <<<"${payload}")"
+        origin_status="$(jq -r '.originStatus // empty' <<<"${payload}")"
+
+        printf 'Domain verification %s/%s: hostname=%s tls=%s origin=%s\n' \
+            "${attempt}" "${attempts}" "${hostname_status:-unknown}" \
+            "${ssl_status:-unknown}" "${origin_status:-unknown}"
+
+        if domain_status_is_ready "${hostname_status}" \
+            && domain_status_is_ready "${ssl_status}" \
+            && domain_status_is_ready "${origin_status}"; then
+            return
+        fi
+
+        if (( attempt < attempts )); then
+            sleep "${interval_seconds}"
+        fi
+    done
+
+    if domain_status_is_ready "${hostname_status}" \
+        && domain_status_is_ready "${ssl_status}" \
+        && [[ "${origin_status}" == "pending" ]] \
+        && "${CURL_BIN}" --fail --silent --show-error --location --max-time 20 \
+            --output /dev/null "https://${DEPLOY_PUBLIC_DOMAIN}/"; then
+        echo "Laravel Cloud origin metadata remains pending, but verified TLS and the live origin probe passed."
+        return
+    fi
+
+    echo "Laravel Cloud did not verify ${DEPLOY_PUBLIC_DOMAIN} within the bounded window." >&2
+    echo "Keep ${DEPLOY_DNS_ZONE} nameservers unchanged and reconcile only these records:" >&2
+    jq '.dnsRecords' <<<"${payload}" >&2
+    exit 75
+}
+
+domain_acceptance() {
+    require_resolved_value DEPLOY_PUBLIC_DOMAIN
+    require_command "${CURL_BIN}"
+
+    local base_url="https://${DEPLOY_PUBLIC_DOMAIN}"
+    local path body_file
+    body_file="$(mktemp)"
+    trap 'rm -f "${body_file}"' RETURN
+
+    for path in / /x/claim /.well-known/x-change-public-mcp; do
+        "${CURL_BIN}" --fail --silent --show-error --location --max-time 20 \
+            --output "${body_file}" "${base_url}${path}"
+        echo "Accepted ${base_url}${path}"
+    done
+
+    "${CURL_BIN}" --fail --silent --show-error --location --max-time 20 \
+        --output "${body_file}" "${base_url}/x/auto-generate"
+
+    if [[ "${XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED:-false}" == "false" ]] \
+        && ! grep -Eqi 'disabled|unavailable|not available' "${body_file}"; then
+        echo "Public issuance was expected to remain unavailable, but its safe-state copy was not found." >&2
+        exit 75
+    fi
+
+    echo "Accepted ${base_url}/x/auto-generate without creating a funding order."
 }
 
 case "${PHASE}" in
@@ -679,6 +769,9 @@ case "${PHASE}" in
         ;;
     domain-verify)
         domain_verify
+        ;;
+    domain-acceptance)
+        domain_acceptance
         ;;
     continuous)
         continuous

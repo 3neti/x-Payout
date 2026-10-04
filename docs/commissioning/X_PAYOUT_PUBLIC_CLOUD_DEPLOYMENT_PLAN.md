@@ -2,11 +2,11 @@
 
 **Status:** Cleanroom proven; turnkey continuous handoff hardening in progress
 
-**Updated:** 2026-10-03
+**Updated:** 2026-10-04
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.59` (`39c56c1`)
+**Current x-PayOut:** `v1.0.0-beta.64` (`d612bb6c`)
 
 **Current x-change:** `v1.0.98` (`5565cf14`)
 
@@ -150,13 +150,18 @@ The demonstration kit must identify:
 
 The kit must expose a common lifecycle across its supported adapters:
 
-`plan → foundation → configure → deploy → commission → verify → domain`
+`plan → foundation → configure → deploy → commission → verify → domain → domain acceptance`
 
 The Laravel Cloud adapter also exposes a `continuous` phase. Once an
 authorized operator has authenticated, attached the required managed secrets,
 and supplied the independent production, commissioning, and domain
 confirmations, that phase executes the gates in order without conversational
 pauses. It stops safely at commissioning when financial authority is absent.
+The domain phase preserves external nameservers, reuses matching DNS records,
+waits for hostname and TLS verification, tolerates only the known
+verified-TLS/live-origin `origin=pending` metadata lag, and performs
+non-financial homepage, claim-entry, MCP-discovery, and disabled-public-
+issuance acceptance.
 
 Adapter ownership is explicit:
 
@@ -313,6 +318,11 @@ Only after Gate 8 passes:
 4. set the custom domain as primary;
 5. update `APP_URL` and clear cached configuration as required; and
 6. rerun strict doctor and public-surface acceptance.
+
+DigitalOcean DNS is a persistent prerequisite rather than a resource recreated
+by the installer. A replacement host may reuse matching A and ACME records.
+Obsolete Cloud ownership TXT records must be removed before recreating a failed
+domain attachment. The adapter never changes the `disburse.cash` nameservers.
 
 ## Gate 10 — Institutional handoff proof
 
