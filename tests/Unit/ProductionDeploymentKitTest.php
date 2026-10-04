@@ -236,6 +236,58 @@ BASH);
     unlink($commandLog);
 });
 
+it('adopts a verified stale installation without repeating opening capitalization', function (): void {
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-cloud-command-log-');
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
+        'DEPLOY_CONFIRM_COMMISSIONING' => 'YES',
+        'DEPLOY_CLOUD_ENVIRONMENT_ID' => 'env-test',
+        'DEPLOY_PROVIDER_CUTOVER_AT' => '2026-10-04T00:00:00Z',
+        'DEPLOY_PROVIDER_CUTOVER_TRANSACTION_ID' => 'test-watermark',
+        'DEPLOY_REQUIRED_CLOUD_SECRET_NAMES' => 'FAKE_SECRET',
+        'XCHANGE_TREASURY_OPENING_CAPITALIZATION_ALLOW_PRODUCTION' => 'true',
+    ]);
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "environment-secret:list" ]]; then printf '[{"key":"FAKE_SECRET"}]\n'; exit 0; fi
+if [[ "${1:-}" == "command:run" ]]; then
+    printf '%s\n' "$*" >>"${FAKE_CLOUD_COMMAND_LOG}"
+    if [[ "$*" == *"commissioning:status"* ]]; then
+        printf '%s\n' '{"id":"status","status":"command.success","output":"{\"operational\":false,\"reason\":\"installation_manifest_stale\"}\n","exitCode":1}'
+    else
+        printf '%s\n' '{"id":"command","status":"command.success","output":"{\"success\":true}\n","exitCode":0}'
+    fi
+    exit 0
+fi
+exit 1
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'commission',
+        '--apply',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'FAKE_CLOUD_COMMAND_LOG' => $commandLog,
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('adopting without opening capitalization')
+        ->and(file_get_contents($commandLog))
+        ->toContain('doctor --pre-commission --strict')
+        ->toContain('commissioning:adopt --confirm-existing-installation')
+        ->toContain('doctor --strict')
+        ->not->toContain('x-payout:bootstrap');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($commandLog);
+});
+
 it('bounds the cloud monitor after a terminally successful deployment', function (): void {
     $controlFile = productionDeploymentControl([
         'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
@@ -250,7 +302,10 @@ it('bounds the cloud monitor after a terminally successful deployment', function
 if [[ "${2:-}" == "-h" ]]; then exit 0; fi
 case "${1:-}" in
     environment:update) printf '{}\n' ;;
-    deploy) printf '%s\n' '{"deployment_id":"deployment-test","status":"initiated"}' ;;
+    deploy)
+        printf '%s\n' '{"deployment_id":"deployment-test","status":"initiated"}'
+        printf '%s\n' '{"status":"deployment.succeeded","message":"Deployment succeeded!"}'
+        ;;
     deploy:monitor) sleep 30 ;;
     deployment:get) printf '%s\n' '{"id":"deployment-test","status":"deployment.succeeded"}' ;;
     *) exit 1 ;;

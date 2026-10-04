@@ -576,7 +576,7 @@ deploy() {
 
     deployment_response="$(cloud_mutation deploy "${DEPLOY_CLOUD_APPLICATION_ID}" "${DEPLOY_CLOUD_ENVIRONMENT_NAME}")"
     printf '%s\n' "${deployment_response}"
-    deployment_id="$(jq -sr 'last | .deployment_id // .id // empty' <<<"${deployment_response}")"
+    deployment_id="$(jq -sr '[.[] | .deployment_id? // .id? // empty] | first // empty' <<<"${deployment_response}")"
 
     if [[ -z "${deployment_id}" ]]; then
         echo "Laravel Cloud did not return a deployment ID." >&2
@@ -641,11 +641,20 @@ commission() {
     fi
 
     capture_remote_command 'php artisan x-change:commissioning:status --json'
-    local commissioning_operational
+    local commissioning_operational commissioning_reason
     commissioning_operational="$(jq -r '.operational // false' <<<"${REMOTE_COMMAND_OUTPUT}" 2>/dev/null || printf 'false')"
+    commissioning_reason="$(jq -r '.reason // empty' <<<"${REMOTE_COMMAND_OUTPUT}" 2>/dev/null || true)"
 
     if [[ "${commissioning_operational}" == "true" ]]; then
         echo "Installation is already operational; skipping the one-time commissioning ceremony."
+        require_remote_command_success 'php artisan x-change:doctor --strict --json'
+        return
+    fi
+
+    if [[ "${commissioning_reason}" == "installation_manifest_stale" ]]; then
+        echo "Existing installation has a stale deployment fingerprint; verifying and adopting without opening capitalization."
+        pre_commission
+        require_remote_command_success 'php artisan x-change:commissioning:adopt --confirm-existing-installation --no-interaction'
         require_remote_command_success 'php artisan x-change:doctor --strict --json'
         return
     fi
@@ -1030,8 +1039,6 @@ EOF
             echo "DigitalOcean DNS automation is disabled; reconcile Cloud's records manually."
         fi
         domain_verify
-        configure
-        deploy
         verify
         domain_acceptance
     else

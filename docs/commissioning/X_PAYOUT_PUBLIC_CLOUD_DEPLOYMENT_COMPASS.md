@@ -316,6 +316,33 @@ bootstrap when commissioning status is already operational, and bounds the
 Cloud monitor with deployment-status polling. These controls are covered by
 focused regression tests before the next release.
 
+## Beta.66 exact-release acceptance — 2026-10-04
+
+- Published x-PayOut `v1.0.0-beta.66` at commit `03e159b`.
+- Deployment `depl-a2e602aa-ed7c-43c3-8f70-4d003af3e822` reached
+  `deployment.succeeded` at that exact commit in 41 seconds.
+- The bounded monitor exited at its first authoritative terminal poll instead
+  of remaining attached.
+- Strict pre-commission doctor passed `27/27`.
+- Commissioning status was operational; bootstrap and opening capitalization
+  were skipped.
+- Final strict doctor passed `37/37`.
+- The read-only balance report was complete with no blockers or warnings, and
+  provider inventory equaled Treasury positions.
+- DigitalOcean reconciliation was an exact A/CNAME no-op. No DNS record was
+  created, updated, or deleted.
+- Laravel Cloud still reported `origin=pending`; verified TLS and an HTTP 200
+  live-origin probe satisfied the documented fallback.
+- Home, Claim, public MCP discovery, and public On-Demand Issuance acceptance
+  passed without creating a funding order.
+
+The rehearsal also exposed that Cloud's deploy stream places `deployment_id`
+in the first event rather than the last. The controller parser now searches
+the full event stream. Stale installation manifests now use verified adoption
+instead of bootstrap, and an existing domain no longer causes a redundant
+second deployment. Those post-tag controller fixes require the next beta for
+exact-release reproducibility.
+
 ## Update protocol
 
 After every gate:

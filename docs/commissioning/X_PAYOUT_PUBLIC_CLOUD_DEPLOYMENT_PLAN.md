@@ -420,7 +420,7 @@ responsibility is supplied by the software alone.
 
 ## Current next move
 
-Finalize Gate 10 with the beta.65 rehearsal corrections:
+Finalize Gate 10 with the beta.66 acceptance corrections:
 
 1. inspect every Laravel Cloud remote command's inner `exitCode` and stop on a
    non-zero application result even when the Cloud wrapper says success;
@@ -430,8 +430,11 @@ Finalize Gate 10 with the beta.65 rehearsal corrections:
    polling so a terminal deployment cannot leave automation attached forever;
 4. retain exact DNS no-op reconciliation and the verified-TLS/live-origin
    fallback while Cloud reconciles `origin=pending` metadata;
-5. repeat continuous mode from the exact next published beta; and
-6. preserve a sanitized transcript suitable for a bank or EMI DevOps team.
+5. publish the full-stream deployment-ID parser, stale-manifest adoption path,
+   and single-deployment domain flow as the next beta;
+6. repeat continuous mode from that exact release without intervening edits;
+   and
+7. preserve a sanitized transcript suitable for a bank or EMI DevOps team.
 
 Do not rerun opening capitalization on an operational installation. Do not
 create, rotate, reveal, or migrate production secret values as part of this
