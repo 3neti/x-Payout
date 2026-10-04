@@ -7,6 +7,39 @@ function productionDeploymentKitPath(string $path): string
     return dirname(__DIR__, 2).'/'.ltrim($path, '/');
 }
 
+/**
+ * @param  array<string, string>  $overrides
+ */
+function productionDeploymentControl(array $overrides): string
+{
+    $controlFile = tempnam(sys_get_temp_dir(), 'x-payout-deployment-control-');
+    $worksheet = file_get_contents(productionDeploymentKitPath('deployment.production.example'));
+
+    foreach ($overrides as $key => $value) {
+        $pattern = '/^'.preg_quote($key, '/').'=.*$/m';
+
+        if (preg_match($pattern, $worksheet) === 1) {
+            $worksheet = preg_replace($pattern, $key.'='.$value, $worksheet);
+        } else {
+            $worksheet .= "\n{$key}={$value}\n";
+        }
+    }
+
+    file_put_contents($controlFile, $worksheet);
+
+    return $controlFile;
+}
+
+function productionDeploymentFakeExecutable(string $contents): string
+{
+    $path = tempnam(sys_get_temp_dir(), 'x-payout-fake-command-');
+
+    file_put_contents($path, $contents);
+    chmod($path, 0755);
+
+    return $path;
+}
+
 it('ships a secret-free production environment worksheet', function (): void {
     $environment = file_get_contents(productionDeploymentKitPath('deployment.production.example'));
 
@@ -214,4 +247,346 @@ it('sets runtime variables idempotently and rejects unresolved storage placehold
         ->toContain('require_resolved_value AWS_BUCKET')
         ->toContain('require_resolved_value XCHANGE_CLAIM_EVIDENCE_DIRECTORY')
         ->toContain('require_resolved_value XCHANGE_INSTANCE_KEEPSAKE_DIRECTORY');
+});
+
+it('reports an exact no-write DNS dry run when Cloud and DigitalOcean already match', function (): void {
+    $snapshotDirectory = sys_get_temp_dir().'/x-payout-dns-snapshots-'.bin2hex(random_bytes(4));
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CLOUD_DOMAIN_ID' => 'domain-test',
+        'DEPLOY_DNS_AUTOMATION_ENABLED' => 'true',
+        'DEPLOY_DOCTL_CONTEXT' => 'x-payout-test-dns',
+        'DEPLOY_DNS_SNAPSHOT_DIRECTORY' => $snapshotDirectory,
+    ]);
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-doctl-log-');
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then
+    exit 0
+fi
+
+if [[ "${1:-}" == "domain:get" ]]; then
+    printf '%s\n' "${FAKE_CLOUD_DOMAIN_JSON}"
+    exit 0
+fi
+
+exit 1
+BASH);
+    $doctlBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"${FAKE_DOCTL_LOG}"
+if [[ "$*" == *"compute domain records list"* ]]; then
+    printf '%s\n' "${FAKE_DOCTL_RECORDS_JSON}"
+    exit 0
+fi
+
+exit 1
+BASH);
+    $cloudDomain = json_encode([
+        'dnsRecords' => [
+            'origin' => ['type' => 'A', 'name' => 'payout.disburse.cash', 'value' => '103.133.1.1'],
+            'ssl' => [[
+                'type' => 'CNAME',
+                'name' => '_acme-challenge.payout.disburse.cash',
+                'value' => 'payout.validation.example.com',
+            ]],
+        ],
+    ], JSON_THROW_ON_ERROR);
+    $digitalOceanRecords = json_encode([
+        ['id' => 1, 'type' => 'A', 'name' => 'payout', 'data' => '103.133.1.1', 'ttl' => 3600],
+        ['id' => 2, 'type' => 'CNAME', 'name' => '_acme-challenge.payout', 'data' => 'payout.validation.example.com', 'ttl' => 3600],
+        ['id' => 3, 'type' => 'MX', 'name' => '@', 'data' => 'mail.example.com', 'ttl' => 3600],
+    ], JSON_THROW_ON_ERROR);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'domain-reconcile',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'DOCTL_BIN' => $doctlBinary,
+        'FAKE_CLOUD_DOMAIN_JSON' => $cloudDomain,
+        'FAKE_DOCTL_RECORDS_JSON' => $digitalOceanRecords,
+        'FAKE_DOCTL_LOG' => $commandLog,
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('NOOP   A payout -> 103.133.1.1')
+        ->toContain('NOOP   CNAME _acme-challenge.payout -> payout.validation.example.com')
+        ->toContain('DNS is already reconciled. No DigitalOcean mutation is required.')
+        ->and(file_get_contents($commandLog))
+        ->toContain('compute domain records list disburse.cash')
+        ->not->toContain('records create')
+        ->not->toContain('records update')
+        ->not->toContain('records delete')
+        ->and(glob($snapshotDirectory.'/*-before.json'))->toHaveCount(1)
+        ->and(glob($snapshotDirectory.'/*-after.json'))->toHaveCount(1);
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($doctlBinary);
+    unlink($commandLog);
+});
+
+it('shows updates and stale ownership deletion without mutating during a DNS dry run', function (): void {
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CLOUD_DOMAIN_ID' => 'domain-test',
+        'DEPLOY_DNS_AUTOMATION_ENABLED' => 'true',
+        'DEPLOY_DOCTL_CONTEXT' => 'x-payout-test-dns',
+        'DEPLOY_DNS_SNAPSHOT_DIRECTORY' => sys_get_temp_dir().'/x-payout-dns-snapshots-'.bin2hex(random_bytes(4)),
+    ]);
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-doctl-log-');
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "domain:get" ]]; then printf '%s\n' "${FAKE_CLOUD_DOMAIN_JSON}"; exit 0; fi
+exit 1
+BASH);
+    $doctlBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"${FAKE_DOCTL_LOG}"
+if [[ "$*" == *"compute domain records list"* ]]; then printf '%s\n' "${FAKE_DOCTL_RECORDS_JSON}"; exit 0; fi
+exit 1
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'domain-reconcile',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'DOCTL_BIN' => $doctlBinary,
+        'FAKE_CLOUD_DOMAIN_JSON' => '{"dnsRecords":{"origin":{"type":"A","name":"payout.disburse.cash","value":"103.133.1.1"}}}',
+        'FAKE_DOCTL_RECORDS_JSON' => '[{"id":1,"type":"A","name":"payout","data":"198.51.100.8","ttl":3600},{"id":2,"type":"TXT","name":"_cf-custom-hostname.payout","data":"obsolete","ttl":3600}]',
+        'FAKE_DOCTL_LOG' => $commandLog,
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('UPDATE 1 A payout: 198.51.100.8 -> 103.133.1.1')
+        ->toContain('DELETE 2 TXT _cf-custom-hostname.payout -> obsolete')
+        ->toContain('DNS dry run only.')
+        ->and(file_get_contents($commandLog))
+        ->not->toContain('records update')
+        ->not->toContain('records delete');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($doctlBinary);
+    unlink($commandLog);
+});
+
+it('rejects a Laravel Cloud DNS record outside the x-PayOut allowlist', function (): void {
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CLOUD_DOMAIN_ID' => 'domain-test',
+        'DEPLOY_DNS_AUTOMATION_ENABLED' => 'true',
+        'DEPLOY_DOCTL_CONTEXT' => 'x-payout-test-dns',
+    ]);
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "domain:get" ]]; then printf '%s\n' "${FAKE_CLOUD_DOMAIN_JSON}"; exit 0; fi
+exit 1
+BASH);
+    $doctlBinary = productionDeploymentFakeExecutable("#!/usr/bin/env bash\nprintf '[]\\n'\n");
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'domain-reconcile',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'DOCTL_BIN' => $doctlBinary,
+        'FAKE_CLOUD_DOMAIN_JSON' => '{"dnsRecords":{"mail":{"type":"MX","name":"disburse.cash","value":"mail.example.com"}}}',
+    ]);
+    $process->run();
+
+    expect($process->isSuccessful())->toBeFalse()
+        ->and($process->getErrorOutput())
+        ->toContain('outside the x-PayOut allowlist: MX @');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($doctlBinary);
+});
+
+it('refuses DNS mutation without the independent DNS write confirmation', function (): void {
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
+        'DEPLOY_CONFIRM_DOMAIN_CUTOVER' => 'YES',
+        'DEPLOY_CONFIRM_DNS_WRITE' => 'NO',
+        'DEPLOY_CLOUD_DOMAIN_ID' => 'domain-test',
+        'DEPLOY_DNS_AUTOMATION_ENABLED' => 'true',
+        'DEPLOY_DOCTL_CONTEXT' => 'x-payout-test-dns',
+        'DEPLOY_DNS_SNAPSHOT_DIRECTORY' => sys_get_temp_dir().'/x-payout-dns-snapshots-'.bin2hex(random_bytes(4)),
+    ]);
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-doctl-log-');
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "domain:get" ]]; then printf '%s\n' "${FAKE_CLOUD_DOMAIN_JSON}"; exit 0; fi
+exit 1
+BASH);
+    $doctlBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"${FAKE_DOCTL_LOG}"
+if [[ "$*" == *"compute domain records list"* ]]; then printf '[]\n'; exit 0; fi
+exit 1
+BASH);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'domain-reconcile',
+        '--apply',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'DOCTL_BIN' => $doctlBinary,
+        'FAKE_CLOUD_DOMAIN_JSON' => '{"dnsRecords":{"origin":{"type":"A","name":"payout.disburse.cash","value":"103.133.1.1"}}}',
+        'FAKE_DOCTL_LOG' => $commandLog,
+    ]);
+    $process->run();
+
+    expect($process->isSuccessful())->toBeFalse()
+        ->and($process->getErrorOutput())
+        ->toContain('DEPLOY_CONFIRM_DNS_WRITE=YES')
+        ->and(file_get_contents($commandLog))
+        ->not->toContain('records create');
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($doctlBinary);
+    unlink($commandLog);
+});
+
+it('applies only the reviewed DNS diff and verifies the resulting state', function (): void {
+    $snapshotDirectory = sys_get_temp_dir().'/x-payout-dns-snapshots-'.bin2hex(random_bytes(4));
+    $controlFile = productionDeploymentControl([
+        'DEPLOY_CONFIRM_PRODUCTION' => 'YES',
+        'DEPLOY_CONFIRM_DOMAIN_CUTOVER' => 'YES',
+        'DEPLOY_CONFIRM_DNS_WRITE' => 'YES',
+        'DEPLOY_CLOUD_DOMAIN_ID' => 'domain-test',
+        'DEPLOY_DNS_AUTOMATION_ENABLED' => 'true',
+        'DEPLOY_DOCTL_CONTEXT' => 'x-payout-test-dns',
+        'DEPLOY_DNS_SNAPSHOT_DIRECTORY' => $snapshotDirectory,
+    ]);
+    $commandLog = tempnam(sys_get_temp_dir(), 'x-payout-doctl-log-');
+    $recordState = tempnam(sys_get_temp_dir(), 'x-payout-doctl-state-');
+    file_put_contents($recordState, '[{"id":1,"type":"A","name":"payout","data":"198.51.100.8","ttl":3600},{"id":2,"type":"TXT","name":"_cf-custom-hostname.payout","data":"obsolete","ttl":3600}]');
+    $cloudBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+if [[ "${2:-}" == "-h" ]]; then exit 0; fi
+if [[ "${1:-}" == "domain:get" ]]; then printf '%s\n' "${FAKE_CLOUD_DOMAIN_JSON}"; exit 0; fi
+exit 1
+BASH);
+    $doctlBinary = productionDeploymentFakeExecutable(<<<'BASH'
+#!/usr/bin/env bash
+set -euo pipefail
+printf '%s\n' "$*" >>"${FAKE_DOCTL_LOG}"
+
+flag_value() {
+    local prefix="$1"
+    shift
+    local argument
+    for argument in "$@"; do
+        case "${argument}" in
+            "${prefix}"=*) printf '%s' "${argument#*=}"; return ;;
+        esac
+    done
+}
+
+if [[ "$*" == *"compute domain records list"* ]]; then
+    cat "${FAKE_DOCTL_STATE}"
+    exit 0
+fi
+
+if [[ "$*" == *"compute domain records create"* ]]; then
+    type="$(flag_value --record-type "$@")"
+    name="$(flag_value --record-name "$@")"
+    data="$(flag_value --record-data "$@")"
+    ttl="$(flag_value --record-ttl "$@")"
+    temporary="$(mktemp)"
+    jq --arg type "${type}" --arg name "${name}" --arg data "${data}" --argjson ttl "${ttl}" \
+        '. + [{id: 99, type: $type, name: $name, data: $data, ttl: $ttl}]' \
+        "${FAKE_DOCTL_STATE}" >"${temporary}"
+    mv "${temporary}" "${FAKE_DOCTL_STATE}"
+    printf '{"id":99}\n'
+    exit 0
+fi
+
+if [[ "$*" == *"compute domain records update"* ]]; then
+    id="$(flag_value --record-id "$@")"
+    type="$(flag_value --record-type "$@")"
+    name="$(flag_value --record-name "$@")"
+    data="$(flag_value --record-data "$@")"
+    ttl="$(flag_value --record-ttl "$@")"
+    temporary="$(mktemp)"
+    jq --arg id "${id}" --arg type "${type}" --arg name "${name}" --arg data "${data}" --argjson ttl "${ttl}" \
+        'map(if (.id | tostring) == $id then .type = $type | .name = $name | .data = $data | .ttl = $ttl else . end)' \
+        "${FAKE_DOCTL_STATE}" >"${temporary}"
+    mv "${temporary}" "${FAKE_DOCTL_STATE}"
+    printf '{"id":%s}\n' "${id}"
+    exit 0
+fi
+
+if [[ "$*" == *"compute domain records delete"* ]]; then
+    id="${6}"
+    temporary="$(mktemp)"
+    jq --arg id "${id}" 'map(select((.id | tostring) != $id))' \
+        "${FAKE_DOCTL_STATE}" >"${temporary}"
+    mv "${temporary}" "${FAKE_DOCTL_STATE}"
+    exit 0
+fi
+
+exit 1
+BASH);
+    $cloudDomain = json_encode([
+        'dnsRecords' => [
+            'origin' => ['type' => 'A', 'name' => 'payout.disburse.cash', 'value' => '103.133.1.1'],
+            'ssl' => [[
+                'type' => 'CNAME',
+                'name' => '_acme-challenge.payout.disburse.cash',
+                'value' => 'payout.validation.example.com',
+            ]],
+        ],
+    ], JSON_THROW_ON_ERROR);
+
+    $process = new Process([
+        'bash',
+        productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
+        'domain-reconcile',
+        '--apply',
+        '--control='.$controlFile,
+    ], env: [
+        'CLOUD_BIN' => $cloudBinary,
+        'DOCTL_BIN' => $doctlBinary,
+        'FAKE_CLOUD_DOMAIN_JSON' => $cloudDomain,
+        'FAKE_DOCTL_LOG' => $commandLog,
+        'FAKE_DOCTL_STATE' => $recordState,
+    ]);
+    $process->mustRun();
+
+    $finalRecords = json_decode(file_get_contents($recordState), true, flags: JSON_THROW_ON_ERROR);
+    expect($process->getOutput())
+        ->toContain('DigitalOcean DNS matches Laravel Cloud')
+        ->and(file_get_contents($commandLog))
+        ->toContain('records create disburse.cash')
+        ->toContain('records update disburse.cash')
+        ->toContain('records delete disburse.cash 2')
+        ->and($finalRecords)->toBe([
+            ['id' => 1, 'type' => 'A', 'name' => 'payout', 'data' => '103.133.1.1', 'ttl' => 3600],
+            ['id' => 99, 'type' => 'CNAME', 'name' => '_acme-challenge.payout', 'data' => 'payout.validation.example.com', 'ttl' => 3600],
+        ])
+        ->and(glob($snapshotDirectory.'/*-before.json'))->toHaveCount(1)
+        ->and(glob($snapshotDirectory.'/*-after.json'))->toHaveCount(1);
+
+    unlink($controlFile);
+    unlink($cloudBinary);
+    unlink($doctlBinary);
+    unlink($commandLog);
+    unlink($recordState);
 });

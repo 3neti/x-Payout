@@ -42,6 +42,7 @@ source "${CONTROL_FILE}"
 set +a
 
 CLOUD_BIN="${CLOUD_BIN:-cloud}"
+DOCTL_BIN="${DOCTL_BIN:-doctl}"
 CURL_BIN="${CURL_BIN:-}"
 
 if [[ -z "${CURL_BIN}" ]]; then
@@ -135,6 +136,7 @@ Usage:
   scripts/deploy-production-cleanroom.sh commission --apply [--control=FILE]
   scripts/deploy-production-cleanroom.sh verify [--control=FILE]
   scripts/deploy-production-cleanroom.sh domain-create --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-reconcile [--apply] [--control=FILE]
   scripts/deploy-production-cleanroom.sh domain-verify --apply [--control=FILE]
   scripts/deploy-production-cleanroom.sh domain-acceptance [--control=FILE]
   scripts/deploy-production-cleanroom.sh continuous --apply [--control=FILE]
@@ -293,8 +295,11 @@ Phases:
   4. commission     Pre-doctor, one bootstrap, final strict doctor.
   5. verify         Versions, assets, doctor, balance evidence.
   6. domain-create  Ask Laravel Cloud for DNS records; do not change nameservers.
-  7. domain-verify  Wait for hostname, TLS, and origin after DNS is updated.
-  8. domain-acceptance
+  7. domain-reconcile
+                    Compare Cloud's desired records with the allowlisted
+                    DigitalOcean records. Dry-run unless --apply is supplied.
+  8. domain-verify  Wait for hostname, TLS, and origin after DNS is updated.
+  9. domain-acceptance
                     Verify public pages and MCP discovery without money movement.
 
 Continuous mode:
@@ -606,6 +611,294 @@ domain_create() {
     echo "Keep the DigitalOcean nameservers unchanged. Apply only these records, then run domain-verify."
 }
 
+doctl_json() {
+    "${DOCTL_BIN}" "$@" \
+        --context="${DEPLOY_DOCTL_CONTEXT}" \
+        --output=json
+}
+
+dns_public_relative_name() {
+    if [[ "${DEPLOY_PUBLIC_DOMAIN}" == "${DEPLOY_DNS_ZONE}" ]]; then
+        printf '@'
+        return
+    fi
+
+    if [[ "${DEPLOY_PUBLIC_DOMAIN}" != *."${DEPLOY_DNS_ZONE}" ]]; then
+        echo "Public domain ${DEPLOY_PUBLIC_DOMAIN} is outside DNS zone ${DEPLOY_DNS_ZONE}." >&2
+        exit 65
+    fi
+
+    printf '%s' "${DEPLOY_PUBLIC_DOMAIN%.${DEPLOY_DNS_ZONE}}"
+}
+
+desired_dns_records() {
+    local payload
+    payload="$(cloud_json domain:get "${DEPLOY_CLOUD_DOMAIN_ID}")"
+
+    jq -c \
+        --arg zone "${DEPLOY_DNS_ZONE}" \
+        --argjson ttl "${DEPLOY_DNS_RECORD_TTL:-3600}" '
+        def relative_name($zone):
+            if . == $zone then "@"
+            elif endswith("." + $zone) then .[0:-(($zone | length) + 1)]
+            else .
+            end;
+
+        (.dnsRecords | [
+            ..
+            | objects
+            | select((.type? // "") != "" and (.name? // "") != "")
+            | select(((.value? // .data? // "") | tostring) != "")
+            | (.type | ascii_upcase) as $type
+            | {
+                type: $type,
+                name: (.name | relative_name($zone)),
+                data: ((.value // .data) | tostring | if $type == "CNAME" then rtrimstr(".") else . end),
+                ttl: $ttl
+            }
+        ] | unique_by([.type, .name, .data]))
+    ' <<<"${payload}"
+}
+
+current_allowlisted_dns_records() {
+    local public_relative
+    public_relative="$(dns_public_relative_name)"
+
+    doctl_json compute domain records list "${DEPLOY_DNS_ZONE}" \
+        | jq -c --arg public "${public_relative}" '
+            map(select(
+                .name == $public
+                or .name == ("www." + $public)
+                or .name == ("_acme-challenge." + $public)
+                or .name == ("_cf-custom-hostname." + $public)
+            ))
+            | map(
+                (.type | ascii_upcase) as $type
+                | {
+                    id: (.id | tostring),
+                    type: $type,
+                    name: .name,
+                    data: (.data | tostring | if $type == "CNAME" then rtrimstr(".") else . end),
+                    ttl: (.ttl // 3600)
+                }
+            )
+        '
+}
+
+assert_desired_dns_records_are_allowlisted() {
+    local desired="$1"
+    local public_relative type name data
+    public_relative="$(dns_public_relative_name)"
+
+    while IFS= read -r record; do
+        type="$(jq -r '.type' <<<"${record}")"
+        name="$(jq -r '.name' <<<"${record}")"
+        data="$(jq -r '.data' <<<"${record}")"
+
+        if [[ -z "${data}" ]]; then
+            echo "Laravel Cloud requested an empty DNS value for ${type} ${name}." >&2
+            exit 75
+        fi
+
+        case "${type}:${name}" in
+            "A:${public_relative}"|"CNAME:${public_relative}"|\
+            "A:www.${public_relative}"|"CNAME:www.${public_relative}"|\
+            "CNAME:_acme-challenge.${public_relative}"|\
+            "TXT:_cf-custom-hostname.${public_relative}")
+                ;;
+            *)
+                echo "Laravel Cloud requested DNS record outside the x-PayOut allowlist: ${type} ${name}." >&2
+                exit 75
+                ;;
+        esac
+    done < <(jq -c '.[]' <<<"${desired}")
+}
+
+dns_reconciliation_plan() {
+    local desired="$1"
+    local current="$2"
+    local public_relative
+    public_relative="$(dns_public_relative_name)"
+
+    jq -nc \
+        --argjson desired "${desired}" \
+        --argjson current "${current}" \
+        --arg ownership "_cf-custom-hostname.${public_relative}" '
+        [
+            $desired[] as $wanted
+            | ($current | map(select(.type == $wanted.type and .name == $wanted.name))) as $candidates
+            | ($candidates | map(select(.data == $wanted.data))) as $exact
+            | if ($exact | length) > 0 then
+                {action: "noop", desired: $wanted}
+              elif ($candidates | length) == 0 then
+                {action: "create", desired: $wanted}
+              elif ($candidates | length) == 1 then
+                {action: "update", desired: $wanted, current: $candidates[0]}
+              else
+                {action: "conflict", desired: $wanted, current: $candidates}
+              end
+        ] + [
+            $current[]
+            | select(.type == "TXT" and .name == $ownership)
+            | select(($desired | map(select(.type == "TXT" and .name == $ownership)) | length) == 0)
+            | {action: "delete", reason: "obsolete_cloud_ownership", current: .}
+        ]
+    '
+}
+
+print_dns_reconciliation_plan() {
+    local plan="$1"
+
+    jq -r '.[] |
+        if .action == "noop" then
+            "NOOP   \(.desired.type) \(.desired.name) -> \(.desired.data)"
+        elif .action == "create" then
+            "CREATE \(.desired.type) \(.desired.name) -> \(.desired.data)"
+        elif .action == "update" then
+            "UPDATE \(.current.id) \(.current.type) \(.current.name): \(.current.data) -> \(.desired.data)"
+        elif .action == "delete" then
+            "DELETE \(.current.id) \(.current.type) \(.current.name) -> \(.current.data) [obsolete Cloud ownership]"
+        else
+            "CONFLICT \(.desired.type) \(.desired.name): multiple existing records require manual review"
+        end
+    ' <<<"${plan}"
+}
+
+write_dns_snapshot() {
+    local label="$1"
+    local records="$2"
+    local snapshot_directory="${DEPLOY_DNS_SNAPSHOT_DIRECTORY:-${ROOT_DIR}/storage/app/private/deployment/dns}"
+    local timestamp snapshot_path
+    timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+    snapshot_path="${snapshot_directory}/${timestamp}-${label}.json"
+
+    mkdir -p "${snapshot_directory}"
+    jq --sort-keys '.' <<<"${records}" >"${snapshot_path}"
+    chmod 0600 "${snapshot_path}"
+    echo "DNS ${label} snapshot: ${snapshot_path}"
+}
+
+apply_dns_reconciliation_plan() {
+    local plan="$1"
+    local action type name data ttl record_id
+
+    while IFS= read -r operation; do
+        action="$(jq -r '.action' <<<"${operation}")"
+
+        case "${action}" in
+            noop)
+                ;;
+            create)
+                type="$(jq -r '.desired.type' <<<"${operation}")"
+                name="$(jq -r '.desired.name' <<<"${operation}")"
+                data="$(jq -r '.desired.data' <<<"${operation}")"
+                ttl="$(jq -r '.desired.ttl' <<<"${operation}")"
+                doctl_json compute domain records create "${DEPLOY_DNS_ZONE}" \
+                    --record-type="${type}" --record-name="${name}" \
+                    --record-data="${data}" --record-ttl="${ttl}" >/dev/null
+                ;;
+            update)
+                record_id="$(jq -r '.current.id' <<<"${operation}")"
+                type="$(jq -r '.desired.type' <<<"${operation}")"
+                name="$(jq -r '.desired.name' <<<"${operation}")"
+                data="$(jq -r '.desired.data' <<<"${operation}")"
+                ttl="$(jq -r '.desired.ttl' <<<"${operation}")"
+                doctl_json compute domain records update "${DEPLOY_DNS_ZONE}" \
+                    --record-id="${record_id}" --record-type="${type}" \
+                    --record-name="${name}" --record-data="${data}" \
+                    --record-ttl="${ttl}" >/dev/null
+                ;;
+            delete)
+                record_id="$(jq -r '.current.id' <<<"${operation}")"
+                "${DOCTL_BIN}" compute domain records delete "${DEPLOY_DNS_ZONE}" "${record_id}" \
+                    --context="${DEPLOY_DOCTL_CONTEXT}" --force >/dev/null
+                ;;
+        esac
+    done < <(jq -c '.[]' <<<"${plan}")
+}
+
+domain_reconcile() {
+    require_value DEPLOY_CLOUD_DOMAIN_ID
+    require_resolved_value DEPLOY_PUBLIC_DOMAIN
+    require_resolved_value DEPLOY_DNS_ZONE
+    require_resolved_value DEPLOY_DOCTL_CONTEXT
+    require_command jq
+    require_command "${CLOUD_BIN}"
+    require_command "${DOCTL_BIN}"
+
+    if [[ "${DEPLOY_DNS_PROVIDER:-}" != "digitalocean" ]]; then
+        echo "The DNS adapter supports only DEPLOY_DNS_PROVIDER=digitalocean." >&2
+        exit 65
+    fi
+
+    if [[ "${DEPLOY_DNS_NAMESERVERS_PRESERVED:-false}" != "true" ]]; then
+        echo "DNS reconciliation refuses to run unless nameserver preservation is explicit." >&2
+        exit 77
+    fi
+
+    if [[ "${DEPLOY_DNS_AUTOMATION_ENABLED:-false}" != "true" ]]; then
+        echo "DigitalOcean DNS automation is disabled; use the manual reconciliation path." >&2
+        exit 77
+    fi
+
+    local desired current plan conflict_count change_count after after_plan
+    desired="$(desired_dns_records)"
+    if (( $(jq 'length' <<<"${desired}") == 0 )); then
+        echo "Laravel Cloud returned no DNS records for ${DEPLOY_PUBLIC_DOMAIN}; refusing to treat an empty plan as reconciled." >&2
+        exit 75
+    fi
+    assert_desired_dns_records_are_allowlisted "${desired}"
+    current="$(current_allowlisted_dns_records)"
+    plan="$(dns_reconciliation_plan "${desired}" "${current}")"
+
+    write_dns_snapshot before "${current}"
+    print_dns_reconciliation_plan "${plan}"
+
+    conflict_count="$(jq '[.[] | select(.action == "conflict")] | length' <<<"${plan}")"
+    if (( conflict_count > 0 )); then
+        echo "DNS reconciliation stopped because existing records are ambiguous." >&2
+        exit 75
+    fi
+
+    change_count="$(jq '[.[] | select(.action != "noop")] | length' <<<"${plan}")"
+    if (( change_count == 0 )); then
+        write_dns_snapshot after "${current}"
+        echo "DNS is already reconciled. No DigitalOcean mutation is required."
+        return
+    fi
+
+    if [[ "${APPLY}" != true ]]; then
+        write_dns_snapshot after "${current}"
+        echo "DNS dry run only. Re-run with --apply after reviewing the exact diff."
+        return
+    fi
+
+    require_apply
+
+    if [[ "${DEPLOY_CONFIRM_DOMAIN_CUTOVER:-NO}" != "YES" ]]; then
+        echo "Set DEPLOY_CONFIRM_DOMAIN_CUTOVER=YES before DNS mutation." >&2
+        exit 77
+    fi
+
+    if [[ "${DEPLOY_CONFIRM_DNS_WRITE:-NO}" != "YES" ]]; then
+        echo "Set DEPLOY_CONFIRM_DNS_WRITE=YES after reviewing the DNS dry run." >&2
+        exit 77
+    fi
+
+    apply_dns_reconciliation_plan "${plan}"
+    after="$(current_allowlisted_dns_records)"
+    write_dns_snapshot after "${after}"
+    after_plan="$(dns_reconciliation_plan "${desired}" "${after}")"
+
+    if (( $(jq '[.[] | select(.action != "noop")] | length' <<<"${after_plan}") > 0 )); then
+        echo "DigitalOcean DNS did not match Laravel Cloud's desired state after reconciliation." >&2
+        print_dns_reconciliation_plan "${after_plan}" >&2
+        exit 75
+    fi
+
+    echo "DigitalOcean DNS matches Laravel Cloud's allowlisted desired state."
+}
+
 domain_status_is_ready() {
     case "$1" in
         active|ready|verified)
@@ -646,6 +939,11 @@ EOF
         fi
 
         domain_create
+        if [[ "${DEPLOY_DNS_AUTOMATION_ENABLED:-false}" == "true" ]]; then
+            domain_reconcile
+        else
+            echo "DigitalOcean DNS automation is disabled; reconcile Cloud's records manually."
+        fi
         domain_verify
         configure
         deploy
@@ -766,6 +1064,9 @@ case "${PHASE}" in
         ;;
     domain-create)
         domain_create
+        ;;
+    domain-reconcile)
+        domain_reconcile
         ;;
     domain-verify)
         domain_verify

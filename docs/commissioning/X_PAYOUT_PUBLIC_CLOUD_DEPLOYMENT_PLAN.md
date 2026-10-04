@@ -383,6 +383,24 @@ With the optional DNS adapter enabled, reconciliation must follow this order:
 7. ask Laravel Cloud to verify hostname and TLS; and
 8. run non-financial custom-domain acceptance.
 
+Operator commands:
+
+```bash
+# Mandatory review step; never writes DNS.
+scripts/deploy-production-cleanroom.sh domain-reconcile \
+  --control=deployment.production.local
+
+# Separate live-change ceremony after reviewing the exact diff.
+scripts/deploy-production-cleanroom.sh domain-reconcile --apply \
+  --control=deployment.production.local
+```
+
+The apply form remains inert unless `DEPLOY_CONFIRM_PRODUCTION`,
+`DEPLOY_CONFIRM_DOMAIN_CUTOVER`, and `DEPLOY_CONFIRM_DNS_WRITE` are all `YES`.
+Every run writes owner-only before/after snapshots under
+`storage/app/private/deployment/dns` by default. The script refuses an empty
+Laravel Cloud desired set rather than treating it as a successful no-op.
+
 ## Gate 10 — Institutional handoff proof
 
 Produce a sanitized demonstration bundle containing:

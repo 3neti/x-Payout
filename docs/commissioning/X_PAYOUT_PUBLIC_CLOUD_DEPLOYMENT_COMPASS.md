@@ -127,10 +127,10 @@ funding order, Pay Code, claim, provider mutation, or message.
 
 ### DigitalOcean CLI disposition
 
-Adopt an optional `doctl` DNS adapter for the next hardening slice. It should
-use a dedicated custom-scoped token and named context, but the installer must
-also enforce an exact `disburse.cash` zone and managed-record allowlist because
-DigitalOcean's domain scopes are broader than one DNS zone.
+The cleanroom script now includes an optional `doctl` DNS adapter. It uses a
+dedicated custom-scoped token and named context while enforcing an exact
+`disburse.cash` zone and managed-record allowlist because DigitalOcean's domain
+scopes are broader than one DNS zone.
 
 The adapter may reconcile only:
 
@@ -140,9 +140,8 @@ The adapter may reconcile only:
 - obsolete `_cf-custom-hostname.payout.disburse.cash` ownership tokens that are
   demonstrably absent from Laravel Cloud's current desired record set.
 
-It must never mutate NS, MX, mail-verification, `netbank.disburse.cash`, Spaces,
-or any unrelated record. Manual DNS remains the fail-safe default until this
-adapter and its rollback tests are implemented.
+It never mutates NS, MX, mail-verification, `netbank.disburse.cash`, Spaces, or
+any unrelated record. Manual DNS remains the fail-safe default.
 
 ### DigitalOcean CLI initialization — 2026-10-04
 
@@ -159,9 +158,23 @@ adapter and its rollback tests are implemented.
 - The token expires on January 2, 2027 and must be rotated or revoked earlier
   if the operator Mac or credential boundary is no longer trusted.
 
-The credential is ready, but automated mutation remains disabled until the
-allowlisted adapter, dry-run diff, rollback coverage, and explicit live-change
-gate are implemented.
+### DNS adapter dry-run evidence — 2026-10-04
+
+- `domain-reconcile` is non-mutating unless `--apply` is supplied.
+- Live dry-run normalization produced two authoritative NOOPs: the `payout` A
+  record and `_acme-challenge.payout` CNAME.
+- The existing `www.payout` record remained untouched because it was not in
+  Laravel Cloud's current desired set.
+- Before and after allowlisted snapshots were written with mode `0600`.
+- The adapter rejects empty Cloud record sets, records outside the allowlist,
+  ambiguous existing records, and any write lacking all three confirmations:
+  production, domain cutover, and DNS write.
+- Isolated tests prove create, update, stale ownership-token deletion,
+  post-write verification, and recovery snapshots without touching live DNS.
+
+The live domain required no mutation. Automated writes remain disabled in the
+committed example and require `DEPLOY_DNS_AUTOMATION_ENABLED=true` plus the
+independent `DEPLOY_CONFIRM_DNS_WRITE=YES` ceremony.
 
 ## Secret custody decision
 
