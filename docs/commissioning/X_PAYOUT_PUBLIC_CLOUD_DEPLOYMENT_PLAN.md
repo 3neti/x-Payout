@@ -179,6 +179,40 @@ Adapter ownership is explicit:
 The Forge recurring deployment must never call the commissioning command.
 Commissioning remains a separately confirmed, one-time financial ceremony.
 
+### Optional DigitalOcean DNS adapter
+
+Direct DigitalOcean CLI access is recommended for uninterrupted cleanroom
+reinstalls, but only as an optional DNS adapter. It is not authority to manage
+the entire DigitalOcean account.
+
+The approved design is:
+
+- use DigitalOcean's official `doctl` CLI;
+- authenticate through a dedicated named context such as
+  `x-payout-production-dns`;
+- issue a custom-scoped token containing only `domain:read`, `domain:create`,
+  `domain:update`, and `domain:delete`;
+- keep the token out of Git, the deployment worksheet, application variables,
+  logs, prompts, and Laravel Cloud;
+- store only the non-secret context name in the local deployment worksheet;
+- allow changes only inside the `disburse.cash` zone and only for the exact
+  Laravel Cloud records associated with `payout.disburse.cash` and its `www`
+  companion;
+- refuse all nameserver, MX, SPF, DKIM, DMARC, NetBank, Spaces, and unrelated
+  subdomain changes;
+- snapshot matching DNS records before and after reconciliation;
+- require Laravel Cloud's requested record set as the desired state; and
+- retain the existing manual DNS path when `doctl` is unavailable or its
+  credentials are absent.
+
+DigitalOcean scopes apply to the resource category and are not treated as an
+object-level restriction to this single zone. The deployment adapter must
+therefore enforce its own zone and record-name allowlist. For demonstrations,
+a short-lived token created before the cleanroom and revoked afterwards is
+preferred. A persistent named context is acceptable only on a controlled
+operator machine with restricted local file access and an established token
+rotation procedure.
+
 ### Production secret custody
 
 Keeper Business and HashiCorp Cloud were evaluated but are not dependencies of
@@ -323,6 +357,18 @@ DigitalOcean DNS is a persistent prerequisite rather than a resource recreated
 by the installer. A replacement host may reuse matching A and ACME records.
 Obsolete Cloud ownership TXT records must be removed before recreating a failed
 domain attachment. The adapter never changes the `disburse.cash` nameservers.
+
+With the optional DNS adapter enabled, reconciliation must follow this order:
+
+1. read Laravel Cloud's required domain records;
+2. read only the allowlisted DigitalOcean records;
+3. preserve records that already match;
+4. create or update only missing or mismatched allowlisted records;
+5. remove an obsolete `_cf-custom-hostname.payout` token only when it is not in
+   Laravel Cloud's current required set;
+6. verify authoritative DNS without changing nameservers;
+7. ask Laravel Cloud to verify hostname and TLS; and
+8. run non-financial custom-domain acceptance.
 
 ## Gate 10 — Institutional handoff proof
 

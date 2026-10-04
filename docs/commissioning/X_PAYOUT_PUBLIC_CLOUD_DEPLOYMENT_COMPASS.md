@@ -98,6 +98,52 @@ funding order, Pay Code, claim, provider mutation, or message.
 - The funded Maker and Checker invitations remained the only two Pay Codes;
   neither was claimed and commissioning was not replayed.
 
+## Cleanroom retrospective and DNS automation decision — 2026-10-04
+
+### Gaps exposed
+
+- DigitalOcean DNS reconciliation required an authenticated browser session,
+  interrupting an otherwise continuous installation.
+- A stale Cloud ownership TXT record survived application deletion and blocked
+  the first replacement attachment.
+- Laravel Cloud's first failed domain attachment retained a frozen verification
+  timestamp and had to be replaced after DNS was corrected.
+- Laravel Cloud origin metadata remained pending after hostname, TLS, and live
+  HTTPS routing were already healthy.
+- The public `APP_URL` required a final idempotent configuration deployment
+  after custom-domain acceptance.
+
+### Corrections now in the deployment contract
+
+- database, cache, deployment, hostname, and TLS operations have bounded waits;
+- exact DNS requirements are emitted when verification stops;
+- a failed domain attachment may be replaced without touching the application,
+  nameservers, or financial state;
+- `origin=pending` is accepted only when hostname and TLS are verified and a
+  real HTTPS origin probe passes;
+- homepage, claim entry, MCP discovery, and disabled public issuance form the
+  non-financial custom-domain acceptance suite; and
+- custom-domain reconciliation is part of the continuous reinstall lifecycle.
+
+### DigitalOcean CLI disposition
+
+Adopt an optional `doctl` DNS adapter for the next hardening slice. It should
+use a dedicated custom-scoped token and named context, but the installer must
+also enforce an exact `disburse.cash` zone and managed-record allowlist because
+DigitalOcean's domain scopes are broader than one DNS zone.
+
+The adapter may reconcile only:
+
+- `payout.disburse.cash` A records requested by Laravel Cloud;
+- `_acme-challenge.payout.disburse.cash` CNAME records;
+- the corresponding `www.payout.disburse.cash` companion records; and
+- obsolete `_cf-custom-hostname.payout.disburse.cash` ownership tokens that are
+  demonstrably absent from Laravel Cloud's current desired record set.
+
+It must never mutate NS, MX, mail-verification, `netbank.disburse.cash`, Spaces,
+or any unrelated record. Manual DNS remains the fail-safe default until this
+adapter and its rollback tests are implemented.
+
 ## Secret custody decision
 
 ### 2026-10-03 — Laravel Cloud is the runtime secret authority
