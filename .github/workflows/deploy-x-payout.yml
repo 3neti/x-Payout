@@ -8,8 +8,8 @@ on:
         required: false
         type: string
         default: ops/deployment/examples/instance.yaml
-      execute_deployment:
-        description: Run through the strict pre-commission checkpoint.
+      execute_precommission:
+        description: Verify the current Laravel Cloud environment with the strict pre-commission doctor.
         required: false
         type: boolean
         default: false
@@ -40,8 +40,8 @@ on:
         required: true
         type: string
         default: ops/deployment/examples/instance.yaml
-      execute_deployment:
-        description: Run through the strict pre-commission checkpoint.
+      execute_precommission:
+        description: Verify the current Laravel Cloud environment with the strict pre-commission doctor.
         required: true
         type: boolean
         default: false
@@ -134,9 +134,9 @@ jobs:
           if-no-files-found: error
           retention-days: ${{ inputs.artifact_retention_days }}
 
-  deploy_to_checkpoint:
-    name: Deploy through pre-commission checkpoint
-    if: ${{ inputs.execute_deployment }}
+  precommission:
+    name: Verify strict pre-commission checkpoint
+    if: ${{ inputs.execute_precommission }}
     needs: compile
     runs-on: ubuntu-latest
     environment:
@@ -175,18 +175,17 @@ jobs:
           sed -i 's/^DEPLOY_CONFIRM_DOMAIN_CUTOVER=.*/DEPLOY_CONFIRM_DOMAIN_CUTOVER=NO/' /tmp/x-payout-platform.env
           sed -i 's/^DEPLOY_CONFIRM_DNS_WRITE=.*/DEPLOY_CONFIRM_DNS_WRITE=NO/' /tmp/x-payout-platform.env
 
-      - name: Deploy continuously to the accountable checkpoint
+      - name: Verify the accountable checkpoint
         env:
           LARAVEL_CLOUD_TOKEN: ${{ secrets.LARAVEL_CLOUD_TOKEN }}
         run: |
           set -euo pipefail
           test -n "${LARAVEL_CLOUD_TOKEN}"
-          scripts/deploy-production-cleanroom.sh continuous \
-            --apply \
+          scripts/deploy-production-cleanroom.sh pre-commission \
             --control=/tmp/x-payout-platform.env \
             --compiled=ops/deployment/build
 
-      - name: Record sanitized deployment evidence
+      - name: Record sanitized pre-commission evidence
         env:
           GIT_SHA: ${{ github.sha }}
         run: |
@@ -198,12 +197,12 @@ jobs:
             --arg git_sha "${GIT_SHA}" \
             --arg profile_fingerprint "${{ needs.compile.outputs.profile_fingerprint }}" \
             '{schema:$schema,phase:$phase,status:$status,git_sha:$git_sha,profile_fingerprint:$profile_fingerprint}' \
-            >/tmp/x-payout-evidence/deployment.json
+            >/tmp/x-payout-evidence/precommission.json
 
-      - name: Upload sanitized deployment evidence
+      - name: Upload sanitized pre-commission evidence
         uses: actions/upload-artifact@v4
         with:
-          name: x-payout-deployment-evidence-${{ needs.compile.outputs.profile_fingerprint }}
+          name: x-payout-precommission-evidence-${{ needs.compile.outputs.profile_fingerprint }}
           path: /tmp/x-payout-evidence/
           if-no-files-found: error
           retention-days: ${{ inputs.artifact_retention_days }}

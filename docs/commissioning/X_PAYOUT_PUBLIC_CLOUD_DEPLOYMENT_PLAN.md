@@ -551,11 +551,12 @@ package is introduced at this stage.
 6. **Complete locally.** Prove parity against the beta.68 behavior: exact release, managed-secret
    gate, bounded monitor, operational skip or verified adoption, strict doctor,
    balance report, DNS reconciliation, and public acceptance.
-7. **Complete locally.** Add an optional reusable GitHub Actions workflow that calls the same
-   compiler and controller, stops at the strict pre-commission checkpoint,
-   and uploads only sanitized evidence. Laravel Cloud push-to-deploy remains
-   the ordinary recurring deployment mechanism. Commissioning is never part
-   of this recurring workflow.
+7. **Complete locally.** Add an optional reusable GitHub Actions workflow that compiles the
+   profile and runs the strict pre-commission doctor against the environment
+   already deployed by Laravel Cloud. It uploads only sanitized evidence and
+   performs no foundation, configuration, deployment, DNS, domain, or
+   commissioning mutation. Laravel Cloud push-to-deploy remains the ordinary
+   recurring deployment mechanism.
 8. Adapt Forge only after Laravel Cloud parity is green; use Forge and Deployer
    for server mechanics rather than reproducing them.
 9. Run one exact-release cleanroom from only the two operator inputs and native
@@ -584,7 +585,8 @@ Publish the workflow simplification, remove the synthetic
 `PAYOUT_SECRETS_ENV` GitHub secret, and store only the private production
 `instance.yaml`, the value-free platform control worksheet, and the Laravel
 Cloud token in the deployment environment. Then run the optional workflow once
-through the strict pre-commission checkpoint.
+to verify the strict pre-commission checkpoint on the environment already
+deployed by Laravel Cloud.
 
 Normal application releases continue through Laravel Cloud push-to-deploy and
 do not require GitHub reviewers, Maker/Checker contact details, or a local

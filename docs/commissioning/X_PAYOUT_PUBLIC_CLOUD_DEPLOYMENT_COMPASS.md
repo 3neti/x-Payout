@@ -253,9 +253,10 @@ forbidden until one exact-release two-file cleanroom passes.
 - Laravel Cloud push-to-deploy remains the normal continuous deployment
   mechanism and is not gated by GitHub reviewers or Maker/Checker identities.
 - The reusable GitHub workflow is optional and contains only profile
-  compilation plus deployment through the strict pre-commission checkpoint.
-  It contains no commissioning job, commissioning input, or financial
-  authority.
+  compilation plus strict pre-commission verification against the environment
+  already deployed by Laravel Cloud. It performs no foundation,
+  configuration, deployment, DNS, domain, commissioning, or financial
+  mutation.
 - Profile compilation can emit the required managed-secret inventory without
   reading secret values. A private `secrets.env` is needed only for initial
   secret import, credential recovery, or a separately authorized one-time
@@ -469,9 +470,10 @@ an otherwise healthy environment.
 
 Publish the corrective workflow, remove the synthetic `PAYOUT_SECRETS_ENV`,
 install the private production `instance.yaml`, platform control worksheet,
-and Laravel Cloud token in the deployment environment, then run the optional
-exact-release rehearsal only through the strict pre-commission checkpoint.
-Do not commission as part of that workflow.
+and Laravel Cloud token in the deployment environment, then use the optional
+workflow to verify the strict pre-commission checkpoint on the environment
+already deployed by Laravel Cloud. Do not deploy or commission from that
+workflow.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
