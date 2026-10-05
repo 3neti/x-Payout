@@ -36,6 +36,7 @@ it('runs the real continuous entry point twice with fake CLIs and emits sanitize
     $git = entryPointExecutable(<<<'BASH'
 #!/usr/bin/env bash
 printf '%s\trefs/tags/v1.0.0\n' 0123456789abcdef0123456789abcdef01234567
+printf '%s\trefs/heads/release/v1.0.0\n' 0123456789abcdef0123456789abcdef01234567
 BASH);
     $doctl = entryPointExecutable(<<<'BASH'
 #!/usr/bin/env bash
@@ -200,6 +201,7 @@ BASH);
 
     expect($first->getOutput())->toContain('Continuous deployment complete')
         ->and($firstLog)->toContain('environment:update env-one --database-id=database-one --cache-id=cache-one')
+        ->and($firstLog)->toContain('environment:update env-one --branch=release/v1.0.0')
         ->and($firstLog)->not->toContain(
             'application:create',
             'database-cluster:create',
@@ -224,6 +226,19 @@ BASH);
             'commissioning', 'domain', 'strict_doctor', 'mcp_doctor',
         ])
         ->and($firstEvidencePayload['phase_evidence']['runtime']['changed_keys'])->not->toBeEmpty();
+
+    expect($firstEvidencePayload['phase_evidence']['preflight']['results'])
+        ->toContainEqual([
+            'id' => 'release.source',
+            'status' => 'ready',
+            'reason' => 'The Laravel Cloud source branch resolves to the immutable source release.',
+            'remediation' => 'None.',
+            'evidence' => [
+                'ref' => 'v1.0.0',
+                'branch' => 'release/v1.0.0',
+                'commit' => '0123456789abcdef0123456789abcdef01234567',
+            ],
+        ]);
 
     $second = new Process($arguments, $root, $environment);
     $second->setTimeout(30);

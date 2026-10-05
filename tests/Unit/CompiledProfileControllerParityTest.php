@@ -166,7 +166,7 @@ BASH);
     $process->mustRun();
 
     expect(file_get_contents($log))
-        ->toContain('environment:update env-test --branch=v1.0.0')
+        ->toContain('environment:update env-test --branch=release/v1.0.0')
         ->toContain('deploy app-test production')
         ->and($process->getOutput())->toContain('deployment.succeeded');
 });

@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — beta.69 foundation recovered live; deploy blocked before start by Laravel Cloud branch/tag boundary
+**Current position:** Gate 13 — beta.69 foundation recovered live; exact-release Cloud source-branch contract tested; remote release branch not yet authorized or created
 
-**Overall status:** Foundation, managed-secret attachment, and runtime reconciliation are complete; no deployment started because Cloud rejected the tag as an environment branch; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
+**Overall status:** Foundation, managed-secret attachment, and runtime reconciliation are complete; deploy now distinguishes the immutable release tag from Laravel Cloud's branch selector and preflight requires both to resolve to the same commit; no remote release branch or deployment has been authorized yet; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -99,7 +99,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
-| 13.8 Exact-release cleanroom | **In progress — deploy blocked before start** | Beta.69 foundation, secrets, and runtime are complete; Cloud rejected the tag as a branch; no deployment, commissioning, domain, or financial phase ran |
+| 13.8 Exact-release cleanroom | **In progress — release branch creation pending** | Beta.69 foundation, secrets, and runtime are complete; the tested profile contract uses `release/v1.0.0-beta.69` for Cloud while retaining tag `v1.0.0-beta.69` as immutable release identity; no deployment, commissioning, domain, or financial phase ran |
 
 ### External prerequisite policy
 
@@ -290,13 +290,21 @@ with `The selected branch is no longer available` because environment source
 selection accepts repository branches. No remote branch currently points to
 the beta.69 tag.
 
-The next corrective slice must introduce an explicit Cloud source-branch
-contract distinct from the immutable package release ref. Its preflight must
-prove that the selected release branch resolves to the exact tag commit before
-Cloud mutation. Deploying mutable `main`, weakening exact-release validation,
-or creating a remote branch without separate source-control authority is
-forbidden. After that slice is tested and the exact branch exists, the bounded
-resume may retry `deploy` and continue only through strict pre-commission.
+The corrective source contract is now implemented and tested. Instance profiles
+declare `release.ref` as immutable release identity and
+`release.cloud_source_branch` as the Laravel Cloud source selector. Preflight
+resolves the tag and branch independently and blocks before mutation when the
+branch is absent or points at another commit. Both the continuous controller
+and retained compatibility controller use the Cloud branch while deployment
+evidence preserves the immutable tag.
+
+The private beta.69 profile now selects `release/v1.0.0-beta.69`, but that
+remote branch has not been created. Creating and pushing it remains a separate
+source-control mutation requiring explicit authority. It must point exactly to
+`296346d9a6743da12c63204634529880ca8d3d06`. Deploying mutable `main`, weakening
+exact-release validation, or retrying Cloud before the branch exists remains
+forbidden. Once the exact branch exists, the bounded resume may retry `deploy`
+and continue only through strict pre-commission.
 
 ### Official adapter parity evidence — 2026-10-05
 

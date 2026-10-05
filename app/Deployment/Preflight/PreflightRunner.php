@@ -20,6 +20,7 @@ final class PreflightRunner
         'authorized_for_this_run',
         'authority',
         'bucket',
+        'branch',
         'capabilities',
         'commit',
         'connection',

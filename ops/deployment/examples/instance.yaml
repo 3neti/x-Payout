@@ -8,6 +8,7 @@ identity:
 release:
   repository: example/x-payout
   ref: v1.0.0
+  cloud_source_branch: release/v1.0.0
 
 public:
   canonical_url: https://payout.example.com

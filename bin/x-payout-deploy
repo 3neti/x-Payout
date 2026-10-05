@@ -144,6 +144,7 @@ try {
             $commands,
             $repository,
             $profile['release']['ref'],
+            $profile['release']['cloud_source_branch'],
             $gitBinary,
         ),
         'dns' => new DigitalOceanDnsPrerequisiteProbe(

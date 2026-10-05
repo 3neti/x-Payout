@@ -43,6 +43,7 @@ final class InstanceProfileCompiler
         $this->assertString($profile['identity'], 'display_name', 'identity');
         $this->assertString($profile['release'], 'repository', 'release');
         $this->assertString($profile['release'], 'ref', 'release');
+        $this->assertString($profile['release'], 'cloud_source_branch', 'release');
         $this->assertHttpsUrl($profile['public']['canonical_url'] ?? null, 'public.canonical_url');
         $this->assertString($profile['public'], 'locale', 'public');
         $this->assertStringList($profile['public']['currencies'] ?? null, 'public.currencies');

@@ -118,7 +118,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
             $environment = $this->cloud->json('environment:create', [
                 $resources['application_id'],
                 '--name='.$this->environmentName,
-                '--branch='.$profile['release']['ref'],
+                '--branch='.$profile['release']['cloud_source_branch'],
             ]);
             $resources['environment_id'] = $this->id($environment, 'environment');
         }
@@ -253,7 +253,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     {
         $this->cloud->json('environment:update', [
             $this->resource($state, 'environment_id'),
-            '--branch='.$compiled['profile']['release']['ref'],
+            '--branch='.$compiled['profile']['release']['cloud_source_branch'],
             '--build-command=composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader',
             '--deploy-command=php artisan migrate --force',
             '--force',
@@ -280,6 +280,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         $this->evidence->record('deployment', [
             'deployment_id' => $deploymentId,
             'release_ref' => $compiled['profile']['release']['ref'],
+            'cloud_source_branch' => $compiled['profile']['release']['cloud_source_branch'],
             'status' => 'succeeded',
         ]);
 

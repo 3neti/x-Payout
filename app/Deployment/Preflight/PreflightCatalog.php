@@ -15,7 +15,7 @@ final class PreflightCatalog
                 id: 'release.source',
                 transport: 'source-control',
                 description: 'The exact immutable release is available to the deployment platform.',
-                references: ['release.repository', 'release.ref'],
+                references: ['release.cloud_source_branch', 'release.repository', 'release.ref'],
             ),
             $this->check(
                 id: 'public.dns',

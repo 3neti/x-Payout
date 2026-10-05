@@ -18,11 +18,19 @@ it('checks remaining prerequisites without financial or messaging mutations', fu
             $this->calls[] = $command;
 
             return str_contains(implode(' ', $command), 'ls-remote')
-                ? new CommandResult(0, "0123456789abcdef\trefs/tags/v1.2.3\n", '')
+                ? new CommandResult(0, implode("\n", [
+                    "0123456789abcdef\trefs/tags/v1.2.3",
+                    "0123456789abcdef\trefs/heads/release/v1.2.3",
+                ])."\n", '')
                 : new CommandResult(0, '', '');
         }
     };
-    $release = (new SourceReleasePrerequisiteProbe($commands, 'git@github.com:3neti/x-payout.git', 'v1.2.3'))
+    $release = (new SourceReleasePrerequisiteProbe(
+        $commands,
+        'git@github.com:3neti/x-payout.git',
+        'v1.2.3',
+        'release/v1.2.3',
+    ))
         ->inspect(['id' => 'release.source']);
     $storage = (new ObjectStoragePrerequisiteProbe($commands, 'private-bucket', 'https://sgp1.digitaloceanspaces.com'))
         ->inspect(['id' => 'storage.evidence']);
@@ -41,6 +49,11 @@ it('checks remaining prerequisites without financial or messaging mutations', fu
     ], new DeploymentAuthority))->inspect(['id' => 'commissioning.authority']);
 
     expect($release['status'])->toBe('ready')
+        ->and($release['evidence'])->toMatchArray([
+            'ref' => 'v1.2.3',
+            'branch' => 'release/v1.2.3',
+            'commit' => '0123456789abcdef',
+        ])
         ->and($storage['status'])->toBe('ready')
         ->and($commissioning['status'])->toBe('ready')
         ->and($commissioning['evidence']['authorized_for_this_run'])->toBeFalse()
@@ -54,3 +67,34 @@ it('checks remaining prerequisites without financial or messaging mutations', fu
         ])['status'])->toBe('ready');
     }
 });
+
+it('blocks deployment when the Cloud source branch is absent or differs from the release tag', function (string $output, string $reason): void {
+    $commands = new class($output) implements CommandExecutor
+    {
+        public function __construct(private readonly string $output) {}
+
+        public function run(array $command, ?string $input = null): CommandResult
+        {
+            return new CommandResult(0, $this->output, '');
+        }
+    };
+
+    $result = (new SourceReleasePrerequisiteProbe(
+        $commands,
+        'git@github.com:3neti/x-payout.git',
+        'v1.2.3',
+        'release/v1.2.3',
+    ))->inspect(['id' => 'release.source']);
+
+    expect($result['status'])->toBe('blocked')
+        ->and($result['reason'])->toBe($reason);
+})->with([
+    'missing branch' => [
+        "0123456789abcdef\trefs/tags/v1.2.3\n",
+        'The Laravel Cloud source branch could not be resolved.',
+    ],
+    'mismatched branch' => [
+        "0123456789abcdef\trefs/tags/v1.2.3\nfedcba9876543210\trefs/heads/release/v1.2.3\n",
+        'The Laravel Cloud source branch does not resolve to the immutable release commit.',
+    ],
+]);

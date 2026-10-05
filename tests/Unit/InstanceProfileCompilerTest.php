@@ -43,6 +43,8 @@ it('validates the sanitized portable profile without booting Laravel', function 
     $profile = $compiler->validate(instanceProfilePath('ops/deployment/examples/instance.yaml'));
 
     expect($profile['schema'])->toBe('x-payout.instance.v1')
+        ->and($profile['release']['ref'])->toBe('v1.0.0')
+        ->and($profile['release']['cloud_source_branch'])->toBe('release/v1.0.0')
         ->and($profile['providers']['active'])->toBe('primary-payout')
         ->and($profile['deployment_required_secrets'])->toContain('NETBANK_CLIENT_SECRET')
         ->not->toContain('X_PAYOUT_MAKER_MOBILE')

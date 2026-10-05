@@ -20,10 +20,11 @@
     "release": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["repository", "ref"],
+      "required": ["repository", "ref", "cloud_source_branch"],
       "properties": {
         "repository": { "type": "string", "minLength": 1 },
-        "ref": { "type": "string", "minLength": 1 }
+        "ref": { "type": "string", "minLength": 1 },
+        "cloud_source_branch": { "type": "string", "minLength": 1 }
       }
     },
     "public": {

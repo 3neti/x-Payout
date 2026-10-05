@@ -74,7 +74,7 @@ load_compiled_profile() {
     export DEPLOY_GIT_REPOSITORY
     DEPLOY_GIT_REPOSITORY="$(jq -er '.profile.release.repository' "${compiled_instance}")"
     export DEPLOY_GIT_BRANCH
-    DEPLOY_GIT_BRANCH="$(jq -er '.profile.release.ref' "${compiled_instance}")"
+    DEPLOY_GIT_BRANCH="$(jq -er '.profile.release.cloud_source_branch' "${compiled_instance}")"
     export DEPLOY_PROVIDER_CUTOVER_AT
     DEPLOY_PROVIDER_CUTOVER_AT="$(jq -er '.profile.commissioning.opening.cutover_at' "${compiled_instance}")"
     export DEPLOY_PROVIDER_CUTOVER_TRANSACTION_ID
