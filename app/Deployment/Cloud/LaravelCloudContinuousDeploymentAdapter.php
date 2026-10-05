@@ -125,7 +125,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
 
         if (! isset($resources['database_cluster_id'])) {
             $cluster = $this->cloud->json('database-cluster:create', [
-                '--name='.$profile['identity']['id'].'-production',
+                '--name='.strtolower((string) $profile['identity']['id']).'-production',
                 '--type=neon_serverless_postgres',
                 '--engine-version=18',
                 '--region='.$this->region,

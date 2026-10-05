@@ -168,6 +168,7 @@ BASH);
     $state = json_decode((string) file_get_contents($statePath), true, flags: JSON_THROW_ON_ERROR);
 
     expect($first->getOutput())->toContain('Continuous deployment complete')
+        ->and($firstLog)->toContain('database-cluster:create --name=example-payments-host-production')
         ->and($state['checkpoints'])->each->toBe('complete')
         ->and($state['resources'])->toMatchArray([
             'application_id' => 'app-one',
