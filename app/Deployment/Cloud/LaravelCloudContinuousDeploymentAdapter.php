@@ -190,10 +190,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     private function secrets(array $compiled, array $state, DeploymentAuthority $authority): array
     {
         $environmentId = $this->resource($state, 'environment_id');
-        $required = array_values(array_unique(array_merge(
-            $compiled['required_secrets'] ?? [],
-            $compiled['commissioning_required_secrets'] ?? [],
-        )));
+        $required = array_values(array_unique($compiled['required_secrets'] ?? []));
         $result = $this->secrets->reconcile(
             $environmentId,
             $required,
