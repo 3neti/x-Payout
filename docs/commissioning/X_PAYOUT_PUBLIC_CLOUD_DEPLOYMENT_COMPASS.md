@@ -1,10 +1,10 @@
 # x-PayOut Public Cloud Deployment Compass
 
-**Last updated:** 2026-10-05
+**Last updated:** 2026-10-06
 
-**Current position:** Gate 13 — beta.69 exact-release deployment and pre-commission readiness complete; commissioning remains unauthorized
+**Current position:** Gate 13 — beta.71 exact-release cleanroom is operational, the custom domain is verified, and the immediate no-op rerun is accepted
 
-**Overall status:** Foundation, managed-secret attachment, runtime reconciliation, exact-release deployment, strict pre-commission doctor, and immediate no-duplicate rerun are complete; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
+**Overall status:** Foundation recovery, managed-secret attachment, runtime reconciliation, exact-release deployment, token-gated commissioning, custom-domain activation, strict and MCP verification, and the immediate mutation-free rerun are complete; compatibility worksheet retirement is now eligible for a separately approved audit but has not started
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -53,9 +53,9 @@ and identity checks.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **In progress** | Compiler, authoritative runtime artifact, compatibility adapter, and fake-transport parity complete; two-input cleanroom remains |
-| 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.99 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict doctor 37/37 and MCP doctor green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **In progress** | Ownership, preflight, state, secret reconciliation, compiled controller authority, changed-only runtime, and per-phase resumption are green; live entry-point adoption remains |
+| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input controller reached operational state and passed its immediate mutation-free rerun; compatibility retirement remains a separate slice |
+| 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.100 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict and MCP doctors are green; client issuance remains governed |
+| 13. Two-input one-command cleanup | **Complete for beta.71** | The hardened controller deployed, commissioned, activated the domain, verified the runtime, and repeated without infrastructure, deployment, commissioning, or DNS mutation |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -99,7 +99,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
-| 13.8 Exact-release cleanroom | **In progress — pre-commission ready** | Deployment `depl-a2e8e855-83a5-45da-8502-1ac7dcc1f97c` succeeded from `release/v1.0.0-beta.69` at exact peeled tag commit `853c5b00774878de89b905fc0d3ba3f5c26aae47`; strict pre-commission doctor passed 27/27; immediate bounded rerun created no replacement deployment; commissioning, domain, invitations, and financial operations did not run |
+| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
 
@@ -185,13 +185,11 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Resume the separately authorized beta.69 exact-release cleanroom from the
-failed foundation checkpoint with the real Laravel Cloud and DigitalOcean
-transports. Discovery must adopt the one unambiguous detached resource set,
-attach it without recreating infrastructure, and continue only after the
-recovered identities are retained in generated state. The immediate run after
-operational acceptance must be mutation-free. Compatibility retirement may be
-reviewed only after that evidence is accepted.
+Audit the retained compatibility worksheets and adapters against the accepted
+beta.71 generated state before retiring anything. The audit must name every
+remaining reader, rollback dependency, and historical-evidence requirement.
+Deletion or compatibility removal requires separate approval and must preserve
+the operational state, immutable release evidence, and recovery path.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -331,6 +329,37 @@ remained `precommission_ready` with the same single deployment. No
 commissioning, domain activation, secret rotation, invitation, or financial
 operation ran. Compatibility worksheet retirement remains prohibited until an
 explicitly authorized commissioning and final no-op operational rerun complete.
+
+### Beta.71 hardened commissioning and domain acceptance — 2026-10-06
+
+- Published x-change `v1.0.100` at commit
+  `dd19abf2b0d0c8493a193fc4b25f187c7b337e3b` with exact, non-mutating
+  commissioning preview tokens.
+- Published x-PayOut `v1.0.0-beta.71` and immutable Cloud source branch
+  `release/v1.0.0-beta.71` at commit
+  `b9869bd8f85bb8b65c5038f03675d17913b60688`.
+- Laravel Cloud deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a`
+  succeeded at that exact commit and was reused by every subsequent run.
+- Commissioning preview observed PHP 4,283.70 of fresh NetBank liquidity,
+  reserved two PHP 100 manual Maker/Checker invitations, and retained PHP
+  4,083.70 after the invitation reserve. The applied bootstrap accepted the
+  same preview token and commissioned once.
+- Invitation delivery mode remained `manual`; no SMS, email, webhook, or other
+  automatic invitation delivery ran.
+- Domain `domain-a2e9a1a8-0ac9-48ae-bcb8-6dd1a44081cf` attached
+  `payout.disburse.cash`. The existing `payout` A record and
+  `_acme-challenge.payout` CNAME already matched Laravel Cloud, so DNS
+  reconciliation recorded two no-ops and no mutation.
+- Laravel Cloud reported hostname and TLS status `verified`. Origin metadata
+  remained `pending`, while the authoritative public HTTPS probe returned 200
+  with successful certificate verification from `103.133.1.1`.
+- Strict x-change doctor and x-mcp doctor passed after domain activation.
+- The immediate identical controller rerun completed without another
+  deployment, recommissioning, domain creation, DNS write, secret rotation, or
+  invitation delivery. Cloud still lists exactly one beta.71 deployment and
+  the earlier beta.69 deployment.
+- All generated-state checkpoints are complete. Compatibility worksheet
+  retirement is now reviewable but remains unapproved and unstarted.
 
 ### Official adapter parity evidence — 2026-10-05
 

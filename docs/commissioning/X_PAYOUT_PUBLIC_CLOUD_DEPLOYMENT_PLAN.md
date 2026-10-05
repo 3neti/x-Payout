@@ -1,14 +1,14 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Compiled-state controller and resumability proven with fake transports; live exact-release adoption remains
+**Status:** Beta.71 exact-release controller accepted live through commissioning, custom-domain verification, and a mutation-free rerun
 
-**Updated:** 2026-10-05
+**Updated:** 2026-10-06
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.69` (`853c5b0`)
+**Current x-PayOut:** `v1.0.0-beta.71` (`b9869bd`)
 
-**Current x-change:** `v1.0.99` (`13e06cd3`)
+**Current x-change:** `v1.0.100` (`dd19abf2`)
 
 ## Objective
 
