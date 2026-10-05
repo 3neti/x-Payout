@@ -1,6 +1,6 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Cleanroom and continuous deployment proven; two-input one-command safety foundations implemented
+**Status:** Compiled-state controller and resumability proven with fake transports; live exact-release adoption remains
 
 **Updated:** 2026-10-05
 
@@ -186,6 +186,14 @@ reconciled by managed-secret identity and name.
 **Acceptance:** An unchanged second run performs no environment-variable,
 secret, infrastructure, DNS, commissioning, or domain mutation.
 
+**Implementation evidence — 2026-10-05:** The compiled artifact now carries
+the normalized, sanitized runtime map alongside the profile fingerprint. The
+new continuous controller accepts only that verified compiled object plus
+current-run authority and generated state. Runtime reconciliation compares
+Cloud values and writes changed non-secret keys only; an unchanged rerun emits
+no runtime writes. The legacy worksheet controller remains available solely as
+the rollback-compatible entry point until the exact-release cleanroom gate.
+
 ### Cleanup Gate 5 — Execute the complete one-command lifecycle
 
 Provide one operator entry point with an explicit adapter, for example:
@@ -211,6 +219,14 @@ operator supplies current commissioning authority.
 **Acceptance:** Inject a recoverable failure after every phase. Each rerun
 continues safely and finishes with one commissioned instance, one domain
 attachment, and no duplicate financial or onboarding artifact.
+
+**Implementation evidence — 2026-10-05:** A fingerprint-bound checkpoint is
+written before and after each of the nine controller phases. Tests inject one
+failure in every phase, confirm the failed checkpoint, resume without replaying
+earlier mutating phases, and prove that the next unchanged run repeats only
+read-only preflight and verification. Release, private-storage, HTTPS
+integration, and commissioning-evidence probes were added without sending a
+message, creating an identity, moving money, or writing an object.
 
 ### Cleanup Gate 6 — Sanitize state and evidence
 

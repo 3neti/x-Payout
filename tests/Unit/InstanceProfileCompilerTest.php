@@ -83,6 +83,13 @@ it('compiles deterministic sanitized artifacts without serializing secret values
         ->toContain('x-payout.preflight-plan.v1', 'block_before_mutation')
         ->not->toContain('do-not-serialize-this-value');
 
+    $compiledInstance = json_decode($first['files']['compiled-instance.json'], true, flags: JSON_THROW_ON_ERROR);
+
+    expect($compiledInstance['runtime'])
+        ->toBeArray()
+        ->toHaveKey('APP_URL', 'https://payout.example.com')
+        ->not->toHaveKey('NETBANK_CLIENT_SECRET');
+
     unlink($secretsPath);
 });
 

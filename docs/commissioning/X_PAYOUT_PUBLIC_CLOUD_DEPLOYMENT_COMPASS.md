@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — official adapter parity and state recovery proven with fakes; controller authority next
+**Current position:** Gate 13 — compiled controller authority and per-phase resumability proven; live entry-point adoption next
 
 **Overall status:** Production deployment, custom domain, public issuance, Partner MCP transport, and strict readiness are green; legacy worksheet compatibility remains the deployment cleanup target
 
@@ -53,9 +53,9 @@ and identity checks.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **In progress** | Compiler, compatibility adapter, fake-transport parity, and live optional pre-commission verification complete; two-input cleanroom remains |
+| 11. Portable instance profile | **In progress** | Compiler, authoritative runtime artifact, compatibility adapter, and fake-transport parity complete; two-input cleanroom remains |
 | 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.99 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict doctor 37/37 and MCP doctor green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **In progress** | Ownership, preflight, state, and secret-reconciliation contracts are green; official adapter wiring and resumable controller remain |
+| 13. Two-input one-command cleanup | **In progress** | Ownership, preflight, state, secret reconciliation, compiled controller authority, changed-only runtime, and per-phase resumption are green; live entry-point adoption remains |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -92,11 +92,11 @@ sanitized evidence, and remain idempotent on rerun.
 | Slice | State | Exit evidence |
 | --- | --- | --- |
 | 13.0 Legacy-input classification | **Complete** | Both worksheet shapes have exact ownership; unknown, duplicate, and multiply owned keys fail |
-| 13.1 External prerequisite catalog | **In progress** | Official DigitalOcean DNS and installed EMI provider probe adapters are wired and fake-tested; release, storage, messaging, identity, and map transports remain |
+| 13.1 External prerequisite catalog | **Complete for adapter contract** | DigitalOcean DNS, installed EMI provider, immutable release, private storage, HTTPS integration, and commissioning-evidence probes are fake-tested; live credentials remain a cleanroom concern |
 | 13.2 Generated-state schema | **Complete** | Official Cloud read discovery, exact identity recovery, ambiguity/conflict failure, unchanged rerun, and deleted-state reconstruction are fake-proven |
 | 13.3 Managed-secret importer | **In progress** | Official Cloud list/create/update/attach transport is wired with values on stdin; controller import authority and live fake-CLI phase parity remain |
-| 13.4 Compiled-state authority | Not started | Controller no longer reads desired state or confirmations from worksheet |
-| 13.5 Resumable one-command controller | Not started | Failure injection after every phase proves safe continuation |
+| 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
+| 13.5 Resumable one-command controller | **Complete with fake transports** | Failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | Not started | Evidence schema and secret-pattern scan green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
 | 13.8 Exact-release cleanroom | Not started | First run operational, second run no-op, deleted-state run safely reconstructs |
@@ -133,10 +133,10 @@ capabilities, hashes, and redacted dispositions only.
 - Losing local state cannot authorize guessing between multiple matching
   resources.
 
-### Immediate next slice
+### Completed controlled slice — 2026-10-05
 
-Make compiled desired state authoritative in the continuous controller while
-retaining the legacy worksheets as an explicit rollback path:
+Compiled desired state is now authoritative in the new continuous controller
+kernel while legacy worksheets remain an explicit rollback path:
 
 1. add the remaining release, private-storage, SMS, OTP, KYC, maps,
    Partner-MCP, and commissioning prerequisite adapters;
@@ -148,8 +148,28 @@ retaining the legacy worksheets as an explicit rollback path:
 7. inject one failure after every fake phase, then prove safe continuation and
    a completely unchanged rerun.
 
-Compatibility worksheet removal remains forbidden until this controller gate
-and one exact-release cleanroom both pass.
+Additional proof:
+
+- `compiled-instance.json` contains the normalized non-secret runtime map;
+- the controller rejects state from another profile fingerprint or adapter;
+- runtime comparison applies only changed keys and an unchanged rerun performs
+  zero writes;
+- checkpoints use `pending`, `failed`, `complete`, or `skipped` and are written
+  atomically in owner-only state;
+- a failure at preflight, foundation, secrets, runtime, deploy,
+  pre-commission, commission, domain, or verify resumes at the failed phase;
+- completed mutating phases are not replayed; and
+- read-only preflight and final verification run again on an unchanged rerun.
+
+Compatibility worksheet removal remains forbidden until the new kernel is
+wired to the operator entry point and one exact-release cleanroom passes.
+
+### Immediate next slice
+
+Wire the new controller kernel into `bin/x-payout-deploy` for the Laravel Cloud
+adapter, emit the sanitized evidence bundle, run a full fake-CLI parity pass,
+then perform one separately authorized exact-release cleanroom. Only after that
+proof may the worksheet compatibility path be deprecated.
 
 ### Official adapter parity evidence — 2026-10-05
 

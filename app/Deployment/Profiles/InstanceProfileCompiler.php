@@ -217,12 +217,6 @@ final class InstanceProfileCompiler
             $sanitizedProfile['commissioning_required_secrets'],
         );
         $fingerprint = hash('sha256', $this->encodeCanonicalJson($sanitizedProfile));
-        $compiledInstance = [
-            'schema' => self::SCHEMA,
-            'profile_fingerprint' => $fingerprint,
-            'profile' => $sanitizedProfile,
-        ];
-
         $runtime = $profile['runtime'] ?? [];
 
         foreach ($profile['providers']['connections'] as $connection) {
@@ -242,6 +236,13 @@ final class InstanceProfileCompiler
             'XCHANGE_TREASURY_OPENING_CAPITALIZATION_ALLOWED_CONNECTIONS' => $profile['commissioning']['opening']['connection'],
         ]);
         ksort($runtime, SORT_STRING);
+
+        $compiledInstance = [
+            'schema' => self::SCHEMA,
+            'profile_fingerprint' => $fingerprint,
+            'profile' => $sanitizedProfile,
+            'runtime' => $runtime,
+        ];
 
         $commissioning = [
             'schema' => 'x-payout.commissioning.v1',
