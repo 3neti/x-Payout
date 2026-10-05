@@ -299,6 +299,31 @@ Gate 13 is not complete: the official Laravel Cloud, DNS, provider, and secret
 transports still need to consume these contracts, and state rediscovery must
 be proved before compatibility inputs can be removed.
 
+### Official adapter parity evidence — 2026-10-05
+
+The next controlled slice wires the safety contracts to official tool and
+package boundaries without activating them against live services:
+
+- Laravel Cloud resource discovery uses documented `--json -n` list commands
+  and stable application, repository, environment, default-instance,
+  attachment, queue-worker, and canonical-domain identity;
+- managed-secret create and update values travel over standard input, never
+  command arguments, logs, state, evidence, or return values;
+- DigitalOcean DNS readiness delegates to a read-only `doctl` zone lookup;
+- provider identity readiness delegates to the installed EMI driver's
+  `ProviderLivePreflightProbe`, preserving provider ownership and preventing
+  x-PayOut from duplicating NetBank protocol logic;
+- state reconciliation rejects ambiguous, missing, or changed recorded
+  identities; and
+- a combined fake-transport rehearsal proves ready preflight, initial state
+  recovery, managed-secret no-op, unchanged second run, state-file deletion,
+  and exact rediscovery without any external mutation command.
+
+Compatibility mode remains intact. The next slice makes the compiled profile,
+generated state, prerequisite report, and current-run authorities drive the
+controller. No live rehearsal is eligible until failure injection proves safe
+continuation after every fake phase.
+
 ## Gate 1 — Record the proven deployment
 
 Create a durable, sanitized deployment record containing:

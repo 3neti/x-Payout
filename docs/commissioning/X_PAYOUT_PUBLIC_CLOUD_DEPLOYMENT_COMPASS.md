@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — safety foundations implemented; live adapter wiring next
+**Current position:** Gate 13 — official adapter parity and state recovery proven with fakes; controller authority next
 
 **Overall status:** Production deployment, custom domain, public issuance, Partner MCP transport, and strict readiness are green; legacy worksheet compatibility remains the deployment cleanup target
 
@@ -92,9 +92,9 @@ sanitized evidence, and remain idempotent on rerun.
 | Slice | State | Exit evidence |
 | --- | --- | --- |
 | 13.0 Legacy-input classification | **Complete** | Both worksheet shapes have exact ownership; unknown, duplicate, and multiply owned keys fail |
-| 13.1 External prerequisite catalog | **In progress** | Deterministic catalog, value-free report, fake readiness/blocking transports, and pre-mutation stop are green; official read-only probes remain |
-| 13.2 Generated-state schema | **In progress** | Atomic owner-only value-free store is green; platform rediscovery and conflict handling remain |
-| 13.3 Managed-secret importer | **In progress** | Exact input, check/create/attach/rotate/no-op/conflict paths are green with fakes; Laravel Cloud transport wiring remains |
+| 13.1 External prerequisite catalog | **In progress** | Official DigitalOcean DNS and installed EMI provider probe adapters are wired and fake-tested; release, storage, messaging, identity, and map transports remain |
+| 13.2 Generated-state schema | **Complete** | Official Cloud read discovery, exact identity recovery, ambiguity/conflict failure, unchanged rerun, and deleted-state reconstruction are fake-proven |
+| 13.3 Managed-secret importer | **In progress** | Official Cloud list/create/update/attach transport is wired with values on stdin; controller import authority and live fake-CLI phase parity remain |
 | 13.4 Compiled-state authority | Not started | Controller no longer reads desired state or confirmations from worksheet |
 | 13.5 Resumable one-command controller | Not started | Failure injection after every phase proves safe continuation |
 | 13.6 Sanitized evidence contract | Not started | Evidence schema and secret-pattern scan green |
@@ -135,22 +135,46 @@ capabilities, hashes, and redacted dispositions only.
 
 ### Immediate next slice
 
-Wire the official Laravel Cloud adapter to the new contracts without changing
-the proven phase order:
+Make compiled desired state authoritative in the continuous controller while
+retaining the legacy worksheets as an explicit rollback path:
 
-1. discover an existing application, environment, database, cache, worker,
-   domain, and managed-secret attachments by stable instance identity;
-2. fail closed on zero-or-multiple matches where exactly one is required;
-3. run the catalog through read-only DNS, provider, storage-configuration,
-   integration-configuration, release, OAuth, and commissioning probes before
-   any create or update call;
-4. reconcile managed secrets from `secrets.env` only when creation or explicit
-   rotation is authorized; and
-5. persist checkpoints through the generated state store.
+1. add the remaining release, private-storage, SMS, OTP, KYC, maps,
+   Partner-MCP, and commissioning prerequisite adapters;
+2. invoke the full preflight report before the first create or update command;
+3. consume generated state instead of mutating the control worksheet;
+4. invoke managed-secret creation or rotation only with current-run authority;
+5. compare desired runtime values with Cloud state and write changed keys only;
+6. persist a checkpoint after each successful phase; and
+7. inject one failure after every fake phase, then prove safe continuation and
+   a completely unchanged rerun.
 
-Use fake Cloud, DNS, provider, and secret transports first. Do not run a live
-Cloud rehearsal until the unchanged rerun and deleted-state rediscovery tests
-prove no duplicate infrastructure, secret, domain, or commissioning action.
+Compatibility worksheet removal remains forbidden until this controller gate
+and one exact-release cleanroom both pass.
+
+### Official adapter parity evidence — 2026-10-05
+
+- Added an official Laravel Cloud JSON client using documented non-interactive
+  CLI shapes. Errors are operation-scoped and do not reproduce raw provider or
+  secret output.
+- Added exact Cloud discovery for application plus repository, named
+  environment, default instance, attached database and cluster, cache, queue
+  worker, canonical domain, and managed-secret identities.
+- Zero matches produce an explicit missing-resource plan. Multiple matches,
+  duplicate secret names, missing recorded resources, or changed identities
+  fail closed.
+- Added the official Laravel Cloud managed-secret transport. Create and update
+  values use standard input and never command arguments; environment
+  attachment uses managed-secret IDs.
+- Added a DigitalOcean DNS zone probe using the official `doctl` read command
+  and an EMI provider adapter that delegates live identity/account readiness
+  to the installed provider package's read-only preflight contract.
+- The first fake run reconstructs owner-only state; the second run leaves the
+  file byte-for-byte unchanged; deleting state rediscovers the same resource
+  and secret identities without a create, update, attach, domain, financial,
+  invitation, or commissioning call.
+- The complete deployment-focused suite passes 91 tests and 443 assertions.
+- No live Cloud, DNS, DigitalOcean, provider, secret, financial, messaging,
+  domain, or commissioning mutation occurred.
 
 ## Turnkey operating contract
 
