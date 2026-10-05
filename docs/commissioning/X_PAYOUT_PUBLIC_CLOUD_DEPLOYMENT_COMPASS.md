@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — beta.69 cleanroom stopped safely at foundation; detached-resource recovery proven locally; controlled live resume next
+**Current position:** Gate 13 — beta.69 foundation recovered live; deploy blocked before start by Laravel Cloud branch/tag boundary
 
-**Overall status:** The beta.69 preflight is green and foundation recovery is test-proven; deployment, commissioning, domain activation, and final verification have not run in this cleanroom; legacy worksheet retirement remains prohibited
+**Overall status:** Foundation, managed-secret attachment, and runtime reconciliation are complete; no deployment started because Cloud rejected the tag as an environment branch; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -99,7 +99,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
-| 13.8 Exact-release cleanroom | **In progress — stopped safely at foundation** | Beta.69 preflight passed 13/13; foundation failed before deployment and commissioning; detached-resource recovery and immediate no-op rerun are now locally proven |
+| 13.8 Exact-release cleanroom | **In progress — deploy blocked before start** | Beta.69 foundation, secrets, and runtime are complete; Cloud rejected the tag as a branch; no deployment, commissioning, domain, or financial phase ran |
 
 ### External prerequisite policy
 
@@ -257,6 +257,46 @@ existing-secret attachment, changed-only runtime configuration, exact beta.69
 deployment, and strict pre-commission verification. It must stop before any
 opening capitalization, funded invitation, domain/DNS mutation, or financial
 operation.
+
+### Beta.69 bounded live resume — 2026-10-05
+
+The authorized resume used `--apply` only. It did not receive commissioning,
+domain-activation, secret-rotation, invitation, messaging, or financial
+authority.
+
+The first preflight stopped before mutation because the default DigitalOcean
+CLI context could not read the declared zone. A read-only lookup proved the
+dedicated `x-payout-production-dns` context could read `disburse.cash`; the
+single corrected retry then passed preflight and completed:
+
+- detached `x_payout` database-cluster and schema recovery;
+- creation of the one missing normalized cache;
+- database and cache attachment to the production environment;
+- attachment of the 18 exact recorded deployment managed-secret IDs;
+- changed-only runtime reconciliation;
+- scheduler enablement; and
+- queue-worker creation.
+
+Generated state now records `preflight`, `foundation`, `secrets`, and `runtime`
+as complete, retains the recovered resource identities, and records `deploy`
+as failed. Laravel Cloud has no deployment record for this environment, so the
+failure occurred before a deployment started. Commissioning and domain phases
+were not reached.
+
+The deploy boundary is now characterized exactly. The compiled release ref is
+the immutable Git tag `v1.0.0-beta.69`, resolving to commit
+`296346d9a6743da12c63204634529880ca8d3d06`. Laravel Cloud rejected that value
+with `The selected branch is no longer available` because environment source
+selection accepts repository branches. No remote branch currently points to
+the beta.69 tag.
+
+The next corrective slice must introduce an explicit Cloud source-branch
+contract distinct from the immutable package release ref. Its preflight must
+prove that the selected release branch resolves to the exact tag commit before
+Cloud mutation. Deploying mutable `main`, weakening exact-release validation,
+or creating a remote branch without separate source-control authority is
+forbidden. After that slice is tested and the exact branch exists, the bounded
+resume may retry `deploy` and continue only through strict pre-commission.
 
 ### Official adapter parity evidence — 2026-10-05
 
