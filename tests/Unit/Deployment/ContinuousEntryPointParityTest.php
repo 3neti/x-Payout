@@ -71,15 +71,21 @@ case "$op" in
     touch "$state/app" "$state/env"
     printf '%s\n' '{"id":"app-one","defaultEnvironmentId":"env-one"}'
     ;;
-  environment:list) printf '%s\n' '[{"id":"env-one","name":"production","databaseSchemaId":"database-one","cacheId":"cache-one"}]' ;;
+  environment:list)
+    if [[ -f "$state/attached" ]]; then
+      printf '%s\n' '[{"id":"env-one","name":"production","databaseSchemaId":"database-one","cacheId":"cache-one"}]'
+    else
+      printf '%s\n' '[{"id":"env-one","name":"production","databaseSchemaId":null,"cacheId":null}]'
+    fi
+    ;;
   instance:list)
     [[ -f "$state/instance" ]] && printf '%s\n' '[{"id":"instance-one","isDefault":true}]' || printf '%s\n' '[]'
     ;;
   database-cluster:list)
-    [[ -f "$state/database" ]] && printf '%s\n' '[{"id":"cluster-one","schemas":[{"id":"database-one"}]}]' || printf '%s\n' '[]'
+    [[ -f "$state/database" ]] && printf '%s\n' '[{"id":"cluster-one","name":"example-payments-host-production","schemas":[{"id":"database-one","name":"x_payout"}]}]' || printf '%s\n' '[]'
     ;;
   cache:list)
-    [[ -f "$state/cache" ]] && printf '%s\n' '[{"id":"cache-one"}]' || printf '%s\n' '[]'
+    [[ -f "$state/cache" ]] && printf '%s\n' '[{"id":"cache-one","name":"example-payments-host-production"}]' || printf '%s\n' '[]'
     ;;
   background-process:list)
     [[ -f "$state/worker" ]] && printf '%s\n' '[{"id":"worker-one","command":"php artisan queue:work"}]' || printf '%s\n' '[]'
@@ -103,7 +109,18 @@ case "$op" in
   database:create) touch "$state/database"; printf '%s\n' '{"id":"database-one"}' ;;
   cache:create) touch "$state/cache"; printf '%s\n' '{"id":"cache-one"}' ;;
   cache:get) printf '%s\n' '{"id":"cache-one","status":"available"}' ;;
-  environment:update|instance:update|environment-secret:attach) printf '%s\n' '{}' ;;
+  environment:update)
+    if [[ "$*" == *"--database-id="* ]]; then
+      if [[ ! -f "$state/foundation-failed" ]]; then
+        touch "$state/foundation-failed"
+        printf '%s\n' 'injected attachment failure' >&2
+        exit 1
+      fi
+      touch "$state/attached"
+    fi
+    printf '%s\n' '{}'
+    ;;
+  instance:update|environment-secret:attach) printf '%s\n' '{}' ;;
   instance:create) touch "$state/instance"; printf '%s\n' '{"id":"instance-one"}' ;;
   environment:get)
     if [[ "$*" == *"--show-sensitive"* ]]; then
@@ -159,17 +176,36 @@ BASH);
         '--activate-domain',
     ];
 
+    $failed = new Process($arguments, $root, $environment);
+    $failed->setTimeout(30);
+    $failed->run();
+    $failedLog = (string) file_get_contents($cloudLog);
+    $failedState = json_decode((string) file_get_contents($statePath), true, flags: JSON_THROW_ON_ERROR);
+
+    expect($failed->isSuccessful())->toBeFalse()
+        ->and($failedState['checkpoints']['preflight'])->toBe('complete')
+        ->and($failedState['checkpoints']['foundation'])->toBe('failed')
+        ->and($failedState['resources'])->toBe([])
+        ->and($failedLog)->toContain('database-cluster:create --name=example-payments-host-production')
+        ->and($failedLog)->toContain('cache:create --name=example-payments-host-production');
+
     $first = new Process($arguments, $root, $environment);
     $first->setTimeout(30);
     $first->mustRun();
-    $firstLog = file_get_contents($cloudLog);
+    $completedLog = (string) file_get_contents($cloudLog);
+    $firstLog = substr($completedLog, strlen($failedLog));
     $firstEvidence = file_get_contents($evidencePath);
     $firstEvidencePayload = json_decode($firstEvidence, true, flags: JSON_THROW_ON_ERROR);
     $state = json_decode((string) file_get_contents($statePath), true, flags: JSON_THROW_ON_ERROR);
 
     expect($first->getOutput())->toContain('Continuous deployment complete')
-        ->and($firstLog)->toContain('database-cluster:create --name=example-payments-host-production')
-        ->and($firstLog)->toContain('cache:create --name=example-payments-host-production')
+        ->and($firstLog)->toContain('environment:update env-one --database-id=database-one --cache-id=cache-one')
+        ->and($firstLog)->not->toContain(
+            'application:create',
+            'database-cluster:create',
+            'database:create',
+            'cache:create',
+        )
         ->and($state['checkpoints'])->each->toBe('complete')
         ->and($state['resources'])->toMatchArray([
             'application_id' => 'app-one',
@@ -192,7 +228,7 @@ BASH);
     $second = new Process($arguments, $root, $environment);
     $second->setTimeout(30);
     $second->mustRun();
-    $secondLog = substr((string) file_get_contents($cloudLog), strlen($firstLog));
+    $secondLog = substr((string) file_get_contents($cloudLog), strlen($completedLog));
     $secondEvidence = json_decode((string) file_get_contents($evidencePath), true, flags: JSON_THROW_ON_ERROR);
 
     expect($secondLog)
@@ -203,6 +239,7 @@ BASH);
             'database:create',
             'cache:create',
             'instance:create',
+            'environment:update',
             'environment:variables',
             'background-process:create',
             'deploy ',

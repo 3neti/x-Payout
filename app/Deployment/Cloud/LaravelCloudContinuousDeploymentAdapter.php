@@ -13,7 +13,6 @@ use App\Deployment\Runtime\RuntimeConfigurationReconciler;
 use App\Deployment\Secrets\ManagedSecretReconciler;
 use App\Deployment\State\ResourceDiscovery;
 use App\Deployment\Support\CommandExecutor;
-use Illuminate\Support\Str;
 use JsonException;
 
 final readonly class LaravelCloudContinuousDeploymentAdapter implements ContinuousDeploymentAdapter
@@ -126,7 +125,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
 
         if (! isset($resources['database_cluster_id'])) {
             $cluster = $this->cloud->json('database-cluster:create', [
-                '--name='.Str::lower((string) $profile['identity']['id']).'-production',
+                '--name='.LaravelCloudResourceNames::foundation($profile),
                 '--type=neon_serverless_postgres',
                 '--engine-version=18',
                 '--region='.$this->region,
@@ -145,7 +144,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
 
         if (! isset($resources['cache_id'])) {
             $cache = $this->cloud->json('cache:create', [
-                '--name='.Str::lower((string) $profile['identity']['id']).'-production',
+                '--name='.LaravelCloudResourceNames::foundation($profile),
                 '--type=laravel_valkey',
                 '--region='.$this->region,
                 '--size=valkey-pro.250mb',

@@ -59,6 +59,7 @@ final readonly class LaravelCloudResourceDiscovery implements ResourceDiscovery
             $resources['instance_id'] = $this->id($instance, 'instance');
         }
 
+        $foundationNames = LaravelCloudResourceNames::foundationCandidates($profile);
         $databaseId = $environment['databaseSchemaId'] ?? null;
 
         if (is_string($databaseId) && $databaseId !== '') {
@@ -75,8 +76,29 @@ final readonly class LaravelCloudResourceDiscovery implements ResourceDiscovery
                 $resources['database_cluster_id'] = $this->id($databaseCluster, 'database cluster');
             }
         } else {
-            $missing[] = 'database_id';
-            $missing[] = 'database_cluster_id';
+            $databaseCluster = $this->unique(
+                $this->cloud->json('database-cluster:list'),
+                fn (array $item): bool => in_array($item['name'] ?? null, $foundationNames, true),
+                'detached database cluster',
+            );
+
+            if ($databaseCluster === null) {
+                $missing[] = 'database_id';
+                $missing[] = 'database_cluster_id';
+            } else {
+                $resources['database_cluster_id'] = $this->id($databaseCluster, 'database cluster');
+                $database = $this->unique(
+                    is_array($databaseCluster['schemas'] ?? null) ? $databaseCluster['schemas'] : [],
+                    fn (array $item): bool => ($item['name'] ?? null) === 'x_payout',
+                    'detached database schema',
+                );
+
+                if ($database === null) {
+                    $missing[] = 'database_id';
+                } else {
+                    $resources['database_id'] = $this->id($database, 'database');
+                }
+            }
         }
 
         $cacheId = $environment['cacheId'] ?? null;
@@ -94,7 +116,17 @@ final readonly class LaravelCloudResourceDiscovery implements ResourceDiscovery
                 $resources['cache_id'] = $this->id($cache, 'cache');
             }
         } else {
-            $missing[] = 'cache_id';
+            $cache = $this->unique(
+                $this->cloud->json('cache:list'),
+                fn (array $item): bool => in_array($item['name'] ?? null, $foundationNames, true),
+                'detached cache',
+            );
+
+            if ($cache === null) {
+                $missing[] = 'cache_id';
+            } else {
+                $resources['cache_id'] = $this->id($cache, 'cache');
+            }
         }
 
         if (isset($resources['instance_id'])) {

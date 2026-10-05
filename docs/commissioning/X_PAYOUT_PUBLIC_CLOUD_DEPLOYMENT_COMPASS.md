@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — real entry point and sanitized fake-CLI parity proven; exact-release cleanroom next
+**Current position:** Gate 13 — beta.69 cleanroom stopped safely at foundation; detached-resource recovery proven locally; controlled live resume next
 
-**Overall status:** Production deployment, custom domain, public issuance, Partner MCP transport, and strict readiness are green; legacy worksheet compatibility remains the deployment cleanup target
+**Overall status:** The beta.69 preflight is green and foundation recovery is test-proven; deployment, commissioning, domain activation, and final verification have not run in this cleanroom; legacy worksheet retirement remains prohibited
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -99,7 +99,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
-| 13.8 Exact-release cleanroom | Not started | First run operational, second run no-op, deleted-state run safely reconstructs |
+| 13.8 Exact-release cleanroom | **In progress — stopped safely at foundation** | Beta.69 preflight passed 13/13; foundation failed before deployment and commissioning; detached-resource recovery and immediate no-op rerun are now locally proven |
 
 ### External prerequisite policy
 
@@ -185,10 +185,49 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Perform one separately authorized exact-release cleanroom with the real
-Laravel Cloud and DigitalOcean transports. First run must reach operational;
-the immediate second run must be mutation-free. Compatibility retirement may
-be reviewed only after that evidence is accepted.
+Resume the separately authorized beta.69 exact-release cleanroom from the
+failed foundation checkpoint with the real Laravel Cloud and DigitalOcean
+transports. Discovery must adopt the one unambiguous detached resource set,
+attach it without recreating infrastructure, and continue only after the
+recovered identities are retained in generated state. The immediate run after
+operational acceptance must be mutation-free. Compatibility retirement may be
+reviewed only after that evidence is accepted.
+
+### Beta.69 foundation recovery evidence — 2026-10-05
+
+The first real two-input beta.69 cleanroom passed all 13 read-only preflight
+checks and stopped safely in `foundation`. Generated evidence records:
+
+- exact release `3neti/x-PayOut` `v1.0.0-beta.69`;
+- `preflight: complete` and `foundation: failed`;
+- managed-secret identities without supplied values;
+- no deployment identity;
+- no completed deployment, commissioning, domain activation, or final
+  verification phase; and
+- an empty local resource map because the foundation phase did not return a
+  patch after its later operation failed.
+
+The recovery slice now closes the resulting rediscovery gap without changing
+the generated-state schema:
+
+- unattached database clusters, `x_payout` schemas, and caches are discovered
+  by the stable instance resource name;
+- both the previously emitted mixed-case name and the corrected lowercase
+  normalized name are recognized during recovery;
+- more than one matching legacy/current resource fails closed as ambiguous;
+- an injected failure after database and cache creation but before environment
+  attachment reproduces the empty-resource-state checkpoint;
+- the retry rediscovers and attaches those exact resources without issuing a
+  second application, database-cluster, database, or cache creation command;
+- the immediate completed rerun performs no infrastructure, runtime,
+  deployment, commissioning, or domain mutation; and
+- the deployment unit suite passes 62 tests and 487 assertions.
+
+This is local fake-transport proof only. It authorizes no Cloud, DNS, provider,
+secret, commissioning, invitation, messaging, or financial mutation by
+itself. Compatibility worksheet retirement remains prohibited until the live
+exact-release run reaches operational state and its immediate no-op rerun is
+accepted.
 
 ### Official adapter parity evidence — 2026-10-05
 

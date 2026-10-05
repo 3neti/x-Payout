@@ -37,7 +37,7 @@ function fakeCloudExecutor(array $responses): CommandExecutor
 function cloudDiscoveryProfile(): array
 {
     return [
-        'identity' => ['display_name' => 'x-PayOut'],
+        'identity' => ['id' => '01M420J9JMF2FFBN1PE6JADZCA', 'display_name' => 'x-PayOut'],
         'release' => ['repository' => '3neti/x-Payout'],
         'runtime' => ['APP_ENV' => 'production'],
         'public' => ['canonical_url' => 'https://payout.disburse.cash'],
@@ -99,6 +99,64 @@ it('rediscovers one complete Laravel Cloud resource set using official list comm
         expect(array_slice($call['command'], -2))->toBe(['--json', '-n']);
     }
 });
+
+it('recovers detached foundation resources by current or legacy stable name', function (string $clusterName, string $cacheName): void {
+    $responses = completeCloudResponses();
+    $responses['environment:list'][0]['databaseSchemaId'] = null;
+    $responses['environment:list'][0]['cacheId'] = null;
+    $responses['database-cluster:list'][0]['name'] = $clusterName;
+    $responses['database-cluster:list'][0]['schemas'][0]['name'] = 'x_payout';
+    $responses['cache:list'][0]['name'] = $cacheName;
+
+    $discovered = (new LaravelCloudResourceDiscovery(new LaravelCloudClient(fakeCloudExecutor($responses))))
+        ->discover(cloudDiscoveryProfile());
+
+    expect($discovered['resources'])
+        ->toMatchArray([
+            'database_cluster_id' => 'cluster-one',
+            'database_id' => 'database-one',
+            'cache_id' => 'cache-one',
+        ])
+        ->and($discovered['missing'])->not->toContain(
+            'database_cluster_id',
+            'database_id',
+            'cache_id',
+        );
+})->with([
+    'corrected normalized names' => [
+        '01m420j9jmf2ffbn1pe6jadzca-production',
+        '01m420j9jmf2ffbn1pe6jadzca-production',
+    ],
+    'previously emitted names' => [
+        '01M420J9JMF2FFBN1PE6JADZCA-production',
+        '01M420J9JMF2FFBN1PE6JADZCA-production',
+    ],
+]);
+
+it('fails closed when detached foundation identity is ambiguous', function (string $resource): void {
+    $responses = completeCloudResponses();
+    $responses['environment:list'][0]['databaseSchemaId'] = null;
+    $responses['environment:list'][0]['cacheId'] = null;
+    $responses['database-cluster:list'][0]['name'] = '01m420j9jmf2ffbn1pe6jadzca-production';
+    $responses['database-cluster:list'][0]['schemas'][0]['name'] = 'x_payout';
+    $responses['cache:list'][0]['name'] = '01m420j9jmf2ffbn1pe6jadzca-production';
+
+    if ($resource === 'database') {
+        $responses['database-cluster:list'][] = array_merge(
+            $responses['database-cluster:list'][0],
+            ['id' => 'cluster-two', 'name' => '01M420J9JMF2FFBN1PE6JADZCA-production'],
+        );
+    } else {
+        $responses['cache:list'][] = [
+            'id' => 'cache-two',
+            'name' => '01M420J9JMF2FFBN1PE6JADZCA-production',
+        ];
+    }
+
+    expect(fn () => (new LaravelCloudResourceDiscovery(new LaravelCloudClient(fakeCloudExecutor($responses))))
+        ->discover(cloudDiscoveryProfile()))
+        ->toThrow(LaravelCloudAdapterException::class, "detached {$resource}");
+})->with(['database', 'cache']);
 
 it('returns a missing plan for an absent foundation and fails on ambiguous identity', function (): void {
     $missing = new LaravelCloudResourceDiscovery(new LaravelCloudClient(fakeCloudExecutor([
