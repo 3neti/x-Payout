@@ -58,7 +58,7 @@ function completeCloudResponses(): array
             'databaseSchemaId' => 'database-one',
             'cacheId' => 'cache-one',
         ]],
-        'instance:list' => [['id' => 'instance-one', 'isDefault' => true]],
+        'instance:list' => [['id' => 'instance-one', 'name' => 'App', 'type' => 'app', 'isDefault' => null]],
         'database-cluster:list' => [[
             'id' => 'cluster-one',
             'schemas' => [['id' => 'database-one']],
@@ -119,6 +119,7 @@ it('returns a missing plan for an absent foundation and fails on ambiguous ident
 it('pipes secret values to the official Cloud commands and never places them in arguments', function (): void {
     $executor = fakeCloudExecutor([
         'environment-secret:list' => [['id' => 'secret-existing', 'key' => 'EXISTING']],
+        'secret:list' => [['id' => 'secret-existing', 'key' => 'EXISTING']],
         'secret:create' => ['id' => 'secret-created'],
         'secret:update' => ['id' => 'secret-existing'],
         'environment-secret:attach' => ['id' => 'env-one'],
@@ -126,6 +127,7 @@ it('pipes secret values to the official Cloud commands and never places them in 
     $transport = new LaravelCloudManagedSecretTransport(new LaravelCloudClient($executor));
 
     expect($transport->attached('env-one'))->toBe(['EXISTING' => ['secret-existing']])
+        ->and($transport->available())->toBe(['EXISTING' => ['secret-existing']])
         ->and($transport->create('CREATED', 'private-create-value'))->toBe('secret-created');
     $transport->rotate('secret-existing', 'private-rotate-value');
     $transport->attach('env-one', 'secret-created');
@@ -134,8 +136,8 @@ it('pipes secret values to the official Cloud commands and never places them in 
 
     expect($serializedCommands)
         ->not->toContain('private-create-value', 'private-rotate-value')
-        ->and($executor->calls[1]['input'])->toBe('private-create-value')
-        ->and($executor->calls[2]['input'])->toBe('private-rotate-value')
-        ->and($executor->calls[1]['command'])->toContain('secret:create', '--name=CREATED', '--json', '-n')
-        ->and($executor->calls[2]['command'])->toContain('secret:update', 'secret-existing', '--force');
+        ->and($executor->calls[2]['input'])->toBe('private-create-value')
+        ->and($executor->calls[3]['input'])->toBe('private-rotate-value')
+        ->and($executor->calls[2]['command'])->toContain('secret:create', '--name=CREATED', '--json', '-n')
+        ->and($executor->calls[3]['command'])->toContain('secret:update', 'secret-existing', '--force');
 });

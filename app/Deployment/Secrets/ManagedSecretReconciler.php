@@ -31,12 +31,13 @@ final class ManagedSecretReconciler
         }
 
         foreach ($requiredNames as $name) {
-            if (! is_string($name) || preg_match('/^[A-Z][A-Z0-9_]*$/', $name) !== 1) {
+            if (preg_match('/^[A-Z][A-Z0-9_]*$/', $name) !== 1) {
                 throw new SecretReconciliationException('Required secret inventory contains an invalid name.');
             }
         }
 
         $attached = $this->transport->attached($environmentId);
+        $available = $this->transport->available();
         $resolvedIds = [];
         $actions = [];
         $ready = true;
@@ -50,15 +51,14 @@ final class ManagedSecretReconciler
 
             $attachedId = $attachedIds[0] ?? null;
             $knownId = $knownIds[$name] ?? null;
+            $availableIds = $available[$name] ?? [];
 
             if ($knownId !== null && $attachedId !== null && ! hash_equals($knownId, $attachedId)) {
                 throw new SecretReconciliationException("Managed secret identity conflict for [{$name}].");
             }
 
-            if ($knownId !== null && $attachedId === null) {
-                throw new SecretReconciliationException(
-                    "Managed secret [{$name}] is recorded in state but is not attached to the environment.",
-                );
+            if ($knownId !== null && ! in_array($knownId, $availableIds, true)) {
+                throw new SecretReconciliationException("Recorded managed secret [{$name}] no longer exists.");
             }
 
             if ($attachedId !== null && ! in_array($name, $rotateNames, true)) {
@@ -66,6 +66,28 @@ final class ManagedSecretReconciler
                 $actions[] = ['name' => $name, 'action' => 'unchanged'];
 
                 continue;
+            }
+
+            if ($attachedId === null && $knownId !== null && ! in_array($name, $rotateNames, true)) {
+                $this->transport->attach($environmentId, $knownId);
+                $resolvedIds[$name] = $knownId;
+                $actions[] = ['name' => $name, 'action' => 'attached_existing'];
+
+                continue;
+            }
+
+            if ($attachedId === null && count($availableIds) === 1 && ! in_array($name, $rotateNames, true)) {
+                $this->transport->attach($environmentId, $availableIds[0]);
+                $resolvedIds[$name] = $availableIds[0];
+                $actions[] = ['name' => $name, 'action' => 'attached_existing'];
+
+                continue;
+            }
+
+            if ($attachedId === null && count($availableIds) > 1 && ! isset($values[$name])) {
+                throw new SecretReconciliationException(
+                    "Managed secret [{$name}] is ambiguous across the organization and needs an exact value or recorded identity.",
+                );
             }
 
             if ($checkOnly) {

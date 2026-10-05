@@ -6,6 +6,7 @@ use App\Deployment\Controller\ContinuousDeploymentAdapter;
 use App\Deployment\Controller\ContinuousDeploymentException;
 use App\Deployment\Controller\DeploymentAuthority;
 use App\Deployment\Controller\DeploymentPhase;
+use App\Deployment\Dns\DnsReconciler;
 use App\Deployment\Evidence\DeploymentEvidenceJournal;
 use App\Deployment\Preflight\PreflightRunner;
 use App\Deployment\Runtime\RuntimeConfigurationReconciler;
@@ -24,6 +25,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         private PreflightRunner $preflight,
         private ManagedSecretReconciler $secrets,
         private RuntimeConfigurationReconciler $runtime,
+        private DnsReconciler $dns,
         private DeploymentEvidenceJournal $evidence,
         private array $secretValues = [],
         private string $binary = 'cloud',
@@ -322,9 +324,13 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     private function domain(array $compiled, array $state): array
     {
         $resources = [];
+        $host = parse_url((string) $compiled['profile']['public']['canonical_url'], PHP_URL_HOST);
+
+        if (! is_string($host) || $host === '') {
+            throw new ContinuousDeploymentException('The canonical domain hostname is invalid.');
+        }
 
         if (! isset($state['resources']['domain_id'])) {
-            $host = parse_url((string) $compiled['profile']['public']['canonical_url'], PHP_URL_HOST);
             $domain = $this->cloud->json('domain:create', [
                 $this->resource($state, 'environment_id'),
                 '--name='.$host,
@@ -332,12 +338,17 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
                 '--verification-method=pre_verification',
             ]);
             $resources['domain_id'] = $this->id($domain, 'domain');
+        } else {
+            $domain = $this->cloud->json('domain:get', [$this->resource($state, 'domain_id')]);
         }
 
         $domainId = $resources['domain_id'] ?? $this->resource($state, 'domain_id');
-        $verification = $this->cloud->json('domain:verify', [$domainId]);
+        $dns = $this->dns->reconcile($host, is_array($domain['dnsRecords'] ?? null) ? $domain['dnsRecords'] : []);
+        $verification = $this->waitForDomain($domainId);
         $this->evidence->record('domain', [
             'domain_id' => $domainId,
+            'dns_changed' => $dns['changed'],
+            'dns_actions' => $dns['actions'],
             'hostname_status' => $verification['hostnameStatus'] ?? null,
             'ssl_status' => $verification['sslStatus'] ?? null,
             'origin_status' => $verification['originStatus'] ?? null,
@@ -350,6 +361,25 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         }
 
         return $resources === [] ? [] : ['resources' => $resources];
+    }
+
+    /** @return array<string, mixed>|list<array<string, mixed>> */
+    private function waitForDomain(string $domainId): array
+    {
+        $verification = [];
+
+        for ($attempt = 1; $attempt <= 90; $attempt++) {
+            $verification = $this->cloud->json('domain:verify', [$domainId]);
+
+            if (in_array($verification['hostnameStatus'] ?? null, ['active', 'ready', 'verified'], true)
+                && in_array($verification['sslStatus'] ?? null, ['active', 'ready', 'verified'], true)) {
+                return $verification;
+            }
+
+            usleep(2_000_000);
+        }
+
+        return $verification;
     }
 
     /**

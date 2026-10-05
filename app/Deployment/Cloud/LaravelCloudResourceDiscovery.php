@@ -45,7 +45,11 @@ final readonly class LaravelCloudResourceDiscovery implements ResourceDiscovery
         $resources['environment_id'] = $this->id($environment, 'environment');
         $instance = $this->unique(
             $this->cloud->json('instance:list', [$resources['environment_id']]),
-            fn (array $item): bool => ($item['isDefault'] ?? false) === true,
+            fn (array $item): bool => ($item['isDefault'] ?? false) === true
+                || (
+                    ($item['type'] ?? null) === 'app'
+                    && strcasecmp((string) ($item['name'] ?? ''), 'App') === 0
+                ),
             'default instance',
         );
 

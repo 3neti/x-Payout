@@ -5,19 +5,29 @@ use App\Deployment\Secrets\ManagedSecretTransport;
 use App\Deployment\Secrets\SecretInputLoader;
 use App\Deployment\Secrets\SecretReconciliationException;
 
-function fakeManagedSecretTransport(array $attached = []): ManagedSecretTransport
+function fakeManagedSecretTransport(array $attached = [], ?array $available = null): ManagedSecretTransport
 {
-    return new class($attached) implements ManagedSecretTransport
+    return new class($attached, $available ?? $attached) implements ManagedSecretTransport
     {
         public array $calls = [];
 
-        public function __construct(private array $attachedSecrets) {}
+        public function __construct(
+            private array $attachedSecrets,
+            private array $availableSecrets,
+        ) {}
 
         public function attached(string $environmentId): array
         {
             $this->calls[] = ['attached', $environmentId];
 
             return $this->attachedSecrets;
+        }
+
+        public function available(): array
+        {
+            $this->calls[] = ['available'];
+
+            return $this->availableSecrets;
         }
 
         public function create(string $name, string $value): string
@@ -134,5 +144,18 @@ it('rotates only with explicit authority and rejects identity ambiguity', functi
         ['FIRST'],
         ['FIRST' => 'replacement'],
         ['FIRST' => 'secret-first'],
-    ))->toThrow(SecretReconciliationException::class, 'recorded in state but is not attached');
+    ))->toThrow(SecretReconciliationException::class, 'no longer exists');
+});
+
+it('reattaches one exact existing organization secret without requiring its value', function (): void {
+    $transport = fakeManagedSecretTransport([], ['FIRST' => ['secret-first']]);
+    $result = (new ManagedSecretReconciler($transport))->reconcile(
+        'env-new',
+        ['FIRST'],
+        [],
+    );
+
+    expect($result['managed_secret_ids'])->toBe(['FIRST' => 'secret-first'])
+        ->and($result['actions'])->toBe([['name' => 'FIRST', 'action' => 'attached_existing']])
+        ->and($transport->calls)->toContain(['attach', 'env-new', 'secret-first']);
 });

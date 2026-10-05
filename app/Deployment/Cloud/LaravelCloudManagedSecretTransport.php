@@ -11,6 +11,21 @@ final readonly class LaravelCloudManagedSecretTransport implements ManagedSecret
     public function attached(string $environmentId): array
     {
         $payload = $this->cloud->json('environment-secret:list', [$environmentId]);
+
+        return $this->index($payload);
+    }
+
+    public function available(): array
+    {
+        return $this->index($this->cloud->json('secret:list'));
+    }
+
+    /**
+     * @param  array<string, mixed>|list<array<string, mixed>>  $payload
+     * @return array<string, list<string>>
+     */
+    private function index(array $payload): array
+    {
         $attached = [];
 
         foreach ($payload as $secret) {

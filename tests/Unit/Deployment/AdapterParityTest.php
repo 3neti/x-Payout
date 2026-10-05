@@ -110,7 +110,7 @@ it('proves fake-transport parity resource recovery and an unchanged rerun', func
                     'command' => 'php artisan queue:work',
                 ]],
                 'domain:list' => [['id' => 'domain-one', 'name' => 'payout.example.com']],
-                'environment-secret:list' => $this->attachedSecrets,
+                'environment-secret:list', 'secret:list' => $this->attachedSecrets,
                 default => null,
             };
 

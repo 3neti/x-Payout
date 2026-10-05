@@ -10,6 +10,7 @@ use App\Deployment\Controller\CompiledArtifactLoader;
 use App\Deployment\Controller\ContinuousDeploymentController;
 use App\Deployment\Controller\DeploymentAuthority;
 use App\Deployment\Dns\DigitalOceanDnsPrerequisiteProbe;
+use App\Deployment\Dns\DigitalOceanDnsReconciler;
 use App\Deployment\Evidence\DeploymentEvidenceJournal;
 use App\Deployment\Evidence\SanitizedEvidenceWriter;
 use App\Deployment\Preflight\CommissioningAuthorityPrerequisiteProbe;
@@ -184,6 +185,12 @@ try {
         secrets: new ManagedSecretReconciler(new LaravelCloudManagedSecretTransport($cloud)),
         runtime: new RuntimeConfigurationReconciler(
             new LaravelCloudRuntimeConfiguration($commands, $cloudBinary),
+        ),
+        dns: new DigitalOceanDnsReconciler(
+            $commands,
+            $zone,
+            $doctlBinary,
+            getenv('DOCTL_CONTEXT') ?: null,
         ),
         evidence: $evidence,
         secretValues: $secretValues,

@@ -39,7 +39,22 @@ printf '%s\trefs/tags/v1.0.0\n' 0123456789abcdef0123456789abcdef01234567
 BASH);
     $doctl = entryPointExecutable(<<<'BASH'
 #!/usr/bin/env bash
-printf '%s\n' '[{"domain":"example.com"}]'
+set -euo pipefail
+if [[ "$*" == *"compute domain get"* ]]; then
+  printf '%s\n' '[{"domain":"example.com"}]'
+elif [[ "$*" == *"compute domain records list"* ]]; then
+  if [[ -f "${FAKE_DNS_STATE}" ]]; then
+    printf '%s\n' '[{"id":1,"type":"A","name":"payout","data":"203.0.113.10","ttl":3600}]'
+  else
+    printf '%s\n' '[]'
+  fi
+elif [[ "$*" == *"compute domain records create"* ]]; then
+  touch "${FAKE_DNS_STATE}"
+  printf '%s\n' '{}'
+else
+  printf 'unsupported fake doctl operation: %s\n' "$*" >&2
+  exit 1
+fi
 BASH);
     $cloud = entryPointExecutable(<<<'BASH'
 #!/usr/bin/env bash
@@ -72,7 +87,7 @@ case "$op" in
   domain:list)
     [[ -f "$state/domain" ]] && printf '%s\n' '[{"id":"domain-one","name":"payout.example.com"}]' || printf '%s\n' '[]'
     ;;
-  environment-secret:list)
+  environment-secret:list|secret:list)
     first=true
     printf '['
     IFS=',' read -ra names <<<"${FAKE_SECRET_NAMES}"
@@ -113,7 +128,7 @@ case "$op" in
       printf '%s\n' '{"status":"command.success","exitCode":0,"output":"{\"success\":true}"}'
     fi
     ;;
-  domain:create) touch "$state/domain"; printf '%s\n' '{"id":"domain-one"}' ;;
+  domain:create) touch "$state/domain"; printf '%s\n' '{"id":"domain-one","dnsRecords":[{"type":"A","name":"payout.example.com","value":"203.0.113.10"}]}' ;;
   domain:verify) printf '%s\n' '{"hostnameStatus":"verified","sslStatus":"verified","originStatus":"verified"}' ;;
   *) printf 'unsupported fake cloud operation: %s\n' "$op" >&2; exit 1 ;;
 esac
@@ -126,6 +141,7 @@ BASH);
         'CURL_BIN' => $success,
         'FAKE_CLOUD_LOG' => $cloudLog,
         'FAKE_CLOUD_STATE' => $cloudState,
+        'FAKE_DNS_STATE' => $directory.'/dns-state',
         'FAKE_SECRET_NAMES' => $secretNames,
     ];
     $arguments = [
