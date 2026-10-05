@@ -60,13 +60,13 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     private function preflight(array $compiled, array $state): array
     {
         $report = $this->preflight->run($compiled['preflight_plan'] ?? []);
-        $this->preflight->assertReady($report);
         $this->evidence->record('preflight', [
             'ready' => $report['ready'],
             'checked_at' => $report['checked_at'],
             'summary' => $report['summary'],
             'results' => $report['results'],
         ]);
+        $this->preflight->assertReady($report);
 
         if (($state['resources'] ?? []) !== []) {
             $discovered = $this->discovery->discover($compiled['profile']);
