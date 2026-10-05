@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — beta.69 foundation recovered live; exact-release Cloud source branch created and verified; bounded deploy resume is next
+**Current position:** Gate 13 — beta.69 exact-release deployment and pre-commission readiness complete; commissioning remains unauthorized
 
-**Overall status:** Foundation, managed-secret attachment, and runtime reconciliation are complete; `release/v1.0.0-beta.69` exists and resolves to the peeled commit of immutable tag `v1.0.0-beta.69`; no deployment has started; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
+**Overall status:** Foundation, managed-secret attachment, runtime reconciliation, exact-release deployment, strict pre-commission doctor, and immediate no-duplicate rerun are complete; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -99,7 +99,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
-| 13.8 Exact-release cleanroom | **In progress — bounded deploy resume ready** | Beta.69 foundation, secrets, and runtime are complete; `release/v1.0.0-beta.69` and the peeled immutable tag both resolve to commit `853c5b00774878de89b905fc0d3ba3f5c26aae47`; no deployment, commissioning, domain, or financial phase ran |
+| 13.8 Exact-release cleanroom | **In progress — pre-commission ready** | Deployment `depl-a2e8e855-83a5-45da-8502-1ac7dcc1f97c` succeeded from `release/v1.0.0-beta.69` at exact peeled tag commit `853c5b00774878de89b905fc0d3ba3f5c26aae47`; strict pre-commission doctor passed 27/27; immediate bounded rerun created no replacement deployment; commissioning, domain, invitations, and financial operations did not run |
 
 ### External prerequisite policy
 
@@ -283,12 +283,12 @@ as failed. Laravel Cloud has no deployment record for this environment, so the
 failure occurred before a deployment started. Commissioning and domain phases
 were not reached.
 
-The deploy boundary is now characterized exactly. The compiled release ref is
-the immutable Git tag `v1.0.0-beta.69`, resolving to commit
-`296346d9a6743da12c63204634529880ca8d3d06`. Laravel Cloud rejected that value
-with `The selected branch is no longer available` because environment source
-selection accepts repository branches. No remote branch currently points to
-the beta.69 tag.
+The original deploy boundary was characterized exactly. The compiled release
+ref was the immutable annotated Git tag `v1.0.0-beta.69`. Its tag object is
+`296346d9a6743da12c63204634529880ca8d3d06`, and its peeled commit is
+`853c5b00774878de89b905fc0d3ba3f5c26aae47`. Laravel Cloud rejected the tag
+value with `The selected branch is no longer available` because environment
+source selection accepts repository branches.
 
 The corrective source contract is now implemented and tested. Instance profiles
 declare `release.ref` as immutable release identity and
@@ -305,8 +305,32 @@ branch and `refs/tags/v1.0.0-beta.69^{}` resolve to that same commit. The
 annotated tag object itself is
 `296346d9a6743da12c63204634529880ca8d3d06`; it is release metadata, not a valid
 branch target. Deploying mutable `main` or weakening exact-release validation
-remains forbidden. The bounded resume may now retry `deploy` and continue only
-through strict pre-commission.
+remains forbidden. The completed bounded resume is recorded below.
+
+### Beta.69 bounded deploy checkpoint — 2026-10-05
+
+The bounded `--apply` resume rediscovered the existing foundation and started
+exactly one Laravel Cloud deployment. Cloud completed deployment
+`depl-a2e8e855-83a5-45da-8502-1ac7dcc1f97c` successfully from
+`release/v1.0.0-beta.69` at commit
+`853c5b00774878de89b905fc0d3ba3f5c26aae47`.
+
+Two CLI streaming races were characterized and hardened without broadening
+authority:
+
+- deployment monitoring now polls the returned deployment ID and can recover
+  exactly one already-successful deployment only when branch and commit match
+  the immutable release;
+- remote commands now start with `--no-monitor` and poll their returned command
+  ID, avoiding multi-document JSON progress output.
+
+The recovered deployment was persisted into generated state and sanitized
+evidence. Strict pre-commission doctor passed all 27 checks. The controller
+stopped with `commission: skipped`, and an immediate subsequent bounded run
+remained `precommission_ready` with the same single deployment. No
+commissioning, domain activation, secret rotation, invitation, or financial
+operation ran. Compatibility worksheet retirement remains prohibited until an
+explicitly authorized commissioning and final no-op operational rerun complete.
 
 ### Official adapter parity evidence — 2026-10-05
 

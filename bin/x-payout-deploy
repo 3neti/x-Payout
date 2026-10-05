@@ -197,6 +197,7 @@ try {
         evidence: $evidence,
         secretValues: $secretValues,
         binary: $cloudBinary,
+        gitBinary: $gitBinary,
     );
     $states = new DeploymentStateStore;
     $controller = new ContinuousDeploymentController($states, $adapter, 'laravel-cloud');

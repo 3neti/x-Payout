@@ -29,6 +29,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         private DeploymentEvidenceJournal $evidence,
         private array $secretValues = [],
         private string $binary = 'cloud',
+        private string $gitBinary = 'git',
         private string $environmentName = 'production',
         private string $region = 'ap-southeast-1',
     ) {}
@@ -251,6 +252,19 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
      */
     private function deploy(array $compiled, array $state): array
     {
+        $expectedCommit = $this->releaseCommit($compiled['profile']['release']);
+        $recoveredDeploymentId = $this->recoverSuccessfulDeployment(
+            $this->resource($state, 'environment_id'),
+            $compiled['profile']['release']['cloud_source_branch'],
+            $expectedCommit,
+        );
+
+        if ($recoveredDeploymentId !== null) {
+            $this->recordDeployment($compiled, $recoveredDeploymentId, $expectedCommit, 'recovered');
+
+            return ['last_deployment_id' => $recoveredDeploymentId];
+        }
+
         $this->cloud->json('environment:update', [
             $this->resource($state, 'environment_id'),
             '--branch='.$compiled['profile']['release']['cloud_source_branch'],
@@ -268,23 +282,111 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         }
 
         $deploymentId = $this->deploymentId($result->output);
-        $monitor = $this->commands->run([
-            $this->binary, 'deploy:monitor', $this->resource($state, 'application_id'), $this->environmentName,
-            '--json', '-n',
-        ]);
+        $this->waitForDeployment($deploymentId, $compiled['profile']['release']['cloud_source_branch'], $expectedCommit);
+        $this->recordDeployment($compiled, $deploymentId, $expectedCommit, 'started');
 
-        if (! $monitor->successful()) {
-            throw new ContinuousDeploymentException('Laravel Cloud deployment did not complete successfully.');
+        return ['last_deployment_id' => $deploymentId];
+    }
+
+    /** @param array<string, mixed> $release */
+    private function releaseCommit(array $release): string
+    {
+        $repository = (string) ($release['repository'] ?? '');
+
+        if (! str_contains($repository, '://') && ! str_starts_with($repository, 'git@')) {
+            $repository = 'git@github.com:'.$repository.'.git';
         }
 
+        $ref = (string) ($release['ref'] ?? '');
+        $result = $this->commands->run([
+            $this->gitBinary,
+            'ls-remote',
+            '--exit-code',
+            $repository,
+            'refs/tags/'.$ref,
+            'refs/tags/'.$ref.'^{}',
+        ]);
+
+        if (! $result->successful()) {
+            throw new ContinuousDeploymentException('The immutable release commit could not be resolved for deployment.');
+        }
+
+        $references = [];
+
+        foreach (preg_split('/\R/', trim($result->output)) ?: [] as $line) {
+            $parts = preg_split('/\s+/', trim($line), 2);
+
+            if (count($parts) === 2) {
+                $references[$parts[1]] = $parts[0];
+            }
+        }
+
+        $commit = $references['refs/tags/'.$ref.'^{}'] ?? $references['refs/tags/'.$ref] ?? null;
+
+        if (! is_string($commit) || preg_match('/^[a-f0-9]{40}$/', $commit) !== 1) {
+            throw new ContinuousDeploymentException('The immutable release tag did not resolve to a commit for deployment.');
+        }
+
+        return $commit;
+    }
+
+    private function recoverSuccessfulDeployment(string $environmentId, string $branch, string $commit): ?string
+    {
+        $deployments = $this->cloud->json('deployment:list', [$environmentId]);
+        $matches = array_values(array_filter(
+            array_is_list($deployments) ? $deployments : [],
+            static fn (array $deployment): bool => ($deployment['status'] ?? null) === 'deployment.succeeded'
+                && ($deployment['branchName'] ?? null) === $branch
+                && ($deployment['commitHash'] ?? null) === $commit,
+        ));
+
+        if (count($matches) > 1) {
+            throw new ContinuousDeploymentException('Exact successful deployment recovery is ambiguous.');
+        }
+
+        if ($matches === []) {
+            return null;
+        }
+
+        return $this->id($matches[0], 'deployment');
+    }
+
+    private function waitForDeployment(string $deploymentId, string $branch, string $commit): void
+    {
+        for ($attempt = 1; $attempt <= 180; $attempt++) {
+            $deployment = $this->cloud->json('deployment:get', [$deploymentId]);
+            $status = $deployment['status'] ?? null;
+
+            if ($status === 'deployment.succeeded') {
+                if (($deployment['branchName'] ?? null) !== $branch
+                    || ($deployment['commitHash'] ?? null) !== $commit) {
+                    throw new ContinuousDeploymentException('Laravel Cloud deployed a source other than the exact release.');
+                }
+
+                return;
+            }
+
+            if (is_string($status) && (str_contains($status, 'failed') || str_contains($status, 'cancelled'))) {
+                throw new ContinuousDeploymentException('Laravel Cloud deployment did not complete successfully.');
+            }
+
+            usleep(2_000_000);
+        }
+
+        throw new ContinuousDeploymentException('Laravel Cloud deployment did not complete in time.');
+    }
+
+    /** @param array<string, mixed> $compiled */
+    private function recordDeployment(array $compiled, string $deploymentId, string $commit, string $disposition): void
+    {
         $this->evidence->record('deployment', [
             'deployment_id' => $deploymentId,
             'release_ref' => $compiled['profile']['release']['ref'],
             'cloud_source_branch' => $compiled['profile']['release']['cloud_source_branch'],
+            'commit' => $commit,
+            'disposition' => $disposition,
             'status' => 'succeeded',
         ]);
-
-        return ['last_deployment_id' => $deploymentId];
     }
 
     /**
@@ -415,10 +517,18 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
      */
     private function remotePayload(array $state, string $command, bool $mustSucceed): array
     {
-        $payload = $this->cloud->json('command:run', [
+        $started = $this->cloud->json('command:run', [
             $this->resource($state, 'environment_id'),
             '--cmd='.$command,
+            '--no-monitor',
         ]);
+        $commandId = $started['command_id'] ?? $started['id'] ?? null;
+
+        if (! is_string($commandId) || $commandId === '') {
+            throw new ContinuousDeploymentException('Laravel Cloud did not return a remote command identity.');
+        }
+
+        $payload = $this->waitForRemoteCommand($commandId);
         $exitCode = $payload['exitCode'] ?? $payload['exit_code'] ?? null;
         $status = $payload['status'] ?? 'command.success';
 
@@ -439,6 +549,23 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         }
 
         return is_array($decoded) ? $decoded : [];
+    }
+
+    /** @return array<string, mixed> */
+    private function waitForRemoteCommand(string $commandId): array
+    {
+        for ($attempt = 1; $attempt <= 180; $attempt++) {
+            $payload = $this->cloud->json('command:get', [$commandId]);
+            $status = $payload['status'] ?? null;
+
+            if (in_array($status, ['command.success', 'command.failed'], true)) {
+                return $payload;
+            }
+
+            usleep(1_000_000);
+        }
+
+        throw new ContinuousDeploymentException('Laravel Cloud remote command did not complete in time.');
     }
 
     /** @param array<string, mixed> $state */

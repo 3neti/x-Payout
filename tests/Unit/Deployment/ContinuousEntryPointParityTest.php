@@ -94,6 +94,13 @@ case "$op" in
   domain:list)
     [[ -f "$state/domain" ]] && printf '%s\n' '[{"id":"domain-one","name":"payout.example.com"}]' || printf '%s\n' '[]'
     ;;
+  deployment:list)
+    if [[ -f "$state/deployed" ]]; then
+      printf '%s\n' '[{"id":"deployment-one","status":"deployment.succeeded","commitHash":"0123456789abcdef0123456789abcdef01234567","branchName":"release/v1.0.0"}]'
+    else
+      printf '%s\n' '[]'
+    fi
+    ;;
   environment-secret:list|secret:list)
     first=true
     printf '['
@@ -133,16 +140,21 @@ case "$op" in
   environment:variables) printf '%s\n' '{}' ;;
   background-process:create) touch "$state/worker"; printf '%s\n' '{"id":"worker-one"}' ;;
   deploy) touch "$state/deployed"; printf '%s\n' '{"deployment_id":"deployment-one"}' ;;
-  deploy:monitor) printf '%s\n' 'deployment.succeeded' ;;
+  deployment:get) printf '%s\n' '{"id":"deployment-one","status":"deployment.succeeded","commitHash":"0123456789abcdef0123456789abcdef01234567","branchName":"release/v1.0.0"}' ;;
   command:run)
-    if [[ "$*" == *"commissioning:status"* ]]; then
+    printf '%s' "$*" >"$state/last-command"
+    printf '%s\n' '{"command_id":"command-one","status":"command.running"}'
+    ;;
+  command:get)
+    remote_command="$(cat "$state/last-command")"
+    if [[ "$remote_command" == *"commissioning:status"* ]]; then
       if [[ -f "$state/commissioned" ]]; then
         printf '%s\n' '{"status":"command.success","exitCode":0,"output":"{\"operational\":true}"}'
       else
         printf '%s\n' '{"status":"command.failed","exitCode":1,"output":"{\"operational\":false,\"reason\":\"installation_incomplete\"}"}'
       fi
     else
-      [[ "$*" == *"x-payout:bootstrap"* ]] && touch "$state/commissioned"
+      [[ "$remote_command" == *"x-payout:bootstrap"* ]] && touch "$state/commissioned"
       printf '%s\n' '{"status":"command.success","exitCode":0,"output":"{\"success\":true}"}'
     fi
     ;;
@@ -202,6 +214,8 @@ BASH);
     expect($first->getOutput())->toContain('Continuous deployment complete')
         ->and($firstLog)->toContain('environment:update env-one --database-id=database-one --cache-id=cache-one')
         ->and($firstLog)->toContain('environment:update env-one --branch=release/v1.0.0')
+        ->and($firstLog)->toContain('deployment:get deployment-one')
+        ->and($firstLog)->not->toContain('deploy:monitor')
         ->and($firstLog)->not->toContain(
             'application:create',
             'database-cluster:create',
@@ -239,6 +253,26 @@ BASH);
                 'commit' => '0123456789abcdef0123456789abcdef01234567',
             ],
         ]);
+
+    $interruptedState = $state;
+    $interruptedState['checkpoints']['deploy'] = 'failed';
+    $interruptedState['last_deployment_id'] = null;
+    file_put_contents($statePath, json_encode(
+        $interruptedState,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR,
+    )."\n");
+    $beforeRecoveryLog = (string) file_get_contents($cloudLog);
+    $recovery = new Process($arguments, $root, $environment);
+    $recovery->setTimeout(30);
+    $recovery->mustRun();
+    $recoveryLog = substr((string) file_get_contents($cloudLog), strlen($beforeRecoveryLog));
+    $recoveredState = json_decode((string) file_get_contents($statePath), true, flags: JSON_THROW_ON_ERROR);
+
+    expect($recoveryLog)
+        ->toContain('deployment:list env-one')
+        ->not->toContain('deploy app-one production')
+        ->and($recoveredState['checkpoints']['deploy'])->toBe('complete')
+        ->and($recoveredState['last_deployment_id'])->toBe('deployment-one');
 
     $second = new Process($arguments, $root, $environment);
     $second->setTimeout(30);
