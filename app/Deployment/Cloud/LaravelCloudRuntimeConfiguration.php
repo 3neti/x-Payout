@@ -4,19 +4,39 @@ namespace App\Deployment\Cloud;
 
 use App\Deployment\Runtime\RuntimeConfigurationTransport;
 use App\Deployment\Support\CommandExecutor;
+use JsonException;
 
 final readonly class LaravelCloudRuntimeConfiguration implements RuntimeConfigurationTransport
 {
     public function __construct(
-        private LaravelCloudClient $cloud,
         private CommandExecutor $commands,
         private string $binary = 'cloud',
     ) {}
 
     public function current(string $environmentId): array
     {
-        $payload = $this->cloud->json('environment:get', [$environmentId]);
-        $variables = $payload['environmentVariables'] ?? $payload['variables'] ?? [];
+        $result = $this->commands->run([
+            $this->binary,
+            'environment:variables',
+            $environmentId,
+            '--json',
+            '--show-sensitive',
+            '-n',
+        ]);
+
+        if (! $result->successful()) {
+            throw new LaravelCloudAdapterException('Laravel Cloud runtime variables could not be read for reconciliation.');
+        }
+
+        try {
+            $payload = json_decode($result->output, true, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new LaravelCloudAdapterException('Laravel Cloud runtime variables returned invalid JSON.', previous: $exception);
+        }
+
+        $variables = is_array($payload)
+            ? ($payload['environmentVariables'] ?? $payload['variables'] ?? $payload)
+            : [];
         $current = [];
 
         if (! is_array($variables)) {

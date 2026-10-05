@@ -1,0 +1,72 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://3neti.dev/schemas/x-payout/deployment-evidence.v1.schema.json",
+    "title": "x-PayOut sanitized deployment evidence",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "schema",
+        "profile_fingerprint",
+        "adapter",
+        "status",
+        "release",
+        "canonical_host",
+        "resources",
+        "managed_secret_names",
+        "last_deployment_id",
+        "checkpoints",
+        "phase_evidence",
+        "generated_at"
+    ],
+    "properties": {
+        "schema": {
+            "const": "x-payout.deployment-evidence.v1"
+        },
+        "profile_fingerprint": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64
+        },
+        "adapter": {
+            "const": "laravel-cloud"
+        },
+        "status": {
+            "enum": ["precommission_ready", "complete", "failed"]
+        },
+        "release": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["repository", "ref"],
+            "properties": {
+                "repository": {"type": "string"},
+                "ref": {"type": "string"}
+            }
+        },
+        "canonical_host": {
+            "type": "string"
+        },
+        "resources": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+        },
+        "managed_secret_names": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string"}
+        },
+        "last_deployment_id": {
+            "type": ["string", "null"]
+        },
+        "checkpoints": {
+            "type": "object",
+            "additionalProperties": {"type": "string"}
+        },
+        "phase_evidence": {
+            "type": "object"
+        },
+        "generated_at": {
+            "type": "string",
+            "format": "date-time"
+        }
+    }
+}

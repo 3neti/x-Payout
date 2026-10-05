@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — compiled controller authority and per-phase resumability proven; live entry-point adoption next
+**Current position:** Gate 13 — real entry point and sanitized fake-CLI parity proven; exact-release cleanroom next
 
 **Overall status:** Production deployment, custom domain, public issuance, Partner MCP transport, and strict readiness are green; legacy worksheet compatibility remains the deployment cleanup target
 
@@ -94,10 +94,10 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.0 Legacy-input classification | **Complete** | Both worksheet shapes have exact ownership; unknown, duplicate, and multiply owned keys fail |
 | 13.1 External prerequisite catalog | **Complete for adapter contract** | DigitalOcean DNS, installed EMI provider, immutable release, private storage, HTTPS integration, and commissioning-evidence probes are fake-tested; live credentials remain a cleanroom concern |
 | 13.2 Generated-state schema | **Complete** | Official Cloud read discovery, exact identity recovery, ambiguity/conflict failure, unchanged rerun, and deleted-state reconstruction are fake-proven |
-| 13.3 Managed-secret importer | **In progress** | Official Cloud list/create/update/attach transport is wired with values on stdin; controller import authority and live fake-CLI phase parity remain |
+| 13.3 Managed-secret importer | **Complete with fake CLI** | Official Cloud list/create/update/attach transport is wired; values use stdin and current-run rotation authority; exact-release cleanroom remains |
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
-| 13.5 Resumable one-command controller | **Complete with fake transports** | Failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
-| 13.6 Sanitized evidence contract | Not started | Evidence schema and secret-pattern scan green |
+| 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
+| 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
 | 13.8 Exact-release cleanroom | Not started | First run operational, second run no-op, deleted-state run safely reconstructs |
 
@@ -161,15 +161,34 @@ Additional proof:
 - completed mutating phases are not replayed; and
 - read-only preflight and final verification run again on an unchanged rerun.
 
-Compatibility worksheet removal remains forbidden until the new kernel is
-wired to the operator entry point and one exact-release cleanroom passes.
+Compatibility worksheet removal remains forbidden until one exact-release
+cleanroom passes.
+
+### Real entry-point fake parity — 2026-10-05
+
+- `bin/x-payout-deploy continuous` accepts the portable instance, optional
+  one-time secrets file, generated state/evidence locations, adapter, and
+  current-run authorities.
+- It compiles and verifies artifacts before constructing the Laravel Cloud
+  adapter; no legacy worksheet is read.
+- The fake first run exercised source, DNS, storage, integration, secret,
+  infrastructure, runtime, deploy, remote-doctor, commissioning, domain, and
+  final verification transports.
+- The fake second run rediscovered state and repeated read-only preflight and
+  doctor checks only. It did not create infrastructure, rewrite runtime,
+  redeploy, recommission, or recreate the domain.
+- Sanitized evidence retained the exact release, fingerprint, changed-key
+  names, phase dispositions, resource IDs, and doctor summaries without any
+  supplied secret value. Its top-level contract is committed as
+  `ops/deployment/schema/evidence.v1.schema.json`, and focused tests verify
+  the required shape, owner-only file mode, and secret-value rejection.
 
 ### Immediate next slice
 
-Wire the new controller kernel into `bin/x-payout-deploy` for the Laravel Cloud
-adapter, emit the sanitized evidence bundle, run a full fake-CLI parity pass,
-then perform one separately authorized exact-release cleanroom. Only after that
-proof may the worksheet compatibility path be deprecated.
+Perform one separately authorized exact-release cleanroom with the real
+Laravel Cloud and DigitalOcean transports. First run must reach operational;
+the immediate second run must be mutation-free. Compatibility retirement may
+be reviewed only after that evidence is accepted.
 
 ### Official adapter parity evidence — 2026-10-05
 

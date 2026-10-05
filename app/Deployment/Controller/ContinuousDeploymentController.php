@@ -54,6 +54,10 @@ final readonly class ContinuousDeploymentController
                 $state['checkpoints'][$phase->value] = 'skipped';
                 $state = $this->states->write($statePath, $state);
 
+                if ($phase === DeploymentPhase::Commission) {
+                    return $state;
+                }
+
                 continue;
             }
 

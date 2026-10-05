@@ -30,14 +30,19 @@ final readonly class SourceReleasePrerequisiteProbe implements PrerequisiteProbe
 
         $hash = strtok(trim($result->output), "\t ");
 
+        if (! is_string($hash)) {
+            return $this->blocked('The immutable release tag did not resolve to a commit.');
+        }
+
         return [
             'status' => 'ready',
             'reason' => 'The immutable source release is available.',
             'remediation' => 'None.',
-            'evidence' => ['ref' => $this->ref, 'commit' => is_string($hash) ? $hash : null],
+            'evidence' => ['ref' => $this->ref, 'commit' => $hash],
         ];
     }
 
+    /** @return array{status: string, reason: string, remediation: string} */
     private function blocked(string $reason): array
     {
         return ['status' => 'blocked', 'reason' => $reason, 'remediation' => 'Publish or correct the exact release before deployment.'];

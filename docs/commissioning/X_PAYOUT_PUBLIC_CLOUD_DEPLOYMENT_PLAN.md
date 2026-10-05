@@ -228,6 +228,12 @@ read-only preflight and verification. Release, private-storage, HTTPS
 integration, and commissioning-evidence probes were added without sending a
 message, creating an identity, moving money, or writing an object.
 
+The real `bin/x-payout-deploy continuous` entry point now compiles the supplied
+instance, loads only verified artifacts, invokes the Laravel Cloud adapter,
+and accepts current-run authority through command flags. It does not source a
+legacy worksheet. Full fake-CLI parity proves the first run and an unchanged
+second run through that exact executable.
+
 ### Cleanup Gate 6 — Sanitize state and evidence
 
 Produce a bounded evidence bundle containing the exact Git SHA and release,
@@ -241,6 +247,16 @@ information.
 
 **Acceptance:** Automated secret-pattern and schema checks pass before local
 retention or CI artifact upload.
+
+**Implementation evidence — 2026-10-05:** The entry point writes an owner-only
+`x-payout.deployment-evidence.v1` bundle containing the profile fingerprint,
+exact release, canonical host, resource identities, managed-secret names,
+changed runtime key names, deployment identity, redacted preflight results,
+commissioning disposition, domain status, and strict/MCP doctor summaries.
+It rejects any supplied secret value found in the encoded evidence and merges
+prior same-fingerprint phase evidence on an unchanged rerun. The committed
+`ops/deployment/schema/evidence.v1.schema.json` contract fixes the allowed
+top-level shape for local retention and CI upload.
 
 ### Cleanup Gate 7 — Retire compatibility mode
 

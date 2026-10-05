@@ -17,20 +17,26 @@ final class PreflightRunner
 
     private const EVIDENCE_KEYS = [
         'adapter',
+        'authorized_for_this_run',
         'authority',
         'bucket',
         'capabilities',
+        'commit',
+        'connection',
         'contract_hash',
         'contract_version',
         'driver',
         'endpoint_host',
         'fingerprint',
+        'host',
         'identity',
         'name',
         'region',
         'release',
+        'ref',
         'repository',
         'resource_id',
+        'transport',
         'zone',
     ];
 
@@ -67,7 +73,9 @@ final class PreflightRunner
         return [
             'schema' => 'x-payout.preflight-report.v1',
             'profile_fingerprint' => $plan['profile_fingerprint'],
-            'checked_at' => ($checkedAt ?? new DateTimeImmutable('now', new DateTimeZone('UTC')))
+            'checked_at' => DateTimeImmutable::createFromInterface(
+                $checkedAt ?? new DateTimeImmutable('now', new DateTimeZone('UTC')),
+            )
                 ->setTimezone(new DateTimeZone('UTC'))
                 ->format(DateTimeInterface::ATOM),
             'ready' => $blocking === [],

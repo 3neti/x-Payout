@@ -1,0 +1,228 @@
+#!/usr/bin/env php
+<?php
+
+use App\Deployment\Cloud\LaravelCloudClient;
+use App\Deployment\Cloud\LaravelCloudContinuousDeploymentAdapter;
+use App\Deployment\Cloud\LaravelCloudManagedSecretTransport;
+use App\Deployment\Cloud\LaravelCloudResourceDiscovery;
+use App\Deployment\Cloud\LaravelCloudRuntimeConfiguration;
+use App\Deployment\Controller\CompiledArtifactLoader;
+use App\Deployment\Controller\ContinuousDeploymentController;
+use App\Deployment\Controller\DeploymentAuthority;
+use App\Deployment\Dns\DigitalOceanDnsPrerequisiteProbe;
+use App\Deployment\Evidence\DeploymentEvidenceJournal;
+use App\Deployment\Evidence\SanitizedEvidenceWriter;
+use App\Deployment\Preflight\CommissioningAuthorityPrerequisiteProbe;
+use App\Deployment\Preflight\CompositePrerequisiteProbe;
+use App\Deployment\Preflight\DeclaredPrerequisiteProbe;
+use App\Deployment\Preflight\HttpsIntegrationPrerequisiteProbe;
+use App\Deployment\Preflight\ObjectStoragePrerequisiteProbe;
+use App\Deployment\Preflight\PreflightRunner;
+use App\Deployment\Preflight\SourceReleasePrerequisiteProbe;
+use App\Deployment\Profiles\InstanceProfileCompiler;
+use App\Deployment\Runtime\RuntimeConfigurationReconciler;
+use App\Deployment\Secrets\ManagedSecretReconciler;
+use App\Deployment\Secrets\SecretInputLoader;
+use App\Deployment\State\DeploymentStateStore;
+use App\Deployment\Support\SymfonyCommandExecutor;
+
+require dirname(__DIR__).'/vendor/autoload.php';
+
+$command = $argv[1] ?? null;
+$options = [];
+$flags = [];
+
+foreach (array_slice($argv, 2) as $argument) {
+    if (preg_match('/^--([^=]+)=(.*)$/', $argument, $matches) === 1) {
+        $options[$matches[1]] = $matches[2];
+    } elseif (preg_match('/^--([a-z][a-z0-9-]*)$/', $argument, $matches) === 1) {
+        $flags[$matches[1]] = true;
+    } else {
+        fwrite(STDERR, "Unknown argument [{$argument}].\n");
+        exit(64);
+    }
+}
+
+$usage = <<<'TEXT'
+Usage:
+  bin/x-payout-deploy continuous \
+    --instance=/path/to/instance.yaml \
+    [--secrets=/path/to/secrets.env] \
+    [--state=/private/path/state.json] \
+    [--evidence=/private/path/evidence.json] \
+    --adapter=laravel-cloud --apply [--commission] [--activate-domain] [--rotate-secrets]
+
+The verified compiled profile is desired-state authority. State and evidence
+are generated outputs. Production secret values are accepted only from the
+owner-only one-time secrets file and are never written to compiled artifacts,
+state, evidence, or command output.
+TEXT;
+
+try {
+    if ($command !== 'continuous') {
+        throw new InvalidArgumentException("Only the continuous command is supported.\n\n{$usage}");
+    }
+
+    $instancePath = $options['instance'] ?? null;
+    $adapterName = $options['adapter'] ?? null;
+
+    if (! is_string($instancePath) || $instancePath === '' || $adapterName !== 'laravel-cloud') {
+        throw new InvalidArgumentException("Continuous deployment requires --instance and --adapter=laravel-cloud.\n\n{$usage}");
+    }
+
+    if (($flags['apply'] ?? false) !== true) {
+        throw new InvalidArgumentException('Continuous deployment requires current-run --apply authority.');
+    }
+
+    $compiler = new InstanceProfileCompiler;
+    $profile = $compiler->validate($instancePath);
+    $instanceId = $profile['identity']['id'];
+    $root = dirname(__DIR__);
+    $compiledDirectory = $options['compiled'] ?? $root.'/ops/deployment/build/'.$instanceId;
+    $statePath = $options['state'] ?? $root.'/ops/deployment/state/'.$instanceId.'.json';
+    $evidencePath = $options['evidence'] ?? $root.'/ops/deployment/state/'.$instanceId.'.evidence.json';
+    $secretsPath = $options['secrets'] ?? null;
+    $secretValues = [];
+
+    if (is_string($secretsPath) && $secretsPath !== '') {
+        $secretValues = (new SecretInputLoader)->load($secretsPath, $profile['required_secrets']);
+    }
+
+    $compiler->compile($instancePath, $secretsPath, $compiledDirectory);
+    $compiled = (new CompiledArtifactLoader)->load($compiledDirectory);
+    $commands = new SymfonyCommandExecutor(1800.0);
+    $storageCommands = new SymfonyCommandExecutor(60.0, array_filter([
+        'AWS_ACCESS_KEY_ID' => $secretValues['AWS_ACCESS_KEY_ID'] ?? null,
+        'AWS_SECRET_ACCESS_KEY' => $secretValues['AWS_SECRET_ACCESS_KEY'] ?? null,
+        'AWS_DEFAULT_REGION' => isset($compiled['runtime']['AWS_DEFAULT_REGION'])
+            ? (string) $compiled['runtime']['AWS_DEFAULT_REGION']
+            : null,
+    ], static fn (?string $value): bool => $value !== null && $value !== ''));
+    $cloudBinary = getenv('CLOUD_BIN') ?: 'cloud';
+    $doctlBinary = getenv('DOCTL_BIN') ?: 'doctl';
+    $curlBinary = getenv('CURL_BIN') ?: 'curl';
+    $gitBinary = getenv('GIT_BIN') ?: 'git';
+    $awsBinary = getenv('AWS_BIN') ?: 'aws';
+    $cloud = new LaravelCloudClient($commands, $cloudBinary);
+    $host = parse_url((string) $profile['public']['canonical_url'], PHP_URL_HOST);
+
+    if (! is_string($host) || $host === '') {
+        throw new InvalidArgumentException('The compiled canonical URL has no hostname.');
+    }
+
+    $labels = explode('.', $host);
+    $zone = count($labels) >= 2 ? implode('.', array_slice($labels, -2)) : $host;
+    $repository = $profile['release']['repository'];
+
+    if (! str_contains($repository, '://') && ! str_starts_with($repository, 'git@')) {
+        $repository = 'git@github.com:'.$repository.'.git';
+    }
+
+    $runtime = $compiled['runtime'];
+    $storageProbe = isset($secretValues['AWS_ACCESS_KEY_ID'], $secretValues['AWS_SECRET_ACCESS_KEY'])
+        ? new ObjectStoragePrerequisiteProbe(
+            $storageCommands,
+            (string) ($runtime['AWS_BUCKET'] ?? ''),
+            (string) ($runtime['AWS_ENDPOINT'] ?? ''),
+            $awsBinary,
+        )
+        : new DeclaredPrerequisiteProbe('object-storage');
+    $httpsProbe = new HttpsIntegrationPrerequisiteProbe($commands, [
+        'sms' => 'https://api.engagespark.com',
+        'otp' => (string) ($runtime['TXTCMDR_API_URL'] ?? 'https://api.txtcmdr.com'),
+        'kyc' => (string) ($runtime['HYPERVERGE_BASE_URL'] ?? 'https://ind-api.hyperverge.co'),
+        'maps' => 'https://api.mapbox.com',
+        'geocoding' => 'https://api.opencagedata.com',
+        'oauth' => (string) $profile['public']['canonical_url'],
+    ], $curlBinary);
+    $availableSecretNames = $profile['required_secrets'];
+    $declarations = new DeclaredPrerequisiteProbe('provider');
+    $preflight = new PreflightRunner(new CompositePrerequisiteProbe([
+        'source-control' => new SourceReleasePrerequisiteProbe(
+            $commands,
+            $repository,
+            $profile['release']['ref'],
+            $gitBinary,
+        ),
+        'dns' => new DigitalOceanDnsPrerequisiteProbe(
+            $commands,
+            $zone,
+            $doctlBinary,
+            getenv('DOCTL_CONTEXT') ?: null,
+        ),
+        'object-storage' => $storageProbe,
+        'secret-custody' => new DeclaredPrerequisiteProbe('secret-custody', $availableSecretNames),
+        'provider' => $declarations,
+        'sms' => $httpsProbe,
+        'otp' => $httpsProbe,
+        'kyc' => $httpsProbe,
+        'maps' => $httpsProbe,
+        'geocoding' => $httpsProbe,
+        'oauth' => $httpsProbe,
+        'operator-approval' => new CommissioningAuthorityPrerequisiteProbe(
+            $profile['commissioning']['opening'],
+            new DeploymentAuthority(
+                apply: true,
+                commission: ($flags['commission'] ?? false) === true,
+                activateDomain: ($flags['activate-domain'] ?? false) === true,
+                rotateSecrets: ($flags['rotate-secrets'] ?? false) === true,
+            ),
+        ),
+    ]));
+    $authority = new DeploymentAuthority(
+        apply: true,
+        commission: ($flags['commission'] ?? false) === true,
+        activateDomain: ($flags['activate-domain'] ?? false) === true,
+        rotateSecrets: ($flags['rotate-secrets'] ?? false) === true,
+    );
+    $evidence = new DeploymentEvidenceJournal;
+    $adapter = new LaravelCloudContinuousDeploymentAdapter(
+        cloud: $cloud,
+        commands: $commands,
+        discovery: new LaravelCloudResourceDiscovery($cloud),
+        preflight: $preflight,
+        secrets: new ManagedSecretReconciler(new LaravelCloudManagedSecretTransport($cloud)),
+        runtime: new RuntimeConfigurationReconciler(
+            new LaravelCloudRuntimeConfiguration($commands, $cloudBinary),
+        ),
+        evidence: $evidence,
+        secretValues: $secretValues,
+        binary: $cloudBinary,
+    );
+    $states = new DeploymentStateStore;
+    $controller = new ContinuousDeploymentController($states, $adapter, 'laravel-cloud');
+
+    try {
+        $state = $controller->run($statePath, $compiled, $authority);
+        $status = ($state['checkpoints']['verify'] ?? null) === 'complete' ? 'complete' : 'precommission_ready';
+        (new SanitizedEvidenceWriter)->write(
+            $evidencePath,
+            $compiled,
+            $state,
+            $status,
+            $secretValues,
+            $evidence->all(),
+        );
+    } catch (Throwable $exception) {
+        $state = $states->load($statePath);
+
+        if (is_array($state)) {
+            (new SanitizedEvidenceWriter)->write(
+                $evidencePath,
+                $compiled,
+                $state,
+                'failed',
+                $secretValues,
+                $evidence->all(),
+            );
+        }
+
+        throw $exception;
+    }
+
+    fwrite(STDOUT, "Continuous deployment {$status}.\nState: {$statePath}\nEvidence: {$evidencePath}\n");
+    exit(0);
+} catch (Throwable $exception) {
+    fwrite(STDERR, 'x-payout-deploy: '.$exception->getMessage()."\n");
+    exit(1);
+}

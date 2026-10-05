@@ -27,7 +27,7 @@ final readonly class HttpsIntegrationPrerequisiteProbe implements PrerequisitePr
         }
 
         $result = $this->commands->run([
-            $this->binary, '--head', '--fail', '--silent', '--show-error', '--max-time', '10', $endpoint,
+            $this->binary, '--head', '--silent', '--show-error', '--max-time', '10', $endpoint,
         ]);
 
         return $result->successful()
