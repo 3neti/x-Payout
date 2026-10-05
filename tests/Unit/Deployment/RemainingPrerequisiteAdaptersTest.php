@@ -26,9 +26,14 @@ it('checks remaining prerequisites without financial or messaging mutations', fu
         ->inspect(['id' => 'release.source']);
     $storage = (new ObjectStoragePrerequisiteProbe($commands, 'private-bucket', 'https://sgp1.digitaloceanspaces.com'))
         ->inspect(['id' => 'storage.evidence']);
-    $integration = (new HttpsIntegrationPrerequisiteProbe($commands, [
+    $integrations = (new HttpsIntegrationPrerequisiteProbe($commands, [
         'sms' => 'https://api.engagespark.com/health',
-    ]))->inspect(['id' => 'integrations.sms', 'transport' => 'sms']);
+        'otp' => 'https://api.txtcmdr.com/health',
+        'kyc' => 'https://api.hyperverge.co/health',
+        'maps' => 'https://api.mapbox.com/',
+        'geocoding' => 'https://api.opencagedata.com/',
+        'oauth' => 'https://payout.disburse.cash/mcp/x-change',
+    ]));
     $commissioning = (new CommissioningAuthorityPrerequisiteProbe([
         'connection' => 'netbank-primary',
         'cutover_at' => '2026-10-05T00:00:00Z',
@@ -37,9 +42,15 @@ it('checks remaining prerequisites without financial or messaging mutations', fu
 
     expect($release['status'])->toBe('ready')
         ->and($storage['status'])->toBe('ready')
-        ->and($integration['status'])->toBe('ready')
         ->and($commissioning['status'])->toBe('ready')
         ->and($commissioning['evidence']['authorized_for_this_run'])->toBeFalse()
         ->and(implode("\n", array_map(static fn (array $call): string => implode(' ', $call), $commands->calls)))
         ->not->toContain('send', 'put-object', 'delete-object');
+
+    foreach (['sms', 'otp', 'kyc', 'maps', 'geocoding', 'oauth'] as $transport) {
+        expect($integrations->inspect([
+            'id' => 'integrations.'.$transport,
+            'transport' => $transport,
+        ])['status'])->toBe('ready');
+    }
 });
