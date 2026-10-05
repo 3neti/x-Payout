@@ -14,7 +14,8 @@ final class DeploymentEvidenceJournal
     {
         if (! in_array($section, [
             'preflight', 'secrets', 'runtime', 'deployment', 'pre_commission',
-            'commissioning', 'domain', 'strict_doctor', 'mcp_doctor',
+            'commissioning_manifest', 'commissioning_preview', 'commissioning',
+            'domain', 'strict_doctor', 'mcp_doctor',
         ], true)) {
             throw new InvalidArgumentException("Unsupported deployment evidence section [{$section}].");
         }

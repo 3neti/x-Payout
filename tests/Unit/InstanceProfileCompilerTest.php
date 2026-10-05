@@ -59,6 +59,28 @@ it('validates the sanitized portable profile without booting Laravel', function 
         ->not->toContain('Artisan');
 });
 
+it('supports manual commissioning without contact delivery secrets', function (): void {
+    $profile = validInstanceProfile();
+    $profile['commissioning']['invitations']['delivery_mode'] = 'manual';
+    unset(
+        $profile['commissioning']['invitations']['maker']['email_secret'],
+        $profile['commissioning']['invitations']['maker']['mobile_secret'],
+        $profile['commissioning']['invitations']['checker']['email_secret'],
+        $profile['commissioning']['invitations']['checker']['mobile_secret'],
+    );
+
+    $validated = (new InstanceProfileCompiler)->validate(writeInstanceProfile($profile));
+
+    expect($validated['commissioning']['invitations']['delivery_mode'])->toBe('manual')
+        ->and($validated['commissioning_required_secrets'])->toBe([])
+        ->and($validated['required_secrets'])->not->toContain(
+            'X_PAYOUT_MAKER_EMAIL',
+            'X_PAYOUT_MAKER_MOBILE',
+            'X_PAYOUT_CHECKER_EMAIL',
+            'X_PAYOUT_CHECKER_MOBILE',
+        );
+});
+
 it('compiles deterministic sanitized artifacts without serializing secret values', function (): void {
     $compiler = new InstanceProfileCompiler;
     $profile = $compiler->validate(instanceProfilePath('ops/deployment/examples/instance.yaml'));

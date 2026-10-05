@@ -100,6 +100,11 @@ final class InstanceProfileCompiler
 
         $this->assertString($profile['commissioning']['commercial_principal'], 'reference', 'commissioning.commercial_principal');
         $this->assertString($profile['commissioning']['commercial_principal'], 'legal_name', 'commissioning.commercial_principal');
+        $invitationDeliveryMode = $profile['commissioning']['invitations']['delivery_mode'] ?? 'contact';
+
+        if (! in_array($invitationDeliveryMode, ['contact', 'manual'], true)) {
+            throw new InstanceProfileException('commissioning.invitations.delivery_mode must be [contact] or [manual].');
+        }
 
         foreach (['maker', 'checker'] as $role) {
             $invitation = $profile['commissioning']['invitations'][$role] ?? null;
@@ -109,8 +114,10 @@ final class InstanceProfileCompiler
             }
 
             $this->assertPositiveInteger($invitation['amount_minor'] ?? null, "commissioning.invitations.{$role}.amount_minor");
-            $this->assertSecretReference($invitation['email_secret'] ?? null, "commissioning.invitations.{$role}.email_secret", $commissioningSecrets);
-            $this->assertSecretReference($invitation['mobile_secret'] ?? null, "commissioning.invitations.{$role}.mobile_secret", $commissioningSecrets);
+            if ($invitationDeliveryMode === 'contact') {
+                $this->assertSecretReference($invitation['email_secret'] ?? null, "commissioning.invitations.{$role}.email_secret", $commissioningSecrets);
+                $this->assertSecretReference($invitation['mobile_secret'] ?? null, "commissioning.invitations.{$role}.mobile_secret", $commissioningSecrets);
+            }
         }
 
         $this->assertEnvironmentMapping($profile['runtime'] ?? [], 'runtime');

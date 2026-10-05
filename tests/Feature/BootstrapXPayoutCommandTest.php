@@ -7,5 +7,7 @@ it('exposes and forwards the production force bootstrap option', function (): vo
 
     expect($source)
         ->toContain('{--force : Force database migrations when bootstrapping in production}')
-        ->toContain("'--force' => (bool) \$this->option('force')");
+        ->toContain("'--force' => (bool) \$this->option('force')")
+        ->toContain('{--commissioning-preview-token= : Exact token emitted by x-change:commission:preview}')
+        ->toContain("'--commissioning-preview-token' => (string) \$this->option('commissioning-preview-token')");
 });

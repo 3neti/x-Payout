@@ -14,6 +14,7 @@ use App\Deployment\Secrets\ManagedSecretReconciler;
 use App\Deployment\State\ResourceDiscovery;
 use App\Deployment\Support\CommandExecutor;
 use JsonException;
+use Symfony\Component\Yaml\Yaml;
 
 final readonly class LaravelCloudContinuousDeploymentAdapter implements ContinuousDeploymentAdapter
 {
@@ -47,7 +48,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
             DeploymentPhase::Runtime => $this->runtime($compiled, $state),
             DeploymentPhase::Deploy => $this->deploy($compiled, $state),
             DeploymentPhase::PreCommission => $this->remote($state, 'php artisan x-change:doctor --pre-commission --strict --json'),
-            DeploymentPhase::Commission => $this->commission($state),
+            DeploymentPhase::Commission => $this->commission($compiled, $state),
             DeploymentPhase::Domain => $this->domain($compiled, $state),
             DeploymentPhase::Verify => $this->verify($state),
         };
@@ -393,7 +394,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
      * @param  array<string, mixed>  $state
      * @return array<string, mixed>
      */
-    private function commission(array $state): array
+    private function commission(array $compiled, array $state): array
     {
         $status = $this->remotePayload($state, 'php artisan x-change:commissioning:status --json', false);
 
@@ -410,10 +411,81 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
             return [];
         }
 
-        $this->remote($state, 'composer x-payout:bootstrap -- --manifest=commissioning/default.yaml --skip-build --no-interaction');
-        $this->evidence->record('commissioning', ['disposition' => 'commissioned_once']);
+        $manifest = $this->materializeCommissioningManifest($compiled, $state);
+        $preview = $this->remotePayload(
+            $state,
+            'php artisan x-change:commission:preview --manifest='.$manifest.' --json --no-interaction',
+            true,
+        );
+        $token = $preview['preview_token'] ?? null;
+
+        if (($preview['ready'] ?? false) !== true
+            || ! is_string($token)
+            || preg_match('/^[a-f0-9]{64}$/', $token) !== 1) {
+            throw new ContinuousDeploymentException('Hardened commissioning preview did not return a valid ready token.');
+        }
+
+        $this->evidence->record('commissioning_preview', [
+            'disposition' => 'matched',
+            'schema' => $preview['schema'] ?? null,
+            'facts' => $preview['facts'] ?? [],
+            'preview_token_hash' => hash('sha256', $token),
+        ]);
+        $this->remote(
+            $state,
+            'composer x-payout:bootstrap -- --manifest='.$manifest.' --skip-build --commissioning-preview-token='.$token.' --no-interaction',
+        );
+        $this->evidence->record('commissioning', [
+            'disposition' => 'commissioned_once',
+            'preview_token_hash' => hash('sha256', $token),
+        ]);
 
         return [];
+    }
+
+    /** @param array<string, mixed> $compiled */
+    private function materializeCommissioningManifest(array $compiled, array $state): string
+    {
+        $compiledOpening = (array) data_get($compiled, 'commissioning.opening', []);
+        $invitations = (array) data_get($compiled, 'commissioning.invitations', []);
+        $makerAmountMinor = (int) data_get($invitations, 'maker.amount_minor', 0);
+        $checkerAmountMinor = (int) data_get($invitations, 'checker.amount_minor', 0);
+        $deliveryMode = trim((string) ($invitations['delivery_mode'] ?? 'contact'));
+
+        if ($makerAmountMinor <= 0 || $makerAmountMinor !== $checkerAmountMinor) {
+            throw new ContinuousDeploymentException(
+                'Hardened commissioning requires equal positive maker and checker invitation amounts.',
+            );
+        }
+
+        $overlay = Yaml::dump([
+            'extends' => 'commissioning/default.yaml',
+            'onboarding' => [
+                'invitation_amount' => $makerAmountMinor / 100,
+            ],
+            'commissioning' => [
+                'opening' => $compiledOpening,
+                'invitations' => [
+                    'delivery_mode' => $deliveryMode,
+                ],
+            ],
+        ], 6, 2);
+        $encoded = base64_encode($overlay);
+        $directory = 'storage/app/private/x-payout';
+        $path = $directory.'/commissioning.generated.yaml';
+        $php = '$directory='.var_export($directory, true).';'
+            .'is_dir($directory) || mkdir($directory, 0700, true);'
+            .'file_put_contents('.var_export($path, true).', base64_decode('.var_export($encoded, true).'));';
+
+        $this->remote($state, 'php -r '.escapeshellarg($php));
+        $this->evidence->record('commissioning_manifest', [
+            'disposition' => 'materialized_from_compiled_profile',
+            'path' => $path,
+            'sha256' => hash('sha256', $overlay),
+            'delivery_mode' => $deliveryMode,
+        ]);
+
+        return $path;
     }
 
     /**

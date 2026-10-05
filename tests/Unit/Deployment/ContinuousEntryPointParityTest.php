@@ -153,6 +153,8 @@ case "$op" in
       else
         printf '%s\n' '{"status":"command.failed","exitCode":1,"output":"{\"operational\":false,\"reason\":\"installation_incomplete\"}"}'
       fi
+    elif [[ "$remote_command" == *"commission:preview"* ]]; then
+      printf '%s\n' '{"status":"command.success","exitCode":0,"output":"{\"schema\":\"x-change.commissioning-preview.v1\",\"ready\":true,\"mutation\":false,\"preview_token\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"facts\":{\"provider_balance_minor\":450693,\"invitation_reserve_minor\":20000,\"remaining_reserve_minor\":430693}}"}'
     else
       [[ "$remote_command" == *"x-payout:bootstrap"* ]] && touch "$state/commissioned"
       printf '%s\n' '{"status":"command.success","exitCode":0,"output":"{\"success\":true}"}'
@@ -216,6 +218,8 @@ BASH);
         ->and($firstLog)->toContain('environment:update env-one --branch=release/v1.0.0')
         ->and($firstLog)->toContain('deployment:get deployment-one')
         ->and($firstLog)->not->toContain('deploy:monitor')
+        ->and($firstLog)->toContain('x-change:commission:preview')
+        ->and($firstLog)->toContain('--commissioning-preview-token=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         ->and($firstLog)->not->toContain(
             'application:create',
             'database-cluster:create',
@@ -237,7 +241,8 @@ BASH);
         ->not->toContain($secretValue, 'NETBANK_CLIENT_SECRET":')
         ->and($firstEvidencePayload['phase_evidence'])->toHaveKeys([
             'preflight', 'secrets', 'runtime', 'deployment', 'pre_commission',
-            'commissioning', 'domain', 'strict_doctor', 'mcp_doctor',
+            'commissioning_manifest', 'commissioning_preview', 'commissioning',
+            'domain', 'strict_doctor', 'mcp_doctor',
         ])
         ->and($firstEvidencePayload['phase_evidence']['runtime']['changed_keys'])->not->toBeEmpty();
 
@@ -294,6 +299,7 @@ BASH);
             'deploy ',
             'domain:create',
         )->and($secondEvidence['phase_evidence'])->toHaveKeys([
-            'deployment', 'commissioning', 'domain', 'strict_doctor', 'mcp_doctor',
+            'deployment', 'commissioning_manifest', 'commissioning_preview',
+            'commissioning', 'domain', 'strict_doctor', 'mcp_doctor',
         ]);
 });
