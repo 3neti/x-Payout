@@ -138,7 +138,7 @@ it('consumes verified compiled artifacts in compatibility mode', function (): vo
     expect($process->getOutput())
         ->toContain('Input mode:       compiled profile compatibility')
         ->toContain('Repository:       example/x-payout')
-        ->toContain('Branch:           v1.0.0')
+        ->toContain('Branch:           release/v1.0.0')
         ->toContain('Public domain:    payout.example.com')
         ->toMatch('/Profile:\s+[a-f0-9]{64}/')
         ->not->toContain('private-test-value');
