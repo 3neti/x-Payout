@@ -229,6 +229,35 @@ itself. Compatibility worksheet retirement remains prohibited until the live
 exact-release run reaches operational state and its immediate no-op rerun is
 accepted.
 
+### Beta.69 live recovery admission — 2026-10-05
+
+A read-only Laravel Cloud inventory after the recovery commit confirms that a
+bounded live resume is admissible:
+
+- exactly one `x-PayOut` application and one `production` environment match
+  the declared repository and environment identity;
+- the environment has no database schema or cache attached;
+- exactly one normalized foundation database cluster is available and contains
+  exactly one `x_payout` schema;
+- no matching x-PayOut cache exists, so the next foundation run may create one
+  cache but must not create another database cluster or schema;
+- exactly one application instance exists at the declared size, with scheduler
+  disabled and no background worker;
+- no domain is attached;
+- all 18 deployment-required managed-secret IDs recorded in generated state
+  still exist at organization scope and none are attached to the new
+  environment; and
+- the four Maker/Checker contact references are commissioning-only inputs, not
+  deployment managed secrets.
+
+The compiled profile and generated state retain the same profile fingerprint.
+The next authorized command must use `--apply` without `--commission`,
+`--activate-domain`, or `--rotate-secrets`. Its boundary is foundation recovery,
+existing-secret attachment, changed-only runtime configuration, exact beta.69
+deployment, and strict pre-commission verification. It must stop before any
+opening capitalization, funded invitation, domain/DNS mutation, or financial
+operation.
+
 ### Official adapter parity evidence — 2026-10-05
 
 - Added an official Laravel Cloud JSON client using documented non-interactive
