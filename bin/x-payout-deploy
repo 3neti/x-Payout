@@ -18,6 +18,7 @@ use App\Deployment\Preflight\CompositePrerequisiteProbe;
 use App\Deployment\Preflight\DeclaredPrerequisiteProbe;
 use App\Deployment\Preflight\HttpsIntegrationPrerequisiteProbe;
 use App\Deployment\Preflight\ObjectStoragePrerequisiteProbe;
+use App\Deployment\Preflight\PassportContractPrerequisiteProbe;
 use App\Deployment\Preflight\PreflightRunner;
 use App\Deployment\Preflight\SourceReleasePrerequisiteProbe;
 use App\Deployment\Profiles\InstanceProfileCompiler;
@@ -159,7 +160,7 @@ try {
         'kyc' => $httpsProbe,
         'maps' => $httpsProbe,
         'geocoding' => $httpsProbe,
-        'oauth' => $httpsProbe,
+        'oauth' => new PassportContractPrerequisiteProbe($runtime, $availableSecretNames),
         'operator-approval' => new CommissioningAuthorityPrerequisiteProbe(
             $profile['commissioning']['opening'],
             new DeploymentAuthority(
