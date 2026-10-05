@@ -169,6 +169,7 @@ BASH);
 
     expect($first->getOutput())->toContain('Continuous deployment complete')
         ->and($firstLog)->toContain('database-cluster:create --name=example-payments-host-production')
+        ->and($firstLog)->toContain('cache:create --name=example-payments-host-production')
         ->and($state['checkpoints'])->each->toBe('complete')
         ->and($state['resources'])->toMatchArray([
             'application_id' => 'app-one',
