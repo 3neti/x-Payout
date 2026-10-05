@@ -47,8 +47,11 @@ final class PreflightRunner
      * @param  array<string, mixed>  $plan
      * @return array<string, mixed>
      */
-    public function run(array $plan, ?DateTimeInterface $checkedAt = null): array
-    {
+    public function run(
+        array $plan,
+        ?DateTimeInterface $checkedAt = null,
+        array $notApplicableCheckIds = [],
+    ): array {
         if (($plan['schema'] ?? null) !== 'x-payout.preflight-plan.v1'
             || ! is_array($plan['checks'] ?? null)
             || ! is_string($plan['profile_fingerprint'] ?? null)) {
@@ -62,7 +65,14 @@ final class PreflightRunner
                 throw new PreflightException('Preflight plan contains an invalid check.');
             }
 
-            $inspection = $this->probe->inspect($check);
+            $inspection = in_array($check['id'], $notApplicableCheckIds, true)
+                ? [
+                    'status' => 'not_applicable',
+                    'reason' => 'The optional deployment phase is not authorized for this run.',
+                    'remediation' => 'Authorize the optional phase to evaluate this prerequisite.',
+                    'evidence' => ['authorized_for_this_run' => false],
+                ]
+                : $this->probe->inspect($check);
             $results[] = $this->normalizeResult($check['id'], $inspection);
         }
 

@@ -72,6 +72,36 @@ it('fails closed before mutation when a fake dependency needs attention', functi
         ->and($mutations)->toBe(0);
 });
 
+it('does not inspect an optional prerequisite when its phase is not authorized', function (): void {
+    $probe = new class implements PrerequisiteProbe
+    {
+        public int $calls = 0;
+
+        public function inspect(array $check): array
+        {
+            $this->calls++;
+
+            return [
+                'status' => 'blocked',
+                'reason' => 'The optional dependency is unavailable.',
+                'remediation' => 'Configure the optional dependency.',
+            ];
+        }
+    };
+    $runner = new PreflightRunner($probe);
+    $report = $runner->run(
+        preflightPlanWith('public.dns'),
+        notApplicableCheckIds: ['public.dns'],
+    );
+
+    $runner->assertReady($report);
+
+    expect($probe->calls)->toBe(0)
+        ->and($report['ready'])->toBeTrue()
+        ->and($report['summary']['not_applicable'])->toBe(1)
+        ->and(data_get($report, 'results.0.evidence.authorized_for_this_run'))->toBeFalse();
+});
+
 it('rejects evidence fields that could leak credentials or provider payloads', function (): void {
     $probe = new class implements PrerequisiteProbe
     {

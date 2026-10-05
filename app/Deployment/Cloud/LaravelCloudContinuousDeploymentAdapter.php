@@ -42,7 +42,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         DeploymentAuthority $authority,
     ): array {
         return match ($phase) {
-            DeploymentPhase::Preflight => $this->preflight($compiled, $state),
+            DeploymentPhase::Preflight => $this->preflight($compiled, $state, $authority),
             DeploymentPhase::Foundation => $this->foundation($compiled, $state),
             DeploymentPhase::Secrets => $this->secrets($compiled, $state, $authority),
             DeploymentPhase::Runtime => $this->runtime($compiled, $state),
@@ -59,9 +59,15 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
      * @param  array<string, mixed>  $state
      * @return array<string, mixed>
      */
-    private function preflight(array $compiled, array $state): array
-    {
-        $report = $this->preflight->run($compiled['preflight_plan'] ?? []);
+    private function preflight(
+        array $compiled,
+        array $state,
+        DeploymentAuthority $authority,
+    ): array {
+        $report = $this->preflight->run(
+            $compiled['preflight_plan'] ?? [],
+            notApplicableCheckIds: $authority->activateDomain ? [] : ['public.dns'],
+        );
         $this->evidence->record('preflight', [
             'ready' => $report['ready'],
             'checked_at' => $report['checked_at'],
