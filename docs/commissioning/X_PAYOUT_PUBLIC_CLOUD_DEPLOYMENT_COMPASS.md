@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-05
 
-**Current position:** Gate 13 — beta.69 foundation recovered live; exact-release Cloud source-branch contract tested; remote release branch not yet authorized or created
+**Current position:** Gate 13 — beta.69 foundation recovered live; exact-release Cloud source branch created and verified; bounded deploy resume is next
 
-**Overall status:** Foundation, managed-secret attachment, and runtime reconciliation are complete; deploy now distinguishes the immutable release tag from Laravel Cloud's branch selector and preflight requires both to resolve to the same commit; no remote release branch or deployment has been authorized yet; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
+**Overall status:** Foundation, managed-secret attachment, and runtime reconciliation are complete; `release/v1.0.0-beta.69` exists and resolves to the peeled commit of immutable tag `v1.0.0-beta.69`; no deployment has started; commissioning, domain activation, and final verification have not run; legacy worksheet retirement remains prohibited
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -99,7 +99,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
-| 13.8 Exact-release cleanroom | **In progress — release branch creation pending** | Beta.69 foundation, secrets, and runtime are complete; the tested profile contract uses `release/v1.0.0-beta.69` for Cloud while retaining tag `v1.0.0-beta.69` as immutable release identity; no deployment, commissioning, domain, or financial phase ran |
+| 13.8 Exact-release cleanroom | **In progress — bounded deploy resume ready** | Beta.69 foundation, secrets, and runtime are complete; `release/v1.0.0-beta.69` and the peeled immutable tag both resolve to commit `853c5b00774878de89b905fc0d3ba3f5c26aae47`; no deployment, commissioning, domain, or financial phase ran |
 
 ### External prerequisite policy
 
@@ -298,13 +298,15 @@ branch is absent or points at another commit. Both the continuous controller
 and retained compatibility controller use the Cloud branch while deployment
 evidence preserves the immutable tag.
 
-The private beta.69 profile now selects `release/v1.0.0-beta.69`, but that
-remote branch has not been created. Creating and pushing it remains a separate
-source-control mutation requiring explicit authority. It must point exactly to
-`296346d9a6743da12c63204634529880ca8d3d06`. Deploying mutable `main`, weakening
-exact-release validation, or retrying Cloud before the branch exists remains
-forbidden. Once the exact branch exists, the bounded resume may retry `deploy`
-and continue only through strict pre-commission.
+The private beta.69 profile selects `release/v1.0.0-beta.69`. Under explicit
+source-control authority, that remote branch was created at peeled commit
+`853c5b00774878de89b905fc0d3ba3f5c26aae47`. Remote verification proves the
+branch and `refs/tags/v1.0.0-beta.69^{}` resolve to that same commit. The
+annotated tag object itself is
+`296346d9a6743da12c63204634529880ca8d3d06`; it is release metadata, not a valid
+branch target. Deploying mutable `main` or weakening exact-release validation
+remains forbidden. The bounded resume may now retry `deploy` and continue only
+through strict pre-commission.
 
 ### Official adapter parity evidence — 2026-10-05
 
