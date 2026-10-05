@@ -13,7 +13,7 @@ it('reads Cloud runtime values and writes one named value', function (): void {
         {
             $this->calls[] = $command;
 
-            if (($command[1] ?? null) === 'environment:variables' && in_array('--show-sensitive', $command, true)) {
+            if (($command[1] ?? null) === 'environment:get' && in_array('--show-sensitive', $command, true)) {
                 return new CommandResult(0, json_encode([
                     'environmentVariables' => [
                         ['key' => 'APP_ENV', 'value' => 'production'],
@@ -35,7 +35,7 @@ it('reads Cloud runtime values and writes one named value', function (): void {
     $runtime->set('env-one', 'APP_NAME', 'x-PayOut');
 
     expect($commands->calls[0])->toBe([
-        'cloud', 'environment:variables', 'env-one', '--json', '--show-sensitive', '-n',
+        'cloud', 'environment:get', 'env-one', '--json', '--show-sensitive', '-n',
     ])->and($commands->calls[1])->toBe([
         'cloud', 'environment:variables', 'env-one', '--action=set', '--key=APP_NAME',
         '--value=x-PayOut', '--force', '-n',

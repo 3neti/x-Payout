@@ -17,7 +17,7 @@ final readonly class LaravelCloudRuntimeConfiguration implements RuntimeConfigur
     {
         $result = $this->commands->run([
             $this->binary,
-            'environment:variables',
+            'environment:get',
             $environmentId,
             '--json',
             '--show-sensitive',

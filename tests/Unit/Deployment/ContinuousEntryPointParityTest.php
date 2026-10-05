@@ -90,7 +90,13 @@ case "$op" in
   cache:get) printf '%s\n' '{"id":"cache-one","status":"available"}' ;;
   environment:update|instance:update|environment-secret:attach) printf '%s\n' '{}' ;;
   instance:create) touch "$state/instance"; printf '%s\n' '{"id":"instance-one"}' ;;
-  environment:get) printf '%s\n' '{"environmentVariables":[]}' ;;
+  environment:get)
+    if [[ "$*" == *"--show-sensitive"* ]]; then
+      printf '%s\n' '{"environmentVariables":[]}'
+    else
+      printf '%s\n' '{"id":"env-one"}'
+    fi
+    ;;
   environment:variables) printf '%s\n' '{}' ;;
   background-process:create) touch "$state/worker"; printf '%s\n' '{"id":"worker-one"}' ;;
   deploy) touch "$state/deployed"; printf '%s\n' '{"deployment_id":"deployment-one"}' ;;
