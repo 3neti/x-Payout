@@ -1,0 +1,65 @@
+{
+  "schema": "x-payout.compatibility-retirement-audit.v1",
+  "audited_at": "2026-10-06",
+  "accepted_release": {
+    "x_payout": "v1.0.0-beta.71",
+    "commit": "b9869bd8f85bb8b65c5038f03675d17913b60688",
+    "deployment": "depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a"
+  },
+  "decision": "retain_until_deprecation_bridge_completes",
+  "active_production_dependencies": [
+    {
+      "path": ".github/workflows/deploy-x-payout.yml",
+      "role": "transitional_precommission_workflow",
+      "dependency": "PAYOUT_PLATFORM_CONTROL_ENV and the legacy pre-commission command",
+      "replacement": "portable read-only pre-commission verifier using compiled profile plus generated state",
+      "blocks_retirement": true
+    },
+    {
+      "path": "scripts/deploy-production-cleanroom.sh",
+      "role": "explicit_rollback_controller",
+      "dependency": "sources and mutates deployment.production.local",
+      "replacement": "bin/x-payout-deploy continuous",
+      "blocks_retirement": true
+    }
+  ],
+  "tracked_retirement_candidates": [
+    "deployment.production.example",
+    "deployment.production.secrets.example",
+    "ops/deployment/contracts/legacy-setting-classification.json",
+    "tests/Unit/CompiledProfileControllerParityTest.php",
+    "tests/Unit/Deployment/Legacy/LegacySettingClassifierTest.php",
+    "tests/Unit/InstanceProfileCompilerTest.php",
+    "tests/Unit/ProductionDeploymentKitTest.php"
+  ],
+  "historical_evidence_to_preserve": [
+    "docs/commissioning/X_PAYOUT_CLEANROOM_DEPLOYMENT_LOG_2026_10_03.md",
+    "docs/commissioning/X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md",
+    "docs/commissioning/X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md",
+    "docs/commissioning/X_PAYOUT_PRODUCTION_SECRET_CUSTODY.md"
+  ],
+  "private_local_inputs": [
+    {
+      "path": "deployment.production.local",
+      "observed": true,
+      "mode": "0600",
+      "contents_inspected": false,
+      "disposition": "retain_until_tracked_readers_are_retired_then_delete_manually"
+    },
+    {
+      "path": "deployment.production.secrets.local",
+      "observed": true,
+      "mode": "0600",
+      "contents_inspected": false,
+      "disposition": "retain_until_secret_recovery_custody_is_confirmed_then_delete_manually"
+    }
+  ],
+  "required_before_removal": [
+    "replace the GitHub pre-commission worksheet path with a portable read-only verifier",
+    "make the portable controller the documented default and label the legacy script as rollback-only",
+    "ship at least one deprecation release with a fail-closed migration path",
+    "prove the deprecation release against fake transports and an unchanged operational rerun",
+    "confirm private recovery custody before manually deleting ignored local worksheets",
+    "preserve historical evidence while removing executable worksheet readers"
+  ]
+}

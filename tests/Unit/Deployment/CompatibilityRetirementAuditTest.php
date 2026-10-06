@@ -1,0 +1,91 @@
+<?php
+
+function compatibilityRetirementPath(string $path): string
+{
+    return dirname(__DIR__, 3).'/'.ltrim($path, '/');
+}
+
+function compatibilityRetirementAudit(): array
+{
+    return json_decode(
+        (string) file_get_contents(compatibilityRetirementPath(
+            'ops/deployment/contracts/compatibility-retirement-audit.json',
+        )),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+}
+
+it('records a fail-closed retirement decision with an exact accepted release', function (): void {
+    $audit = compatibilityRetirementAudit();
+
+    expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
+        ->and($audit['decision'])->toBe('retain_until_deprecation_bridge_completes')
+        ->and($audit['accepted_release'])->toBe([
+            'x_payout' => 'v1.0.0-beta.71',
+            'commit' => 'b9869bd8f85bb8b65c5038f03675d17913b60688',
+            'deployment' => 'depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a',
+        ])
+        ->and($audit['required_before_removal'])->toHaveCount(6);
+});
+
+it('classifies every executable or workflow dependency on the legacy worksheets', function (): void {
+    $root = compatibilityRetirementPath('');
+    $tokens = [
+        'deployment.production.local',
+        'deployment.production.secrets.local',
+        'PAYOUT_PLATFORM_CONTROL_ENV',
+        'deploy-production-cleanroom.sh',
+        '--control=',
+        'upsert_local_state',
+    ];
+    $matches = [];
+
+    foreach (['bin', 'scripts', '.github/workflows'] as $directory) {
+        $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(
+            $root.$directory,
+            FilesystemIterator::SKIP_DOTS,
+        ));
+
+        foreach ($iterator as $file) {
+            if (! $file->isFile()) {
+                continue;
+            }
+
+            $contents = (string) file_get_contents($file->getPathname());
+
+            if (array_any($tokens, static fn (string $token): bool => str_contains($contents, $token))) {
+                $matches[] = ltrim(str_replace($root, '', $file->getPathname()), '/');
+            }
+        }
+    }
+
+    $classified = array_column(compatibilityRetirementAudit()['active_production_dependencies'], 'path');
+    sort($matches);
+    sort($classified);
+
+    expect(array_values(array_unique($matches)))->toBe($classified);
+});
+
+it('keeps every retirement blocker explicit and points to its replacement', function (): void {
+    $dependencies = compatibilityRetirementAudit()['active_production_dependencies'];
+
+    expect($dependencies)->toHaveCount(2);
+
+    foreach ($dependencies as $dependency) {
+        expect(compatibilityRetirementPath($dependency['path']))->toBeFile()
+            ->and($dependency['blocks_retirement'])->toBeTrue()
+            ->and($dependency['replacement'])->toBeString()->not->toBeEmpty();
+    }
+});
+
+it('keeps the portable controller independent of compatibility worksheets', function (): void {
+    $controller = (string) file_get_contents(compatibilityRetirementPath('bin/x-payout-deploy'));
+
+    expect($controller)
+        ->not->toContain('deployment.production.local')
+        ->not->toContain('deployment.production.secrets.local')
+        ->not->toContain('PAYOUT_PLATFORM_CONTROL_ENV')
+        ->not->toContain('deploy-production-cleanroom.sh')
+        ->not->toContain('upsert_local_state');
+});

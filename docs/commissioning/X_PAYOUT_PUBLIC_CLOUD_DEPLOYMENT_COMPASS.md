@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13 — beta.71 exact-release cleanroom is operational, the custom domain is verified, and the immediate no-op rerun is accepted
+**Current position:** Gate 13.7 — compatibility retirement audit complete; removal is blocked on the portable pre-commission verifier and deprecation bridge
 
-**Overall status:** Foundation recovery, managed-secret attachment, runtime reconciliation, exact-release deployment, token-gated commissioning, custom-domain activation, strict and MCP verification, and the immediate mutation-free rerun are complete; compatibility worksheet retirement is now eligible for a separately approved audit but has not started
+**Overall status:** Beta.71 is operational and idempotent; the portable controller has no worksheet dependency, but the reusable pre-commission workflow and explicit rollback controller still do, so compatibility artifacts remain retained and no private worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -98,7 +98,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | Not started | Worksheet dependencies removed after parity proof |
+| 13.7 Compatibility retirement | **Audit complete — removal blocked** | The portable controller is independent, but the reusable GitHub pre-commission workflow and rollback controller remain active readers; migrate CI and ship a deprecation bridge before removal |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -185,11 +185,11 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Audit the retained compatibility worksheets and adapters against the accepted
-beta.71 generated state before retiring anything. The audit must name every
-remaining reader, rollback dependency, and historical-evidence requirement.
-Deletion or compatibility removal requires separate approval and must preserve
-the operational state, immutable release evidence, and recovery path.
+Add a portable, read-only pre-commission verifier that consumes the verified
+compiled profile plus generated state, then migrate the reusable GitHub
+workflow away from `PAYOUT_PLATFORM_CONTROL_ENV`. Make the portable controller
+the documented default and reduce the legacy controller to an explicit,
+fail-closed rollback path. Removal remains separately gated.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -358,8 +358,26 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   deployment, recommissioning, domain creation, DNS write, secret rotation, or
   invitation delivery. Cloud still lists exactly one beta.71 deployment and
   the earlier beta.69 deployment.
-- All generated-state checkpoints are complete. Compatibility worksheet
-  retirement is now reviewable but remains unapproved and unstarted.
+- All generated-state checkpoints are complete. This made compatibility
+  retirement review admissible; the subsequent audit and decision follow.
+
+### Compatibility retirement audit — 2026-10-06
+
+- Added a machine-readable inventory and a Pest guard that classifies every
+  executable or workflow dependency on the legacy worksheets.
+- Confirmed `bin/x-payout-deploy continuous` has no dependency on either
+  worksheet, the transitional CI control secret, the legacy controller, or
+  `upsert_local_state()`.
+- Identified two active blockers: the reusable GitHub pre-commission workflow
+  and `scripts/deploy-production-cleanroom.sh` as the explicit rollback
+  controller.
+- Observed both ignored local worksheets with owner-only mode `0600` without
+  reading their contents. Automated deletion remains prohibited.
+- Preserved historical commissioning documents as evidence rather than
+  treating their worksheet references as executable dependencies.
+- Retirement is admissible but blocked until the portable pre-commission
+  verifier, CI migration, documented default switch, and one deprecation
+  release are accepted.
 
 ### Official adapter parity evidence — 2026-10-05
 

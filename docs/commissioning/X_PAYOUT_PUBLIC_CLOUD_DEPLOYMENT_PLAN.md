@@ -278,6 +278,16 @@ After one exact-release cleanroom passes, remove:
 on either worksheet, while migration documentation still identifies the last
 release that supports them.
 
+**Audit evidence — 2026-10-06:** The beta.71 exact-release cleanroom and its
+mutation-free rerun make retirement review admissible. The portable controller
+is worksheet-independent, but removal is not yet safe: the reusable GitHub
+pre-commission workflow still reconstructs `PAYOUT_PLATFORM_CONTROL_ENV`, and
+the legacy cleanroom script remains the explicit rollback controller that
+sources and mutates `deployment.production.local`. The machine-readable audit
+and characterization test fail if another executable or workflow dependency
+appears without classification. The next slice is a portable read-only
+pre-commission verifier plus CI migration, followed by one deprecation release.
+
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 
 From a clean checkout, supply only the private production `instance.yaml`, a
