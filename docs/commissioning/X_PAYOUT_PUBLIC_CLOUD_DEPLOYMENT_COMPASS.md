@@ -53,9 +53,9 @@ and identity checks.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input controller reached operational state and passed its immediate mutation-free rerun; compatibility retirement remains a separate slice |
+| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.72 remains operational with independently recoverable Passport custody |
 | 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.100 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict and MCP doctors are green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **Complete for beta.71** | The hardened controller deployed, commissioned, activated the domain, verified the runtime, and repeated without infrastructure, deployment, commissioning, or DNS mutation |
+| 13. Two-input one-command cleanup | **Complete through beta.72** | The hardened controller proved exact-release deployment and idempotency; beta.72 remains operational after controlled Passport rotation |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -72,18 +72,17 @@ sanitized evidence, and remain idempotent on rerun.
 - The portable schema, compiler, examples, required-secret inventory, fake
   transport parity, GitHub validation workflow, and current Laravel Cloud
   controller already exist.
-- `deployment.production.local` still combines platform target, generated
-  resource state, confirmations, and duplicated non-secret runtime values.
-- `deployment.production.secrets.local` remains a local secure re-entry
-  worksheet; Laravel Cloud managed secrets are the production runtime
-  authority.
-- The current controller mutates the control worksheet through
-  `upsert_local_state()`.
+- `deployment.production.local` remains a compatibility worksheet used only
+  by the explicitly gated rollback controller.
+- `deployment.production.secrets.local` remains legacy recovery input while
+  the exact 18-name `ops/deployment/secrets.env` is the supported owner-only
+  recovery inventory; Laravel Cloud managed secrets remain runtime authority.
+- The portable controller consumes verified compiled artifacts and generated
+  state without reading or mutating either compatibility worksheet.
 - The private `payout.disburse.cash.yaml` profile exists and is ignored from
-  Git, but compiled mode still depends on the legacy control worksheet for
-  parts of the run.
+  Git; compiled mode is worksheet-independent.
 - Partner MCP is no longer a deferred configuration item: production runs
-  x-change `v1.0.99`, x-mcp `v0.3.0`, contract `1.4.0`, strict doctor `37/37`,
+  x-change `v1.0.100`, x-mcp `v0.3.0`, contract `1.4.0`, strict doctor `37/37`,
   and MCP doctor ready. Production OAuth client creation remains a separate
   Maker/Checker-governed ceremony.
 
@@ -980,12 +979,11 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Keep ordinary releases on Laravel Cloud push-to-deploy. The optional GitHub
-workflow is now complete for compile and strict pre-commission evidence and
-needs no reviewer, Maker/Checker contact, or private provider-value bundle.
-The remaining Gate 11 proof is a separately authorized two-input cleanroom
-using `instance.yaml`, one-time `secrets.env`, and native platform tooling;
-commissioning remains a distinct one-time ceremony.
+Add fail-closed named secret rotation so a command can authorize only explicit
+managed-secret names without rotating the complete inventory. Then run one
+bounded beta.72 continuous no-op without rotation, commissioning, domain, or
+financial authority. Compatibility worksheet and reader retirement remains a
+separate explicit gate after that proof.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
