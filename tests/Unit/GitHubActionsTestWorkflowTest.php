@@ -1,24 +1,18 @@
 <?php
 
-it('installs backend and frontend dependencies before bootstrapping the application', function (): void {
+it('installs backend and frontend dependencies before running checks', function (): void {
     $workflow = file_get_contents(dirname(__DIR__, 2).'/.github/workflows/tests.yml');
 
     $composerInstall = strpos($workflow, 'composer install --no-interaction --prefer-dist --no-progress');
     $npmInstall = strpos($workflow, 'npm ci');
-    $bootstrap = strpos($workflow, 'composer setup');
     $checks = strpos($workflow, 'composer ci:check');
 
     expect($composerInstall)->toBeInt()
         ->and($npmInstall)->toBeInt()
-        ->and($bootstrap)->toBeInt()
         ->and($checks)->toBeInt()
-        ->and($composerInstall)->toBeLessThan($bootstrap)
-        ->and($npmInstall)->toBeLessThan($bootstrap)
-        ->and($bootstrap)->toBeLessThan($checks)
-        ->and($workflow)
-        ->toContain('APP_ENV: testing')
-        ->toContain('XCHANGE_DEPLOYMENT_PROFILE: development')
-        ->toContain('XCHANGE_RUNTIME_TIER: local');
+        ->and($composerInstall)->toBeLessThan($checks)
+        ->and($npmInstall)->toBeLessThan($checks)
+        ->and($workflow)->not->toContain('composer setup');
 });
 
 it('uses the accepted GitHub Action major versions in deployment', function (): void {
