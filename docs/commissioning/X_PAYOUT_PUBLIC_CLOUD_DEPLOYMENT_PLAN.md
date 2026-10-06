@@ -1,12 +1,12 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Beta.72 operational; Passport recovery continuity verified; compatibility retirement separately gated
+**Status:** Beta.73 operational and mutation-free on rerun; compatibility retirement separately gated
 
 **Updated:** 2026-10-06
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.72` (`43d9c2c`)
+**Current x-PayOut:** `v1.0.0-beta.73` (`e073e61`)
 
 **Current x-change:** `v1.0.100` (`dd19abf2`)
 
@@ -340,6 +340,18 @@ immediate identical rerun left the normalized Cloud inventory byte-for-byte
 unchanged. Strict doctor passed `37/37`, x-mcp doctor was ready, and the public
 host returned HTTP `200`. Compatibility removal remains separately authorized;
 existing partner OAuth access tokens require governed reissue when needed.
+
+**Released-controller acceptance — 2026-10-06:** Beta.73 published at exact
+commit `e073e616da65036fbf94e4bb7ee7eea8521088d0` and deployed as
+`depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6`. The apply-only controller
+recovered the existing foundation, secrets, domain, worker, and successful
+deployment, then stopped at the unauthorized commissioning boundary. The
+immediate identical rerun preserved the normalized Cloud inventory
+byte-for-byte with SHA-256
+`77e50104217f7cefdfbef03e337018792a05f67d8b0e977a8e40e5424ebf33c7`.
+Strict doctor passed `37/37`, x-mcp doctor was ready, and the public host
+returned HTTP `200`. Compatibility retirement is eligible for a separately
+authorized slice but did not occur.
 
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 

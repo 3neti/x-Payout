@@ -2,11 +2,11 @@
   "schema": "x-payout.compatibility-retirement-audit.v1",
   "audited_at": "2026-10-06",
   "accepted_release": {
-    "x_payout": "v1.0.0-beta.72",
-    "commit": "43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce",
-    "deployment": "depl-a2ea0417-e779-4794-be60-1ccb93e4cda2"
+    "x_payout": "v1.0.0-beta.73",
+    "commit": "e073e616da65036fbf94e4bb7ee7eea8521088d0",
+    "deployment": "depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6"
   },
-  "decision": "blocked_by_passport_signing_key_continuity",
+  "decision": "ready_for_separate_retirement_authorization",
   "active_production_dependencies": [
     {
       "path": "scripts/deploy-production-cleanroom.sh",
@@ -26,7 +26,9 @@
     "beta.72 exact release deployed and independently verified through the portable controller",
     "beta.72 immediate identical rerun preserved the Cloud environment and deployment inventories",
     "all 18 required managed-secret names verified attached without reading values",
-    "provider-rotatable credentials mapped to named owner roles and issuing recovery authorities"
+    "provider-rotatable credentials mapped to named owner roles and issuing recovery authorities",
+    "Passport signing pair deliberately rotated with an owner-only complete recovery inventory",
+    "beta.73 released controller deployed at its exact commit and passed an immediate mutation-free rerun"
   ],
   "tracked_retirement_candidates": [
     "deployment.production.example",
@@ -62,8 +64,9 @@
     }
   ],
   "required_before_removal": [
-    "establish independent Passport signing-key continuity custody or separately authorize deliberate rotation impact",
-    "preserve historical evidence while removing executable worksheet readers"
+    "obtain current-run authority naming the exact tracked readers and compatibility artifacts to remove",
+    "preserve historical evidence while removing executable worksheet readers",
+    "publish the retirement release and pass exact deployment plus an immediate no-op rerun before manually deleting private worksheets"
   ],
   "recovery_custody_contract": "ops/deployment/contracts/secret-recovery-custody.json"
 }

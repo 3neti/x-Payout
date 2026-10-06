@@ -2,12 +2,13 @@
 
 **Audited:** 2026-10-06
 
-**Accepted operational baseline:** x-PayOut `v1.0.0-beta.72` at
-`43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`
+**Accepted operational baseline:** x-PayOut `v1.0.0-beta.73` at
+`e073e616da65036fbf94e4bb7ee7eea8521088d0`
 
-**Decision:** The deprecation release is operationally accepted, but
-compatibility retirement is blocked by unverified Passport signing-key
-continuity. Retain the rollback reader and private worksheets.
+**Decision:** The released portable controller and recovery custody
+prerequisites are accepted. Compatibility retirement is eligible for a
+separately authorized slice; retain the rollback reader and private worksheets
+until that authority is granted and its acceptance sequence passes.
 
 ## What the beta.71 proof established
 
@@ -42,8 +43,8 @@ Focused tests prove the missing-authority failure, the explicitly authorized
 rollback path, fake-transport parity, and the existing worksheet safety
 boundaries.
 
-Beta.72 was deployed through the portable controller as deployment
-`depl-a2ea0417-e779-4794-be60-1ccb93e4cda2` at the exact release commit. The
+Beta.73 was deployed through the portable controller as deployment
+`depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6` at the exact release commit. The
 first controller monitor timed out while Laravel Cloud was still deploying;
 the safe retry recovered that same successful deployment rather than creating
 a replacement. The immediate identical rerun left the sanitized Cloud
@@ -105,26 +106,27 @@ Every provider-issued or application-generated credential has a documented
 rotation path. The live Laravel Cloud environment has all 18 required names
 attached.
 
-Passport signing material is the sole blocker. The private and public signing
-keys are attached to Laravel Cloud, but Cloud cannot return plaintext. The
-local re-entry worksheet has no populated Passport key entry, and no separate
-continuity artifact was located by filename or key declaration. Rotating the
-pair may invalidate existing tokens or signatures, so the audit cannot infer
-authority to rotate it.
+The Passport signing pair was deliberately rotated under explicit authority.
+The complete 18-name `ops/deployment/secrets.env` recovery inventory is
+gitignored, owner-only, and independently matches the live production public
+key. Existing tokens signed by the superseded pair require governed reissue
+when needed; this does not block compatibility retirement.
 
 Only names, attachment IDs, file modes, and populated-key names were examined.
 No secret value or value-derived hash was emitted or retained.
 
 ## Required deprecation bridge
 
-1. Establish independent custody of the existing Passport signing pair, or
-   separately approve deliberate rotation and its invalidation impact.
-2. In a separately authorized removal slice, delete executable readers,
+1. Obtain current-run authority naming the exact compatibility artifacts.
+2. In that separately authorized removal slice, delete executable readers,
    examples, duplicate parsing, and legacy-only tests while preserving
    historical evidence.
+3. Publish and deploy the retirement release, prove its immediate no-op rerun,
+   and only then delete either private worksheet manually.
 
 ## Result
 
-Compatibility retirement is **blocked** by Passport signing-key continuity.
-Beta.72 satisfies the deprecation-release and mutation-free-rerun requirements,
-but Cloud attachment alone is not recovery custody.
+Compatibility retirement is **ready for separate authorization**. Beta.73
+satisfies the released-controller, recovery-custody, exact-deployment, and
+mutation-free-rerun prerequisites. No compatibility artifact or private
+worksheet was removed by this audit update.

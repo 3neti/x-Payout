@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — post-rotation idempotency proved; compatibility retirement awaits separate authority
+**Current position:** Gate 13.7 — released hardening proved on beta.73; compatibility retirement awaits separate authority
 
-**Overall status:** Beta.72 is operational; all 18 managed-secret names are attached, the rotated Passport pair has an owner-only recovery copy, and the immediate continuous rerun is mutation-free; no compatibility worksheet was deleted
+**Overall status:** Beta.73 is operational at exact commit `e073e61`; all 18 managed-secret names are attached, the rotated Passport pair has an owner-only recovery copy, and the immediate continuous rerun is mutation-free; no compatibility worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -53,9 +53,9 @@ and identity checks.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.72 remains operational with independently recoverable Passport custody |
+| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.73 remains operational with independently recoverable Passport custody |
 | 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.100 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict and MCP doctors are green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **Complete through beta.72** | Named secret rotation, authoritative exact-deployment recovery, and a mutation-free post-rotation rerun are proved; beta.72 remains operational |
+| 13. Two-input one-command cleanup | **Complete through beta.73** | Named secret rotation, authoritative exact-deployment recovery, and a mutation-free released-controller rerun are proved; beta.73 remains operational |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -97,8 +97,8 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Prerequisites complete; retirement not authorized** | Beta.72 exact-release deployment, Passport continuity, and the post-rotation no-op rerun passed; worksheet/reader deletion remains a separate gate |
-| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
+| 13.7 Compatibility retirement | **Prerequisites complete; retirement not authorized** | Beta.73 exact-release deployment, Passport continuity, and the released-controller no-op rerun passed; worksheet/reader deletion remains a separate gate |
+| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6` runs `release/v1.0.0-beta.73` at exact peeled tag commit `e073e616da65036fbf94e4bb7ee7eea8521088d0`; existing commissioning remains operational; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or other Cloud mutation |
 
 ### External prerequisite policy
 
@@ -493,6 +493,39 @@ explicitly authorized commissioning and final no-op operational rerun complete.
 - No compatibility worksheet or reader was removed. Existing OAuth access
   tokens invalidated by the intentional Passport rotation still require
   controlled reissue when a partner client needs them.
+
+### Beta.73 released-controller acceptance — 2026-10-06
+
+- Published annotated tag `v1.0.0-beta.73` and immutable branch
+  `release/v1.0.0-beta.73`; GitHub and Packagist resolve both release inputs
+  to exact commit `e073e616da65036fbf94e4bb7ee7eea8521088d0`.
+- Release verification passed the deployment suite at 91 tests and 682
+  assertions, the full application suite at 199 tests and 1,211 assertions,
+  targeted PHPStan for named rotation, and the production frontend build.
+  Repository-wide formatter, PHPStan, and Vue type debt outside this release
+  remains separately tracked and was not bulk-modified.
+- The apply-only controller rediscovered the existing foundation, 18 attached
+  managed-secret identities, domain, and worker without replacement. No
+  secrets file or rotation authority was supplied.
+- Laravel Cloud deployment
+  `depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6` succeeded on the exact beta.73
+  branch and commit. The first bounded monitor ended while the build was still
+  running; monitoring reached terminal success, and the retry recovered that
+  same deployment rather than creating another one.
+- The resumed controller reached pre-commission readiness and recorded
+  commissioning as skipped. It received no domain, invitation, provider,
+  messaging, or financial authority.
+- The immediate identical rerun preserved the normalized Cloud inventory
+  byte-for-byte. Before and after SHA-256 was
+  `77e50104217f7cefdfbef03e337018792a05f67d8b0e977a8e40e5424ebf33c7`
+  across the environment attachments, 18 managed-secret identities, five
+  deployment records, canonical domain, and queue worker.
+- Final production evidence remained green: strict doctor `37/37`, all four
+  x-mcp readiness checks passed, and `https://payout.disburse.cash` returned
+  HTTP `200`.
+- No compatibility worksheet or reader was removed. That retirement is now
+  eligible for a separately authorized gate, not implicitly authorized by
+  this acceptance.
 
 ### Official adapter parity evidence — 2026-10-05
 
@@ -1008,13 +1041,12 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Publish the named-rotation and exact-deployment-recovery hardening in the next
-immutable x-PayOut release, deploy that exact release under a separately
-approved non-financial gate, and repeat the mutation-free rerun proof.
-Compatibility worksheet and reader retirement remains a separate explicit
-authorization after the released controller passes that checkpoint. Partner
-OAuth token reissue remains a separate governed ceremony performed only when
-a client needs access.
+Decide whether to authorize the exact compatibility-retirement slice: remove
+the classified rollback reader and tracked compatibility artifacts, preserve
+historical evidence, publish another immutable release, and repeat exact
+deployment plus no-op acceptance before manually deleting either private
+worksheet. Partner OAuth token reissue remains a separate governed ceremony
+performed only when a client needs access.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
