@@ -237,7 +237,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
                 $this->resource($state, 'instance_id'),
                 '--type=worker',
                 '--connection=redis',
-                '--queue=x-change-funding,x-change-feedback,default',
+                '--queue=partner-payments,x-change-funding,x-change-feedback,default',
                 '--backoff=30', '--sleep=3', '--rest=0', '--timeout=60', '--tries=3', '--processes=1',
             ]);
             $resources['worker_process_id'] = $this->id($worker, 'queue worker');

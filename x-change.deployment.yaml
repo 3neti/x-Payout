@@ -20,6 +20,9 @@ environment:
   example_file: .env.example
   required:
     - XCHANGE_DEPLOYMENT_PROFILE
+    - XCHANGE_PARTNER_PAYMENT_EVENTS_ENABLED
+    - XCHANGE_BPLS_EVENT_PARTNER_REFERENCE
+    - XCHANGE_BPLS_EVENT_RECEIVER_URL
     - XCHANGE_RUNTIME_TIER
   secrets:
     provider: local-environment
@@ -57,6 +60,7 @@ environment:
       - RESEND_KEY
       - TXTCMDR_API_TOKEN
       - XCHANGE_COMMISSIONING_ACCESS_TOKEN
+      - XCHANGE_PAYMENT_EVENTS_SECRET
       - XCHANGE_REDEMPTION_FEEDBACK_WEBHOOK_SECRET
     permit_plaintext_repository_files: false
 operations:
@@ -76,6 +80,7 @@ operations:
     - verify
 runtime:
   queues:
+    - partner-payments
     - x-change-funding
     - x-change-feedback
     - default
