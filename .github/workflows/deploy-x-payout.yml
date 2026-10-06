@@ -27,9 +27,6 @@ on:
       PAYOUT_INSTANCE_YAML:
         description: Optional private instance.yaml contents; overrides instance_path.
         required: false
-      PAYOUT_PLATFORM_CONTROL_ENV:
-        description: Transitional secret-free Laravel Cloud control worksheet.
-        required: false
       LARAVEL_CLOUD_TOKEN:
         description: Least-privilege Laravel Cloud automation token.
         required: false
@@ -163,41 +160,17 @@ jobs:
           name: x-payout-compiled-${{ needs.compile.outputs.profile_fingerprint }}
           path: ops/deployment/build
 
-      - name: Prepare transitional platform state
-        env:
-          PAYOUT_PLATFORM_CONTROL_ENV: ${{ secrets.PAYOUT_PLATFORM_CONTROL_ENV }}
-        run: |
-          set -euo pipefail
-          test -n "${PAYOUT_PLATFORM_CONTROL_ENV}"
-          install -m 0600 /dev/null /tmp/x-payout-platform.env
-          printf '%s' "${PAYOUT_PLATFORM_CONTROL_ENV}" >/tmp/x-payout-platform.env
-          sed -i 's/^DEPLOY_CONFIRM_COMMISSIONING=.*/DEPLOY_CONFIRM_COMMISSIONING=NO/' /tmp/x-payout-platform.env
-          sed -i 's/^DEPLOY_CONFIRM_DOMAIN_CUTOVER=.*/DEPLOY_CONFIRM_DOMAIN_CUTOVER=NO/' /tmp/x-payout-platform.env
-          sed -i 's/^DEPLOY_CONFIRM_DNS_WRITE=.*/DEPLOY_CONFIRM_DNS_WRITE=NO/' /tmp/x-payout-platform.env
-
       - name: Verify the accountable checkpoint
         env:
           LARAVEL_CLOUD_TOKEN: ${{ secrets.LARAVEL_CLOUD_TOKEN }}
         run: |
           set -euo pipefail
           test -n "${LARAVEL_CLOUD_TOKEN}"
-          scripts/deploy-production-cleanroom.sh pre-commission \
-            --control=/tmp/x-payout-platform.env \
-            --compiled=ops/deployment/build
-
-      - name: Record sanitized pre-commission evidence
-        env:
-          GIT_SHA: ${{ github.sha }}
-        run: |
           mkdir -p /tmp/x-payout-evidence
-          jq -n \
-            --arg schema x-payout.workflow-evidence.v1 \
-            --arg phase pre-commission-checkpoint \
-            --arg status succeeded \
-            --arg git_sha "${GIT_SHA}" \
-            --arg profile_fingerprint "${{ needs.compile.outputs.profile_fingerprint }}" \
-            '{schema:$schema,phase:$phase,status:$status,git_sha:$git_sha,profile_fingerprint:$profile_fingerprint}' \
-            >/tmp/x-payout-evidence/precommission.json
+          bin/x-payout-deploy precommission \
+            --compiled=ops/deployment/build \
+            --evidence=/tmp/x-payout-evidence/precommission.json \
+            --adapter=laravel-cloud
 
       - name: Upload sanitized pre-commission evidence
         uses: actions/upload-artifact@v4

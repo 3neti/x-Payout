@@ -6,15 +6,8 @@
     "commit": "b9869bd8f85bb8b65c5038f03675d17913b60688",
     "deployment": "depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a"
   },
-  "decision": "retain_until_deprecation_bridge_completes",
+  "decision": "retain_until_deprecation_release_completes",
   "active_production_dependencies": [
-    {
-      "path": ".github/workflows/deploy-x-payout.yml",
-      "role": "transitional_precommission_workflow",
-      "dependency": "PAYOUT_PLATFORM_CONTROL_ENV and the legacy pre-commission command",
-      "replacement": "portable read-only pre-commission verifier using compiled profile plus generated state",
-      "blocks_retirement": true
-    },
     {
       "path": "scripts/deploy-production-cleanroom.sh",
       "role": "explicit_rollback_controller",
@@ -22,6 +15,11 @@
       "replacement": "bin/x-payout-deploy continuous",
       "blocks_retirement": true
     }
+  ],
+  "completed_deprecation_steps": [
+    "portable read-only pre-commission verifier added",
+    "GitHub pre-commission workflow migrated away from PAYOUT_PLATFORM_CONTROL_ENV",
+    "live beta.71 portable pre-commission verification accepted without apply authority"
   ],
   "tracked_retirement_candidates": [
     "deployment.production.example",
@@ -55,7 +53,6 @@
     }
   ],
   "required_before_removal": [
-    "replace the GitHub pre-commission worksheet path with a portable read-only verifier",
     "make the portable controller the documented default and label the legacy script as rollback-only",
     "ship at least one deprecation release with a fail-closed migration path",
     "prove the deprecation release against fake transports and an unchanged operational rerun",

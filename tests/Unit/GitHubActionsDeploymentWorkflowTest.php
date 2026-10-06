@@ -22,11 +22,15 @@ it('runs only non-mutating pre-commission verification', function (): void {
 
     expect($workflow)
         ->toContain('default: x-payout-production-deployment')
-        ->toContain('DEPLOY_CONFIRM_COMMISSIONING=NO')
-        ->toContain('DEPLOY_CONFIRM_DOMAIN_CUTOVER=NO')
-        ->toContain('DEPLOY_CONFIRM_DNS_WRITE=NO')
-        ->toContain('scripts/deploy-production-cleanroom.sh pre-commission')
+        ->toContain('bin/x-payout-deploy precommission')
+        ->toContain('--compiled=ops/deployment/build')
+        ->toContain('--evidence=/tmp/x-payout-evidence/precommission.json')
+        ->toContain('--adapter=laravel-cloud')
         ->not->toContain('execute_deployment')
+        ->not->toContain('PAYOUT_PLATFORM_CONTROL_ENV')
+        ->not->toContain('DEPLOY_CONFIRM_')
+        ->not->toContain('scripts/deploy-production-cleanroom.sh')
+        ->not->toContain('--apply')
         ->not->toContain('scripts/deploy-production-cleanroom.sh continuous')
         ->not->toContain('authorize_commissioning')
         ->not->toContain('commissioning_environment')
@@ -51,12 +55,13 @@ it('compiles privately and uploads only sanitized build and evidence artifacts',
         ->not->toContain('continue-on-error');
 });
 
-it('invokes the compatibility controller only for the safe checkpoint', function (): void {
+it('invokes only the portable verifier for the safe checkpoint', function (): void {
     $workflow = file_get_contents(deploymentWorkflowPath());
 
-    expect(substr_count($workflow, 'scripts/deploy-production-cleanroom.sh'))->toBe(1)
-        ->and($workflow)
-        ->toContain('scripts/deploy-production-cleanroom.sh pre-commission')
-        ->toContain('--compiled=ops/deployment/build')
-        ->toContain('--control=/tmp/x-payout-platform.env');
+    expect(substr_count($workflow, 'bin/x-payout-deploy precommission'))->toBe(1)
+        ->and($workflow)->not->toContain(
+            'scripts/deploy-production-cleanroom.sh',
+            '--control=',
+            '/tmp/x-payout-platform.env',
+        );
 });

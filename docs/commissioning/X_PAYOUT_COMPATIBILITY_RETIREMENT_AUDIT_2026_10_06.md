@@ -5,8 +5,9 @@
 **Accepted operational baseline:** x-PayOut `v1.0.0-beta.71` at
 `b9869bd8f85bb8b65c5038f03675d17913b60688`
 
-**Decision:** Retain compatibility mode until a bounded deprecation bridge is
-complete. Do not delete either private worksheet or its tracked readers yet.
+**Decision:** Retain compatibility mode until the deprecation release is
+complete. Do not delete either private worksheet or its final tracked reader
+yet.
 
 ## What the beta.71 proof established
 
@@ -24,12 +25,29 @@ already stopped using compatibility mode.
 
 | Path | Current role | Why it blocks immediate removal | Required replacement |
 | --- | --- | --- | --- |
-| `.github/workflows/deploy-x-payout.yml` | Transitional pre-commission workflow | Reconstructs `PAYOUT_PLATFORM_CONTROL_ENV` and invokes the legacy pre-commission command | A portable, read-only verifier using the compiled profile and generated state |
 | `scripts/deploy-production-cleanroom.sh` | Explicit rollback controller | Sources and mutates `deployment.production.local`, including generated resource IDs | `bin/x-payout-deploy continuous`, after a documented deprecation window |
 
 The normal beta.71 runtime and continuous controller do not depend on these
 paths. The blockers are operational tooling and rollback compatibility, not a
 hidden dependency in the commissioned application.
+
+## Portable verifier and CI migration completed
+
+`bin/x-payout-deploy precommission` now consumes verified compiled artifacts,
+rediscovers the exact Laravel Cloud resource and managed-secret identities,
+proves the active deployment matches the immutable release branch and commit,
+runs the strict remote pre-commission doctor, and emits owner-only sanitized
+evidence. It accepts no mutation authority flags and writes no generated state.
+
+The reusable GitHub workflow now calls that verifier directly. It no longer
+declares `PAYOUT_PLATFORM_CONTROL_ENV`, creates `/tmp/x-payout-platform.env`,
+or invokes `scripts/deploy-production-cleanroom.sh`.
+
+The same command passed against the live beta.71 environment without
+`--apply`. It matched deployment
+`depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` at commit
+`b9869bd8f85bb8b65c5038f03675d17913b60688`, passed the strict remote doctor,
+and wrote `0600` sanitized evidence with disposition `verified_existing`.
 
 ## Tracked candidates for eventual removal
 
@@ -59,21 +77,21 @@ recoverable.
 
 ## Required deprecation bridge
 
-1. Add a portable, read-only pre-commission verifier and migrate the reusable
-   GitHub workflow away from `PAYOUT_PLATFORM_CONTROL_ENV`.
-2. Make the portable controller the only documented default. Mark the legacy
+1. Make the portable controller the only documented default. Mark the legacy
    script rollback-only and fail closed with a migration path when invoked
    without explicit compatibility authority.
-3. Ship one deprecation release and prove fake-transport parity plus an
+2. Ship one deprecation release and prove fake-transport parity plus an
    unchanged operational rerun.
-4. Confirm private secret recovery custody.
-5. In a separately authorized removal slice, delete executable readers,
+3. Confirm private secret recovery custody.
+4. In a separately authorized removal slice, delete executable readers,
    examples, duplicate parsing, and legacy-only tests while preserving
    historical evidence.
 
 ## Result
 
-Compatibility retirement is **admissible but blocked**. The next bounded slice
-is the portable pre-commission verifier and CI migration. No Cloud, DNS,
-provider, commissioning, invitation, secret, or financial state changed during
-this audit.
+Compatibility retirement is **admissible but blocked** only by the explicit
+rollback/deprecation window and recovery-custody confirmation. The next bounded
+slice makes the portable controller the documented default and makes legacy
+execution require explicit compatibility authority. No Cloud, DNS, provider,
+commissioning, invitation, secret, or financial state changed during this
+gate.

@@ -20,13 +20,14 @@ it('records a fail-closed retirement decision with an exact accepted release', f
     $audit = compatibilityRetirementAudit();
 
     expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
-        ->and($audit['decision'])->toBe('retain_until_deprecation_bridge_completes')
+        ->and($audit['decision'])->toBe('retain_until_deprecation_release_completes')
         ->and($audit['accepted_release'])->toBe([
             'x_payout' => 'v1.0.0-beta.71',
             'commit' => 'b9869bd8f85bb8b65c5038f03675d17913b60688',
             'deployment' => 'depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a',
         ])
-        ->and($audit['required_before_removal'])->toHaveCount(6);
+        ->and($audit['completed_deprecation_steps'])->toHaveCount(3)
+        ->and($audit['required_before_removal'])->toHaveCount(5);
 });
 
 it('classifies every executable or workflow dependency on the legacy worksheets', function (): void {
@@ -70,7 +71,7 @@ it('classifies every executable or workflow dependency on the legacy worksheets'
 it('keeps every retirement blocker explicit and points to its replacement', function (): void {
     $dependencies = compatibilityRetirementAudit()['active_production_dependencies'];
 
-    expect($dependencies)->toHaveCount(2);
+    expect($dependencies)->toHaveCount(1);
 
     foreach ($dependencies as $dependency) {
         expect(compatibilityRetirementPath($dependency['path']))->toBeFile()

@@ -27,6 +27,7 @@ use App\Deployment\Secrets\ManagedSecretReconciler;
 use App\Deployment\Secrets\SecretInputLoader;
 use App\Deployment\State\DeploymentStateStore;
 use App\Deployment\Support\SymfonyCommandExecutor;
+use App\Deployment\Verification\LaravelCloudPreCommissionVerifier;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
@@ -54,6 +55,11 @@ Usage:
     [--evidence=/private/path/evidence.json] \
     --adapter=laravel-cloud --apply [--commission] [--activate-domain] [--rotate-secrets]
 
+  bin/x-payout-deploy precommission \
+    --compiled=/path/to/verified/compiled-artifacts \
+    [--evidence=/private/path/precommission-evidence.json] \
+    --adapter=laravel-cloud
+
 The verified compiled profile is desired-state authority. State and evidence
 are generated outputs. Production secret values are accepted only from the
 owner-only one-time secrets file and are never written to compiled artifacts,
@@ -61,37 +67,80 @@ state, evidence, or command output.
 TEXT;
 
 try {
-    if ($command !== 'continuous') {
-        throw new InvalidArgumentException("Only the continuous command is supported.\n\n{$usage}");
+    if (! in_array($command, ['continuous', 'precommission'], true)) {
+        throw new InvalidArgumentException("Supported commands are continuous and precommission.\n\n{$usage}");
     }
 
-    $instancePath = $options['instance'] ?? null;
     $adapterName = $options['adapter'] ?? null;
 
-    if (! is_string($instancePath) || $instancePath === '' || $adapterName !== 'laravel-cloud') {
-        throw new InvalidArgumentException("Continuous deployment requires --instance and --adapter=laravel-cloud.\n\n{$usage}");
+    if ($adapterName !== 'laravel-cloud') {
+        throw new InvalidArgumentException("Deployment commands require --adapter=laravel-cloud.\n\n{$usage}");
     }
 
-    if (($flags['apply'] ?? false) !== true) {
-        throw new InvalidArgumentException('Continuous deployment requires current-run --apply authority.');
+    $allowedOptions = $command === 'continuous'
+        ? ['instance', 'secrets', 'state', 'evidence', 'compiled', 'adapter']
+        : ['compiled', 'evidence', 'adapter'];
+    $unsupportedOptions = array_values(array_diff(array_keys($options), $allowedOptions));
+
+    if ($unsupportedOptions !== []) {
+        throw new InvalidArgumentException(
+            ucfirst($command).' does not support options: '.implode(', ', $unsupportedOptions).'.',
+        );
     }
 
-    $compiler = new InstanceProfileCompiler;
-    $profile = $compiler->validate($instancePath);
-    $instanceId = $profile['identity']['id'];
+    if ($command === 'precommission' && $flags !== []) {
+        throw new InvalidArgumentException('Portable pre-commission verification does not accept mutation authority flags.');
+    }
+
     $root = dirname(__DIR__);
-    $compiledDirectory = $options['compiled'] ?? $root.'/ops/deployment/build/'.$instanceId;
-    $statePath = $options['state'] ?? $root.'/ops/deployment/state/'.$instanceId.'.json';
-    $evidencePath = $options['evidence'] ?? $root.'/ops/deployment/state/'.$instanceId.'.evidence.json';
-    $secretsPath = $options['secrets'] ?? null;
     $secretValues = [];
+    $statePath = null;
 
-    if (is_string($secretsPath) && $secretsPath !== '') {
-        $secretValues = (new SecretInputLoader)->load($secretsPath, $profile['required_secrets']);
+    if ($command === 'continuous') {
+        $instancePath = $options['instance'] ?? null;
+
+        if (! is_string($instancePath) || $instancePath === '') {
+            throw new InvalidArgumentException("Continuous deployment requires --instance.\n\n{$usage}");
+        }
+
+        if (($flags['apply'] ?? false) !== true) {
+            throw new InvalidArgumentException('Continuous deployment requires current-run --apply authority.');
+        }
+
+        $compiler = new InstanceProfileCompiler;
+        $profile = $compiler->validate($instancePath);
+        $instanceId = $profile['identity']['id'];
+        $compiledDirectory = $options['compiled'] ?? $root.'/ops/deployment/build/'.$instanceId;
+        $statePath = $options['state'] ?? $root.'/ops/deployment/state/'.$instanceId.'.json';
+        $evidencePath = $options['evidence'] ?? $root.'/ops/deployment/state/'.$instanceId.'.evidence.json';
+        $secretsPath = $options['secrets'] ?? null;
+
+        if (is_string($secretsPath) && $secretsPath !== '') {
+            $secretValues = (new SecretInputLoader)->load($secretsPath, $profile['required_secrets']);
+        }
+
+        $compiler->compile($instancePath, $secretsPath, $compiledDirectory);
+        $compiled = (new CompiledArtifactLoader)->load($compiledDirectory);
+        $authority = new DeploymentAuthority(
+            apply: true,
+            commission: ($flags['commission'] ?? false) === true,
+            activateDomain: ($flags['activate-domain'] ?? false) === true,
+            rotateSecrets: ($flags['rotate-secrets'] ?? false) === true,
+        );
+    } else {
+        $compiledDirectory = $options['compiled'] ?? null;
+
+        if (! is_string($compiledDirectory) || $compiledDirectory === '') {
+            throw new InvalidArgumentException("Portable pre-commission verification requires --compiled.\n\n{$usage}");
+        }
+
+        $compiled = (new CompiledArtifactLoader)->load($compiledDirectory);
+        $profile = $compiled['profile'];
+        $instanceId = $profile['identity']['id'];
+        $evidencePath = $options['evidence'] ?? rtrim($compiledDirectory, '/').'/precommission-evidence.json';
+        $authority = new DeploymentAuthority;
     }
 
-    $compiler->compile($instancePath, $secretsPath, $compiledDirectory);
-    $compiled = (new CompiledArtifactLoader)->load($compiledDirectory);
     $commands = new SymfonyCommandExecutor(1800.0);
     $storageCommands = new SymfonyCommandExecutor(60.0, array_filter([
         'AWS_ACCESS_KEY_ID' => $secretValues['AWS_ACCESS_KEY_ID'] ?? null,
@@ -137,7 +186,10 @@ try {
         'geocoding' => 'https://api.opencagedata.com',
         'oauth' => (string) $profile['public']['canonical_url'],
     ], $curlBinary);
-    $availableSecretNames = $profile['required_secrets'];
+    $availableSecretNames = array_values(array_unique(array_merge(
+        $compiled['required_secrets'],
+        $compiled['commissioning_required_secrets'],
+    )));
     $declarations = new DeclaredPrerequisiteProbe('provider');
     $preflight = new PreflightRunner(new CompositePrerequisiteProbe([
         'source-control' => new SourceReleasePrerequisiteProbe(
@@ -164,25 +216,15 @@ try {
         'oauth' => new PassportContractPrerequisiteProbe($runtime, $availableSecretNames),
         'operator-approval' => new CommissioningAuthorityPrerequisiteProbe(
             $profile['commissioning']['opening'],
-            new DeploymentAuthority(
-                apply: true,
-                commission: ($flags['commission'] ?? false) === true,
-                activateDomain: ($flags['activate-domain'] ?? false) === true,
-                rotateSecrets: ($flags['rotate-secrets'] ?? false) === true,
-            ),
+            $authority,
         ),
     ]));
-    $authority = new DeploymentAuthority(
-        apply: true,
-        commission: ($flags['commission'] ?? false) === true,
-        activateDomain: ($flags['activate-domain'] ?? false) === true,
-        rotateSecrets: ($flags['rotate-secrets'] ?? false) === true,
-    );
     $evidence = new DeploymentEvidenceJournal;
+    $discovery = new LaravelCloudResourceDiscovery($cloud);
     $adapter = new LaravelCloudContinuousDeploymentAdapter(
         cloud: $cloud,
         commands: $commands,
-        discovery: new LaravelCloudResourceDiscovery($cloud),
+        discovery: $discovery,
         preflight: $preflight,
         secrets: new ManagedSecretReconciler(new LaravelCloudManagedSecretTransport($cloud)),
         runtime: new RuntimeConfigurationReconciler(
@@ -200,6 +242,28 @@ try {
         gitBinary: $gitBinary,
     );
     $states = new DeploymentStateStore;
+
+    if ($command === 'precommission') {
+        $state = (new LaravelCloudPreCommissionVerifier(
+            $discovery,
+            $adapter,
+            $cloud,
+            $evidence,
+            $states,
+        ))->verify($compiled);
+        (new SanitizedEvidenceWriter)->write(
+            $evidencePath,
+            $compiled,
+            $state,
+            'precommission_ready',
+            [],
+            $evidence->all(),
+        );
+
+        fwrite(STDOUT, "Portable pre-commission verification complete.\nEvidence: {$evidencePath}\n");
+        exit(0);
+    }
+
     $controller = new ContinuousDeploymentController($states, $adapter, 'laravel-cloud');
 
     try {

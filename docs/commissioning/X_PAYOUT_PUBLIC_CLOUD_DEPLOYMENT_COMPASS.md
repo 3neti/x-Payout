@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — compatibility retirement audit complete; removal is blocked on the portable pre-commission verifier and deprecation bridge
+**Current position:** Gate 13.7 — portable pre-commission verifier and CI migration complete; the explicit rollback controller remains for the deprecation release
 
-**Overall status:** Beta.71 is operational and idempotent; the portable controller has no worksheet dependency, but the reusable pre-commission workflow and explicit rollback controller still do, so compatibility artifacts remain retained and no private worksheet was deleted
+**Overall status:** Beta.71 is operational and idempotent; runtime, portable deployment, and reusable CI no longer depend on worksheets; only the explicit rollback controller remains, and no private worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -98,7 +98,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Audit complete — removal blocked** | The portable controller is independent, but the reusable GitHub pre-commission workflow and rollback controller remain active readers; migrate CI and ship a deprecation bridge before removal |
+| 13.7 Compatibility retirement | **Deprecation bridge in progress** | Portable pre-commission verification and CI migration are complete; document the portable default, require explicit rollback authority, and ship one deprecation release before removal |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -185,11 +185,10 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Add a portable, read-only pre-commission verifier that consumes the verified
-compiled profile plus generated state, then migrate the reusable GitHub
-workflow away from `PAYOUT_PLATFORM_CONTROL_ENV`. Make the portable controller
-the documented default and reduce the legacy controller to an explicit,
-fail-closed rollback path. Removal remains separately gated.
+Make the portable controller the documented default and require explicit,
+current-run compatibility authority before the legacy cleanroom script can
+execute. Ship that behavior as one deprecation release, prove fake-transport
+parity and an unchanged operational rerun, then review removal separately.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -368,9 +367,9 @@ explicitly authorized commissioning and final no-op operational rerun complete.
 - Confirmed `bin/x-payout-deploy continuous` has no dependency on either
   worksheet, the transitional CI control secret, the legacy controller, or
   `upsert_local_state()`.
-- Identified two active blockers: the reusable GitHub pre-commission workflow
-  and `scripts/deploy-production-cleanroom.sh` as the explicit rollback
-  controller.
+- Initially identified two active blockers: the reusable GitHub pre-commission
+  workflow and `scripts/deploy-production-cleanroom.sh` as the explicit
+  rollback controller.
 - Observed both ignored local worksheets with owner-only mode `0600` without
   reading their contents. Automated deletion remains prohibited.
 - Preserved historical commissioning documents as evidence rather than
@@ -378,6 +377,28 @@ explicitly authorized commissioning and final no-op operational rerun complete.
 - Retirement is admissible but blocked until the portable pre-commission
   verifier, CI migration, documented default switch, and one deprecation
   release are accepted.
+
+### Portable pre-commission verifier and CI migration — 2026-10-06
+
+- Added `bin/x-payout-deploy precommission`, which loads only verified compiled
+  artifacts and accepts no mutation authority flags.
+- The verifier rediscovers the exact foundation and attached managed-secret
+  identities, fails on missing or ambiguous facts, and proves exactly one
+  successful deployment matches the immutable release branch and commit.
+- It runs only read-only prerequisite checks and the strict remote
+  pre-commission doctor, then writes owner-only sanitized evidence without a
+  generated-state mutation.
+- The reusable GitHub workflow no longer declares
+  `PAYOUT_PLATFORM_CONTROL_ENV`, constructs a temporary control worksheet, or
+  invokes the legacy controller.
+- Fake transports reject any unexpected Cloud mutation, and characterization
+  now finds exactly one active compatibility reader: the explicit rollback
+  controller.
+- The live read-only command matched beta.71 deployment
+  `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` at exact commit
+  `b9869bd8f85bb8b65c5038f03675d17913b60688`, passed the strict
+  pre-commission doctor, and wrote owner-only sanitized evidence without
+  `--apply` authority.
 
 ### Official adapter parity evidence — 2026-10-05
 

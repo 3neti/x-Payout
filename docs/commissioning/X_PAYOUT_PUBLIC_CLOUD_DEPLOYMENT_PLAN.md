@@ -280,13 +280,17 @@ release that supports them.
 
 **Audit evidence — 2026-10-06:** The beta.71 exact-release cleanroom and its
 mutation-free rerun make retirement review admissible. The portable controller
-is worksheet-independent, but removal is not yet safe: the reusable GitHub
-pre-commission workflow still reconstructs `PAYOUT_PLATFORM_CONTROL_ENV`, and
-the legacy cleanroom script remains the explicit rollback controller that
-sources and mutates `deployment.production.local`. The machine-readable audit
-and characterization test fail if another executable or workflow dependency
-appears without classification. The next slice is a portable read-only
-pre-commission verifier plus CI migration, followed by one deprecation release.
+is worksheet-independent. The portable read-only pre-commission verifier and
+GitHub workflow migration are now complete: CI no longer reconstructs
+`PAYOUT_PLATFORM_CONTROL_ENV` or invokes the legacy controller. The legacy
+cleanroom script remains the sole explicit rollback controller that sources
+and mutates `deployment.production.local`. The machine-readable audit and
+characterization test fail if another executable or workflow dependency
+appears without classification. The next slice documents the portable default,
+requires explicit compatibility authority, and ships one deprecation release.
+The verifier also passed against the live beta.71 environment without
+`--apply`, matched the exact existing deployment and commit, and emitted
+owner-only sanitized evidence.
 
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 
