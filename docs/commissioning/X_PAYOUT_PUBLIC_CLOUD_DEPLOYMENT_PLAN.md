@@ -156,16 +156,22 @@ It must:
 - reject unknown, unused, empty, duplicate, or missing entries;
 - create, rotate, or attach Laravel Cloud managed secrets without printing
   values;
+- accept a fail-closed comma-delimited rotation allowlist and leave every
+  unselected managed secret unchanged;
 - record only managed-secret IDs in state;
 - support a read-only check mode; and
-- permit later ordinary deployments without retaining `secrets.env` locally.
+- permit later ordinary deployments without reopening the retained
+  `secrets.env` recovery input.
 
 `APP_KEY`, generated database credentials, and other platform-owned values
 remain platform-owned and are not imported from the worksheet.
 
 **Acceptance:** Logs, process arguments, compiled artifacts, Git status, and
 uploaded evidence contain no secret value. A second import is an idempotent
-no-op unless an explicit rotation is requested.
+no-op unless an explicit rotation is requested. Bare `--rotate-secrets`
+retains backward-compatible all-secret authority; normal controlled rotation
+uses `--rotate-secrets=NAME,...` and rejects empty, malformed, duplicate,
+mixed, or unused names.
 
 ### Cleanup Gate 4 — Make compiled desired state authoritative
 
@@ -201,10 +207,20 @@ Provide one operator entry point with an explicit adapter, for example:
 ```bash
 bin/x-payout-deploy continuous \
   --instance=ops/deployment/instances/payout.disburse.cash.yaml \
+  --secrets=ops/deployment/secrets.env \
+  --adapter=laravel-cloud \
+  --apply
+```
+
+A controlled credential rotation adds only the approved names:
+
+```bash
+bin/x-payout-deploy continuous \
+  --instance=ops/deployment/instances/payout.disburse.cash.yaml \
+  --secrets=ops/deployment/secrets.env \
   --adapter=laravel-cloud \
   --apply \
-  --commission \
-  --activate-domain
+  --rotate-secrets=PASSPORT_PRIVATE_KEY,PASSPORT_PUBLIC_KEY
 ```
 
 The command executes the objective in order and persists a checkpoint after

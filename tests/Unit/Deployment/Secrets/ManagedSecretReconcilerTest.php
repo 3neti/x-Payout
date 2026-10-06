@@ -119,18 +119,25 @@ it('is a no-op on an unchanged rerun and reports missing attachments in check mo
 });
 
 it('rotates only with explicit authority and rejects identity ambiguity', function (): void {
-    $transport = fakeManagedSecretTransport(['FIRST' => ['secret-first']]);
+    $transport = fakeManagedSecretTransport([
+        'FIRST' => ['secret-first'],
+        'SECOND' => ['secret-second'],
+    ]);
     $result = (new ManagedSecretReconciler($transport))->reconcile(
         'env-test',
-        ['FIRST'],
-        ['FIRST' => 'replacement'],
-        ['FIRST' => 'secret-first'],
+        ['FIRST', 'SECOND'],
+        ['FIRST' => 'replacement', 'SECOND' => 'leave-unchanged'],
+        ['FIRST' => 'secret-first', 'SECOND' => 'secret-second'],
         false,
         ['FIRST'],
     );
 
-    expect($result['actions'])->toBe([['name' => 'FIRST', 'action' => 'rotated']])
-        ->and($transport->calls)->toContain(['rotate', 'secret-first', hash('sha256', 'replacement')]);
+    expect($result['actions'])->toBe([
+        ['name' => 'FIRST', 'action' => 'rotated'],
+        ['name' => 'SECOND', 'action' => 'unchanged'],
+    ])->and($transport->calls)
+        ->toContain(['rotate', 'secret-first', hash('sha256', 'replacement')])
+        ->not->toContain(['rotate', 'secret-second', hash('sha256', 'leave-unchanged')]);
 
     $ambiguous = fakeManagedSecretTransport(['FIRST' => ['secret-one', 'secret-two']]);
 

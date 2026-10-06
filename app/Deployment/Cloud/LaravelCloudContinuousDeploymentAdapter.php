@@ -205,7 +205,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
             $this->secretValues,
             $state['managed_secret_ids'] ?? [],
             false,
-            $authority->rotateSecrets ? $required : [],
+            $authority->secretRotation?->resolve($required) ?? [],
         );
 
         if (! $result['ready']) {

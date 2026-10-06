@@ -25,6 +25,7 @@ use App\Deployment\Profiles\InstanceProfileCompiler;
 use App\Deployment\Runtime\RuntimeConfigurationReconciler;
 use App\Deployment\Secrets\ManagedSecretReconciler;
 use App\Deployment\Secrets\SecretInputLoader;
+use App\Deployment\Secrets\SecretRotationSelection;
 use App\Deployment\State\DeploymentStateStore;
 use App\Deployment\Support\SymfonyCommandExecutor;
 use App\Deployment\Verification\LaravelCloudPreCommissionVerifier;
@@ -53,7 +54,8 @@ Usage:
     [--secrets=/path/to/secrets.env] \
     [--state=/private/path/state.json] \
     [--evidence=/private/path/evidence.json] \
-    --adapter=laravel-cloud --apply [--commission] [--activate-domain] [--rotate-secrets]
+    --adapter=laravel-cloud --apply [--commission] [--activate-domain] \
+    [--rotate-secrets | --rotate-secrets=NAME,...]
 
   bin/x-payout-deploy precommission \
     --compiled=/path/to/verified/compiled-artifacts \
@@ -78,7 +80,7 @@ try {
     }
 
     $allowedOptions = $command === 'continuous'
-        ? ['instance', 'secrets', 'state', 'evidence', 'compiled', 'adapter']
+        ? ['instance', 'secrets', 'state', 'evidence', 'compiled', 'adapter', 'rotate-secrets']
         : ['compiled', 'evidence', 'adapter'];
     $unsupportedOptions = array_values(array_diff(array_keys($options), $allowedOptions));
 
@@ -114,6 +116,14 @@ try {
         $statePath = $options['state'] ?? $root.'/ops/deployment/state/'.$instanceId.'.json';
         $evidencePath = $options['evidence'] ?? $root.'/ops/deployment/state/'.$instanceId.'.evidence.json';
         $secretsPath = $options['secrets'] ?? null;
+        $secretRotation = SecretRotationSelection::fromInput(
+            $options['rotate-secrets'] ?? null,
+            ($flags['rotate-secrets'] ?? false) === true,
+        );
+
+        if ($secretRotation !== null && (! is_string($secretsPath) || $secretsPath === '')) {
+            throw new InvalidArgumentException('Secret rotation requires the owner-only --secrets input.');
+        }
 
         if (is_string($secretsPath) && $secretsPath !== '') {
             $secretValues = (new SecretInputLoader)->load($secretsPath, $profile['required_secrets']);
@@ -125,7 +135,7 @@ try {
             apply: true,
             commission: ($flags['commission'] ?? false) === true,
             activateDomain: ($flags['activate-domain'] ?? false) === true,
-            rotateSecrets: ($flags['rotate-secrets'] ?? false) === true,
+            secretRotation: $secretRotation,
         );
     } else {
         $compiledDirectory = $options['compiled'] ?? null;

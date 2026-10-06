@@ -2,13 +2,15 @@
 
 namespace App\Deployment\Controller;
 
+use App\Deployment\Secrets\SecretRotationSelection;
+
 final readonly class DeploymentAuthority
 {
     public function __construct(
         public bool $apply = false,
         public bool $commission = false,
         public bool $activateDomain = false,
-        public bool $rotateSecrets = false,
+        public ?SecretRotationSelection $secretRotation = null,
     ) {}
 
     public function allows(DeploymentPhase $phase): bool
