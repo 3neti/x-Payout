@@ -2,11 +2,11 @@
   "schema": "x-payout.compatibility-retirement-audit.v1",
   "audited_at": "2026-10-06",
   "accepted_release": {
-    "x_payout": "v1.0.0-beta.71",
-    "commit": "b9869bd8f85bb8b65c5038f03675d17913b60688",
-    "deployment": "depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a"
+    "x_payout": "v1.0.0-beta.72",
+    "commit": "43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce",
+    "deployment": "depl-a2ea0417-e779-4794-be60-1ccb93e4cda2"
   },
-  "decision": "retain_until_deprecation_release_is_accepted",
+  "decision": "deprecation_release_accepted_retirement_pending_recovery_custody",
   "active_production_dependencies": [
     {
       "path": "scripts/deploy-production-cleanroom.sh",
@@ -22,7 +22,9 @@
     "live beta.71 portable pre-commission verification accepted without apply authority",
     "portable controller documented as the normal Laravel Cloud entry point",
     "legacy controller fails closed without current-run compatibility rollback authority",
-    "authorized rollback behavior remains covered by fake transport characterization"
+    "authorized rollback behavior remains covered by fake transport characterization",
+    "beta.72 exact release deployed and independently verified through the portable controller",
+    "beta.72 immediate identical rerun preserved the Cloud environment and deployment inventories"
   ],
   "tracked_retirement_candidates": [
     "deployment.production.example",
@@ -56,8 +58,6 @@
     }
   ],
   "required_before_removal": [
-    "ship at least one deprecation release with a fail-closed migration path",
-    "prove the deprecation release against fake transports and an unchanged operational rerun",
     "confirm private recovery custody before manually deleting ignored local worksheets",
     "preserve historical evidence while removing executable worksheet readers"
   ]

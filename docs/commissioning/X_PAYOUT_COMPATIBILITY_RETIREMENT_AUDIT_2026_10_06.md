@@ -2,12 +2,12 @@
 
 **Audited:** 2026-10-06
 
-**Accepted operational baseline:** x-PayOut `v1.0.0-beta.71` at
-`b9869bd8f85bb8b65c5038f03675d17913b60688`
+**Accepted operational baseline:** x-PayOut `v1.0.0-beta.72` at
+`43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`
 
-**Decision:** Retain compatibility mode until the beta.72 deprecation release
-is operationally accepted. Do not delete either private worksheet or its final
-tracked reader yet.
+**Decision:** The deprecation release is operationally accepted. Retain the
+rollback reader and private worksheets until recovery custody is confirmed and
+a separately authorized removal slice preserves the required evidence.
 
 ## What the beta.71 proof established
 
@@ -40,9 +40,17 @@ invocation includes `--compatibility-rollback`.
 
 Focused tests prove the missing-authority failure, the explicitly authorized
 rollback path, fake-transport parity, and the existing worksheet safety
-boundaries. Beta.72 remains a candidate until its exact release is deployed
-through the portable controller and the immediate identical rerun is accepted
-as mutation-free.
+boundaries.
+
+Beta.72 was deployed through the portable controller as deployment
+`depl-a2ea0417-e779-4794-be60-1ccb93e4cda2` at the exact release commit. The
+first controller monitor timed out while Laravel Cloud was still deploying;
+the safe retry recovered that same successful deployment rather than creating
+a replacement. The immediate identical rerun left the sanitized Cloud
+environment and deployment inventories unchanged. A separate read-only
+portable verifier matched the same deployment and passed strict
+pre-commission readiness. Commissioning, domain activation, secret rotation,
+invitation delivery, and financial operations were not authorized.
 
 ## Portable verifier and CI migration completed
 
@@ -90,16 +98,13 @@ recoverable.
 
 ## Required deprecation bridge
 
-1. Ship beta.72 and prove fake-transport parity plus an
-   unchanged operational rerun.
-2. Confirm private secret recovery custody.
-3. In a separately authorized removal slice, delete executable readers,
+1. Confirm private secret recovery custody.
+2. In a separately authorized removal slice, delete executable readers,
    examples, duplicate parsing, and legacy-only tests while preserving
    historical evidence.
 
 ## Result
 
-Compatibility retirement is **admissible but blocked** by beta.72 operational
-acceptance, the explicit rollback/deprecation window, and recovery-custody
-confirmation. No Cloud, DNS, provider, commissioning, invitation, secret, or
-financial state changed while preparing this release candidate.
+Compatibility retirement is **admissible but still gated** by recovery-custody
+confirmation and a separately authorized removal slice. Beta.72 satisfies the
+deprecation-release and mutation-free-rerun requirements.

@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — beta.72 deprecation release candidate ready; operational acceptance and its no-op rerun remain
+**Current position:** Gate 13.7 — beta.72 deprecation release accepted; recovery custody and separately authorized compatibility removal remain
 
-**Overall status:** Beta.71 is operational and idempotent; the portable controller is now the documented default, while the rollback controller fails closed without explicit current-run compatibility authority; no private worksheet was deleted
+**Overall status:** Beta.72 is operational and idempotent; the portable controller is the documented default, while the rollback controller fails closed without explicit current-run compatibility authority; no private worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -98,7 +98,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Deprecation release candidate ready** | Portable verification, CI migration, the documented-default switch, and explicit rollback authority are complete; beta.72 deployment and its immediate no-op rerun remain before acceptance |
+| 13.7 Compatibility retirement | **Deprecation release accepted** | Beta.72 exact-release deployment, portable verification, and unchanged operational rerun passed; recovery custody and separately authorized reader removal remain |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -185,10 +185,9 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Publish beta.72, deploy it through the portable controller without
-commissioning, domain, secret-rotation, invitation, or financial authority,
-then immediately repeat the identical run and prove that it is mutation-free.
-Compatibility removal remains a separate gate.
+Confirm private recovery custody without reading or exposing secret values.
+Compatibility reader and worksheet removal remains a separate, explicitly
+authorized gate.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -400,7 +399,7 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   pre-commission doctor, and wrote owner-only sanitized evidence without
   `--apply` authority.
 
-### Beta.72 compatibility deprecation candidate — 2026-10-06
+### Beta.72 compatibility deprecation acceptance — 2026-10-06
 
 - `bin/x-payout-deploy` is the documented default Laravel Cloud entry point.
 - The legacy cleanroom controller identifies itself as rollback-only and exits
@@ -411,8 +410,18 @@ explicitly authorized commissioning and final no-op operational rerun complete.
 - Existing rollback behavior and fake-transport parity remain characterized
   only when that explicit authority is present.
 - Private worksheets remain untouched and must not be deleted in this gate.
-- Operational acceptance still requires publishing and deploying beta.72 and
-  proving its immediate identical rerun performs no mutation.
+- Published release branch and tag resolve to exact commit
+  `43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`.
+- Laravel Cloud deployment `depl-a2ea0417-e779-4794-be60-1ccb93e4cda2`
+  succeeded for that exact branch and commit.
+- The first monitor timed out while the deployment was still running; the safe
+  retry recovered that exact successful deployment and created no replacement.
+- The immediate identical apply-only rerun left the sanitized Cloud
+  environment and deployment inventories unchanged.
+- The read-only portable verifier independently matched the exact deployment,
+  passed strict pre-commission readiness, and wrote `0600` evidence.
+- Commissioning, domain activation, secret rotation, invitations, and
+  financial operations were not authorized.
 
 ### Official adapter parity evidence — 2026-10-05
 

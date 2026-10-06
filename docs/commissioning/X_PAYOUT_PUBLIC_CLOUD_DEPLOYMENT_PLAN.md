@@ -292,13 +292,17 @@ The verifier also passed against the live beta.71 environment without
 `--apply`, matched the exact existing deployment and commit, and emitted
 owner-only sanitized evidence.
 
-**Deprecation release candidate — 2026-10-06:** The README now makes
+**Deprecation release accepted — 2026-10-06:** The README now makes
 `bin/x-payout-deploy` the supported Laravel Cloud entry point. The legacy
 cleanroom controller is rollback-only and fails before reading a worksheet
 unless the current invocation includes `--compatibility-rollback`. Focused
 tests preserve the authorized rollback behavior and fake-transport parity.
-Beta.72 must still be published, deployed by the portable controller, and
-immediately rerun without mutation before this deprecation gate is accepted.
+Beta.72 was deployed at exact commit
+`43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`; a safe retry recovered its
+already-running deployment, the immediate identical rerun preserved the Cloud
+environment and deployment inventories, and the read-only verifier passed.
+Compatibility removal remains separately authorized and recovery-custody
+gated.
 
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 

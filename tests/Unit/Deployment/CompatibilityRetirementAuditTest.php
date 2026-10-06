@@ -22,14 +22,14 @@ it('records a fail-closed retirement decision with an exact accepted release', f
     $audit = compatibilityRetirementAudit();
 
     expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
-        ->and($audit['decision'])->toBe('retain_until_deprecation_release_is_accepted')
+        ->and($audit['decision'])->toBe('deprecation_release_accepted_retirement_pending_recovery_custody')
         ->and($audit['accepted_release'])->toBe([
-            'x_payout' => 'v1.0.0-beta.71',
-            'commit' => 'b9869bd8f85bb8b65c5038f03675d17913b60688',
-            'deployment' => 'depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a',
+            'x_payout' => 'v1.0.0-beta.72',
+            'commit' => '43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce',
+            'deployment' => 'depl-a2ea0417-e779-4794-be60-1ccb93e4cda2',
         ])
-        ->and($audit['completed_deprecation_steps'])->toHaveCount(6)
-        ->and($audit['required_before_removal'])->toHaveCount(4);
+        ->and($audit['completed_deprecation_steps'])->toHaveCount(8)
+        ->and($audit['required_before_removal'])->toHaveCount(2);
 });
 
 it('classifies every executable or workflow dependency on the legacy worksheets', function (): void {
