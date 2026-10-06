@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — Passport signing continuity restored; compatibility retirement awaits separate authority
+**Current position:** Gate 13.7 — post-rotation idempotency proved; compatibility retirement awaits separate authority
 
-**Overall status:** Beta.72 is operational; all 18 managed-secret names are attached and the rotated Passport pair has an owner-only recovery copy; no compatibility worksheet was deleted
+**Overall status:** Beta.72 is operational; all 18 managed-secret names are attached, the rotated Passport pair has an owner-only recovery copy, and the immediate continuous rerun is mutation-free; no compatibility worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -55,7 +55,7 @@ and identity checks.
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
 | 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.72 remains operational with independently recoverable Passport custody |
 | 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.100 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict and MCP doctors are green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **Complete through beta.72** | The hardened controller proved exact-release deployment and idempotency; beta.72 remains operational after controlled Passport rotation |
+| 13. Two-input one-command cleanup | **Complete through beta.72** | Named secret rotation, authoritative exact-deployment recovery, and a mutation-free post-rotation rerun are proved; beta.72 remains operational |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -97,7 +97,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Continuity prerequisite complete; retirement not authorized** | Beta.72 exact-release deployment and no-op rerun passed; the rotated Passport pair is independently recoverable, but worksheet/reader deletion remains a separate gate |
+| 13.7 Compatibility retirement | **Prerequisites complete; retirement not authorized** | Beta.72 exact-release deployment, Passport continuity, and the post-rotation no-op rerun passed; worksheet/reader deletion remains a separate gate |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -464,6 +464,35 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   message, DNS mutation, or financial operation was performed.
 - Passport continuity no longer blocks Gate 13.7. Compatibility worksheet and
   reader retirement remain separately authorized work.
+
+### Beta.72 post-rotation no-op proof — 2026-10-06
+
+- Added fail-closed named managed-secret rotation. Bare `--rotate-secrets`
+  retains backward-compatible all-secret authority, while
+  `--rotate-secrets=NAME,...` authorizes only the explicit unique names and
+  rejects malformed, duplicate, mixed, empty, or unused selections.
+- The first bounded `--apply` recovery pass received no secret-rotation,
+  commissioning, domain, invitation, provider, messaging, or financial
+  authority. It corrected one real non-secret runtime drift by restoring
+  `CACHE_STORE=redis`, then stopped safely when two successful beta.72
+  deployments shared the same branch and commit.
+- Exact-deployment recovery now uses the environment's authoritative current
+  deployment identity to disambiguate multiple successful records with the
+  same branch and commit. It still fails closed when no authoritative unique
+  match exists.
+- The bounded retry recovered deployment
+  `depl-a2ea1763-bb5c-46a9-a603-fbcfab673523`, reached
+  `precommission_ready`, and did not create another deployment.
+- An immediate identical rerun preserved the normalized Laravel Cloud
+  inventory byte-for-byte. The before and after SHA-256 was
+  `c3cb78d93fb6ae739c3b1a5164ec9b1808c33c734edf69aa55616e9dee8bf3cc`
+  across the environment attachments, 18 managed-secret identities, four
+  deployment records, canonical domain, and queue worker.
+- Final production evidence remained green: strict doctor `37/37`, x-mcp
+  doctor ready, and `https://payout.disburse.cash` HTTP `200`.
+- No compatibility worksheet or reader was removed. Existing OAuth access
+  tokens invalidated by the intentional Passport rotation still require
+  controlled reissue when a partner client needs them.
 
 ### Official adapter parity evidence — 2026-10-05
 
@@ -979,11 +1008,13 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Add fail-closed named secret rotation so a command can authorize only explicit
-managed-secret names without rotating the complete inventory. Then run one
-bounded beta.72 continuous no-op without rotation, commissioning, domain, or
-financial authority. Compatibility worksheet and reader retirement remains a
-separate explicit gate after that proof.
+Publish the named-rotation and exact-deployment-recovery hardening in the next
+immutable x-PayOut release, deploy that exact release under a separately
+approved non-financial gate, and repeat the mutation-free rerun proof.
+Compatibility worksheet and reader retirement remains a separate explicit
+authorization after the released controller passes that checkpoint. Partner
+OAuth token reissue remains a separate governed ceremony performed only when
+a client needs access.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 

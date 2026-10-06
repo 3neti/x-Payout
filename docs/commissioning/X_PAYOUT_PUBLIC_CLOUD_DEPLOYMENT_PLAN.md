@@ -328,6 +328,19 @@ the re-entry worksheet has no populated Passport entries, and no independent
 continuity artifact was located. Removal must fail closed until existing-key
 custody is established or deliberate rotation impact is separately approved.
 
+**Post-rotation idempotency accepted — 2026-10-06:** Deliberate Passport key
+rotation established an owner-only 18-name recovery inventory and updated only
+the two existing Passport managed-secret identities. The continuous controller
+now supports fail-closed named rotation and resolves duplicate successful
+branch-and-commit deployment records only through the environment's
+authoritative current deployment ID. A bounded recovery pass corrected the
+single non-secret `CACHE_STORE` drift, recovered the current beta.72
+deployment, and stopped at the unauthorized commissioning boundary. The
+immediate identical rerun left the normalized Cloud inventory byte-for-byte
+unchanged. Strict doctor passed `37/37`, x-mcp doctor was ready, and the public
+host returned HTTP `200`. Compatibility removal remains separately authorized;
+existing partner OAuth access tokens require governed reissue when needed.
+
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 
 From a clean checkout, supply only the private production `instance.yaml`, a
