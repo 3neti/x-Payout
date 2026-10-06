@@ -2,7 +2,7 @@
 
 **Opened:** 2026-10-06
 
-**Status:** Implementation and release acceptance in progress
+**Status:** Complete through beta.75 publication, main adoption, and branch retirement
 
 ## Objective
 
@@ -36,3 +36,20 @@ collection, reverse settlement, or create payment truth.
   operation.
 - Live receiver enablement and deployment remain separately authorized gates.
 - Immutable release branches remain historical evidence and are not retired.
+
+## Completion evidence
+
+- Immutable x-change dependency: `v1.0.101` at `dbee25b7`.
+- Immutable x-PayOut release: `v1.0.0-beta.75` at `d3ab8af`.
+- x-PayOut `main`: `18b62a3` after the CI bootstrap and GitHub Action
+  refresh were reapplied on current main.
+- Host acceptance: 166 tests, 1,046 assertions; production frontend build,
+  Pint, strict Composer validation, and diff checks passed.
+- Dependabot PR 1 was closed and its remote branch deleted after its action
+  upgrades were incorporated on current main.
+- The merged local adoption and CI topic branches were deleted. Immutable
+  beta.69 through beta.75 release branches and tags were preserved.
+- The repository-wide frontend formatter still reports a pre-existing
+  333-file baseline. It was neither rewritten wholesale nor hidden.
+- Beta.74 remains the operational production release. Beta.75 was not deployed
+  and partner payment-event delivery was not enabled by this work.

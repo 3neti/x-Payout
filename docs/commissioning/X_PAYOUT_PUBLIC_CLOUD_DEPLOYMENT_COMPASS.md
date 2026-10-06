@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Payment confirmation resilience adoption in progress after Gate 13 closure
+**Current position:** Payment confirmation resilience adopted in beta.75; live enablement remains separately gated
 
-**Overall status:** Beta.74 remains the operational production release. A new local adoption branch locks x-change `v1.0.101` and adds fail-closed, deployment-managed partner payment confirmation settings; it is not deployed or enabled yet
+**Overall status:** Beta.74 remains the operational production release. Immutable beta.75 at `d3ab8af` locks x-change `v1.0.101` and adds fail-closed, deployment-managed partner payment confirmation settings; x-PayOut `main` is `18b62a3` after CI bootstrap hardening. Beta.75 is not deployed and delivery is not enabled
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -20,7 +20,7 @@ The governing plan is
 The current package-adoption and branch-retirement gates are recorded in the
 [Payment Confirmation Resilience Adoption Plan](PAYMENT_CONFIRMATION_RESILIENCE_ADOPTION_PLAN.md).
 
-## Payment confirmation resilience adoption — 2026-10-06
+## Payment confirmation resilience adoption — completed 2026-10-06
 
 - x-change `v1.0.101` is the immutable package candidate.
 - x-PayOut owns deployment configuration only: receiver reference, HTTPS URL,
@@ -33,6 +33,13 @@ The current package-adoption and branch-retirement gates are recorded in the
   operation.
 - Production deployment and receiver enablement are separate gates after the
   release is accepted.
+- Host acceptance passed 166 tests / 1,046 assertions, production build, Pint,
+  strict Composer validation, and diff checks.
+- The stale Dependabot update was reapplied on current main, its PR was closed,
+  and its remote branch was deleted. Merged local topic branches were deleted;
+  immutable release branches were preserved.
+- The repository-wide frontend formatter continues to report its pre-existing
+  333-file baseline. That separate cleanup was not folded into this release.
 
 ## Proven baseline
 
