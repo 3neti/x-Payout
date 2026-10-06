@@ -14,7 +14,11 @@ it('installs backend and frontend dependencies before bootstrapping the applicat
         ->and($checks)->toBeInt()
         ->and($composerInstall)->toBeLessThan($bootstrap)
         ->and($npmInstall)->toBeLessThan($bootstrap)
-        ->and($bootstrap)->toBeLessThan($checks);
+        ->and($bootstrap)->toBeLessThan($checks)
+        ->and($workflow)
+        ->toContain('APP_ENV: testing')
+        ->toContain('XCHANGE_DEPLOYMENT_PROFILE: development')
+        ->toContain('XCHANGE_RUNTIME_TIER: local');
 });
 
 it('uses the accepted GitHub Action major versions in deployment', function (): void {

@@ -39,6 +39,10 @@ jobs:
 
       - name: Bootstrap application
         run: composer setup
+        env:
+          APP_ENV: testing
+          XCHANGE_DEPLOYMENT_PROFILE: development
+          XCHANGE_RUNTIME_TIER: local
 
       - name: Run CI Checks
         run: composer ci:check
