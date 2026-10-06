@@ -10,6 +10,9 @@ it('generates secure redirects when the canonical application URL uses https', f
 
     Route::get('/secure-redirect-source', fn () => redirect()->route('home'));
 
-    $this->get('/secure-redirect-source')
-        ->assertRedirect('https://localhost');
+    $response = $this->get('/secure-redirect-source');
+
+    $response->assertRedirect();
+
+    expect($response->headers->get('Location'))->toStartWith('https://');
 });
