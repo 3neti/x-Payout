@@ -26,7 +26,7 @@ final readonly class SecretRotationSelection
 
         $names = array_map('trim', explode(',', $namedSecrets));
 
-        if ($names === [] || in_array('', $names, true)) {
+        if (in_array('', $names, true)) {
             throw new SecretReconciliationException(
                 'Named secret rotation requires a comma-delimited list of secret names.',
             );
