@@ -30,6 +30,8 @@ it('runs the real continuous entry point twice with fake CLIs and emits sanitize
     $cloudLog = $directory.'/cloud.log';
     $cloudState = $directory.'/cloud-state';
     mkdir($cloudState, 0700, true);
+    touch($cloudState.'/instance');
+    touch($cloudState.'/worker');
     $secretNames = implode(',', $profile['required_secrets']);
 
     $success = entryPointExecutable("#!/usr/bin/env bash\nexit 0\n");
@@ -91,6 +93,14 @@ case "$op" in
   background-process:list)
     [[ -f "$state/worker" ]] && printf '%s\n' '[{"id":"worker-one","command":"php artisan queue:work"}]' || printf '%s\n' '[]'
     ;;
+  background-process:get)
+    if [[ -f "$state/worker-updated" ]]; then
+      printf '%s\n' '{"id":"worker-one","type":"worker","connection":"redis","queue":"partner-payments,x-change-funding,x-change-feedback,default","backoff":30,"sleep":3,"rest":0,"timeout":60,"tries":3,"processes":1}'
+    else
+      printf '%s\n' '{"id":"worker-one","type":"worker","connection":"redis","queue":"x-change-funding,x-change-feedback,default","backoff":30,"sleep":3,"rest":0,"timeout":60,"tries":3,"processes":1}'
+    fi
+    ;;
+  background-process:update) touch "$state/worker-updated"; printf '%s\n' '{"id":"worker-one"}' ;;
   domain:list)
     [[ -f "$state/domain" ]] && printf '%s\n' '[{"id":"domain-one","name":"payout.example.com"}]' || printf '%s\n' '[]'
     ;;
@@ -216,6 +226,8 @@ BASH);
     expect($first->getOutput())->toContain('Continuous deployment complete')
         ->and($firstLog)->toContain('environment:update env-one --database-id=database-one --cache-id=cache-one')
         ->and($firstLog)->toContain('environment:update env-one --branch=release/v1.0.0')
+        ->and($firstLog)->toContain('background-process:update worker-one')
+        ->and($firstLog)->toContain('--queue=partner-payments,x-change-funding,x-change-feedback,default')
         ->and($firstLog)->toContain('deployment:get deployment-one')
         ->and($firstLog)->not->toContain('deploy:monitor')
         ->and($firstLog)->toContain('x-change:commission:preview')
@@ -245,6 +257,14 @@ BASH);
             'domain', 'strict_doctor', 'mcp_doctor',
         ])
         ->and($firstEvidencePayload['phase_evidence']['runtime']['changed_keys'])->not->toBeEmpty();
+
+    expect($firstEvidencePayload['phase_evidence']['runtime']['worker'])
+        ->toMatchArray([
+            'action' => 'updated',
+            'worker_id' => 'worker-one',
+        ])
+        ->and($firstEvidencePayload['phase_evidence']['runtime']['worker']['changed_keys'])
+        ->toContain('queue');
 
     expect($firstEvidencePayload['phase_evidence']['preflight']['results'])
         ->toContainEqual([
@@ -296,6 +316,7 @@ BASH);
             'environment:update',
             'environment:variables',
             'background-process:create',
+            'background-process:update',
             'deploy ',
             'domain:create',
         )->and($secondEvidence['phase_evidence'])->toHaveKeys([

@@ -18,6 +18,18 @@ use Symfony\Component\Yaml\Yaml;
 
 final readonly class LaravelCloudContinuousDeploymentAdapter implements ContinuousDeploymentAdapter
 {
+    private const WORKER_CONFIGURATION = [
+        'type' => 'worker',
+        'connection' => 'redis',
+        'queue' => 'partner-payments,x-change-funding,x-change-feedback,default',
+        'backoff' => 30,
+        'sleep' => 3,
+        'rest' => 0,
+        'timeout' => 60,
+        'tries' => 3,
+        'processes' => 1,
+    ];
+
     /** @param array<string, string> $secretValues */
     public function __construct(
         private LaravelCloudClient $cloud,
@@ -226,22 +238,12 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     {
         $environmentId = $this->resource($state, 'environment_id');
         $runtime = $this->runtime->reconcile($environmentId, $compiled['runtime'], true);
+        $worker = $this->reconcileWorker($state);
         $this->evidence->record('runtime', [
             'changed_keys' => $runtime['changed'],
             'unchanged_keys' => $runtime['unchanged'],
+            'worker' => $worker['evidence'],
         ]);
-        $resources = [];
-
-        if (! isset($state['resources']['worker_process_id'])) {
-            $worker = $this->cloud->json('background-process:create', [
-                $this->resource($state, 'instance_id'),
-                '--type=worker',
-                '--connection=redis',
-                '--queue=partner-payments,x-change-funding,x-change-feedback,default',
-                '--backoff=30', '--sleep=3', '--rest=0', '--timeout=60', '--tries=3', '--processes=1',
-            ]);
-            $resources['worker_process_id'] = $this->id($worker, 'queue worker');
-        }
 
         $this->cloud->json('instance:update', [
             $this->resource($state, 'instance_id'),
@@ -249,7 +251,69 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
             '--force',
         ]);
 
-        return $resources === [] ? [] : ['resources' => $resources];
+        return $worker['resources'] === [] ? [] : ['resources' => $worker['resources']];
+    }
+
+    /**
+     * @param  array<string, mixed>  $state
+     * @return array{resources: array<string, string>, evidence: array<string, mixed>}
+     */
+    private function reconcileWorker(array $state): array
+    {
+        $workerId = $state['resources']['worker_process_id'] ?? null;
+        $arguments = [
+            '--type='.self::WORKER_CONFIGURATION['type'],
+            '--connection='.self::WORKER_CONFIGURATION['connection'],
+            '--queue='.self::WORKER_CONFIGURATION['queue'],
+            '--backoff='.self::WORKER_CONFIGURATION['backoff'],
+            '--sleep='.self::WORKER_CONFIGURATION['sleep'],
+            '--rest='.self::WORKER_CONFIGURATION['rest'],
+            '--timeout='.self::WORKER_CONFIGURATION['timeout'],
+            '--tries='.self::WORKER_CONFIGURATION['tries'],
+            '--processes='.self::WORKER_CONFIGURATION['processes'],
+        ];
+
+        if (! is_string($workerId) || $workerId === '') {
+            $worker = $this->cloud->json('background-process:create', [
+                $this->resource($state, 'instance_id'),
+                ...$arguments,
+            ]);
+            $workerId = $this->id($worker, 'queue worker');
+
+            return [
+                'resources' => ['worker_process_id' => $workerId],
+                'evidence' => ['action' => 'created', 'worker_id' => $workerId],
+            ];
+        }
+
+        $worker = $this->cloud->json('background-process:get', [$workerId]);
+        $changed = array_keys(array_filter(
+            self::WORKER_CONFIGURATION,
+            static fn (string|int $value, string $key): bool => (string) ($worker[$key] ?? '') !== (string) $value,
+            ARRAY_FILTER_USE_BOTH,
+        ));
+
+        if ($changed === []) {
+            return [
+                'resources' => [],
+                'evidence' => ['action' => 'unchanged', 'worker_id' => $workerId],
+            ];
+        }
+
+        $this->cloud->json('background-process:update', [
+            $workerId,
+            ...$arguments,
+            '--force',
+        ]);
+
+        return [
+            'resources' => [],
+            'evidence' => [
+                'action' => 'updated',
+                'worker_id' => $workerId,
+                'changed_keys' => $changed,
+            ],
+        ];
     }
 
     /**

@@ -82,5 +82,5 @@ it('declares the durable worker queue and deployment-managed settings', function
         ->toContain('- XCHANGE_PAYMENT_EVENTS_SECRET')
         ->toContain('- partner-payments')
         ->and($continuousAdapter)
-        ->toContain('--queue=partner-payments,x-change-funding,x-change-feedback,default');
+        ->toContain("'queue' => 'partner-payments,x-change-funding,x-change-feedback,default'");
 });
