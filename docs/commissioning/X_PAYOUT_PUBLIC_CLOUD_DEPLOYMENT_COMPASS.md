@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — beta.72 deprecation release accepted; recovery custody and separately authorized compatibility removal remain
+**Current position:** Gate 13.7 — beta.72 accepted; compatibility retirement blocked on Passport signing-key continuity
 
-**Overall status:** Beta.72 is operational and idempotent; the portable controller is the documented default, while the rollback controller fails closed without explicit current-run compatibility authority; no private worksheet was deleted
+**Overall status:** Beta.72 is operational and idempotent; all 18 managed-secret names are attached, but Passport signing-key recovery is not independently proven; no private worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -98,7 +98,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Deprecation release accepted** | Beta.72 exact-release deployment, portable verification, and unchanged operational rerun passed; recovery custody and separately authorized reader removal remain |
+| 13.7 Compatibility retirement | **Blocked on signing continuity** | Beta.72 exact-release deployment and no-op rerun passed; Passport keys are available at runtime but lack independently verified recovery custody |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -185,9 +185,10 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Confirm private recovery custody without reading or exposing secret values.
-Compatibility reader and worksheet removal remains a separate, explicitly
-authorized gate.
+Establish approved independent custody for the existing Passport signing key
+pair, or separately authorize deliberate key rotation with its token and
+signature invalidation impact. Compatibility reader and worksheet removal
+remains a later, explicitly authorized gate.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -422,6 +423,21 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   passed strict pre-commission readiness, and wrote `0600` evidence.
 - Commissioning, domain activation, secret rotation, invitations, and
   financial operations were not authorized.
+
+### Secret recovery custody audit — 2026-10-06
+
+- Verified all 18 required secret names are attached to the live Laravel Cloud
+  environment without requesting or displaying values.
+- Added a value-free recovery contract mapping every required name to an owner
+  role, issuing authority, recovery method, continuity class, and status.
+- Provider and application credentials are recoverable through documented
+  rotation procedures; Cloud attachment remains runtime custody only.
+- Both ignored worksheets remain mode `0600`. Only populated key names were
+  examined; values and value-derived hashes were not emitted.
+- The local re-entry worksheet has no populated Passport signing key entries,
+  and no independent continuity artifact was located in this checkout.
+- Retirement now fails closed on Passport signing continuity. No worksheet,
+  secret, Cloud attachment, runtime value, or live resource was changed.
 
 ### Official adapter parity evidence — 2026-10-05
 

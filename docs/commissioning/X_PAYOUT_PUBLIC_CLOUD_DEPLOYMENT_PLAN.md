@@ -304,6 +304,14 @@ environment and deployment inventories, and the read-only verifier passed.
 Compatibility removal remains separately authorized and recovery-custody
 gated.
 
+**Recovery custody audit — 2026-10-06:** All 18 production managed-secret
+names are attached, and every provider-issued or application-rotatable
+credential now has a value-free owner/authority/recovery mapping. Passport
+signing keys remain the sole blocker: Laravel Cloud cannot return their values,
+the re-entry worksheet has no populated Passport entries, and no independent
+continuity artifact was located. Removal must fail closed until existing-key
+custody is established or deliberate rotation impact is separately approved.
+
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 
 From a clean checkout, supply only the private production `instance.yaml`, a

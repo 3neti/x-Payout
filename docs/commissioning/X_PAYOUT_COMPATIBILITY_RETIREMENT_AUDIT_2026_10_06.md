@@ -5,9 +5,9 @@
 **Accepted operational baseline:** x-PayOut `v1.0.0-beta.72` at
 `43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`
 
-**Decision:** The deprecation release is operationally accepted. Retain the
-rollback reader and private worksheets until recovery custody is confirmed and
-a separately authorized removal slice preserves the required evidence.
+**Decision:** The deprecation release is operationally accepted, but
+compatibility retirement is blocked by unverified Passport signing-key
+continuity. Retain the rollback reader and private worksheets.
 
 ## What the beta.71 proof established
 
@@ -84,9 +84,10 @@ operated, not executable dependencies.
 
 ## Private local worksheet posture
 
-Both ignored local worksheets still exist with owner-only mode `0600`. Their
-contents were not read during this audit. They must not be committed, copied
-into evidence, or deleted by an automated repository change.
+Both ignored local worksheets still exist with owner-only mode `0600`. The
+custody audit inspected key names and whether entries were populated, but did
+not print, copy, hash, or retain any value. The worksheets must not be
+committed, copied into evidence, or deleted by an automated repository change.
 
 `deployment.production.local` can be deleted manually only after all tracked
 readers have been retired and the deprecation release is accepted.
@@ -96,15 +97,34 @@ every non-regenerable recovery value has authoritative custody outside the
 worksheet. Laravel Cloud managed-secret IDs do not make secret values
 recoverable.
 
+## Recovery custody audit
+
+The value-free custody contract maps all 18 production recovery names to an
+owner role, recovery authority, method, continuity class, and disposition.
+Every provider-issued or application-generated credential has a documented
+rotation path. The live Laravel Cloud environment has all 18 required names
+attached.
+
+Passport signing material is the sole blocker. The private and public signing
+keys are attached to Laravel Cloud, but Cloud cannot return plaintext. The
+local re-entry worksheet has no populated Passport key entry, and no separate
+continuity artifact was located by filename or key declaration. Rotating the
+pair may invalidate existing tokens or signatures, so the audit cannot infer
+authority to rotate it.
+
+Only names, attachment IDs, file modes, and populated-key names were examined.
+No secret value or value-derived hash was emitted or retained.
+
 ## Required deprecation bridge
 
-1. Confirm private secret recovery custody.
+1. Establish independent custody of the existing Passport signing pair, or
+   separately approve deliberate rotation and its invalidation impact.
 2. In a separately authorized removal slice, delete executable readers,
    examples, duplicate parsing, and legacy-only tests while preserving
    historical evidence.
 
 ## Result
 
-Compatibility retirement is **admissible but still gated** by recovery-custody
-confirmation and a separately authorized removal slice. Beta.72 satisfies the
-deprecation-release and mutation-free-rerun requirements.
+Compatibility retirement is **blocked** by Passport signing-key continuity.
+Beta.72 satisfies the deprecation-release and mutation-free-rerun requirements,
+but Cloud attachment alone is not recovery custody.

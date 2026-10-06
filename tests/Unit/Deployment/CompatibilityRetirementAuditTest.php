@@ -22,13 +22,13 @@ it('records a fail-closed retirement decision with an exact accepted release', f
     $audit = compatibilityRetirementAudit();
 
     expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
-        ->and($audit['decision'])->toBe('deprecation_release_accepted_retirement_pending_recovery_custody')
+        ->and($audit['decision'])->toBe('blocked_by_passport_signing_key_continuity')
         ->and($audit['accepted_release'])->toBe([
             'x_payout' => 'v1.0.0-beta.72',
             'commit' => '43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce',
             'deployment' => 'depl-a2ea0417-e779-4794-be60-1ccb93e4cda2',
         ])
-        ->and($audit['completed_deprecation_steps'])->toHaveCount(8)
+        ->and($audit['completed_deprecation_steps'])->toHaveCount(10)
         ->and($audit['required_before_removal'])->toHaveCount(2);
 });
 

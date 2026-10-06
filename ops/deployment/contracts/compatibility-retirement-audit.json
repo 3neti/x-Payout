@@ -6,7 +6,7 @@
     "commit": "43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce",
     "deployment": "depl-a2ea0417-e779-4794-be60-1ccb93e4cda2"
   },
-  "decision": "deprecation_release_accepted_retirement_pending_recovery_custody",
+  "decision": "blocked_by_passport_signing_key_continuity",
   "active_production_dependencies": [
     {
       "path": "scripts/deploy-production-cleanroom.sh",
@@ -24,7 +24,9 @@
     "legacy controller fails closed without current-run compatibility rollback authority",
     "authorized rollback behavior remains covered by fake transport characterization",
     "beta.72 exact release deployed and independently verified through the portable controller",
-    "beta.72 immediate identical rerun preserved the Cloud environment and deployment inventories"
+    "beta.72 immediate identical rerun preserved the Cloud environment and deployment inventories",
+    "all 18 required managed-secret names verified attached without reading values",
+    "provider-rotatable credentials mapped to named owner roles and issuing recovery authorities"
   ],
   "tracked_retirement_candidates": [
     "deployment.production.example",
@@ -46,19 +48,22 @@
       "path": "deployment.production.local",
       "observed": true,
       "mode": "0600",
-      "contents_inspected": false,
+      "key_names_inspected": false,
+      "value_contents_inspected": false,
       "disposition": "retain_until_tracked_readers_are_retired_then_delete_manually"
     },
     {
       "path": "deployment.production.secrets.local",
       "observed": true,
       "mode": "0600",
-      "contents_inspected": false,
+      "key_names_inspected": true,
+      "value_contents_inspected": false,
       "disposition": "retain_until_secret_recovery_custody_is_confirmed_then_delete_manually"
     }
   ],
   "required_before_removal": [
-    "confirm private recovery custody before manually deleting ignored local worksheets",
+    "establish independent Passport signing-key continuity custody or separately authorize deliberate rotation impact",
     "preserve historical evidence while removing executable worksheet readers"
-  ]
+  ],
+  "recovery_custody_contract": "ops/deployment/contracts/secret-recovery-custody.json"
 }

@@ -1,8 +1,8 @@
 # x-PayOut Production Secret Custody and Recovery
 
-**Status:** Adopted for the shared Laravel Cloud host
+**Status:** Adopted for runtime custody; recovery audit blocked on Passport signing continuity
 
-**Updated:** 2026-10-03
+**Updated:** 2026-10-06
 
 ## Governing rule
 
@@ -87,4 +87,29 @@ and attachment of the managed secrets.
 
 Keeper Business and HashiCorp Vault are not production dependencies. They may
 be reevaluated later for organizational recovery or machine identity, but the
-current deployment remains complete and recoverable without them.
+current runtime does not depend on them. Full signing-key recovery remains
+unconfirmed as recorded below.
+
+## Recovery custody audit — 2026-10-06
+
+The beta.72 custody audit compared secret names and attachment identities only.
+No secret value, hash, or masked provider payload was printed, copied, or
+placed in evidence.
+
+- all 18 names in the production recovery inventory are attached to the live
+  Laravel Cloud environment;
+- Laravel Cloud attachment proves runtime availability but cannot prove
+  plaintext recovery because managed secret values are non-exportable;
+- provider-issued and application-rotatable credentials now have documented
+  owner roles, issuing authorities, and replacement procedures in
+  `ops/deployment/contracts/secret-recovery-custody.json`;
+- both ignored worksheets remain owner-only with mode `0600`;
+- the re-entry worksheet has populated provider material but no populated
+  `PASSPORT_PRIVATE_KEY` or `PASSPORT_PUBLIC_KEY` entry; and
+- no independent Passport continuity artifact was located by filename or key
+  declaration in this repository checkout.
+
+Recovery custody is therefore not fully confirmed. Do not delete the re-entry
+worksheet or remove the compatibility reader until the existing Passport key
+pair is held in an approved independent continuity record, or a separately
+authorized rotation accepts the effect on existing tokens and signatures.
