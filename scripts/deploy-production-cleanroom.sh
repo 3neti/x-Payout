@@ -10,6 +10,7 @@ CONTROL_FILE="${PAYOUT_DEPLOYMENT_CONTROL_FILE:-${ROOT_DIR}/deployment.productio
 COMPILED_PROFILE_DIRECTORY="${PAYOUT_COMPILED_PROFILE_DIRECTORY:-}"
 APPLY=false
 RENDER_ONLY=false
+COMPATIBILITY_ROLLBACK=false
 
 for argument in "$@"; do
     case "${argument}" in
@@ -18,6 +19,9 @@ for argument in "$@"; do
             ;;
         --render-only)
             RENDER_ONLY=true
+            ;;
+        --compatibility-rollback)
+            COMPATIBILITY_ROLLBACK=true
             ;;
         --control=*)
             CONTROL_FILE="${argument#--control=}"
@@ -34,6 +38,17 @@ for argument in "$@"; do
             ;;
     esac
 done
+
+if [[ "${COMPATIBILITY_ROLLBACK}" != true ]]; then
+    cat >&2 <<'EOF'
+This compatibility controller is rollback-only and requires explicit current-run
+--compatibility-rollback authority.
+
+Use the portable controller for normal operation:
+  bin/x-payout-deploy continuous --instance=PATH --adapter=laravel-cloud --apply
+EOF
+    exit 77
+fi
 
 if [[ ! -f "${CONTROL_FILE}" ]]; then
     echo "Missing ${CONTROL_FILE}. Copy deployment.production.example to deployment.production.local first." >&2
@@ -190,18 +205,18 @@ usage() {
 x-PayOut production cleanroom deployment cheat sheet
 
 Usage:
-  scripts/deploy-production-cleanroom.sh plan [--control=FILE] [--compiled=DIR] [--render-only]
-  scripts/deploy-production-cleanroom.sh foundation --apply [--control=FILE]
-  scripts/deploy-production-cleanroom.sh configure --apply [--control=FILE]
-  scripts/deploy-production-cleanroom.sh deploy --apply [--control=FILE]
-  scripts/deploy-production-cleanroom.sh pre-commission [--control=FILE]
-  scripts/deploy-production-cleanroom.sh commission --apply [--control=FILE]
-  scripts/deploy-production-cleanroom.sh verify [--control=FILE]
-  scripts/deploy-production-cleanroom.sh domain-create --apply [--control=FILE]
-  scripts/deploy-production-cleanroom.sh domain-reconcile [--apply] [--control=FILE]
-  scripts/deploy-production-cleanroom.sh domain-verify --apply [--control=FILE]
-  scripts/deploy-production-cleanroom.sh domain-acceptance [--control=FILE]
-  scripts/deploy-production-cleanroom.sh continuous --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh plan --compatibility-rollback [--control=FILE] [--compiled=DIR] [--render-only]
+  scripts/deploy-production-cleanroom.sh foundation --compatibility-rollback --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh configure --compatibility-rollback --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh deploy --compatibility-rollback --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh pre-commission --compatibility-rollback [--control=FILE]
+  scripts/deploy-production-cleanroom.sh commission --compatibility-rollback --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh verify --compatibility-rollback [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-create --compatibility-rollback --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-reconcile --compatibility-rollback [--apply] [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-verify --compatibility-rollback --apply [--control=FILE]
+  scripts/deploy-production-cleanroom.sh domain-acceptance --compatibility-rollback [--control=FILE]
+  scripts/deploy-production-cleanroom.sh continuous --compatibility-rollback --apply [--control=FILE]
 
 Without --compiled, the control file supplies identifiers, confirmations, and
 non-secret runtime configuration exactly as before. With --compiled, verified
@@ -209,6 +224,9 @@ portable artifacts supply runtime configuration, release, domain, required
 secret names, and commissioning intent; the control file supplies only the
 platform target, generated state, and operator authority. Production secret
 values belong exclusively in Laravel Cloud managed secrets.
+
+This rollback-only script requires --compatibility-rollback on every run. The
+portable bin/x-payout-deploy controller is the normal deployment entry point.
 
 The script never deletes a Laravel Cloud or DigitalOcean resource. Mutating
 phases require --apply and DEPLOY_CONFIRM_PRODUCTION=YES. Commissioning and

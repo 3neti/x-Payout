@@ -92,6 +92,7 @@ it('renders a non destructive deployment plan by default', function (): void {
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'plan',
+        '--compatibility-rollback',
         '--render-only',
         '--control='.productionDeploymentKitPath('deployment.production.example'),
     ]);
@@ -112,6 +113,7 @@ it('retains legacy worksheet behavior when no compiled profile is supplied', fun
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'plan',
+        '--compatibility-rollback',
         '--render-only',
         '--control='.productionDeploymentKitPath('deployment.production.example'),
     ]);
@@ -129,6 +131,7 @@ it('consumes verified compiled artifacts in compatibility mode', function (): vo
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'plan',
+        '--compatibility-rollback',
         '--render-only',
         '--control='.productionDeploymentKitPath('deployment.production.example'),
         '--compiled='.$compiled['directory'],
@@ -153,6 +156,7 @@ it('rejects tampered compiled artifacts before evaluating a deployment phase', f
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'plan',
+        '--compatibility-rollback',
         '--render-only',
         '--control='.productionDeploymentKitPath('deployment.production.example'),
         '--compiled='.$compiled['directory'],
@@ -196,6 +200,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'configure',
+        '--compatibility-rollback',
         '--apply',
         '--control='.$controlFile,
         '--compiled='.$compiled['directory'],
@@ -228,6 +233,7 @@ it('refuses production mutations without explicit confirmation', function (): vo
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'foundation',
+        '--compatibility-rollback',
         '--apply',
         '--control='.productionDeploymentKitPath('deployment.production.example'),
     ]);
@@ -247,6 +253,7 @@ it('rejects production secret values in the deployment control worksheet', funct
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'plan',
+        '--compatibility-rollback',
         '--render-only',
         '--control='.$controlFile,
     ]);
@@ -313,6 +320,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'pre-commission',
+        '--compatibility-rollback',
         '--control='.$controlFile,
     ], env: ['CLOUD_BIN' => $cloudBinary]);
     $process->run();
@@ -354,6 +362,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'commission',
+        '--compatibility-rollback',
         '--apply',
         '--control='.$controlFile,
     ], env: [
@@ -405,6 +414,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'commission',
+        '--compatibility-rollback',
         '--apply',
         '--control='.$controlFile,
     ], env: [
@@ -454,6 +464,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'deploy',
+        '--compatibility-rollback',
         '--apply',
         '--control='.$controlFile,
     ], env: ['CLOUD_BIN' => $cloudBinary]);
@@ -519,6 +530,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'domain-acceptance',
+        '--compatibility-rollback',
         '--control='.$controlFile,
     ], env: ['CURL_BIN' => $curlBinary]);
     $process->mustRun();
@@ -577,6 +589,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'pre-commission',
+        '--compatibility-rollback',
         '--control='.$controlFile,
     ], env: ['CLOUD_BIN' => $cloudBinary]);
     $process->run();
@@ -665,6 +678,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'domain-reconcile',
+        '--compatibility-rollback',
         '--control='.$controlFile,
     ], env: [
         'CLOUD_BIN' => $cloudBinary,
@@ -718,6 +732,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'domain-reconcile',
+        '--compatibility-rollback',
         '--control='.$controlFile,
     ], env: [
         'CLOUD_BIN' => $cloudBinary,
@@ -760,6 +775,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'domain-reconcile',
+        '--compatibility-rollback',
         '--control='.$controlFile,
     ], env: [
         'CLOUD_BIN' => $cloudBinary,
@@ -805,6 +821,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'domain-reconcile',
+        '--compatibility-rollback',
         '--apply',
         '--control='.$controlFile,
     ], env: [
@@ -923,6 +940,7 @@ BASH);
         'bash',
         productionDeploymentKitPath('scripts/deploy-production-cleanroom.sh'),
         'domain-reconcile',
+        '--compatibility-rollback',
         '--apply',
         '--control='.$controlFile,
     ], env: [

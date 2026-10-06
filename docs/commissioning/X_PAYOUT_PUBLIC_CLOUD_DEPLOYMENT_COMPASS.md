@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — portable pre-commission verifier and CI migration complete; the explicit rollback controller remains for the deprecation release
+**Current position:** Gate 13.7 — beta.72 deprecation release candidate ready; operational acceptance and its no-op rerun remain
 
-**Overall status:** Beta.71 is operational and idempotent; runtime, portable deployment, and reusable CI no longer depend on worksheets; only the explicit rollback controller remains, and no private worksheet was deleted
+**Overall status:** Beta.71 is operational and idempotent; the portable controller is now the documented default, while the rollback controller fails closed without explicit current-run compatibility authority; no private worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -98,7 +98,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Deprecation bridge in progress** | Portable pre-commission verification and CI migration are complete; document the portable default, require explicit rollback authority, and ship one deprecation release before removal |
+| 13.7 Compatibility retirement | **Deprecation release candidate ready** | Portable verification, CI migration, the documented-default switch, and explicit rollback authority are complete; beta.72 deployment and its immediate no-op rerun remain before acceptance |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -185,10 +185,10 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Make the portable controller the documented default and require explicit,
-current-run compatibility authority before the legacy cleanroom script can
-execute. Ship that behavior as one deprecation release, prove fake-transport
-parity and an unchanged operational rerun, then review removal separately.
+Publish beta.72, deploy it through the portable controller without
+commissioning, domain, secret-rotation, invitation, or financial authority,
+then immediately repeat the identical run and prove that it is mutation-free.
+Compatibility removal remains a separate gate.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -399,6 +399,20 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   `b9869bd8f85bb8b65c5038f03675d17913b60688`, passed the strict
   pre-commission doctor, and wrote owner-only sanitized evidence without
   `--apply` authority.
+
+### Beta.72 compatibility deprecation candidate — 2026-10-06
+
+- `bin/x-payout-deploy` is the documented default Laravel Cloud entry point.
+- The legacy cleanroom controller identifies itself as rollback-only and exits
+  before reading a worksheet unless the current invocation includes
+  `--compatibility-rollback`.
+- The failure includes the portable migration command and uses a distinct
+  authority exit code.
+- Existing rollback behavior and fake-transport parity remain characterized
+  only when that explicit authority is present.
+- Private worksheets remain untouched and must not be deleted in this gate.
+- Operational acceptance still requires publishing and deploying beta.72 and
+  proving its immediate identical rerun performs no mutation.
 
 ### Official adapter parity evidence — 2026-10-05
 

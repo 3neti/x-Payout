@@ -6,7 +6,7 @@
     "commit": "b9869bd8f85bb8b65c5038f03675d17913b60688",
     "deployment": "depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a"
   },
-  "decision": "retain_until_deprecation_release_completes",
+  "decision": "retain_until_deprecation_release_is_accepted",
   "active_production_dependencies": [
     {
       "path": "scripts/deploy-production-cleanroom.sh",
@@ -19,7 +19,10 @@
   "completed_deprecation_steps": [
     "portable read-only pre-commission verifier added",
     "GitHub pre-commission workflow migrated away from PAYOUT_PLATFORM_CONTROL_ENV",
-    "live beta.71 portable pre-commission verification accepted without apply authority"
+    "live beta.71 portable pre-commission verification accepted without apply authority",
+    "portable controller documented as the normal Laravel Cloud entry point",
+    "legacy controller fails closed without current-run compatibility rollback authority",
+    "authorized rollback behavior remains covered by fake transport characterization"
   ],
   "tracked_retirement_candidates": [
     "deployment.production.example",
@@ -53,7 +56,6 @@
     }
   ],
   "required_before_removal": [
-    "make the portable controller the documented default and label the legacy script as rollback-only",
     "ship at least one deprecation release with a fail-closed migration path",
     "prove the deprecation release against fake transports and an unchanged operational rerun",
     "confirm private recovery custody before manually deleting ignored local worksheets",

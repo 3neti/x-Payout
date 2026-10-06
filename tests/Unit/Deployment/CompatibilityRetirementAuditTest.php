@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\Process\Process;
+
 function compatibilityRetirementPath(string $path): string
 {
     return dirname(__DIR__, 3).'/'.ltrim($path, '/');
@@ -20,14 +22,14 @@ it('records a fail-closed retirement decision with an exact accepted release', f
     $audit = compatibilityRetirementAudit();
 
     expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
-        ->and($audit['decision'])->toBe('retain_until_deprecation_release_completes')
+        ->and($audit['decision'])->toBe('retain_until_deprecation_release_is_accepted')
         ->and($audit['accepted_release'])->toBe([
             'x_payout' => 'v1.0.0-beta.71',
             'commit' => 'b9869bd8f85bb8b65c5038f03675d17913b60688',
             'deployment' => 'depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a',
         ])
-        ->and($audit['completed_deprecation_steps'])->toHaveCount(3)
-        ->and($audit['required_before_removal'])->toHaveCount(5);
+        ->and($audit['completed_deprecation_steps'])->toHaveCount(6)
+        ->and($audit['required_before_removal'])->toHaveCount(4);
 });
 
 it('classifies every executable or workflow dependency on the legacy worksheets', function (): void {
@@ -89,4 +91,38 @@ it('keeps the portable controller independent of compatibility worksheets', func
         ->not->toContain('PAYOUT_PLATFORM_CONTROL_ENV')
         ->not->toContain('deploy-production-cleanroom.sh')
         ->not->toContain('upsert_local_state');
+});
+
+it('fails closed before reading a worksheet without current-run rollback authority', function (): void {
+    $process = new Process([
+        'bash',
+        compatibilityRetirementPath('scripts/deploy-production-cleanroom.sh'),
+        'plan',
+        '--render-only',
+        '--control=/does/not/exist',
+    ]);
+    $process->run();
+
+    expect($process->getExitCode())->toBe(77)
+        ->and($process->getErrorOutput())
+        ->toContain('rollback-only')
+        ->toContain('--compatibility-rollback')
+        ->toContain('bin/x-payout-deploy continuous')
+        ->not->toContain('Missing /does/not/exist');
+});
+
+it('retains one explicitly authorized rollback path during the deprecation release', function (): void {
+    $process = new Process([
+        'bash',
+        compatibilityRetirementPath('scripts/deploy-production-cleanroom.sh'),
+        'plan',
+        '--compatibility-rollback',
+        '--render-only',
+        '--control='.compatibilityRetirementPath('deployment.production.example'),
+    ]);
+    $process->mustRun();
+
+    expect($process->getOutput())
+        ->toContain('X-PAYOUT CLEANROOM DEPLOYMENT')
+        ->toContain('Input mode:       legacy worksheet');
 });

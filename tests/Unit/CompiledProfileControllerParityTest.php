@@ -83,9 +83,13 @@ function compiledParityExecutable(string $contents): string
  */
 function compiledParityProcess(array $arguments, array $environment = []): Process
 {
+    $phase = array_shift($arguments);
+
     return new Process([
         'bash',
         compiledParityPath('scripts/deploy-production-cleanroom.sh'),
+        $phase,
+        '--compatibility-rollback',
         ...$arguments,
     ], env: $environment);
 }
