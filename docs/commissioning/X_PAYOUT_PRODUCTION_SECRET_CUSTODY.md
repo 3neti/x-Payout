@@ -1,14 +1,18 @@
 # x-PayOut Production Secret Custody and Recovery
 
-**Status:** Adopted for runtime custody; recovery audit blocked on Passport signing continuity
+**Status:** Adopted for runtime custody; Passport recovery continuity verified
 
 **Updated:** 2026-10-06
 
 ## Governing rule
 
-Laravel Cloud managed secrets are the runtime authority. A local `.env` is for
-development and sandbox use only. The production deployment adapter never
-reads, writes, exports, or logs a plaintext production secret.
+Laravel Cloud managed secrets are the runtime authority. The application's
+ordinary local `.env` is for development and sandbox use only. The dedicated,
+gitignored `ops/deployment/secrets.env` is an owner-only recovery input, not
+an application runtime environment file. The deployment runner may read it
+only during explicitly authorized initial import, recovery, or rotation and
+must never write its values to compiled artifacts, state, evidence, logs, or
+command arguments.
 
 The value-free deployment worksheet is `deployment.production.local`, created
 from `deployment.production.example`. It may contain Cloud resource IDs, Cloud
@@ -51,11 +55,11 @@ plaintext production `.env`.
 manages it for the application environment; the deployment kit verifies its
 runtime readiness through strict doctor without copying its value.
 
-For the one-time migration from direct environment variables, copy
-`deployment.production.secrets.example` to the gitignored
-`deployment.production.secrets.local`, restrict it to mode `600`, populate it
-from authoritative provider sources, and remove it after successful creation
-and attachment of the managed secrets.
+For initial import or controlled recovery, populate the exact required
+inventory in the gitignored `ops/deployment/secrets.env`, restrict it to mode
+`0600`, and keep it under approved owner custody. Laravel Cloud remains the
+active runtime authority; this retained file exists so the two-input cleanroom
+can reconstruct or rotate managed secrets without relying on Cloud export.
 
 ## Operator ceremony
 
@@ -87,8 +91,7 @@ and attachment of the managed secrets.
 
 Keeper Business and HashiCorp Vault are not production dependencies. They may
 be reevaluated later for organizational recovery or machine identity, but the
-current runtime does not depend on them. Full signing-key recovery remains
-unconfirmed as recorded below.
+current runtime does not depend on them.
 
 ## Recovery custody audit — 2026-10-06
 
@@ -109,7 +112,29 @@ placed in evidence.
 - no independent Passport continuity artifact was located by filename or key
   declaration in this repository checkout.
 
-Recovery custody is therefore not fully confirmed. Do not delete the re-entry
-worksheet or remove the compatibility reader until the existing Passport key
-pair is held in an approved independent continuity record, or a separately
-authorized rotation accepts the effect on existing tokens and signatures.
+That audit was resolved by the controlled rotation recorded below.
+
+## Passport signing continuity rotation — 2026-10-06
+
+- Generated one new 4096-bit Passport signing pair locally.
+- Built the exact 18-name recovery input at
+  `ops/deployment/secrets.env`; it is gitignored and mode `0600`.
+- Verified the private/public relationship before any Cloud mutation.
+- Updated only the existing `PASSPORT_PRIVATE_KEY` and
+  `PASSPORT_PUBLIC_KEY` managed-secret identities.
+- Redeployed `release/v1.0.0-beta.72` at commit
+  `43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`.
+- Verified that the production public-key fingerprint matches the recovery
+  input and that production derives the attached public key from the private
+  key.
+- Re-adopted the verified existing installation after the intentional
+  configuration-fingerprint change. Adoption inspected existing identity and
+  Treasury state and recorded the new manifest; it did not capitalize,
+  invite, call a provider, or move money.
+- Final strict doctor passed `37/37`, x-mcp doctor reported ready, the
+  commissioning state returned `operational`, and the public host returned
+  HTTP `200`.
+
+Existing OAuth access tokens signed by the superseded key must be treated as
+invalid and reissued. Recovery continuity is now verified, but compatibility
+worksheet retirement remains a separate explicitly authorized gate.

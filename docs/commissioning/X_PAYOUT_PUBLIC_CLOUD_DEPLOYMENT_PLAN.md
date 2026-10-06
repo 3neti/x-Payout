@@ -1,12 +1,12 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Beta.71 exact-release controller accepted live through commissioning, custom-domain verification, and a mutation-free rerun
+**Status:** Beta.72 operational; Passport recovery continuity verified; compatibility retirement separately gated
 
 **Updated:** 2026-10-06
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.71` (`b9869bd`)
+**Current x-PayOut:** `v1.0.0-beta.72` (`43d9c2c`)
 
 **Current x-change:** `v1.0.100` (`dd19abf2`)
 
@@ -791,8 +791,10 @@ The operator supplies:
   credential recovery, or initial commissioning.
 
 `instance.yaml` must not contain plaintext secret values. `secrets.env` is
-gitignored, owner-only (`0600`), and is not reopened by an ordinary recurring
-deployment after its values become platform-managed secrets. `APP_KEY`,
+gitignored, owner-only (`0600`), retained under controlled recovery custody,
+and is not reopened by an ordinary recurring deployment after its values
+become platform-managed secrets. It may be read only for initial import,
+credential recovery, or explicitly authorized rotation. `APP_KEY`,
 database credentials, cache credentials, and platform-native signing material
 remain under their platform's own authority.
 

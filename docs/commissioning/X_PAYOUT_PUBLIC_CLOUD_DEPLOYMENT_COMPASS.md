@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — beta.72 accepted; compatibility retirement blocked on Passport signing-key continuity
+**Current position:** Gate 13.7 — Passport signing continuity restored; compatibility retirement awaits separate authority
 
-**Overall status:** Beta.72 is operational and idempotent; all 18 managed-secret names are attached, but Passport signing-key recovery is not independently proven; no private worksheet was deleted
+**Overall status:** Beta.72 is operational; all 18 managed-secret names are attached and the rotated Passport pair has an owner-only recovery copy; no compatibility worksheet was deleted
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -98,7 +98,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Blocked on signing continuity** | Beta.72 exact-release deployment and no-op rerun passed; Passport keys are available at runtime but lack independently verified recovery custody |
+| 13.7 Compatibility retirement | **Continuity prerequisite complete; retirement not authorized** | Beta.72 exact-release deployment and no-op rerun passed; the rotated Passport pair is independently recoverable, but worksheet/reader deletion remains a separate gate |
 | 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2e99ccb-7b85-4d63-9c17-28579d0add4a` runs `release/v1.0.0-beta.71` at exact peeled tag commit `b9869bd8f85bb8b65c5038f03675d17913b60688`; token-gated commissioning completed once; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or DNS mutation |
 
 ### External prerequisite policy
@@ -438,6 +438,33 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   and no independent continuity artifact was located in this checkout.
 - Retirement now fails closed on Passport signing continuity. No worksheet,
   secret, Cloud attachment, runtime value, or live resource was changed.
+
+### Passport signing continuity rotation — 2026-10-06
+
+- Explicit authority accepted the invalidation impact of replacing the
+  Passport signing pair while retaining the Partner API.
+- Generated a 4096-bit pair into the exact, gitignored, owner-only
+  `ops/deployment/secrets.env` recovery inventory; the file contains all 18
+  required names and remains mode `0600`.
+- Updated only the two existing Passport managed-secret identities and
+  redeployed `release/v1.0.0-beta.72`.
+- Laravel Cloud deployment
+  `depl-a2ea1763-bb5c-46a9-a603-fbcfab673523` succeeded at exact commit
+  `43d9c2cfd5cf2266c1d7bac44a4c470a7752f3ce`.
+- The production public-key fingerprint matches the retained recovery pair,
+  and production confirmed that the private key derives the configured public
+  key.
+- The intentional configuration change made the commissioning manifest stale.
+  The guarded existing-installation adoption path revalidated identity and
+  Treasury state and refreshed only the manifest fingerprint.
+- Final strict doctor passed `37/37`, x-mcp doctor reported ready,
+  commissioning returned `operational`, and
+  `https://payout.disburse.cash` returned HTTP `200`.
+- Existing OAuth access tokens signed by the superseded key require reissue.
+  No commissioning bootstrap, capitalization, invitation, provider call,
+  message, DNS mutation, or financial operation was performed.
+- Passport continuity no longer blocks Gate 13.7. Compatibility worksheet and
+  reader retirement remain separately authorized work.
 
 ### Official adapter parity evidence — 2026-10-05
 

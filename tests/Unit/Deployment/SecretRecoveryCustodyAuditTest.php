@@ -50,17 +50,29 @@ it('requires an owner authority method and explicit disposition for every recove
     }
 });
 
-it('fails closed on Passport signing continuity before worksheet retirement', function (): void {
+it('records verified Passport signing continuity without authorizing worksheet retirement', function (): void {
     $audit = secretRecoveryCustodyAudit();
     $blocked = array_values(array_filter(
         $audit['groups'],
         static fn (array $group): bool => $group['status'] === 'blocked',
     ));
+    $passport = collect($audit['groups'])->firstWhere('id', 'passport-signing');
 
-    expect($blocked)->toHaveCount(1)
-        ->and($blocked[0]['id'])->toBe('passport-signing')
-        ->and($blocked[0]['secret_names'])->toBe(['PASSPORT_PRIVATE_KEY', 'PASSPORT_PUBLIC_KEY'])
-        ->and($audit['blocking_findings'])->toHaveCount(1)
+    expect($blocked)->toBe([])
+        ->and($passport['secret_names'])->toBe(['PASSPORT_PRIVATE_KEY', 'PASSPORT_PUBLIC_KEY'])
+        ->and($passport['continuity'])->toBe('verified_recovery_pair')
+        ->and($passport['status'])->toBe('documented_recovery')
+        ->and($audit['recovery_input'])->toMatchArray([
+            'path' => 'ops/deployment/secrets.env',
+            'authority' => 'owner-only-local-recovery-input',
+            'mode' => '0600',
+            'gitignored' => true,
+            'required_secret_count' => 18,
+            'passport_pair_verified' => true,
+        ])
+        ->and($audit['recovery_input']['passport_public_key_fingerprint_sha256'])
+        ->toMatch('/^[a-f0-9]{64}$/')
+        ->and($audit['blocking_findings'])->toBe([])
         ->and($audit['retirement_authorized'])->toBeFalse();
 });
 
