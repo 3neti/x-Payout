@@ -2,11 +2,11 @@
   "schema": "x-payout.compatibility-retirement-audit.v1",
   "audited_at": "2026-10-06",
   "accepted_release": {
-    "x_payout": "v1.0.0-beta.73",
-    "commit": "e073e616da65036fbf94e4bb7ee7eea8521088d0",
-    "deployment": "depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6"
+    "x_payout": "v1.0.0-beta.74",
+    "commit": "1b00f7d3d7e8f1bc218f99fb92269d01c62a3044",
+    "deployment": "depl-a2ea332f-3a13-44f8-b271-1f0c3543d849"
   },
-  "decision": "retirement_implementation_complete_pending_release_acceptance",
+  "decision": "retired",
   "active_production_dependencies": [],
   "completed_deprecation_steps": [
     "portable read-only pre-commission verifier added",
@@ -20,7 +20,10 @@
     "all 18 required managed-secret names verified attached without reading values",
     "provider-rotatable credentials mapped to named owner roles and issuing recovery authorities",
     "Passport signing pair deliberately rotated with an owner-only complete recovery inventory",
-    "beta.73 released controller deployed at its exact commit and passed an immediate mutation-free rerun"
+    "beta.73 released controller deployed at its exact commit and passed an immediate mutation-free rerun",
+    "beta.74 retirement release deployed at its exact commit and recovered without replacement",
+    "beta.74 immediate identical rerun preserved the normalized Cloud topology byte-for-byte",
+    "both obsolete private compatibility worksheets deleted after beta.74 acceptance"
   ],
   "retired_tracked_artifacts": [
     "scripts/deploy-production-cleanroom.sh",
@@ -42,23 +45,30 @@
   "private_local_inputs": [
     {
       "path": "deployment.production.local",
-      "observed": true,
-      "mode": "0600",
+      "observed_before_retirement": true,
+      "observed_after_retirement": false,
+      "mode_before_retirement": "0600",
       "key_names_inspected": false,
       "value_contents_inspected": false,
-      "disposition": "retain_until_tracked_readers_are_retired_then_delete_manually"
+      "disposition": "deleted_after_beta74_acceptance"
     },
     {
       "path": "deployment.production.secrets.local",
-      "observed": true,
-      "mode": "0600",
+      "observed_before_retirement": true,
+      "observed_after_retirement": false,
+      "mode_before_retirement": "0600",
       "key_names_inspected": true,
       "value_contents_inspected": false,
-      "disposition": "retain_until_secret_recovery_custody_is_confirmed_then_delete_manually"
+      "disposition": "deleted_after_beta74_acceptance"
     }
   ],
-  "required_before_private_input_removal": [
-    "publish the retirement release and pass exact deployment plus an immediate no-op rerun before manually deleting private worksheets"
-  ],
+  "retirement_acceptance": {
+    "topology_sha256": "f7907933d1595752d6e66cc385afe2494adccea3207fa1d1ad1db0308b42c8c3",
+    "strict_doctor": "37/37",
+    "mcp_doctor": "4/4",
+    "public_http_status": 200,
+    "commissioning": "skipped"
+  },
+  "required_before_private_input_removal": [],
   "recovery_custody_contract": "ops/deployment/contracts/secret-recovery-custody.json"
 }

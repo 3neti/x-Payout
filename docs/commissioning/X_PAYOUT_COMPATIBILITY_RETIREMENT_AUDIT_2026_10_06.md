@@ -2,13 +2,13 @@
 
 **Audited:** 2026-10-06
 
-**Accepted operational baseline:** x-PayOut `v1.0.0-beta.73` at
-`e073e616da65036fbf94e4bb7ee7eea8521088d0`
+**Accepted operational baseline:** x-PayOut `v1.0.0-beta.74` at
+`1b00f7d3d7e8f1bc218f99fb92269d01c62a3044`
 
-**Decision:** The released portable controller and recovery custody
-prerequisites are accepted. Compatibility retirement is eligible for a
-separately authorized slice; retain the rollback reader and private worksheets
-until that authority is granted and its acceptance sequence passes.
+**Decision:** Compatibility mode is retired. The classified reader, examples,
+duplicate legacy parsing, and legacy-only tests are removed. Historical
+evidence remains. The two ignored private worksheets were deleted only after
+the beta.74 exact-release deployment and mutation-free rerun passed.
 
 ## What the beta.71 proof established
 
@@ -24,13 +24,9 @@ already stopped using compatibility mode.
 
 ## Remaining active dependencies
 
-| Path | Current role | Why it blocks immediate removal | Required replacement |
-| --- | --- | --- | --- |
-| `scripts/deploy-production-cleanroom.sh` | Explicit rollback controller | Sources and mutates `deployment.production.local`, including generated resource IDs | `bin/x-payout-deploy continuous`, after a documented deprecation window |
-
-The normal runtime and continuous controller do not depend on these
-paths. The blockers are operational tooling and rollback compatibility, not a
-hidden dependency in the commissioned application.
+None. Executable and workflow scans find no dependency on either worksheet,
+the retired controller, `PAYOUT_PLATFORM_CONTROL_ENV`,
+`--control=`, or `upsert_local_state()`.
 
 ## Deprecation release candidate
 
@@ -71,7 +67,7 @@ The same command passed against the live beta.71 environment without
 `b9869bd8f85bb8b65c5038f03675d17913b60688`, passed the strict remote doctor,
 and wrote `0600` sanitized evidence with disposition `verified_existing`.
 
-## Tracked candidates for eventual removal
+## Retired tracked artifacts
 
 - `deployment.production.example`
 - `deployment.production.secrets.example`
@@ -85,18 +81,14 @@ operated, not executable dependencies.
 
 ## Private local worksheet posture
 
-Both ignored local worksheets still exist with owner-only mode `0600`. The
-custody audit inspected key names and whether entries were populated, but did
-not print, copy, hash, or retain any value. The worksheets must not be
-committed, copied into evidence, or deleted by an automated repository change.
+Before retirement, both ignored local worksheets existed with owner-only mode
+`0600`. The custody audit inspected only the approved metadata and never
+printed, copied, hashed, or retained a secret value.
 
-`deployment.production.local` can be deleted manually only after all tracked
-readers have been retired and the deprecation release is accepted.
-
-`deployment.production.secrets.local` additionally requires confirmation that
-every non-regenerable recovery value has authoritative custody outside the
-worksheet. Laravel Cloud managed-secret IDs do not make secret values
-recoverable.
+After beta.74 exact-release and no-op acceptance, both obsolete worksheets were
+deleted. The complete, gitignored, owner-only
+`ops/deployment/secrets.env` recovery inventory remains intact. Laravel Cloud
+managed-secret attachments remain runtime custody, not value recovery.
 
 ## Recovery custody audit
 
@@ -115,18 +107,25 @@ when needed; this does not block compatibility retirement.
 Only names, attachment IDs, file modes, and populated-key names were examined.
 No secret value or value-derived hash was emitted or retained.
 
-## Required deprecation bridge
+## Completed acceptance bridge
 
-1. Obtain current-run authority naming the exact compatibility artifacts.
-2. In that separately authorized removal slice, delete executable readers,
-   examples, duplicate parsing, and legacy-only tests while preserving
-   historical evidence.
-3. Publish and deploy the retirement release, prove its immediate no-op rerun,
-   and only then delete either private worksheet manually.
+1. Current-run authority named the exact compatibility artifacts.
+2. Executable readers, examples, duplicate parsing, and legacy-only tests were
+   removed while historical evidence was preserved.
+3. Beta.74 was published and deployed at exact commit
+   `1b00f7d3d7e8f1bc218f99fb92269d01c62a3044` as deployment
+   `depl-a2ea332f-3a13-44f8-b271-1f0c3543d849`.
+4. The immediate successful rerun preserved the normalized Cloud topology
+   byte-for-byte at SHA-256
+   `f7907933d1595752d6e66cc385afe2494adccea3207fa1d1ad1db0308b42c8c3`.
+5. Strict doctor passed `37/37`, x-mcp doctor passed `4/4`, and the public
+   host returned HTTP `200`.
+6. Only then were the two private worksheets deleted.
 
 ## Result
 
-Compatibility retirement is **ready for separate authorization**. Beta.73
-satisfies the released-controller, recovery-custody, exact-deployment, and
-mutation-free-rerun prerequisites. No compatibility artifact or private
-worksheet was removed by this audit update.
+Compatibility retirement is **complete**. Beta.74 is operational at the exact
+retirement commit, its immediate successful rerun is mutation-free,
+commissioning remained skipped, and no DNS, domain, secret rotation,
+invitation, provider, messaging, OAuth issuance, or financial authority was
+used.

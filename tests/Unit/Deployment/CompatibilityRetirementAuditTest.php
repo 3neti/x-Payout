@@ -16,18 +16,30 @@ function compatibilityRetirementAudit(): array
     );
 }
 
-it('records the authorized implementation pending exact release acceptance', function (): void {
+it('records the accepted compatibility retirement release', function (): void {
     $audit = compatibilityRetirementAudit();
 
     expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
-        ->and($audit['decision'])->toBe('retirement_implementation_complete_pending_release_acceptance')
+        ->and($audit['decision'])->toBe('retired')
         ->and($audit['accepted_release'])->toBe([
-            'x_payout' => 'v1.0.0-beta.73',
-            'commit' => 'e073e616da65036fbf94e4bb7ee7eea8521088d0',
-            'deployment' => 'depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6',
+            'x_payout' => 'v1.0.0-beta.74',
+            'commit' => '1b00f7d3d7e8f1bc218f99fb92269d01c62a3044',
+            'deployment' => 'depl-a2ea332f-3a13-44f8-b271-1f0c3543d849',
+        ])
+        ->and($audit['retirement_acceptance'])->toBe([
+            'topology_sha256' => 'f7907933d1595752d6e66cc385afe2494adccea3207fa1d1ad1db0308b42c8c3',
+            'strict_doctor' => '37/37',
+            'mcp_doctor' => '4/4',
+            'public_http_status' => 200,
+            'commissioning' => 'skipped',
         ])
         ->and($audit['active_production_dependencies'])->toBe([])
-        ->and($audit['required_before_private_input_removal'])->toHaveCount(1);
+        ->and($audit['required_before_private_input_removal'])->toBe([])
+        ->and(array_column($audit['private_local_inputs'], 'observed_after_retirement'))->toBe([false, false])
+        ->and(array_column($audit['private_local_inputs'], 'disposition'))->toBe([
+            'deleted_after_beta74_acceptance',
+            'deleted_after_beta74_acceptance',
+        ]);
 });
 
 it('classifies every executable or workflow dependency on the legacy worksheets', function (): void {

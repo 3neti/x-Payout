@@ -1,12 +1,12 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Beta.73 operational and mutation-free on rerun; compatibility retirement separately gated
+**Status:** Beta.74 operational and mutation-free on rerun; compatibility mode retired
 
 **Updated:** 2026-10-06
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.73` (`e073e61`)
+**Current x-PayOut:** `v1.0.0-beta.74` (`1b00f7d`)
 
 **Current x-change:** `v1.0.100` (`dd19abf2`)
 
@@ -352,6 +352,22 @@ byte-for-byte with SHA-256
 Strict doctor passed `37/37`, x-mcp doctor was ready, and the public host
 returned HTTP `200`. Compatibility retirement is eligible for a separately
 authorized slice but did not occur.
+
+**Compatibility retirement accepted — 2026-10-06:** Beta.74 published at
+exact commit `1b00f7d3d7e8f1bc218f99fb92269d01c62a3044` and deployed as
+`depl-a2ea332f-3a13-44f8-b271-1f0c3543d849`. The portable controller
+recovered that successful deployment, reached pre-commission readiness, and
+kept commissioning skipped. An integration reachability probe failed closed
+once without changing Cloud topology; the safe retry passed. The immediate
+successful identical rerun preserved the normalized Cloud topology
+byte-for-byte with SHA-256
+`f7907933d1595752d6e66cc385afe2494adccea3207fa1d1ad1db0308b42c8c3`.
+Strict doctor passed `37/37`, x-mcp doctor passed `4/4`, and the public host
+returned HTTP `200`. Only then were the two ignored compatibility worksheets
+deleted. The supported owner-only `ops/deployment/secrets.env` recovery
+inventory remains intact. No commissioning, DNS, domain, secret rotation,
+invitation, provider, messaging, OAuth issuance, or financial authority was
+used.
 
 ### Cleanup Gate 8 — Definitive cleanroom and idempotency proof
 

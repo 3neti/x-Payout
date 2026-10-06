@@ -135,5 +135,7 @@ That audit was resolved by the controlled rotation recorded below.
 
 Existing OAuth access tokens signed by the superseded key must be treated as
 invalid and reissued. Recovery continuity is verified. The worksheet-based
-controller and tracked examples were retired only after beta.73 exact-release
-and mutation-free-rerun acceptance; historical evidence remains preserved.
+controller and tracked examples were retired in beta.74 only after exact-release
+and mutation-free-rerun acceptance. The two obsolete private worksheets were
+then deleted; this owner-only recovery inventory remains the supported local
+custody input, and historical evidence remains preserved.

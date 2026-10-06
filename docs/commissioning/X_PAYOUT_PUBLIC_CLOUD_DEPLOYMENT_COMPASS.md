@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13.7 — released hardening proved on beta.73; compatibility retirement awaits separate authority
+**Current position:** Gate 13 complete — compatibility mode retired on beta.74
 
-**Overall status:** Beta.73 is operational at exact commit `e073e61`; all 18 managed-secret names are attached, the rotated Passport pair has an owner-only recovery copy, and the immediate continuous rerun is mutation-free; no compatibility worksheet was deleted
+**Overall status:** Beta.74 is operational at exact commit `1b00f7d`; all 18 managed-secret names are attached, the rotated Passport pair has an owner-only recovery copy, the immediate successful continuous rerun is mutation-free, and both obsolete compatibility worksheets are retired
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -33,9 +33,9 @@ The governing plan is
 - Previous production resources and financial evidence remain historical
   records; they are not instructions to replay transactions or balances.
 
-Today, exact application, environment, deployment, process, database, cache,
-domain, and secret IDs still live in the local value-free compatibility
-worksheet. Gate 13 moves them into generated, reconstructible platform state.
+Exact application, environment, deployment, process, database, cache, domain,
+and secret identities now come from generated reconstructible platform state
+and live discovery. The former local compatibility worksheets are retired.
 Historical identifiers must never be copied into a new run without discovery
 and identity checks.
 
@@ -53,9 +53,9 @@ and identity checks.
 | 8. Generated-domain acceptance | Complete | Browser, worker, storage, MCP, and report checks proved |
 | 9. Restore custom domain | Complete with Cloud metadata caveat | DNS and TLS proved; Cloud control-plane metadata may reconcile asynchronously |
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
-| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.73 remains operational with independently recoverable Passport custody |
+| 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.74 remains operational with independently recoverable Passport custody |
 | 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.100 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict and MCP doctors are green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **Complete through beta.73** | Named secret rotation, authoritative exact-deployment recovery, and a mutation-free released-controller rerun are proved; beta.73 remains operational |
+| 13. Two-input one-command cleanup | **Complete through beta.74** | Named secret rotation, authoritative exact-deployment recovery, compatibility retirement, and a mutation-free released-controller rerun are proved; beta.74 remains operational |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -72,10 +72,9 @@ sanitized evidence, and remain idempotent on rerun.
 - The portable schema, compiler, examples, required-secret inventory, fake
   transport parity, GitHub validation workflow, and current Laravel Cloud
   controller already exist.
-- `deployment.production.local` remains a compatibility worksheet used only
-  by the explicitly gated rollback controller.
-- `deployment.production.secrets.local` remains legacy recovery input while
-  the exact 18-name `ops/deployment/secrets.env` is the supported owner-only
+- `deployment.production.local` and
+  `deployment.production.secrets.local` are retired and deleted.
+- The exact 18-name `ops/deployment/secrets.env` is the supported owner-only
   recovery inventory; Laravel Cloud managed secrets remain runtime authority.
 - The portable controller consumes verified compiled artifacts and generated
   state without reading or mutating either compatibility worksheet.
@@ -97,8 +96,8 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.4 Compiled-state authority | **Complete in controller kernel** | Verified compiled profile owns normalized runtime and current-run authority is typed; worksheet is not consulted by the kernel |
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
-| 13.7 Compatibility retirement | **Prerequisites complete; retirement not authorized** | Beta.73 exact-release deployment, Passport continuity, and the released-controller no-op rerun passed; worksheet/reader deletion remains a separate gate |
-| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6` runs `release/v1.0.0-beta.73` at exact peeled tag commit `e073e616da65036fbf94e4bb7ee7eea8521088d0`; existing commissioning remains operational; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate rerun created no replacement deployment or other Cloud mutation |
+| 13.7 Compatibility retirement | **Complete — retired** | Beta.74 removed the classified reader and tracked compatibility artifacts, preserved historical evidence, passed exact-release and no-op acceptance, then deleted both obsolete private worksheets |
+| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2ea332f-3a13-44f8-b271-1f0c3543d849` runs `release/v1.0.0-beta.74` at exact peeled tag commit `1b00f7d3d7e8f1bc218f99fb92269d01c62a3044`; existing commissioning remains operational; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate successful rerun created no replacement deployment or other Cloud mutation |
 
 ### External prerequisite policy
 
@@ -184,10 +183,9 @@ cleanroom passes.
 
 ### Immediate next slice
 
-Establish approved independent custody for the existing Passport signing key
-pair, or separately authorize deliberate key rotation with its token and
-signature invalidation impact. Compatibility reader and worksheet removal
-remains a later, explicitly authorized gate.
+Gate 13 has no remaining compatibility work. Reissue partner OAuth access
+tokens only when a client needs access, as a separate governed ceremony.
+Otherwise select the next product or deployment objective explicitly.
 
 ### Beta.69 foundation recovery evidence — 2026-10-05
 
@@ -431,8 +429,8 @@ explicitly authorized commissioning and final no-op operational rerun complete.
   role, issuing authority, recovery method, continuity class, and status.
 - Provider and application credentials are recoverable through documented
   rotation procedures; Cloud attachment remains runtime custody only.
-- Both ignored worksheets remain mode `0600`. Only populated key names were
-  examined; values and value-derived hashes were not emitted.
+- At audit time, both ignored worksheets were mode `0600`. Only populated
+  key names were examined; values and value-derived hashes were not emitted.
 - The local re-entry worksheet has no populated Passport signing key entries,
   and no independent continuity artifact was located in this checkout.
 - Retirement now fails closed on Passport signing continuity. No worksheet,
@@ -526,6 +524,38 @@ explicitly authorized commissioning and final no-op operational rerun complete.
 - No compatibility worksheet or reader was removed. That retirement is now
   eligible for a separately authorized gate, not implicitly authorized by
   this acceptance.
+
+### Beta.74 compatibility-retirement acceptance — 2026-10-06
+
+- Removed the sole classified worksheet reader, tracked worksheet examples,
+  legacy classification runtime, and legacy-only tests while preserving
+  historical commissioning evidence and the portable controller/compiler.
+- Published annotated tag `v1.0.0-beta.74` and immutable branch
+  `release/v1.0.0-beta.74` at exact commit
+  `1b00f7d3d7e8f1bc218f99fb92269d01c62a3044`; Packagist resolved the same
+  source and distribution commit.
+- Laravel Cloud deployment
+  `depl-a2ea332f-3a13-44f8-b271-1f0c3543d849` succeeded at that exact branch
+  and commit. The controller retry recovered it rather than creating a
+  replacement.
+- The first immediate rerun failed closed at a transient geocoding
+  reachability probe. A topology comparison proved that failure made no Cloud
+  mutation. The safe retry passed and reached pre-commission readiness with
+  commissioning skipped.
+- The immediate successful identical rerun preserved the normalized Cloud
+  topology byte-for-byte. Before and after SHA-256 was
+  `f7907933d1595752d6e66cc385afe2494adccea3207fa1d1ad1db0308b42c8c3`
+  across the environment attachments, 18 managed-secret identities, six
+  deployment records, canonical domain, and queue worker.
+- Final production evidence remained green: strict doctor `37/37`, all four
+  x-mcp readiness checks passed, and `https://payout.disburse.cash` returned
+  HTTP `200`.
+- Only after those gates passed were
+  `deployment.production.local` and
+  `deployment.production.secrets.local` deleted. The owner-only
+  `ops/deployment/secrets.env` recovery inventory remains intact.
+- No commissioning, DNS, domain, secret rotation, invitation, provider,
+  messaging, OAuth issuance, or financial authority was used.
 
 ### Official adapter parity evidence — 2026-10-05
 
@@ -1041,12 +1071,10 @@ an otherwise healthy environment.
 
 ## Immediate next controlled move
 
-Decide whether to authorize the exact compatibility-retirement slice: remove
-the classified rollback reader and tracked compatibility artifacts, preserve
-historical evidence, publish another immutable release, and repeat exact
-deployment plus no-op acceptance before manually deleting either private
-worksheet. Partner OAuth token reissue remains a separate governed ceremony
-performed only when a client needs access.
+Gate 13 is complete. Partner OAuth token reissue remains a separate governed
+ceremony performed only when a client needs access. Otherwise choose the next
+product or deployment objective explicitly; no further compatibility cleanup
+is required.
 
 ## Beta.65 continuous rehearsal evidence — 2026-10-04
 
