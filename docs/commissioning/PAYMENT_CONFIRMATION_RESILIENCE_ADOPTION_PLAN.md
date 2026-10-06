@@ -41,8 +41,8 @@ collection, reverse settlement, or create payment truth.
 
 - Immutable x-change dependency: `v1.0.101` at `dbee25b7`.
 - Immutable x-PayOut release: `v1.0.0-beta.75` at `d3ab8af`.
-- x-PayOut `main`: `18b62a3` after the CI bootstrap and GitHub Action
-  refresh were reapplied on current main.
+- x-PayOut `main`: `426d03e` after the CI dependency bootstrap, GitHub Action
+  refresh, and exclusion of interactive commissioning from ordinary CI.
 - Host acceptance: 166 tests, 1,046 assertions; production frontend build,
   Pint, strict Composer validation, and diff checks passed.
 - Dependabot PR 1 was closed and its remote branch deleted after its action
@@ -50,6 +50,7 @@ collection, reverse settlement, or create payment truth.
 - The merged local adoption and CI topic branches were deleted. Immutable
   beta.69 through beta.75 release branches and tags were preserved.
 - The repository-wide frontend formatter still reports a pre-existing
-  333-file baseline. It was neither rewritten wholesale nor hidden.
+  333-file baseline. Remote CI now reaches and reports this exact baseline; it
+  was neither rewritten wholesale nor hidden.
 - Beta.74 remains the operational production release. Beta.75 was not deployed
   and partner payment-event delivery was not enabled by this work.

@@ -4,7 +4,7 @@
 
 **Current position:** Payment confirmation resilience adopted in beta.75; live enablement remains separately gated
 
-**Overall status:** Beta.74 remains the operational production release. Immutable beta.75 at `d3ab8af` locks x-change `v1.0.101` and adds fail-closed, deployment-managed partner payment confirmation settings; x-PayOut `main` is `18b62a3` after CI bootstrap hardening. Beta.75 is not deployed and delivery is not enabled
+**Overall status:** Beta.74 remains the operational production release. Immutable beta.75 at `d3ab8af` locks x-change `v1.0.101` and adds fail-closed, deployment-managed partner payment confirmation settings; x-PayOut `main` is `426d03e` after CI bootstrap hardening. Beta.75 is not deployed and delivery is not enabled
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -39,7 +39,8 @@ The current package-adoption and branch-retirement gates are recorded in the
   and its remote branch was deleted. Merged local topic branches were deleted;
   immutable release branches were preserved.
 - The repository-wide frontend formatter continues to report its pre-existing
-  333-file baseline. That separate cleanup was not folded into this release.
+  333-file baseline. Remote CI now reaches and reports that exact baseline;
+  the separate cleanup was not folded into this release.
 
 ## Proven baseline
 
