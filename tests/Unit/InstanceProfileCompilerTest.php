@@ -248,32 +248,22 @@ it('detects any change to a compiled artifact', function (): void {
     unlink($secretsPath);
 });
 
-it('ships a valid json schema and the versioned legacy classification contract', function (): void {
+it('ships a valid portable instance json schema', function (): void {
     $schema = json_decode(file_get_contents(instanceProfilePath('ops/deployment/schema/instance.v1.schema.json')), true, flags: JSON_THROW_ON_ERROR);
-    $contract = json_decode(file_get_contents(instanceProfilePath('ops/deployment/contracts/legacy-setting-classification.json')), true, flags: JSON_THROW_ON_ERROR);
 
-    expect($schema['properties']['schema']['const'])->toBe('x-payout.instance.v1')
-        ->and($contract['schema'])->toBe('x-payout.legacy-setting-classification.v2')
-        ->and(array_keys($contract['sources']))->toBe(['deployment_control', 'secret_reentry'])
-        ->and($contract['categories'])->not->toBeEmpty();
-});
-
-it('retains an explicit legacy worksheet mode in the compatibility controller', function (): void {
-    $controller = file_get_contents(instanceProfilePath('scripts/deploy-production-cleanroom.sh'));
-
-    expect($controller)
-        ->toContain('PAYOUT_COMPILED_PROFILE_DIRECTORY')
-        ->toContain('load_compiled_profile')
-        ->toContain('source "${CONTROL_FILE}"')
-        ->toContain('legacy worksheet');
+    expect($schema['properties']['schema']['const'])->toBe('x-payout.instance.v1');
 });
 
 it('ships Passport persistence and treats signing keys as managed secrets', function (): void {
     $migrations = glob(instanceProfilePath('database/migrations/*_create_oauth_clients_table.php'));
-    $controller = file_get_contents(instanceProfilePath('scripts/deploy-production-cleanroom.sh'));
-    $worksheet = file_get_contents(instanceProfilePath('deployment.production.secrets.example'));
+    $custody = json_decode(
+        file_get_contents(instanceProfilePath('ops/deployment/contracts/secret-recovery-custody.json')),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+    $passport = collect($custody['groups'])->firstWhere('id', 'passport-signing');
 
     expect($migrations)->toHaveCount(1)
-        ->and($controller)->toContain('PASSPORT_PRIVATE_KEY PASSPORT_PUBLIC_KEY')
-        ->and($worksheet)->toContain('PASSPORT_PRIVATE_KEY=', 'PASSPORT_PUBLIC_KEY=');
+        ->and($passport['secret_names'])->toBe(['PASSPORT_PRIVATE_KEY', 'PASSPORT_PUBLIC_KEY'])
+        ->and($passport['status'])->toBe('documented_recovery');
 });

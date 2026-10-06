@@ -14,10 +14,9 @@ only during explicitly authorized initial import, recovery, or rotation and
 must never write its values to compiled artifacts, state, evidence, logs, or
 command arguments.
 
-The value-free deployment worksheet is `deployment.production.local`, created
-from `deployment.production.example`. It may contain Cloud resource IDs, Cloud
-secret IDs, confirmation flags, cutover evidence, and non-secret runtime
-configuration.
+The portable instance profile is desired-state authority. Generated owner-only
+state stores discovered Cloud resource and managed-secret identities without
+secret values. The former value-free deployment worksheet is retired.
 
 ## Custody matrix
 
@@ -37,9 +36,8 @@ configuration.
 
 ## Required managed-secret gate
 
-The control worksheet declares `DEPLOY_REQUIRED_CLOUD_SECRET_NAMES` and
-`DEPLOY_CLOUD_SECRET_IDS`. During `configure` and again before commissioning,
-the adapter:
+The compiled instance declares the required managed-secret names. During the
+secret phase and again before pre-commission verification, the adapter:
 
 1. attaches the approved secret IDs;
 2. lists attachment metadata only;
@@ -66,14 +64,14 @@ can reconstruct or rotate managed secrets without relying on Cloud export.
 1. Authenticate to the correct Laravel Cloud organization.
 2. Review the environment and organization IDs.
 3. Confirm required managed-secret records exist.
-4. Place only their IDs in `deployment.production.local`.
-5. Run the non-destructive plan.
-6. Set `DEPLOY_CONFIRM_PRODUCTION=YES` for infrastructure and deployment.
-7. Set `DEPLOY_CONFIRM_COMMISSIONING=YES` only after provider cutover evidence
-   and opening-capitalization authority are accepted.
-8. Set `DEPLOY_CONFIRM_DOMAIN_CUTOVER=YES` only after generated-domain
-   acceptance and DNS readiness.
-9. Run the continuous adapter and preserve a sanitized transcript.
+4. Confirm the private instance profile selects the intended immutable release.
+5. Run `bin/x-payout-deploy continuous` without mutation authority to review
+   preflight.
+6. Supply `--apply` only for an approved infrastructure or deployment change.
+7. Supply `--commission`, `--activate-domain`, or named secret rotation only
+   in a separately authorized ceremony.
+8. Preserve generated sanitized evidence and prove the immediate rerun is
+   mutation-free.
 
 ## Recovery requirements
 
@@ -136,5 +134,6 @@ That audit was resolved by the controlled rotation recorded below.
   HTTP `200`.
 
 Existing OAuth access tokens signed by the superseded key must be treated as
-invalid and reissued. Recovery continuity is now verified, but compatibility
-worksheet retirement remains a separate explicitly authorized gate.
+invalid and reissued. Recovery continuity is verified. The worksheet-based
+controller and tracked examples were retired only after beta.73 exact-release
+and mutation-free-rerun acceptance; historical evidence remains preserved.

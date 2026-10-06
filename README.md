@@ -20,6 +20,7 @@ To create a fresh local x-PayOut instance, validate NetBank readiness, and mint 
 - [Forge deployment adapter](scripts/deploy-production-forge.sh)
 
 The supported Laravel Cloud deployment entry point is `bin/x-payout-deploy`.
-The former cleanroom script and worksheets are retained for one deprecation
-release as rollback-only compatibility tooling and require explicit current-run
-`--compatibility-rollback` authority.
+The former worksheet-based cleanroom controller has been retired. Production
+deployment uses the portable instance profile, generated state, Laravel Cloud
+managed-secret identities, and the owner-only recovery input described by the
+deployment plan.

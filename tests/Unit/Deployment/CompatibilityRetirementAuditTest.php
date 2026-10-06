@@ -1,7 +1,5 @@
 <?php
 
-use Symfony\Component\Process\Process;
-
 function compatibilityRetirementPath(string $path): string
 {
     return dirname(__DIR__, 3).'/'.ltrim($path, '/');
@@ -18,18 +16,18 @@ function compatibilityRetirementAudit(): array
     );
 }
 
-it('records a fail-closed retirement decision with an exact accepted release', function (): void {
+it('records the authorized implementation pending exact release acceptance', function (): void {
     $audit = compatibilityRetirementAudit();
 
     expect($audit['schema'])->toBe('x-payout.compatibility-retirement-audit.v1')
-        ->and($audit['decision'])->toBe('ready_for_separate_retirement_authorization')
+        ->and($audit['decision'])->toBe('retirement_implementation_complete_pending_release_acceptance')
         ->and($audit['accepted_release'])->toBe([
             'x_payout' => 'v1.0.0-beta.73',
             'commit' => 'e073e616da65036fbf94e4bb7ee7eea8521088d0',
             'deployment' => 'depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6',
         ])
-        ->and($audit['completed_deprecation_steps'])->toHaveCount(12)
-        ->and($audit['required_before_removal'])->toHaveCount(3);
+        ->and($audit['active_production_dependencies'])->toBe([])
+        ->and($audit['required_before_private_input_removal'])->toHaveCount(1);
 });
 
 it('classifies every executable or workflow dependency on the legacy worksheets', function (): void {
@@ -63,22 +61,20 @@ it('classifies every executable or workflow dependency on the legacy worksheets'
         }
     }
 
-    $classified = array_column(compatibilityRetirementAudit()['active_production_dependencies'], 'path');
     sort($matches);
-    sort($classified);
 
-    expect(array_values(array_unique($matches)))->toBe($classified);
+    expect(array_values(array_unique($matches)))->toBe([]);
 });
 
-it('keeps every retirement blocker explicit and points to its replacement', function (): void {
-    $dependencies = compatibilityRetirementAudit()['active_production_dependencies'];
+it('removes every classified compatibility artifact while preserving evidence', function (): void {
+    $audit = compatibilityRetirementAudit();
 
-    expect($dependencies)->toHaveCount(1);
+    foreach ($audit['retired_tracked_artifacts'] as $path) {
+        expect(compatibilityRetirementPath($path))->not->toBeFile();
+    }
 
-    foreach ($dependencies as $dependency) {
-        expect(compatibilityRetirementPath($dependency['path']))->toBeFile()
-            ->and($dependency['blocks_retirement'])->toBeTrue()
-            ->and($dependency['replacement'])->toBeString()->not->toBeEmpty();
+    foreach ($audit['historical_evidence_to_preserve'] as $path) {
+        expect(compatibilityRetirementPath($path))->toBeFile();
     }
 });
 
@@ -93,36 +89,8 @@ it('keeps the portable controller independent of compatibility worksheets', func
         ->not->toContain('upsert_local_state');
 });
 
-it('fails closed before reading a worksheet without current-run rollback authority', function (): void {
-    $process = new Process([
-        'bash',
-        compatibilityRetirementPath('scripts/deploy-production-cleanroom.sh'),
-        'plan',
-        '--render-only',
-        '--control=/does/not/exist',
-    ]);
-    $process->run();
-
-    expect($process->getExitCode())->toBe(77)
-        ->and($process->getErrorOutput())
-        ->toContain('rollback-only')
-        ->toContain('--compatibility-rollback')
-        ->toContain('bin/x-payout-deploy continuous')
-        ->not->toContain('Missing /does/not/exist');
-});
-
-it('retains one explicitly authorized rollback path during the deprecation release', function (): void {
-    $process = new Process([
-        'bash',
-        compatibilityRetirementPath('scripts/deploy-production-cleanroom.sh'),
-        'plan',
-        '--compatibility-rollback',
-        '--render-only',
-        '--control='.compatibilityRetirementPath('deployment.production.example'),
-    ]);
-    $process->mustRun();
-
-    expect($process->getOutput())
-        ->toContain('X-PAYOUT CLEANROOM DEPLOYMENT')
-        ->toContain('Input mode:       legacy worksheet');
+it('retains the portable compiler and deployment controller coverage', function (): void {
+    expect(compatibilityRetirementPath('tests/Unit/InstanceProfileCompilerTest.php'))->toBeFile()
+        ->and(compatibilityRetirementPath('tests/Unit/Deployment/ContinuousEntryPointParityTest.php'))->toBeFile()
+        ->and(compatibilityRetirementPath('tests/Unit/Deployment/Verification/PortablePreCommissionEntryPointTest.php'))->toBeFile();
 });

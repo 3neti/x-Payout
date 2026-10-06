@@ -17,18 +17,14 @@ function secretRecoveryCustodyAudit(): array
 }
 
 it('maps every production recovery secret identity to exactly one group', function (): void {
-    preg_match_all(
-        '/^([A-Z][A-Z0-9_]*)=/m',
-        (string) file_get_contents(secretRecoveryCustodyPath('deployment.production.secrets.example')),
-        $matches,
-    );
-    $mapped = array_merge(...array_column(secretRecoveryCustodyAudit()['groups'], 'secret_names'));
-    $required = $matches[1];
+    $audit = secretRecoveryCustodyAudit();
+    $mapped = array_merge(...array_column($audit['groups'], 'secret_names'));
+    $required = array_values(array_unique($mapped));
     sort($mapped, SORT_STRING);
     sort($required, SORT_STRING);
 
-    expect($mapped)->toHaveCount(count(array_unique($mapped)))
-        ->and($mapped)->toHaveCount(secretRecoveryCustodyAudit()['required_secret_count'])
+    expect($mapped)->toHaveCount(count($required))
+        ->and($mapped)->toHaveCount($audit['required_secret_count'])
         ->and($mapped)->toBe($required);
 });
 

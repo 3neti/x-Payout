@@ -6,16 +6,8 @@
     "commit": "e073e616da65036fbf94e4bb7ee7eea8521088d0",
     "deployment": "depl-a2ea2d61-0acc-40c8-8cd7-06c09efa48c6"
   },
-  "decision": "ready_for_separate_retirement_authorization",
-  "active_production_dependencies": [
-    {
-      "path": "scripts/deploy-production-cleanroom.sh",
-      "role": "explicit_rollback_controller",
-      "dependency": "sources and mutates deployment.production.local",
-      "replacement": "bin/x-payout-deploy continuous",
-      "blocks_retirement": true
-    }
-  ],
+  "decision": "retirement_implementation_complete_pending_release_acceptance",
+  "active_production_dependencies": [],
   "completed_deprecation_steps": [
     "portable read-only pre-commission verifier added",
     "GitHub pre-commission workflow migrated away from PAYOUT_PLATFORM_CONTROL_ENV",
@@ -30,13 +22,15 @@
     "Passport signing pair deliberately rotated with an owner-only complete recovery inventory",
     "beta.73 released controller deployed at its exact commit and passed an immediate mutation-free rerun"
   ],
-  "tracked_retirement_candidates": [
+  "retired_tracked_artifacts": [
+    "scripts/deploy-production-cleanroom.sh",
     "deployment.production.example",
     "deployment.production.secrets.example",
     "ops/deployment/contracts/legacy-setting-classification.json",
+    "app/Deployment/Legacy/LegacySettingClassifier.php",
+    "app/Deployment/Legacy/LegacySettingClassificationException.php",
     "tests/Unit/CompiledProfileControllerParityTest.php",
     "tests/Unit/Deployment/Legacy/LegacySettingClassifierTest.php",
-    "tests/Unit/InstanceProfileCompilerTest.php",
     "tests/Unit/ProductionDeploymentKitTest.php"
   ],
   "historical_evidence_to_preserve": [
@@ -63,9 +57,7 @@
       "disposition": "retain_until_secret_recovery_custody_is_confirmed_then_delete_manually"
     }
   ],
-  "required_before_removal": [
-    "obtain current-run authority naming the exact tracked readers and compatibility artifacts to remove",
-    "preserve historical evidence while removing executable worksheet readers",
+  "required_before_private_input_removal": [
     "publish the retirement release and pass exact deployment plus an immediate no-op rerun before manually deleting private worksheets"
   ],
   "recovery_custody_contract": "ops/deployment/contracts/secret-recovery-custody.json"
