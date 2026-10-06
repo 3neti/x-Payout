@@ -348,7 +348,19 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         ));
 
         if (count($matches) > 1) {
-            throw new ContinuousDeploymentException('Exact successful deployment recovery is ambiguous.');
+            $environment = $this->cloud->json('environment:get', [$environmentId]);
+            $currentDeploymentId = $environment['currentDeploymentId'] ?? null;
+            $currentMatches = array_values(array_filter(
+                $matches,
+                static fn (array $deployment): bool => is_string($currentDeploymentId)
+                    && ($deployment['id'] ?? null) === $currentDeploymentId,
+            ));
+
+            if (count($currentMatches) !== 1) {
+                throw new ContinuousDeploymentException('Exact successful deployment recovery is ambiguous.');
+            }
+
+            return $this->id($currentMatches[0], 'deployment');
         }
 
         if ($matches === []) {

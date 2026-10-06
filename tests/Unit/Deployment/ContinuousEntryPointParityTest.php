@@ -96,7 +96,7 @@ case "$op" in
     ;;
   deployment:list)
     if [[ -f "$state/deployed" ]]; then
-      printf '%s\n' '[{"id":"deployment-one","status":"deployment.succeeded","commitHash":"0123456789abcdef0123456789abcdef01234567","branchName":"release/v1.0.0"}]'
+      printf '%s\n' '[{"id":"deployment-one","status":"deployment.succeeded","commitHash":"0123456789abcdef0123456789abcdef01234567","branchName":"release/v1.0.0"},{"id":"deployment-older","status":"deployment.succeeded","commitHash":"0123456789abcdef0123456789abcdef01234567","branchName":"release/v1.0.0"}]'
     else
       printf '%s\n' '[]'
     fi
@@ -134,7 +134,7 @@ case "$op" in
     if [[ "$*" == *"--show-sensitive"* ]]; then
       printf '%s\n' '{"environmentVariables":[]}'
     else
-      printf '%s\n' '{"id":"env-one"}'
+      printf '%s\n' '{"id":"env-one","currentDeploymentId":"deployment-one"}'
     fi
     ;;
   environment:variables) printf '%s\n' '{}' ;;
