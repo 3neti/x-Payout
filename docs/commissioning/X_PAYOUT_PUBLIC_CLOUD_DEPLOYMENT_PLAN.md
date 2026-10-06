@@ -1,18 +1,18 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Beta.74 operational and mutation-free on rerun; beta.75 payment confirmation resilience adoption published but not deployed
+**Status:** Beta.76 operational and mutation-free on rerun; payment confirmation delivery remains disabled pending an approved receiver
 
 **Updated:** 2026-10-06
 
 **Current public host:** `https://payout.disburse.cash`
 
-**Current x-PayOut:** `v1.0.0-beta.74` (`1b00f7d`)
+**Current x-PayOut:** `v1.0.0-beta.76` (`9df3adb`)
 
-**Current production x-change:** `v1.0.100` (`dd19abf2`)
+**Current production x-change:** `v1.0.101` (`dbee25b7`)
 
 **Candidate x-change:** `v1.0.101` (durable signed partner payment confirmations)
 
-**Published x-PayOut candidate:** `v1.0.0-beta.75` (`d3ab8af`)
+**Published x-PayOut candidate:** `v1.0.0-beta.76` (`9df3adb`), accepted in production
 
 The bounded adoption plan is
 [PAYMENT_CONFIRMATION_RESILIENCE_ADOPTION_PLAN.md](PAYMENT_CONFIRMATION_RESILIENCE_ADOPTION_PLAN.md).

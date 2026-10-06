@@ -2,7 +2,7 @@
 
 **Opened:** 2026-10-06
 
-**Status:** Complete through beta.75 publication, main adoption, and branch retirement
+**Status:** Complete through beta.76 production cleanroom, worker reconciliation, and mutation-free rerun
 
 ## Objective
 
@@ -54,3 +54,11 @@ collection, reverse settlement, or create payment truth.
   was neither rewritten wholesale nor hidden.
 - Beta.74 remains the operational production release. Beta.75 was not deployed
   and partner payment-event delivery was not enabled by this work.
+- Production acceptance subsequently deployed beta.75 and detected that the
+  reused Cloud worker retained its legacy queue list. Beta.76 at `9df3adb` adds
+  changed-only existing-worker reconciliation, updates that worker to consume
+  `partner-payments`, and is now the operational release.
+- The beta.76 strict and MCP doctors, domain/TLS checks, HTTPS smoke check, and
+  immediate mutation-free rerun passed. Payment-event delivery remains
+  disabled until a real receiver URL, partner reference, and signing secret
+  are separately approved.

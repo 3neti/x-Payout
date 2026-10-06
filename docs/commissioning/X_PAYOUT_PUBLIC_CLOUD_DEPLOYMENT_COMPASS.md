@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Payment confirmation resilience adopted in beta.75; live enablement remains separately gated
+**Current position:** Beta.76 operational after exact-release cleanroom and mutation-free rerun; payment-event delivery remains separately gated
 
-**Overall status:** Beta.74 remains the operational production release. Immutable beta.75 at `d3ab8af` locks x-change `v1.0.101` and adds fail-closed, deployment-managed partner payment confirmation settings; x-PayOut `main` is `426d03e` after CI bootstrap hardening. Beta.75 is not deployed and delivery is not enabled
+**Overall status:** Immutable beta.76 at `9df3adb` is the operational production release and locks x-change `v1.0.101`. It adds fail-closed partner payment confirmation support and reconciles an existing Cloud worker to consume `partner-payments` without replacing the worker. Deployment `depl-a2ea8364-4f17-4edf-a903-0508ee4233b9`, strict and MCP doctors, domain/TLS acceptance, and the immediate mutation-free rerun are green. Partner payment-event delivery remains disabled
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -41,6 +41,9 @@ The current package-adoption and branch-retirement gates are recorded in the
 - The repository-wide frontend formatter continues to report its pre-existing
   333-file baseline. Remote CI now reaches and reports that exact baseline;
   the separate cleanup was not folded into this release.
+- Live acceptance found that beta.75 reused the existing worker without
+  reconciling its queue list. Beta.76 corrects that gap, updates the existing
+  worker in place, and keeps partner payment-event delivery disabled.
 
 ## Proven baseline
 
@@ -80,7 +83,7 @@ and identity checks.
 | 10. Institutional handoff | Complete for current Cloud controller | Beta.68 exact-release continuous run completed without intervention or controller error |
 | 11. Portable instance profile | **Complete for the exact-release cleanroom** | The beta.71 two-input cleanroom proved the controller; beta.74 remains operational with independently recoverable Passport custody |
 | 12. Institutional Partner MCP | Complete for transport readiness | x-change v1.0.100 and x-mcp v0.3.0 deployed; Passport keys and contract v1.4.0 pinned; strict and MCP doctors are green; client issuance remains governed |
-| 13. Two-input one-command cleanup | **Complete through beta.74** | Named secret rotation, authoritative exact-deployment recovery, compatibility retirement, and a mutation-free released-controller rerun are proved; beta.74 remains operational |
+| 13. Two-input one-command cleanup | **Complete through beta.76** | Named secret rotation, authoritative exact-deployment recovery, compatibility retirement, existing-worker reconciliation, and a mutation-free released-controller rerun are proved; beta.76 is operational |
 
 ## Gate 13 compass — two-input one-command cleanup
 
@@ -122,7 +125,7 @@ sanitized evidence, and remain idempotent on rerun.
 | 13.5 Resumable one-command controller | **Complete with fake CLI** | Real entry point plus failure injection at all nine phases proves safe continuation and unchanged rerun behavior |
 | 13.6 Sanitized evidence contract | **Complete with fake CLI** | Owner-only bounded evidence, same-fingerprint merge, and secret-value rejection are green |
 | 13.7 Compatibility retirement | **Complete — retired** | Beta.74 removed the classified reader and tracked compatibility artifacts, preserved historical evidence, passed exact-release and no-op acceptance, then deleted both obsolete private worksheets |
-| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2ea332f-3a13-44f8-b271-1f0c3543d849` runs `release/v1.0.0-beta.74` at exact peeled tag commit `1b00f7d3d7e8f1bc218f99fb92269d01c62a3044`; existing commissioning remains operational; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate successful rerun created no replacement deployment or other Cloud mutation |
+| 13.8 Exact-release cleanroom | **Complete — operational** | Deployment `depl-a2ea8364-4f17-4edf-a903-0508ee4233b9` runs `release/v1.0.0-beta.76` at exact peeled tag commit `9df3adb9bb0f3c348656aaa9e306290c65babae8`; existing commissioning remains operational; the reused worker now consumes `partner-payments,x-change-funding,x-change-feedback,default`; `payout.disburse.cash` and TLS are verified; strict and MCP doctors pass; the immediate successful rerun created no replacement deployment or other Cloud mutation |
 
 ### External prerequisite policy
 
@@ -1200,6 +1203,34 @@ exact-release reproducibility.
 - The exact continuous controller completed with exit code `0`, with no
   intervening edits or manual phase substitutions. The repository remained
   clean and the remote tag resolved to the deployed commit.
+
+## Beta.76 payment-confirmation cleanroom evidence — 2026-10-06
+
+- Beta.75 deployed successfully at exact commit
+  `d3ab8afbd71c51d7bcc63cd6381bc1ba10f39c74`, but live acceptance found that
+  the reused worker still omitted the new `partner-payments` queue.
+- The controller was hardened to compare and reconcile an existing Cloud
+  worker. Focused acceptance passed 24 tests / 360 assertions; the full suite
+  passed 166 tests / 1,052 assertions; Pint, Composer validation, and diff
+  checks passed.
+- Immutable beta.76 was published from
+  `9df3adb9bb0f3c348656aaa9e306290c65babae8` and deployed as
+  `depl-a2ea8364-4f17-4edf-a903-0508ee4233b9`.
+- The application, environment, PostgreSQL cluster/schema, cache, instance,
+  worker, domain, and 18 existing managed-secret identities were rediscovered
+  and reused. No replacement foundation resource was created.
+- Worker `process-a2e8db53-a994-457a-a65d-385f45a5f491` was updated in place
+  to consume `partner-payments,x-change-funding,x-change-feedback,default`.
+- Commissioning reported `already_operational`; opening capitalization,
+  invitations, provider transfers, and other financial mutations were not
+  replayed.
+- DNS reconciliation was an exact no-op for the A, ACME CNAME, and Cloud
+  ownership TXT records. Hostname and TLS verification passed, and the public
+  home returned HTTP 200 with a valid certificate.
+- Strict doctor succeeded and Partner MCP doctor reported ready. Payment-event
+  delivery remains disabled; no receiver URL or signing secret was invented.
+- The immediate identical beta.76 rerun retained the same resource and
+  deployment identities, and Cloud contained exactly one beta.76 deployment.
 
 ## Update protocol
 
