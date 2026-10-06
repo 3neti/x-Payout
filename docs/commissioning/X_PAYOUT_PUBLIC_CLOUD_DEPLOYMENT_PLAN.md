@@ -1,6 +1,6 @@
 # x-PayOut Public Cloud Retirement and Cleanroom Redeployment Plan
 
-**Status:** Beta.74 operational and mutation-free on rerun; compatibility mode retired
+**Status:** Beta.74 operational and mutation-free on rerun; payment confirmation resilience adoption in progress
 
 **Updated:** 2026-10-06
 
@@ -8,7 +8,12 @@
 
 **Current x-PayOut:** `v1.0.0-beta.74` (`1b00f7d`)
 
-**Current x-change:** `v1.0.100` (`dd19abf2`)
+**Current production x-change:** `v1.0.100` (`dd19abf2`)
+
+**Candidate x-change:** `v1.0.101` (durable signed partner payment confirmations)
+
+The bounded adoption plan is
+[PAYMENT_CONFIRMATION_RESILIENCE_ADOPTION_PLAN.md](PAYMENT_CONFIRMATION_RESILIENCE_ADOPTION_PLAN.md).
 
 ## Objective
 

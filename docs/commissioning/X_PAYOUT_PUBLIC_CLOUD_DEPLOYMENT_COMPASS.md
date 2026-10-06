@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-06
 
-**Current position:** Gate 13 complete — compatibility mode retired on beta.74
+**Current position:** Payment confirmation resilience adoption in progress after Gate 13 closure
 
-**Overall status:** Beta.74 is operational at exact commit `1b00f7d`; all 18 managed-secret names are attached, the rotated Passport pair has an owner-only recovery copy, the immediate successful continuous rerun is mutation-free, and both obsolete compatibility worksheets are retired
+**Overall status:** Beta.74 remains the operational production release. A new local adoption branch locks x-change `v1.0.101` and adds fail-closed, deployment-managed partner payment confirmation settings; it is not deployed or enabled yet
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -16,6 +16,23 @@ Update it after every completed, blocked, rolled-back, or deferred gate.
 
 The governing plan is
 [X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md](X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md).
+
+The current package-adoption and branch-retirement gates are recorded in the
+[Payment Confirmation Resilience Adoption Plan](PAYMENT_CONFIRMATION_RESILIENCE_ADOPTION_PLAN.md).
+
+## Payment confirmation resilience adoption — 2026-10-06
+
+- x-change `v1.0.101` is the immutable package candidate.
+- x-PayOut owns deployment configuration only: receiver reference, HTTPS URL,
+  signing-secret custody, feature enablement, and durable worker queue posture.
+- x-change owns the durable outbox, signatures, delivery attempts, retry state,
+  receiver safety, and collection hooks.
+- Delivery remains disabled by default and incomplete configuration adds no
+  receiver.
+- Automated acceptance must not send a notification or perform any financial
+  operation.
+- Production deployment and receiver enablement are separate gates after the
+  release is accepted.
 
 ## Proven baseline
 
