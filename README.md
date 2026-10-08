@@ -8,6 +8,7 @@ It is intended to be commissioned from a manifest, with the operational behavior
 
 To create a fresh local x-PayOut instance, validate NetBank readiness, and mint the initial Maker and Checker onboarding Pay Codes, see:
 
+- [Deployment runbook](DEPLOY.md)
 - [x-PayOut Cleanroom Commissioning Guide](docs/commissioning/X_PAYOUT_CLEANROOM_COMMISSIONING.md)
 - [Public Cloud Retirement and Cleanroom Redeployment Plan](docs/commissioning/X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md)
 - [Retirement and Cleanroom Redeployment Compass](docs/commissioning/X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md)
