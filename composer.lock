@@ -1663,16 +1663,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.101",
+            "version": "v1.0.111",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "dbee25b7816d090e8ad0fc90c0c81b86c0c07864"
+                "reference": "df1eadff74e022ff21a556e46319dc111a6725c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/dbee25b7816d090e8ad0fc90c0c81b86c0c07864",
-                "reference": "dbee25b7816d090e8ad0fc90c0c81b86c0c07864",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/df1eadff74e022ff21a556e46319dc111a6725c1",
+                "reference": "df1eadff74e022ff21a556e46319dc111a6725c1",
                 "shasum": ""
             },
             "require": {
@@ -1730,7 +1730,8 @@
                 "pestphp/pest-plugin-laravel": "^4.1"
             },
             "suggest": {
-                "3neti/x-legal": "Provides jurisdiction-aware advisory Treasury vocabulary and policy traceability."
+                "3neti/x-legal": "Provides jurisdiction-aware advisory Treasury vocabulary and policy traceability.",
+                "laravel/horizon": "Allows a Redis-enabled host application to operate and inspect the declared x-change queue lanes."
             },
             "bin": [
                 "bin/x-change-cloud"
@@ -1746,6 +1747,9 @@
                     "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
                     "adopt-command": "x-change:adopt",
                     "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1769,9 +1773,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.101"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.111"
             },
-            "time": "2026-10-06T08:25:44+00:00"
+            "time": "2026-10-07T22:24:39+00:00"
         },
         {
             "name": "3neti/x-commerce",

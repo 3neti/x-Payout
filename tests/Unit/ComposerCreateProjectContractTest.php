@@ -88,6 +88,6 @@ it('ships only released x-change runtime packages in its Composer lock', functio
         ->not->toHaveKey('repositories')
         ->and(data_get($composer, 'require.3neti/x-change'))->toBe('^1.0.101')
         ->and(data_get($composer, 'require.3neti/x-mcp'))->toBe('^0.3.0')
-        ->and(data_get($packages->get('3neti/x-change'), 'version'))->toBe('v1.0.101')
+        ->and(data_get($packages->get('3neti/x-change'), 'version'))->toBe('v1.0.111')
         ->and(data_get($packages->get('3neti/x-mcp'), 'version'))->toBe('v0.3.0');
 });
