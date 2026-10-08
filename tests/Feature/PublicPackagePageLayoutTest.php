@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-it('keeps public package pages outside the authenticated application shell', function (): void {
+it('uses the package-owned shell boundaries for public and cockpit pages', function (): void {
     $source = file_get_contents(resource_path('js/app.ts'));
 
     expect($source)
-        ->toContain('function isPublicPackagePage')
-        ->toContain("'x-change/claim/'")
-        ->toContain("'x-change/provisioning/'")
-        ->toContain("'x-change/onboarding/'")
-        ->toContain("'form-flow/'")
-        ->toContain("'x-rider/'")
-        ->toContain('case isPublicPackagePage(name):')
-        ->toContain('return null;');
+        ->toContain("import AppSidebarLayoutCockpit from '@/layouts/app/AppSidebarLayoutCockpit.vue';")
+        ->toContain("case name.startsWith('x-change/claim/'):")
+        ->toContain("case name.startsWith('x-change/public/'):")
+        ->toContain("case name.startsWith('form-flow/'):")
+        ->toContain('return null;')
+        ->toContain("case name.startsWith('x-change/cockpit/'):")
+        ->toContain('return AppSidebarLayoutCockpit;')
+        ->not->toContain('function isPublicPackagePage');
 });
-

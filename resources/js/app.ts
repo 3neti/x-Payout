@@ -1,22 +1,11 @@
 import { createInertiaApp } from '@inertiajs/vue3';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
+import AppSidebarLayoutCockpit from '@/layouts/app/AppSidebarLayoutCockpit.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { initializeFlashToast } from '@/lib/flashToast';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
-function isPublicPackagePage(name: string): boolean {
-    return [
-        'x-change/claim/',
-        'x-change/public/',
-        'x-change/provisioning/',
-        'x-change/onboarding/',
-        'form-flow/',
-        'x-rider/',
-    ].some((prefix) => name.startsWith(prefix));
-}
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
@@ -24,12 +13,16 @@ void createInertiaApp({
         switch (true) {
             case name === 'Welcome':
                 return null;
-            case isPublicPackagePage(name):
+            case name.startsWith('x-change/claim/'):
+            case name.startsWith('x-change/public/'):
+            case name.startsWith('form-flow/'):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];
+            case name.startsWith('x-change/cockpit/'):
+                return AppSidebarLayoutCockpit;
             default:
                 return AppLayout;
         }
@@ -41,6 +34,3 @@ void createInertiaApp({
 
 // This will set light / dark mode on page load...
 initializeTheme();
-
-// This will listen for flash toast data from the server...
-initializeFlashToast();
