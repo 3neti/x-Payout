@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.4",
         "3neti/form-flow": "^1.9",
-        "3neti/x-change": "^1.0.120",
+        "3neti/x-change": "^1.0.121",
         "3neti/x-mcp": "^0.3.0",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/chisel": "^0.1.0",
