@@ -95,7 +95,7 @@ case "$op" in
     ;;
   background-process:get)
     if [[ -f "$state/worker-updated" ]]; then
-      printf '%s\n' '{"id":"worker-one","type":"worker","connection":"redis","queue":"partner-payments,x-change-funding,x-change-feedback,default","backoff":30,"sleep":3,"rest":0,"timeout":60,"tries":3,"processes":1}'
+      printf '%s\n' '{"id":"worker-one","type":"worker","connection":"redis","queue":"partner-payments,x-change-funding,x-change-issuance,x-change-feedback,default","backoff":30,"sleep":3,"rest":0,"timeout":60,"tries":3,"processes":1}'
     else
       printf '%s\n' '{"id":"worker-one","type":"worker","connection":"redis","queue":"x-change-funding,x-change-feedback,default","backoff":30,"sleep":3,"rest":0,"timeout":60,"tries":3,"processes":1}'
     fi
@@ -227,7 +227,7 @@ BASH);
         ->and($firstLog)->toContain('environment:update env-one --database-id=database-one --cache-id=cache-one')
         ->and($firstLog)->toContain('environment:update env-one --branch=release/v1.0.0')
         ->and($firstLog)->toContain('background-process:update worker-one')
-        ->and($firstLog)->toContain('--queue=partner-payments,x-change-funding,x-change-feedback,default')
+        ->and($firstLog)->toContain('--queue=partner-payments,x-change-funding,x-change-issuance,x-change-feedback,default')
         ->and($firstLog)->toContain('deployment:get deployment-one')
         ->and($firstLog)->not->toContain('deploy:monitor')
         ->and($firstLog)->toContain('x-change:commission:preview')

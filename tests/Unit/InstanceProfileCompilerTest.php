@@ -141,6 +141,7 @@ it('requires a complete public MCP runtime when public on-demand issuance is ena
     $profile = validInstanceProfile();
     $profile['features']['public_on_demand_issuance'] = true;
     $profile['runtime']['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED'] = true;
+    $profile['runtime']['XCHANGE_FUNDING_NETBANK_ENABLED'] = true;
     $profile['runtime']['XMCP_PUBLIC_ISSUANCE_ENABLED'] = true;
     $profile['runtime']['XMCP_PUBLIC_ISSUANCE_API_BASE_URL'] = 'https://payout.example.com/api/x/v1/public-issuance';
     $path = writeInstanceProfile($profile);
@@ -154,6 +155,13 @@ it('requires a complete public MCP runtime when public on-demand issuance is ena
 
     expect(fn () => (new InstanceProfileCompiler)->validate($path))
         ->toThrow(InstanceProfileException::class, 'runtime.XMCP_PUBLIC_ISSUANCE_ENABLED must be true');
+
+    $profile['runtime']['XMCP_PUBLIC_ISSUANCE_ENABLED'] = true;
+    unset($profile['runtime']['XCHANGE_FUNDING_NETBANK_ENABLED']);
+    file_put_contents($path, Yaml::dump($profile, 10, 2));
+
+    expect(fn () => (new InstanceProfileCompiler)->validate($path))
+        ->toThrow(InstanceProfileException::class, 'runtime.XCHANGE_FUNDING_NETBANK_ENABLED must be true');
 
     unlink($path);
 });

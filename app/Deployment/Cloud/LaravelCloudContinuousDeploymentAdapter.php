@@ -21,7 +21,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     private const WORKER_CONFIGURATION = [
         'type' => 'worker',
         'connection' => 'redis',
-        'queue' => 'partner-payments,x-change-funding,x-change-feedback,default',
+        'queue' => 'partner-payments,x-change-funding,x-change-issuance,x-change-feedback,default',
         'backoff' => 30,
         'sleep' => 3,
         'rest' => 0,

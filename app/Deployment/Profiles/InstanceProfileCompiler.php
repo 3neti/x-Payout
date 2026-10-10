@@ -141,7 +141,7 @@ final class InstanceProfileCompiler
         $runtime = $profile['runtime'] ?? [];
 
         if (($profile['features']['public_on_demand_issuance'] ?? false) === true) {
-            foreach (['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED', 'XMCP_PUBLIC_ISSUANCE_ENABLED'] as $key) {
+            foreach (['XCHANGE_PUBLIC_AUTO_GENERATE_ENABLED', 'XCHANGE_FUNDING_NETBANK_ENABLED', 'XMCP_PUBLIC_ISSUANCE_ENABLED'] as $key) {
                 if (($runtime[$key] ?? null) !== true) {
                     throw new InstanceProfileException("runtime.{$key} must be true when features.public_on_demand_issuance is enabled.");
                 }
