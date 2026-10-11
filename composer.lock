@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21180af84049c0dfd424141fb883fd60",
+    "content-hash": "5d2f9ba541071e0ad485dc5354b961c7",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1663,16 +1663,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.122",
+            "version": "v1.0.123",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "555b4b4b2d723a06aacedf1ab8023b821a06589e"
+                "reference": "8ddbab36e944eb464fb3ff9366e92548059abdff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/555b4b4b2d723a06aacedf1ab8023b821a06589e",
-                "reference": "555b4b4b2d723a06aacedf1ab8023b821a06589e",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/8ddbab36e944eb464fb3ff9366e92548059abdff",
+                "reference": "8ddbab36e944eb464fb3ff9366e92548059abdff",
                 "shasum": ""
             },
             "require": {
@@ -1738,18 +1738,18 @@
             ],
             "type": "library",
             "extra": {
+                "x-change": {
+                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
+                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md",
+                    "adopt-command": "x-change:adopt"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
+                },
                 "laravel": {
                     "providers": [
                         "LBHurtado\\XChange\\Providers\\XChangeServiceProvider"
                     ]
-                },
-                "x-change": {
-                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
-                    "adopt-command": "x-change:adopt",
-                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md"
-                },
-                "settlement-os": {
-                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1757,7 +1757,22 @@
                     "LBHurtado\\XChange\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "LBHurtado\\XChange\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "php -d memory_limit=2G vendor/bin/pest"
+                ],
+                "test:unit": [
+                    "php -d memory_limit=2G vendor/bin/pest"
+                ],
+                "test:coverage": [
+                    "php -d memory_limit=2G vendor/bin/pest --coverage"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1771,11 +1786,7 @@
                 }
             ],
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
-            "support": {
-                "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.122"
-            },
-            "time": "2026-10-10T16:08:28+00:00"
+            "time": "2026-10-11T05:25:32+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -18422,12 +18433,12 @@
     ],
     "aliases": [],
     "minimum-stability": "beta",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.4"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.9.0"
 }
