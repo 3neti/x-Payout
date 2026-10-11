@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5d2f9ba541071e0ad485dc5354b961c7",
+    "content-hash": "117b7bb33d684bb5c969a55dd2105b96",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1663,16 +1663,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.123",
+            "version": "v1.0.124",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "8ddbab36e944eb464fb3ff9366e92548059abdff"
+                "reference": "6b16e8d9ff1abf7a112ec8b6c2087a47b50edb71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/8ddbab36e944eb464fb3ff9366e92548059abdff",
-                "reference": "8ddbab36e944eb464fb3ff9366e92548059abdff",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/6b16e8d9ff1abf7a112ec8b6c2087a47b50edb71",
+                "reference": "6b16e8d9ff1abf7a112ec8b6c2087a47b50edb71",
                 "shasum": ""
             },
             "require": {
@@ -1702,7 +1702,7 @@
                 "3neti/x-affiliation": "^0.1.1",
                 "3neti/x-campaign": "^1.1.2",
                 "3neti/x-commerce": "^1.2",
-                "3neti/x-feedback": "^1.0",
+                "3neti/x-feedback": "^1.1.2",
                 "3neti/x-journal": "^1.1",
                 "3neti/x-provisioning": "^1.0",
                 "3neti/x-ray": "^1.0.1",
@@ -1738,18 +1738,18 @@
             ],
             "type": "library",
             "extra": {
-                "x-change": {
-                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
-                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md",
-                    "adopt-command": "x-change:adopt"
-                },
-                "settlement-os": {
-                    "queue-manifest": "resources/settlement-os/queues.php"
-                },
                 "laravel": {
                     "providers": [
                         "LBHurtado\\XChange\\Providers\\XChangeServiceProvider"
                     ]
+                },
+                "x-change": {
+                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
+                    "adopt-command": "x-change:adopt",
+                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1757,22 +1757,7 @@
                     "LBHurtado\\XChange\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LBHurtado\\XChange\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "php -d memory_limit=2G vendor/bin/pest"
-                ],
-                "test:unit": [
-                    "php -d memory_limit=2G vendor/bin/pest"
-                ],
-                "test:coverage": [
-                    "php -d memory_limit=2G vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1786,7 +1771,11 @@
                 }
             ],
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
-            "time": "2026-10-11T05:25:32+00:00"
+            "support": {
+                "issues": "https://github.com/3neti/x-change/issues",
+                "source": "https://github.com/3neti/x-change/tree/v1.0.124"
+            },
+            "time": "2026-10-11T07:33:22+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -1845,16 +1834,16 @@
         },
         {
             "name": "3neti/x-feedback",
-            "version": "v1.1.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-feedback.git",
-                "reference": "3c048615c004de90e6a7096aefcf64bb19ed6b1b"
+                "reference": "5ea8d1ac81d034bcd49b3e59b7d7a3684928399b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-feedback/zipball/3c048615c004de90e6a7096aefcf64bb19ed6b1b",
-                "reference": "3c048615c004de90e6a7096aefcf64bb19ed6b1b",
+                "url": "https://api.github.com/repos/3neti/x-feedback/zipball/5ea8d1ac81d034bcd49b3e59b7d7a3684928399b",
+                "reference": "5ea8d1ac81d034bcd49b3e59b7d7a3684928399b",
                 "shasum": ""
             },
             "require": {
@@ -1880,6 +1869,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.x-dev"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1900,9 +1892,9 @@
             "description": "Feedback, notification, and communication infrastructure package for the x-change Settlement Operating System",
             "support": {
                 "issues": "https://github.com/3neti/x-feedback/issues",
-                "source": "https://github.com/3neti/x-feedback/tree/v1.1.0"
+                "source": "https://github.com/3neti/x-feedback/tree/v1.1.2"
             },
-            "time": "2026-08-10T01:43:13+00:00"
+            "time": "2026-10-11T07:13:28+00:00"
         },
         {
             "name": "3neti/x-journal",
@@ -18433,12 +18425,12 @@
     ],
     "aliases": [],
     "minimum-stability": "beta",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.4"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.9.0"
 }
