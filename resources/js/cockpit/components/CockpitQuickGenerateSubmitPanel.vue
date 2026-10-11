@@ -9,6 +9,7 @@ Changes will be overwritten by php artisan x-change:publish --scope=build --forc
 <script setup lang="ts">
 import CockpitPayCodeTemplateStoreController from "@/actions/LBHurtado/XChange/Http/Controllers/Web/Cockpit/CockpitPayCodeTemplateStoreController";
 import CockpitPayCodeTemplateUpdateController from "@/actions/LBHurtado/XChange/Http/Controllers/Web/Cockpit/CockpitPayCodeTemplateUpdateController";
+import { store as savePublicCheckoutDraft } from "@/routes/x-change/public-auto-generate/checkouts";
 import type { RequestPayload } from "@inertiajs/core";
 import { Link, router } from "@inertiajs/vue3";
 import type {
@@ -152,6 +153,11 @@ const props = withDefaults(
     publicPrefill?: {
       amount: string;
       currency: string;
+    } | null;
+    checkoutDraft?: {
+      reference: string;
+      guest_token: string;
+      instructions: Record<string, unknown> | null;
     } | null;
     publicAccountUrl?: string | null;
     turnstile?: { enabled: boolean; site_key: string | null };
@@ -824,6 +830,9 @@ const executionMetadata = ref("");
 const metadataFlowType = ref("");
 const metadataIssuerId = ref("");
 const processing = ref(false);
+const savingCheckoutDraft = ref(false);
+const checkoutDraftToken = ref<string | null>(props.checkoutDraft?.guest_token ?? null);
+const checkoutDraftMessage = ref<string | null>(props.checkoutDraft ? "A saved checkout draft is available in this browser." : null);
 const lastStatus = ref("ready");
 const lastMessage = ref("Ready to issue when the design is complete.");
 const lastResponse = ref<Record<string, unknown> | null>(null);
@@ -1116,7 +1125,10 @@ function startBlank(): void {
 function initializeStartingPoint(): void {
   if (props.publicMode) {
     startBlank();
-    if (props.publicPrefill) {
+    if (props.checkoutDraft?.instructions) {
+      applyInstructionBlueprint(props.checkoutDraft.instructions, true);
+      lastMessage.value = "Your saved checkout draft is ready to review or change.";
+    } else if (props.publicPrefill) {
       amount.value = props.publicPrefill.amount;
       currency.value = props.publicPrefill.currency;
     }
@@ -4616,6 +4628,10 @@ async function submit(): Promise<void> {
   emit("submitStart", payload);
 
   try {
+    if (props.publicMode) {
+      await saveCheckoutDraft(payload);
+    }
+
     const response = await fetch(routeUrl.value, {
       method: "POST",
       credentials: "same-origin",
@@ -4676,6 +4692,8 @@ async function submit(): Promise<void> {
     }
 
     if (body.schema === "x-change.cockpit.on-demand-issuance-funding.v1") {
+      checkoutDraftToken.value = null;
+      checkoutDraftMessage.value = null;
       onDemandFundingProjection.value =
         body as CockpitOnDemandIssuanceFundingProjection;
       onDemandFundingDialogOpen.value = true;
@@ -4721,6 +4739,49 @@ async function submit(): Promise<void> {
     if (props.publicMode && props.turnstile?.enabled) {
       turnstileWidget.value?.reset();
     }
+  }
+}
+
+async function saveCheckoutDraft(payload: Record<string, unknown>): Promise<void> {
+  if (savingCheckoutDraft.value) {
+    return;
+  }
+
+  savingCheckoutDraft.value = true;
+
+  try {
+    const response = await fetch(savePublicCheckoutDraft().url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        ...(checkoutDraftToken.value
+          ? { "X-XChange-Guest-Checkout-Token": checkoutDraftToken.value }
+          : {}),
+        ...csrfHeader(),
+      },
+      body: JSON.stringify({ instructions: payload }),
+    });
+
+    if (!response.ok) {
+      throw new Error("The checkout draft could not be saved. Try again shortly.");
+    }
+
+    const draft = await safeJson(response);
+    checkoutDraftToken.value = stringValue(draft.guest_token);
+    checkoutDraftMessage.value = "Checkout draft saved in this browser. No payment is needed yet.";
+  } finally {
+    savingCheckoutDraft.value = false;
+  }
+}
+
+async function saveCheckoutDraftFromButton(): Promise<void> {
+  try {
+    await saveCheckoutDraft(buildIssuancePayload());
+  } catch (error) {
+    checkoutDraftMessage.value = error instanceof Error ? error.message : "The checkout draft could not be saved.";
   }
 }
 
@@ -6369,8 +6430,12 @@ function instructionRecord(
               data-testid="cockpit-quick-generate-public-paused"
               role="status"
             >
-              New Pay Code orders are temporarily paused. No payment is needed.
+              New Pay Code orders are temporarily paused.
             </p>
+            <div v-if="publicMode" class="flex flex-wrap items-center gap-3 text-xs">
+              <button type="button" :disabled="savingCheckoutDraft || processing" class="rounded-lg border border-slate-300 bg-white px-3 py-2 font-semibold text-slate-700 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200" @click="saveCheckoutDraftFromButton">{{ savingCheckoutDraft ? 'Saving…' : 'Save checkout draft' }}</button>
+              <span v-if="checkoutDraftMessage" role="status" class="text-slate-600 dark:text-slate-300">{{ checkoutDraftMessage }}</span>
+            </div>
             <div
               class="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] items-start justify-start gap-x-2 gap-y-1.5 sm:grid-cols-[minmax(0,18rem)_minmax(0,18rem)]"
               data-testid="cockpit-quick-generate-amount-action-row"
