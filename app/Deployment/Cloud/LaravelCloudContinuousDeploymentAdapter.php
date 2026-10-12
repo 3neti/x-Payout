@@ -339,7 +339,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         $this->cloud->json('environment:update', [
             $this->resource($state, 'environment_id'),
             '--branch='.$compiled['profile']['release']['cloud_source_branch'],
-            '--build-command=composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader',
+            '--build-command=composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader && php artisan x-change:publish --scope=build --force --verify --no-interaction && npm ci --no-audit --no-fund && npm run build',
             '--deploy-command=php artisan migrate --force && php artisan x-change:commissioning:refresh-release --no-interaction',
             '--force',
         ]);
