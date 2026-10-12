@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.140",
+            "version": "v1.0.141",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "4a5d4a85"
+                "reference": "fd70b81b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/4a5d4a85",
-                "reference": "4a5d4a85",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/fd70b81b",
+                "reference": "fd70b81b",
                 "shasum": ""
             },
             "require": {
