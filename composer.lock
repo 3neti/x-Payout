@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "24ec7b18d8e80f585360fef86ed9eb8f",
+    "content-hash": "fe9beedafac151b7760aaba89b30acfa",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1491,16 +1491,16 @@
         },
         {
             "name": "3neti/x-action",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-action.git",
-                "reference": "e753126bb561e7e1cba30bfb303164373508de4e"
+                "reference": "73125296b33e910af09141d24fec45101a10c1de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-action/zipball/e753126bb561e7e1cba30bfb303164373508de4e",
-                "reference": "e753126bb561e7e1cba30bfb303164373508de4e",
+                "url": "https://api.github.com/repos/3neti/x-action/zipball/73125296b33e910af09141d24fec45101a10c1de",
+                "reference": "73125296b33e910af09141d24fec45101a10c1de",
                 "shasum": ""
             },
             "require": {
@@ -1523,6 +1523,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.x-dev"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1543,9 +1546,9 @@
             "description": "Workflow action and CTA infrastructure package for the x-change Settlement Operating System",
             "support": {
                 "issues": "https://github.com/3neti/x-action/issues",
-                "source": "https://github.com/3neti/x-action/tree/v1.0.1"
+                "source": "https://github.com/3neti/x-action/tree/v1.0.2"
             },
-            "time": "2026-07-31T08:17:29+00:00"
+            "time": "2026-10-07T02:03:25+00:00"
         },
         {
             "name": "3neti/x-affiliation",
@@ -1604,16 +1607,16 @@
         },
         {
             "name": "3neti/x-campaign",
-            "version": "v1.1.2",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-campaign.git",
-                "reference": "cb67ed6944527efb7693cd618820ee008eb04d1b"
+                "reference": "f5e4d53d923833828957f02a24e7d1bb6b995392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-campaign/zipball/cb67ed6944527efb7693cd618820ee008eb04d1b",
-                "reference": "cb67ed6944527efb7693cd618820ee008eb04d1b",
+                "url": "https://api.github.com/repos/3neti/x-campaign/zipball/f5e4d53d923833828957f02a24e7d1bb6b995392",
+                "reference": "f5e4d53d923833828957f02a24e7d1bb6b995392",
                 "shasum": ""
             },
             "require": {
@@ -1637,6 +1640,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.x-dev"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1657,22 +1663,22 @@
             "description": "Beneficiary distribution and campaign orchestration package for the x-change Settlement Operating System",
             "support": {
                 "issues": "https://github.com/3neti/x-campaign/issues",
-                "source": "https://github.com/3neti/x-campaign/tree/v1.1.2"
+                "source": "https://github.com/3neti/x-campaign/tree/v1.1.3"
             },
-            "time": "2026-09-18T22:38:05+00:00"
+            "time": "2026-10-07T02:05:02+00:00"
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.133",
+            "version": "v1.0.134",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "9cc78c5a04f7876392890f3c77e381f152afd09b"
+                "reference": "36b080f726a52947e9e4523f8041ae36d018bc47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/9cc78c5a04f7876392890f3c77e381f152afd09b",
-                "reference": "9cc78c5a04f7876392890f3c77e381f152afd09b",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/36b080f726a52947e9e4523f8041ae36d018bc47",
+                "reference": "36b080f726a52947e9e4523f8041ae36d018bc47",
                 "shasum": ""
             },
             "require": {
@@ -1773,9 +1779,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.133"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.134"
             },
-            "time": "2026-10-12T05:13:04+00:00"
+            "time": "2026-10-12T13:02:00+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -1898,16 +1904,16 @@
         },
         {
             "name": "3neti/x-journal",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-journal.git",
-                "reference": "02803bebeb78fbfbad21e0391fccbbe414f11d71"
+                "reference": "5791f1c777b93a888c22cf722113517bcfaf057f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-journal/zipball/02803bebeb78fbfbad21e0391fccbbe414f11d71",
-                "reference": "02803bebeb78fbfbad21e0391fccbbe414f11d71",
+                "url": "https://api.github.com/repos/3neti/x-journal/zipball/5791f1c777b93a888c22cf722113517bcfaf057f",
+                "reference": "5791f1c777b93a888c22cf722113517bcfaf057f",
                 "shasum": ""
             },
             "require": {
@@ -1930,6 +1936,9 @@
                 },
                 "branch-alias": {
                     "dev-main": "1.x-dev"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1950,22 +1959,22 @@
             "description": "Evidentiary journal package for the x-change Settlement Operating System",
             "support": {
                 "issues": "https://github.com/3neti/x-journal/issues",
-                "source": "https://github.com/3neti/x-journal/tree/v1.1.0"
+                "source": "https://github.com/3neti/x-journal/tree/v1.1.1"
             },
-            "time": "2026-09-17T01:55:10+00:00"
+            "time": "2026-10-07T02:02:06+00:00"
         },
         {
             "name": "3neti/x-mcp",
-            "version": "v0.3.1",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-mcp.git",
-                "reference": "7ccf66b3b29e58c13b416962ba994217499707c3"
+                "reference": "dc218cce7dcf304785d94770b62e18df0bbca264"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-mcp/zipball/7ccf66b3b29e58c13b416962ba994217499707c3",
-                "reference": "7ccf66b3b29e58c13b416962ba994217499707c3",
+                "url": "https://api.github.com/repos/3neti/x-mcp/zipball/dc218cce7dcf304785d94770b62e18df0bbca264",
+                "reference": "dc218cce7dcf304785d94770b62e18df0bbca264",
                 "shasum": ""
             },
             "require": {
@@ -2010,9 +2019,9 @@
             "description": "AI-native MCP adapters for the X-Change Settlement Operating System.",
             "support": {
                 "issues": "https://github.com/3neti/x-mcp/issues",
-                "source": "https://github.com/3neti/x-mcp/tree/v0.3.1"
+                "source": "https://github.com/3neti/x-mcp/tree/v0.3.0"
             },
-            "time": "2026-10-12T05:13:04+00:00"
+            "time": "2026-10-04T22:03:45+00:00"
         },
         {
             "name": "3neti/x-provisioning",
@@ -2241,16 +2250,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.399.1",
+            "version": "3.400.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "cd7cf43b7d42e49579bf3f09ab58d4724d64152c"
+                "reference": "c0cf2c322bc1a344aaf39250da8856563532f82b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/cd7cf43b7d42e49579bf3f09ab58d4724d64152c",
-                "reference": "cd7cf43b7d42e49579bf3f09ab58d4724d64152c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c0cf2c322bc1a344aaf39250da8856563532f82b",
+                "reference": "c0cf2c322bc1a344aaf39250da8856563532f82b",
                 "shasum": ""
             },
             "require": {
@@ -2332,9 +2341,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.399.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.400.1"
             },
-            "time": "2026-10-02T18:16:16+00:00"
+            "time": "2026-10-09T18:11:15+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -3816,16 +3825,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php-lite",
-            "version": "9.0.40",
+            "version": "9.0.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git",
-                "reference": "314fdac61038421a74bc794555ba9e9fc537eb31"
+                "reference": "6ffb41a259c950d6f4df5596e32917f631052910"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/314fdac61038421a74bc794555ba9e9fc537eb31",
-                "reference": "314fdac61038421a74bc794555ba9e9fc537eb31",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/6ffb41a259c950d6f4df5596e32917f631052910",
+                "reference": "6ffb41a259c950d6f4df5596e32917f631052910",
                 "shasum": ""
             },
             "require": {
@@ -3890,7 +3899,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php-lite/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php-lite"
             },
-            "time": "2026-09-24T13:47:31+00:00"
+            "time": "2026-10-08T08:51:54+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -5608,16 +5617,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "5.6.0",
+            "version": "5.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "bb3e9f21e4196e8afc41def81ef649c164bca25e"
+                "reference": "482760068e5a55a9045feddb3e2fc3f878cbd577"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/bb3e9f21e4196e8afc41def81ef649c164bca25e",
-                "reference": "bb3e9f21e4196e8afc41def81ef649c164bca25e",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/482760068e5a55a9045feddb3e2fc3f878cbd577",
+                "reference": "482760068e5a55a9045feddb3e2fc3f878cbd577",
                 "shasum": ""
             },
             "require": {
@@ -5665,7 +5674,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/5.6.0"
+                "source": "https://github.com/lcobucci/jwt/tree/5.6.1"
             },
             "funding": [
                 {
@@ -5677,7 +5686,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-10-17T11:30:53+00:00"
+            "time": "2026-10-10T09:42:14+00:00"
         },
         {
             "name": "league/commonmark",
@@ -14565,16 +14574,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "2.4.1",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70"
+                "reference": "8a163706bbcac613733dba03f51e13b5eb1bb819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/2ccb7c2e821038c03a3e6e1700c570c158c55f70",
-                "reference": "2ccb7c2e821038c03a3e6e1700c570c158c55f70",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/8a163706bbcac613733dba03f51e13b5eb1bb819",
+                "reference": "8a163706bbcac613733dba03f51e13b5eb1bb819",
                 "shasum": ""
             },
             "require": {
@@ -14625,9 +14634,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/2.4.1"
+                "source": "https://github.com/webmozarts/assert/tree/2.5.0"
             },
-            "time": "2026-06-15T15:31:57+00:00"
+            "time": "2026-10-05T23:14:19+00:00"
         },
         {
             "name": "zordius/lightncandy",
