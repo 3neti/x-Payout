@@ -1677,8 +1677,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/b1e28981659bdbcd24cc1ff278fee64d2717bf53",
-                "reference": "b1e28981659bdbcd24cc1ff278fee64d2717bf53",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/06d463e8e69b811996f4ec06a73a25f998894c5b",
+                "reference": "06d463e8e69b811996f4ec06a73a25f998894c5b",
                 "shasum": ""
             },
             "require": {
