@@ -2,9 +2,9 @@
 
 **Last updated:** 2026-10-12
 
-**Current position:** Beta.91 operational with x-change v1.0.131; commissioning release refresh is implemented locally and awaits rollout
+**Current position:** Beta.91 operational with x-change v1.0.131; beta.92 is prepared locally with published x-change v1.0.132 and awaits testing Cloud acceptance
 
-**Overall status:** Beta.91 is the current production release and locks x-change `v1.0.131`. The commissioning manifest release refresh has passed local package and host tests; Cloud acceptance remains pending. Earlier beta.76 cleanroom evidence remains historical below.
+**Overall status:** Beta.91 is the current production release and locks x-change `v1.0.131`. Beta.92 locks published x-change `v1.0.132` and contains the guarded release refresh; testing Cloud acceptance remains pending. Earlier beta.76 cleanroom evidence remains historical below.
 
 **Intended public host:** `https://payout.disburse.cash`
 
