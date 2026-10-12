@@ -1,10 +1,10 @@
 # x-PayOut Public Cloud Deployment Compass
 
-**Last updated:** 2026-10-06
+**Last updated:** 2026-10-12
 
-**Current position:** Beta.76 operational after exact-release cleanroom and mutation-free rerun; payment-event delivery remains separately gated
+**Current position:** Beta.91 operational with x-change v1.0.131; commissioning release refresh is implemented locally and awaits rollout
 
-**Overall status:** Immutable beta.76 at `9df3adb` is the operational production release and locks x-change `v1.0.101`. It adds fail-closed partner payment confirmation support and reconciles an existing Cloud worker to consume `partner-payments` without replacing the worker. Deployment `depl-a2ea8364-4f17-4edf-a903-0508ee4233b9`, strict and MCP doctors, domain/TLS acceptance, and the immediate mutation-free rerun are green. Partner payment-event delivery remains disabled
+**Overall status:** Beta.91 is the current production release and locks x-change `v1.0.131`. The commissioning manifest release refresh has passed local package and host tests; Cloud acceptance remains pending. Earlier beta.76 cleanroom evidence remains historical below.
 
 **Intended public host:** `https://payout.disburse.cash`
 
@@ -13,6 +13,21 @@
 This compass is the durable operational memory for repeatedly deploying the
 shared x-PayOut beta and demonstrating the same procedure to banks and EMIs.
 Update it after every completed, blocked, rolled-back, or deferred gate.
+
+## Commissioning manifest release refresh — 2026-10-12, implementation pending rollout
+
+- Ordinary Cloud deployments run `x-change:commissioning:refresh-release` after
+  migrations. The command updates the installed package version only after
+  readiness and the commissioned identity match; a matching version 2 manifest
+  receives a one-time guarded upgrade.
+- A changed commissioning identity stops the deploy or commissioning gate.
+  The continuous controller no longer adopts a stale manifest automatically;
+  review the change and use guarded adoption deliberately.
+- Runtime delivery controls such as payment SMS, mail, Turnstile, and queue
+  configuration remain subject to readiness checks without invalidating the
+  commissioning fingerprint.
+- Verify the new gate in testing before rolling it into the public payout
+  instance. No live financial operation is required for this change.
 
 The governing plan is
 [X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md](X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_PLAN.md).

@@ -158,7 +158,9 @@ case "$op" in
   command:get)
     remote_command="$(cat "$state/last-command")"
     if [[ "$remote_command" == *"commissioning:status"* ]]; then
-      if [[ -f "$state/commissioned" ]]; then
+      if [[ -f "$state/stale-commissioning" ]]; then
+        printf '%s\n' '{"status":"command.failed","exitCode":1,"output":"{\"operational\":false,\"reason\":\"installation_manifest_stale\"}"}'
+      elif [[ -f "$state/commissioned" ]]; then
         printf '%s\n' '{"status":"command.success","exitCode":0,"output":"{\"operational\":true}"}'
       else
         printf '%s\n' '{"status":"command.failed","exitCode":1,"output":"{\"operational\":false,\"reason\":\"installation_incomplete\"}"}'
@@ -231,6 +233,8 @@ BASH);
         ->and($firstLog)->toContain('deployment:get deployment-one')
         ->and($firstLog)->not->toContain('deploy:monitor')
         ->and($firstLog)->toContain('x-change:commission:preview')
+        ->and($firstLog)->toContain('x-change:commissioning:refresh-release')
+        ->and($firstLog)->not->toContain('x-change:commissioning:adopt')
         ->and($firstLog)->toContain('--commissioning-preview-token=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         ->and($firstLog)->not->toContain(
             'application:create',
@@ -323,4 +327,19 @@ BASH);
             'deployment', 'commissioning_manifest', 'commissioning_preview',
             'commissioning', 'domain', 'strict_doctor', 'mcp_doctor',
         ]);
+
+    touch($cloudState.'/stale-commissioning');
+    $staleState = json_decode((string) file_get_contents($statePath), true, flags: JSON_THROW_ON_ERROR);
+    $staleState['checkpoints']['commission'] = 'failed';
+    file_put_contents($statePath, json_encode($staleState, JSON_THROW_ON_ERROR));
+    $beforeStaleLog = (string) file_get_contents($cloudLog);
+
+    $stale = new Process($arguments, $root, $environment);
+    $stale->setTimeout(30);
+    $stale->run();
+    $staleLog = substr((string) file_get_contents($cloudLog), strlen($beforeStaleLog));
+
+    expect($stale->isSuccessful())->toBeFalse()
+        ->and($staleLog)->toContain('x-change:commissioning:status')
+        ->and($staleLog)->not->toContain('x-change:commissioning:adopt', 'x-payout:bootstrap');
 });

@@ -340,7 +340,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
             $this->resource($state, 'environment_id'),
             '--branch='.$compiled['profile']['release']['cloud_source_branch'],
             '--build-command=composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader',
-            '--deploy-command=php artisan migrate --force',
+            '--deploy-command=php artisan migrate --force && php artisan x-change:commissioning:refresh-release --no-interaction',
             '--force',
         ]);
         $result = $this->commands->run([
@@ -487,10 +487,9 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         }
 
         if (($status['reason'] ?? null) === 'installation_manifest_stale') {
-            $this->remote($state, 'php artisan x-change:commissioning:adopt --confirm-existing-installation --no-interaction');
-            $this->evidence->record('commissioning', ['disposition' => 'adopted_existing_installation']);
-
-            return [];
+            throw new ContinuousDeploymentException(
+                'Commissioning identity changed; review the deployment before guarded adoption.',
+            );
         }
 
         $manifest = $this->materializeCommissioningManifest($compiled, $state);
