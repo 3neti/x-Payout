@@ -1,4 +1,11 @@
 <laravel-boost-guidelines>
+
+## Thin host ownership
+
+- Keep x-change domain behavior and Inertia/Vue UI in the `3neti/x-change` package.
+- This host owns app shell, branding, configuration, and deployment settings only; do not hand-edit generated x-change frontend copies.
+- Cloud builds must run `php artisan x-change:publish --scope=build --force --verify --no-interaction` before `npm ci --no-audit --no-fund && npm run build`.
+
 === foundation rules ===
 
 # Laravel Boost Guidelines
