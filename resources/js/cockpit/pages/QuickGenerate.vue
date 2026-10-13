@@ -28,6 +28,7 @@ import type { CockpitQuickGenerateSurface } from "../components/CockpitQuickGene
 import CockpitQuickGeneratePricingGatePanel from "../components/CockpitQuickGeneratePricingGatePanel.vue";
 import CockpitQuickGenerateSubmitPanel from "../components/CockpitQuickGenerateSubmitPanel.vue";
 import CockpitQuickGenerateValidationRedactionGatePanel from "../components/CockpitQuickGenerateValidationRedactionGatePanel.vue";
+import PublicIssuanceTurnstile from "../components/PublicIssuanceTurnstile.vue";
 import CockpitLayout from "../layouts/CockpitLayout.vue";
 import PublicIssuanceLayout from "../layouts/PublicIssuanceLayout.vue";
 import {
@@ -87,6 +88,10 @@ const issuanceSurface = ref<CockpitQuickGenerateSurface>(
 const displaySession = ref(props.display_session ?? null);
 const submitPanelElement = ref<InstanceType<
   typeof CockpitQuickGenerateSubmitPanel
+> | null>(null);
+const publicTurnstileToken = ref("");
+const publicTurnstileWidget = ref<InstanceType<
+  typeof PublicIssuanceTurnstile
 > | null>(null);
 
 async function beginPublicIssuance(trigger: HTMLButtonElement): Promise<void> {
@@ -1158,6 +1163,27 @@ function stringValue(value: unknown): string | null {
     v-bind="pageLayoutProps"
     @create="beginPublicIssuance"
   >
+    <template #verification>
+      <div
+        v-if="publicAutoGenerate && props.turnstile?.enabled"
+        class="rounded-2xl border border-slate-200 bg-white/80 p-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80"
+      >
+        <p
+          class="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400"
+        >
+          Security check
+        </p>
+        <PublicIssuanceTurnstile
+          v-if="props.turnstile.site_key"
+          ref="publicTurnstileWidget"
+          :site-key="props.turnstile.site_key"
+          @verified="publicTurnstileToken = $event"
+        />
+        <p v-else class="text-sm text-rose-700" role="alert">
+          Verification is unavailable. Please try again later.
+        </p>
+      </div>
+    </template>
     <section
       class="space-y-4 px-4 md:px-0"
       data-testid="cockpit-quick-generate-shell"
@@ -1232,6 +1258,7 @@ function stringValue(value: unknown): string | null {
           :public-prefill="props.public_prefill"
           :checkout-draft="props.checkout_draft"
           :turnstile="props.turnstile"
+          :turnstile-token="publicTurnstileToken"
           :public-account-url="props.public_navigation?.register_url ?? null"
           :show-engineering-preview="
             props.surface_profile?.show_engineering_preview ?? true
@@ -1243,6 +1270,7 @@ function stringValue(value: unknown): string | null {
             props.surface_profile?.allow_template_management ?? true
           "
           :templates="templates"
+          @reset-turnstile="publicTurnstileWidget?.reset()"
         />
         <CockpitQuickGeneratePosPanel
           v-else-if="issuanceSurface === 'pos'"
