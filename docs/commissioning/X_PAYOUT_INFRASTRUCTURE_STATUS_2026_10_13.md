@@ -23,7 +23,7 @@ upgrade.
 | Database | Attached Laravel-managed payout PostgreSQL resource |
 | Cache | Attached payout Valkey resource; not shared with testing |
 | Evidence storage | Private object storage for claim evidence |
-| Public protection | Turnstile enabled; application-level issuance and MCP rate limits enabled |
+| Public protection | Turnstile enabled; application-level issuance and MCP rate limits enabled; Laravel Cloud edge rate limiting enabled in challenge mode |
 | Deployment | Composer package install, x-change build publishing, frontend build, migrations, and commissioning refresh |
 
 The application remains at one replica during normal low traffic and can scale
@@ -43,47 +43,42 @@ capacity path for bursts.
   not part of the production topology.
 - Payout endpoint smoke check returned HTTP 200 after the change.
 
-## Remaining dashboard controls
+## Dashboard controls applied
 
-These controls are outside the Laravel Cloud CLI and remain to be configured
-in the provider dashboards.
+### Laravel Cloud edge rate limiting
 
-### 1. Cloudflare rate limiting
+Rate limiting is enabled for the production environment in Laravel Cloud's
+Firewall settings. The selected level is **Challenge**: an IP that exceeds
+100 requests per minute receives a CAPTCHA or Turnstile challenge for five
+minutes. This is an edge layer; the application-level limits remain in place
+for order creation, polling, recovery, and MCP traffic.
 
-Create rules for the public payment workflow, starting with conservative
-IP-based limits:
+The payout domain is not using a Cloudflare zone, so no Cloudflare WAF rule
+was created. Laravel Cloud owns the active edge configuration for this host.
 
-- Order creation: challenge or block after repeated bursts from one IP.
-- Payment polling: allow normal polling but cap aggressive refresh loops.
-- Workspace recovery and OTP requests: apply the strictest limit.
+### HSTS
 
-Keep the application-level limits as the second layer. Start in challenge or
-log mode, review legitimate traffic, then enforce. Verify that payment status
-polling and recovery still work from a normal browser before tightening rules.
+HSTS is enabled in Laravel Cloud Response rules with:
 
-### 2. HSTS
+- `Strict-Transport-Security: max-age=31536000`
+- `includeSubDomains`: disabled
+- `preload`: disabled
 
-Confirm that the payout domain and every required subdomain are HTTPS-only.
-Then enable HSTS with a staged policy:
+The header was verified on `https://payout.disburse.cash/x/auto-generate/`.
+Subdomain scope and preload remain intentionally deferred until the complete
+domain inventory is confirmed.
 
-1. Start with a short max-age while checking all subdomains.
-2. Increase to a long max-age such as one year once verified.
-3. Add `includeSubDomains` only after every subdomain is confirmed safe.
-4. Delay preload enrollment until the domain inventory is stable.
+### Laravel Cloud spending alert
 
-HSTS must be enabled only after certificate renewal and domain routing have
-been verified for every included hostname.
-
-### 3. Laravel Cloud spending alert
-
-Create a monthly alert around the beta target, initially at **$40–$50**.
-Review the breakdown by web compute, workers, database, cache, storage, and
-bandwidth. Treat the alert as an operator warning; it is not a hard spending
-cap.
+The Growth billing dashboard already has the beta spending alert set to
+**$40.00**. No billing mutation was needed. The alert is an operator warning,
+not a hard spending cap.
 
 ## Verification after dashboard changes
 
 - Check the public auto-generate page and Turnstile challenge.
+- Confirm the Laravel Cloud Firewall shows rate limiting enabled at Challenge.
+- Confirm the response includes `Strict-Transport-Security: max-age=31536000`.
 - Create and poll a non-financial estimate without creating an order.
 - Verify normal payment polling is not rate-limited.
 - Verify recovery and OTP throttling with a controlled test.
