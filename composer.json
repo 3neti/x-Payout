@@ -15,7 +15,7 @@
         "php": "^8.4",
         "3neti/form-flow": "^1.9",
         "3neti/hyperverge": "2.0.0-beta.2",
-        "3neti/x-change": "1.0.180",
+        "3neti/x-change": "1.0.182",
         "3neti/x-mcp": "^0.3.0",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/chisel": "^0.1.0",
@@ -126,5 +126,11 @@
         }
     },
     "minimum-stability": "beta",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/3neti/x-change.git"
+        }
+    ]
 }
