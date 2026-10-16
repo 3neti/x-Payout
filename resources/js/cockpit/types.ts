@@ -1845,12 +1845,14 @@ export type CockpitQuickGeneratePageProps = CockpitHeaderPageProps & {
   };
   public_navigation?: {
     pricing_url: string | null;
+    analytics_url: string | null;
     claim_url: string | null;
     create_url: string | null;
     login_url: string | null;
     register_url: string | null;
   };
   batch_endpoints?: { preview: string; create: string; fund: string };
+  batch_recovery_endpoints?: { request: string; verify: string; select: string };
   public_prefill?: {
     amount: string;
     currency: string;

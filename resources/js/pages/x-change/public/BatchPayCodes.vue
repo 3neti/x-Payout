@@ -11,6 +11,7 @@ defineOptions({ layout: null });
 
 const props = defineProps<{
     batch_reference: string;
+    recovery_available: boolean;
     batch_endpoint: string;
     download_endpoint: string;
     detail_url_template: string;
@@ -36,6 +37,15 @@ type BatchItem = {
         claimed_at?: string | null;
         amount_minor?: number | null;
         currency?: string | null;
+        claimer_name?: string | null;
+        claimer_mobile_masked?: string | null;
+        settlement_mode?: string | null;
+        settlement_rail?: string | null;
+        provider?: string | null;
+        bank_code?: string | null;
+        account_number_masked?: string | null;
+        provider_transaction_id?: string | null;
+        payout_status?: string | null;
     };
     issued_at: string | null;
     failure_message: string | null;
@@ -156,11 +166,11 @@ function batchRecord(item: BatchItem): CockpitPayCodeExplorerRecord {
         collection: {},
         claimSummary: {
             claimed_at: item.claim_summary?.claimed_at ?? item.redeemed_at ?? null,
-            claimed_by_label: null,
-            claimed_mobile_masked: null,
+            claimed_by_label: item.claim_summary?.claimer_name ?? item.claim_summary?.claimer_mobile_masked ?? null,
+            claimed_mobile_masked: item.claim_summary?.claimer_mobile_masked ?? null,
             amount_minor: item.claim_summary?.amount_minor ?? null,
             currency: item.claim_summary?.currency ?? 'PHP',
-            location_label: null,
+            location_label: item.claim_summary?.settlement_rail ?? item.claim_summary?.provider ?? item.claim_summary?.bank_code ?? null,
         },
         voucherStatus: lifecycleStatus,
         operationalStatus: {
@@ -297,7 +307,7 @@ onMounted(loadBatch);
                 </div>
             </header>
 
-            <section class="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 shadow-sm dark:border-amber-900 dark:bg-amber-950/20" data-testid="batch-workspace-recovery">
+            <section v-if="props.recovery_available" class="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 shadow-sm dark:border-amber-900 dark:bg-amber-950/20" data-testid="batch-workspace-recovery">
                 <button type="button" class="flex w-full items-center justify-between gap-3 text-left" data-testid="batch-workspace-recovery-toggle" @click="recoveryOpen = !recoveryOpen">
                     <span>
                         <span class="block text-sm font-bold text-amber-950 dark:text-amber-100">Need to recover this workspace?</span>

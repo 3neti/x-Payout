@@ -10,6 +10,7 @@ Changes will be overwritten by php artisan x-change:publish --scope=build --forc
 import { Head, Link } from "@inertiajs/vue3";
 import PublicNavigation from "../components/PublicNavigation.vue";
 import PublicIssuanceBatchDialog from "../components/PublicIssuanceBatchDialog.vue";
+import PublicIssuanceBatchRecovery from "../components/PublicIssuanceBatchRecovery.vue";
 import {
   ArrowRight,
   BadgeCheck,
@@ -27,22 +28,26 @@ withDefaults(
   defineProps<{
     navigation?: {
       pricing_url: string | null;
+      analytics_url: string | null;
       claim_url: string | null;
       create_url: string | null;
       login_url: string | null;
       register_url: string | null;
     };
-    batch_endpoints?: { preview: string; create: string; fund: string };
+    batch_endpoints?: { preview: string; create: string; fund: string; template: string };
+    batch_recovery_endpoints?: { request: string; verify: string; select: string };
   }>(),
   {
     navigation: () => ({
       pricing_url: null,
+      analytics_url: null,
       claim_url: null,
       create_url: null,
       login_url: null,
       register_url: null,
     }),
     batch_endpoints: undefined,
+    batch_recovery_endpoints: undefined,
   },
 );
 
@@ -75,7 +80,11 @@ const painPoints = [
     <div
       class="relative z-10 mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8"
     >
-      <PublicNavigation :navigation="navigation" active="create" />
+      <PublicNavigation
+        :navigation="navigation"
+        :batch-recovery-endpoints="batch_recovery_endpoints"
+        active="create"
+      />
 
       <section
         class="grid items-start gap-8 py-9 lg:grid-cols-[minmax(0,0.82fr)_minmax(36rem,1.18fr)] lg:gap-12 lg:py-14"
