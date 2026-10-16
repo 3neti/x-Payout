@@ -57,10 +57,10 @@ capacity path for bursts.
 ### Laravel Cloud edge rate limiting
 
 Rate limiting is enabled for the production environment in Laravel Cloud's
-Firewall settings. The selected level is **Challenge**: an IP that exceeds
-100 requests per minute receives a CAPTCHA or Turnstile challenge for five
-minutes. This is an edge layer; the application-level limits remain in place
-for order creation, polling, recovery, and MCP traffic.
+Firewall settings. The selected level is **Challenge**. The exact threshold is
+not exposed by the Cloud CLI, so it is not treated as a contractual value in
+this record. This is an edge layer; the application-level limits remain in
+place for order creation, polling, recovery, and MCP traffic.
 
 The payout domain is not present in the authenticated Cloudflare account's zone
 list, so no Cloudflare WAF rule could be created there. Laravel Cloud owns the
