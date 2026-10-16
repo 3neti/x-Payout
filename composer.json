@@ -15,7 +15,7 @@
         "php": "^8.4",
         "3neti/form-flow": "^1.9",
         "3neti/hyperverge": "2.0.0-beta.2",
-        "3neti/x-change": "1.0.210",
+        "3neti/x-change": "1.0.211",
         "3neti/x-mcp": "^0.3.0",
         "inertiajs/inertia-laravel": "^3.0",
         "laravel/chisel": "^0.1.0",
