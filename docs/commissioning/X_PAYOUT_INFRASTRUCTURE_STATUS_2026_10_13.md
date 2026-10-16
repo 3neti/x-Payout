@@ -2,9 +2,9 @@
 
 **Environment:** Laravel Cloud `production`  
 **Host:** `https://payout.disburse.cash`  
-**Recorded:** 2026-10-13  
-**Package:** x-change `v1.0.156`  
-**Branch:** `release/v1.0.0-beta.92`
+**Recorded:** 2026-10-16  
+**Package:** x-change `v1.0.210`  
+**Branch:** `release/v1.0.0-beta.106`
 
 ## Current infrastructure
 
@@ -19,7 +19,7 @@ upgrade.
 | Scale thresholds | CPU 70%; memory 80% |
 | Scheduler | Enabled on the application instance |
 | Queue connection | Redis/Valkey |
-| Queue workers | One shared worker for `partner-payments`, `x-change-funding`, `x-change-issuance`, `x-change-feedback`, and `default`; one dedicated `x-change-issuance` worker with five tries |
+| Queue workers | Redis workers: shared `partner-payments`, `x-change-funding`, `x-change-feedback`, and `default` worker; dedicated `x-change-issuance` worker with five tries |
 | Database | Attached Laravel-managed payout PostgreSQL resource |
 | Cache | Attached payout Valkey resource; not shared with testing |
 | Evidence storage | Private object storage for claim evidence |
@@ -38,9 +38,18 @@ capacity path for bursts.
   custom autoscaling with `min=1`, `max=2`.
 - CPU and memory thresholds set to 70% and 80%.
 - Scheduler retained as enabled.
-- Existing queue workers were inspected and retained. A duplicate default
-  worker was briefly created during verification and removed immediately; it is
-  not part of the production topology.
+- Existing queue workers were inspected and aligned with Redis metadata. The
+  dedicated issuance worker remains separate so issuance retries do not compete
+  with funding verification.
+- Funding verification, issuance, feedback, partner-payment, and default queues
+  were checked with `queue:monitor`; there were no pending or reserved jobs.
+  Nine delayed funding verification jobs were visible and are expected to be
+  consumed by the scheduled verifier.
+- The failed-job list contains historical funding verification failures and was
+  preserved for audit/review; it was not purged during commissioning.
+- The payout Neon cluster now retains seven days of backups. A point-in-time
+  restore was created as the isolated cluster `payout-p0-restore-20261016` and
+  reached `available` without changing the live cluster.
 - Payout endpoint smoke check returned HTTP 200 after the change.
 
 ## Dashboard controls applied
@@ -53,8 +62,10 @@ Firewall settings. The selected level is **Challenge**: an IP that exceeds
 minutes. This is an edge layer; the application-level limits remain in place
 for order creation, polling, recovery, and MCP traffic.
 
-The payout domain is not using a Cloudflare zone, so no Cloudflare WAF rule
-was created. Laravel Cloud owns the active edge configuration for this host.
+The payout domain is not present in the authenticated Cloudflare account's zone
+list, so no Cloudflare WAF rule could be created there. Laravel Cloud owns the
+active edge configuration for this host; its Challenge-mode limit remains the
+effective edge control until the authoritative Cloudflare zone is identified.
 
 ### HSTS
 
