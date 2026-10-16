@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e12561fd245e6868eb0516842c8a5be",
+    "content-hash": "e5b5662051b1d19b953fd84ee235da76",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1669,11 +1669,17 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.197",
+            "version": "v1.0.199",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "3c837604ff1c889074f4f40aea07d283732beef9"
+                "reference": "f80c7bbeef04fca404d52e5f7d4502bd25b3b30b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/f80c7bbeef04fca404d52e5f7d4502bd25b3b30b",
+                "reference": "f80c7bbeef04fca404d52e5f7d4502bd25b3b30b",
+                "shasum": ""
             },
             "require": {
                 "3neti/cash": "^1.3",
@@ -1738,18 +1744,18 @@
             ],
             "type": "library",
             "extra": {
-                "x-change": {
-                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
-                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md",
-                    "adopt-command": "x-change:adopt"
-                },
-                "settlement-os": {
-                    "queue-manifest": "resources/settlement-os/queues.php"
-                },
                 "laravel": {
                     "providers": [
                         "LBHurtado\\XChange\\Providers\\XChangeServiceProvider"
                     ]
+                },
+                "x-change": {
+                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
+                    "adopt-command": "x-change:adopt",
+                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1757,22 +1763,7 @@
                     "LBHurtado\\XChange\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LBHurtado\\XChange\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "php -d memory_limit=2G vendor/bin/pest"
-                ],
-                "test:unit": [
-                    "php -d memory_limit=2G vendor/bin/pest"
-                ],
-                "test:coverage": [
-                    "php -d memory_limit=2G vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1786,7 +1777,11 @@
                 }
             ],
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
-            "time": "2026-10-15T23:14:58+00:00"
+            "support": {
+                "issues": "https://github.com/3neti/x-change/issues",
+                "source": "https://github.com/3neti/x-change/tree/v1.0.199"
+            },
+            "time": "2026-10-16T01:35:26+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -6587,16 +6582,16 @@
         },
         {
             "name": "lorisleiva/laravel-actions",
-            "version": "v2.12.0",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lorisleiva/laravel-actions.git",
-                "reference": "8d58b11d4fbca08fbcdb87243a4607bb3ae1db8d"
+                "reference": "c28e8fb0573324d28fdfdf780425329646bf28a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lorisleiva/laravel-actions/zipball/8d58b11d4fbca08fbcdb87243a4607bb3ae1db8d",
-                "reference": "8d58b11d4fbca08fbcdb87243a4607bb3ae1db8d",
+                "url": "https://api.github.com/repos/lorisleiva/laravel-actions/zipball/c28e8fb0573324d28fdfdf780425329646bf28a1",
+                "reference": "c28e8fb0573324d28fdfdf780425329646bf28a1",
                 "shasum": ""
             },
             "require": {
@@ -6661,7 +6656,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lorisleiva/laravel-actions/issues",
-                "source": "https://github.com/lorisleiva/laravel-actions/tree/v2.12.0"
+                "source": "https://github.com/lorisleiva/laravel-actions/tree/2.13.0"
             },
             "funding": [
                 {
@@ -6669,7 +6664,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-25T14:17:11+00:00"
+            "time": "2026-10-15T14:23:24+00:00"
         },
         {
             "name": "lorisleiva/lody",
