@@ -7,6 +7,10 @@ Do not edit this published host copy directly.
 Changes will be overwritten by php artisan x-change:publish --scope=build --force.
 -->
 <script setup lang="ts">
+import ClaimStatePanel from '@/components/x-change/ClaimStatePanel.vue';
+import FormFlowActions from '@/pages/form-flow/core/components/FormFlowActions.vue';
+import { useClaimActionLabel } from '@/composables/useClaimActionLabel';
+
 import { computed, ref } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { Clock3 } from 'lucide-vue-next';
@@ -24,6 +28,8 @@ import {
 import { submitApprovalOtp } from '@/components/x-change/approvalOtpSubmitAdapter';
 import PayoutRouteDisplay from '@/components/x-change/PayoutRouteDisplay.vue';
 import type { PayoutDestinationSnapshot } from '@/components/x-change/support/payoutDestinations';
+
+const claimActionLabel = useClaimActionLabel();
 
 defineOptions({ layout: null });
 
@@ -133,9 +139,7 @@ function submitOtp(): void {
     <Head title="Claim Awaiting Approval" />
 
     <ClaimStepShell tone="warning">
-        <div class="space-y-6 text-center">
-            <Clock3 class="mx-auto h-12 w-12 text-amber-500" />
-
+        <ClaimStatePanel role="pending" class="space-y-6 text-center">
             <div class="space-y-2">
                 <p
                     class="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
@@ -277,14 +281,22 @@ function submitOtp(): void {
                     {{ otpError || visibleServerOtpError }}
                 </p>
 
-                <button
-                    type="submit"
-                    data-testid="approval-otp-submit"
-                    :disabled="otpProcessing"
-                    class="w-full rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                <FormFlowActions :show-secondary="false"
+                    ><button
+                        type="submit"
+                        data-testid="approval-otp-submit"
+                        :disabled="otpProcessing"
+                        class="w-full rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+                    >
+                        {{
+                            claimActionLabel(
+                                'verify',
+                                otpProcessing ? 'Verifying...' : 'Verify OTP',
+                                otpProcessing,
+                            )
+                        }}
+                    </button></FormFlowActions
                 >
-                    {{ otpProcessing ? 'Verifying...' : 'Verify OTP' }}
-                </button>
             </form>
 
             <div
@@ -322,6 +334,6 @@ function submitOtp(): void {
                     {{ item }}
                 </li>
             </ul>
-        </div>
+        </ClaimStatePanel>
     </ClaimStepShell>
 </template>
