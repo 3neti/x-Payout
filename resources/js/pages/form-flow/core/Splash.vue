@@ -1,10 +1,14 @@
 <script setup lang="ts">
+import FormFlowPresentation from "./components/FormFlowPresentation.vue";
+import type { FormFlowPresentation as PresentationPolicy } from "./components/formFlowPresentation";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { router, Head } from "@inertiajs/vue3";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 import { initializeTheme } from "@/composables/useTheme";
+import FormFlowArtworkSurface from "./components/FormFlowArtworkSurface.vue";
+import FormFlowHtmlContent from "./components/FormFlowHtmlContent.vue";
 import FormFlowActions from "./components/FormFlowActions.vue";
 import FormFlowVersionStrip from "./components/FormFlowVersionStrip.vue";
 
@@ -44,6 +48,7 @@ interface PackageVersion {
 }
 
 interface Props {
+  presentation?: PresentationPolicy | null;
   flow_id: string;
   step_index: number;
   title?: string;
@@ -148,7 +153,7 @@ const voucherCodeDisplayStyle = computed(() => {
   }
 
   return {
-    fontSize,
+    fontSize: `min(${fontSize}, ${130 / (length + 6)}cqi)`,
     letterSpacing: "0.08em",
   };
 });
@@ -180,6 +185,19 @@ const contentType = computed(() => {
   // Fallback to plain text
   return "text";
 });
+
+const splashArtworkSource = computed(() => {
+  if (typeof document === "undefined") return null;
+  const template = document.createElement("template");
+  template.innerHTML = DOMPurify.sanitize(props.content);
+  return template.content.querySelector("img")?.getAttribute("src") ?? null;
+});
+
+const isArtworkSplash = computed(() =>
+  (contentType.value === "html" || contentType.value === "svg")
+  && /<(?:img|svg)\b/i.test(props.content)
+  && (!!props.presentation?.artwork || (!!props.presentation?.layout.artwork_aspect_ratio && props.presentation.layout.artwork_aspect_ratio !== "natural")),
+);
 
 const renderedContent = computed(() => {
   switch (contentType.value) {
@@ -274,6 +292,7 @@ if (import.meta.env.DEV && props.claim_experience) {
 </script>
 
 <template>
+  <FormFlowPresentation :presentation="presentation">
   <Head :title="pageTitle" />
 
   <!-- ============================================================ -->
@@ -281,7 +300,7 @@ if (import.meta.env.DEV && props.claim_experience) {
   <!-- ============================================================ -->
   <div
     v-if="is_default_splash"
-    class="min-h-screen bg-gradient-to-b from-primary/5 via-background to-background px-5 py-8 select-none"
+    class="x-claim-canvas min-h-screen bg-gradient-to-b from-primary/5 via-background to-background px-5 py-8 select-none"
   >
     <Card class="mx-auto w-full max-w-4xl border-0 bg-card/90 shadow-sm">
       <CardContent
@@ -289,7 +308,7 @@ if (import.meta.env.DEV && props.claim_experience) {
       >
         <!-- Hero logo -->
         <img
-          v-if="app_logo"
+          v-if="!presentation && app_logo"
           :src="app_logo"
           :alt="app_name ?? 'Logo'"
           class="form-flow-default-splash-logo mb-4 w-auto object-contain drop-shadow-lg animate-fade-in"
@@ -314,22 +333,12 @@ if (import.meta.env.DEV && props.claim_experience) {
 
           <div
             data-testid="form-flow-splash-pay-code"
-            class="flex w-full items-center gap-3 sm:gap-5"
+            class="@container flex w-full items-center justify-center"
           >
-            <span class="flex min-w-6 flex-1 flex-col gap-2">
-              <span class="form-flow-splash-pay-code-rule" />
-              <span class="form-flow-splash-pay-code-rule" />
-            </span>
             <span
               :style="voucherCodeDisplayStyle"
-              class="min-w-0 max-w-full break-all font-mono font-black uppercase leading-none text-primary"
-            >
-              {{ voucher_code }}
-            </span>
-            <span class="flex min-w-6 flex-1 flex-col gap-2">
-              <span class="form-flow-splash-pay-code-rule" />
-              <span class="form-flow-splash-pay-code-rule" />
-            </span>
+              class="max-w-full whitespace-nowrap font-mono font-black uppercase leading-none text-primary"
+            >{{ `|| ${voucher_code} ||` }}</span>
           </div>
         </div>
 
@@ -389,27 +398,57 @@ if (import.meta.env.DEV && props.claim_experience) {
   <!-- ============================================================ -->
   <div
     v-else
-    :class="
-      isDisburseFlow
+    class="min-w-0"
+    :style="isArtworkSplash && presentation ? { minHeight: 'calc(100svh - 11rem)', padding: '0' } : undefined"
+    :class="[isArtworkSplash ? 'flex flex-col items-center' : 'x-claim-canvas',
+
+      isArtworkSplash ? '' : isDisburseFlow
         ? 'min-h-screen flex items-center justify-center bg-gradient-to-b from-primary/5 via-background to-background p-4'
         : 'min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4'
-    "
+    ]"
   >
+    <FormFlowArtworkSurface v-if="isArtworkSplash" :artwork-src="splashArtworkSource" class="self-stretch">
+      <h2 v-if="title" class="text-center text-2xl font-semibold">{{ title }}</h2>
+      <Card class="w-full max-w-2xl min-w-0 gap-0 border-0 py-0 shadow-sm" data-testid="form-flow-splash-artwork-card">
+        <CardContent class="min-w-0 p-0">
+          <FormFlowHtmlContent :html="renderedContent" />
+        </CardContent>
+      </Card>
+      <template #footer>
+      <p v-if="timeoutSeconds > 0" class="text-center text-xs text-muted-foreground" role="status">{{ remainingSeconds }}s</p>
+      <FormFlowVersionStrip :show="show_package_versions" :package-versions="package_versions" context="splash" />
+      <FormFlowActions
+        :action-placement="splashActionPlacement"
+        :processing="submitting"
+        :primary-disabled="submitting"
+        :show-secondary="false"
+        :primary-label="primaryActionLabel"
+        primary-type="button"
+        :variant="isDisburseFlow ? 'immersive' : 'default'"
+        @primary="handleContinue"
+      />
+      </template>
+    </FormFlowArtworkSurface>
     <Card
+      v-else
       :class="
         isDisburseFlow
-          ? 'w-full max-w-2xl overflow-visible border-0 shadow-sm bg-card/80'
-          : 'w-full max-w-2xl overflow-visible'
+          ? 'min-w-0 w-full max-w-2xl overflow-visible border-0 shadow-sm bg-card/80'
+          : 'min-w-0 w-full max-w-2xl overflow-visible'
       "
     >
       <CardHeader v-if="title">
         <CardTitle class="text-center text-2xl">{{ title }}</CardTitle>
       </CardHeader>
 
-      <CardContent class="space-y-6 overflow-visible">
+      <CardContent class="min-w-0 space-y-6 overflow-visible">
         <!-- Rendered content -->
+        <FormFlowHtmlContent
+          v-if="contentType === 'html' || contentType === 'svg'"
+          :html="renderedContent"
+        />
         <div
-          v-if="contentType !== 'text'"
+          v-else-if="contentType !== 'text'"
           v-html="renderedContent"
           class="prose prose-base max-w-none dark:prose-invert text-center overflow-visible"
         />
@@ -474,6 +513,8 @@ if (import.meta.env.DEV && props.claim_experience) {
       </CardContent>
     </Card>
   </div>
+
+  </FormFlowPresentation>
 </template>
 
 <style scoped>
@@ -513,15 +554,6 @@ if (import.meta.env.DEV && props.claim_experience) {
   }
 }
 
-.form-flow-splash-pay-code-rule {
-  display: block;
-  width: 100%;
-  height: 2px;
-  border-radius: 9999px;
-  background: currentColor;
-  color: hsl(var(--foreground));
-  opacity: 0.75;
-}
 
 /* Prose overrides for custom splash content */
 .prose :deep(img) {

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import FormFlowPresentation from "./components/FormFlowPresentation.vue";
+import type { FormFlowPresentation as PresentationPolicy } from "./components/formFlowPresentation";
 import { ref, computed, watch, onMounted, nextTick } from "vue";
 import { router, Head } from "@inertiajs/vue3";
 import {
@@ -137,6 +139,7 @@ interface ClaimExperience {
 }
 
 interface Props {
+  presentation?: PresentationPolicy | null;
   flow_id: string;
   step_index: number;
   step_name?: string;
@@ -313,6 +316,7 @@ const uiVariant = computed(() => normalizeFormFlowUiVariant(props.ui_variant));
 const isCompactUi = computed(() => uiVariant.value === "compact");
 const isImmersiveUi = computed(() => uiVariant.value === "immersive");
 const screenClass = computed(() => {
+  if (props.presentation) return "mx-auto w-full max-w-lg px-4 py-2";
   if (!isDisburseFlow.value) {
     return "container mx-auto max-w-2xl px-4 py-8";
   }
@@ -770,9 +774,12 @@ function clearAccountNumber(): void {
   manualOverrides.value.account_number = false;
 }
 
-function shouldShowPayoutRouteSegmentText(index: number): boolean {
-  return index === 0 || index === payoutRouteSegmentsList.value.length - 1;
-}
+const payoutRouteDetails = computed(() => {
+  const labels = ["Amount", "Payment method", "Bank / wallet", "Account number"].slice(-payoutRouteSegmentsList.value.length);
+  return payoutRouteSegmentsList.value.map((value, index) => ({
+    label: labels[index], value, icon: payoutRouteIconsList.value[index],
+  }));
+});
 
 // Form submission
 async function handleSubmit() {
@@ -856,6 +863,7 @@ if (import.meta.env.DEV && props.claim_experience) {
 </script>
 
 <template>
+  <FormFlowPresentation :presentation="presentation">
   <Head :title="pageTitle" />
 
   <div :class="screenClass" :data-form-flow-ui-variant="uiVariant">
@@ -873,10 +881,16 @@ if (import.meta.env.DEV && props.claim_experience) {
     </Alert>
 
     <!-- Form Card -->
+    <FormFlowVersionStrip
+      v-if="presentation"
+      :show="props.show_package_versions"
+      :package-versions="props.package_versions"
+      :context="props.package_version_context"
+    />
     <Card :class="cardClass">
       <CardHeader :class="cardHeaderClass">
         <div
-          v-if="props.app_logo || props.app_name"
+          v-if="!presentation && (props.app_logo || props.app_name)"
           class="mb-3 flex items-center gap-3"
         >
           <img
@@ -906,7 +920,7 @@ if (import.meta.env.DEV && props.claim_experience) {
           />
 
           <div
-            v-if="claimWorkflow"
+            v-if="claimWorkflow && (!presentation || claimWorkflowReview.length > 0)"
             class="rounded-lg border border-primary/15 bg-primary/5 p-3"
             data-testid="form-flow-claim-workflow-panel"
           >
@@ -1139,8 +1153,8 @@ if (import.meta.env.DEV && props.claim_experience) {
             :key="groupName"
           >
             <div class="space-y-3">
-              <fieldset class="rounded-lg border bg-muted/5 px-4 pb-4 pt-2">
-                <legend class="px-2 text-sm font-medium text-muted-foreground">
+              <fieldset class="min-w-0 rounded-lg border bg-muted/5 p-0" data-testid="form-flow-field-group">
+                <legend class="mx-2 px-2 text-sm font-medium text-muted-foreground">
                   {{
                     groupName
                       .replace("_", " ")
@@ -1148,11 +1162,11 @@ if (import.meta.env.DEV && props.claim_experience) {
                   }}
                 </legend>
 
-                <div class="mt-2 space-y-3">
+                <div class="min-w-0 space-y-3 px-4 py-3" data-testid="form-flow-field-group-content">
                   <div
                     v-for="field in groupFields"
                     :key="field.name"
-                    class="space-y-2"
+                    class="min-w-0 w-full space-y-2"
                   >
                     <!-- Render field with standard template below -->
                     <template
@@ -1773,7 +1787,8 @@ if (import.meta.env.DEV && props.claim_experience) {
 
           <div
             v-if="payoutRouteVisible"
-            class="rounded-2xl border border-blue-100 bg-blue-50/70 p-3.5 shadow-sm dark:border-blue-950 dark:bg-blue-950/20"
+            class="min-w-0 rounded-xl border border-blue-100 bg-blue-50/70 p-4 dark:border-blue-950 dark:bg-blue-950/20"
+            data-testid="form-flow-destination-summary"
           >
             <div class="flex items-start justify-between gap-3">
               <div class="min-w-0">
@@ -1792,40 +1807,16 @@ if (import.meta.env.DEV && props.claim_experience) {
                 }}
               </Badge>
             </div>
-            <div class="mt-3 flex min-w-0 items-center gap-2 overflow-hidden whitespace-nowrap">
-              <template
-                v-for="(segment, index) in payoutRouteSegmentsList"
-                :key="`${segment}-${index}`"
-              >
-                <span
-                  class="inline-flex min-w-0 items-center text-sm font-semibold text-slate-950 dark:text-white"
-                  :class="{
-                    'shrink-0 text-blue-900 dark:text-blue-100': index === 0,
-                    'shrink font-mono': index === payoutRouteSegmentsList.length - 1,
-                  }"
-                >
-                  <PayoutDestinationIcon
-                    :icon-asset="payoutRouteIconsList[index]"
-                    :alt="segment"
-                    size-class="h-5 w-5"
-                  />
-                  <span
-                    v-if="shouldShowPayoutRouteSegmentText(index)"
-                    class="min-w-0 truncate"
-                  >
-                    {{ segment }}
-                  </span>
-                </span>
-                <span
-                  v-if="index < payoutRouteSegmentsList.length - 1"
-                  class="shrink-0 text-xs text-muted-foreground"
-                  aria-hidden="true"
-                >
-                  ->
-                </span>
-              </template>
-            </div>
-            <p class="mt-2 text-[11px] leading-snug text-slate-500">
+            <dl class="mt-4 grid min-w-0 grid-cols-2 gap-4">
+              <div v-for="detail in payoutRouteDetails" :key="detail.label" class="min-w-0">
+                <dt class="text-[11px] leading-4 text-slate-500 dark:text-slate-400">{{ detail.label }}</dt>
+                <dd class="mt-1 flex min-w-0 items-start gap-2 text-sm font-semibold leading-5 text-slate-950 dark:text-white">
+                  <PayoutDestinationIcon :icon-asset="detail.icon" alt="" size-class="h-5 w-5 shrink-0" />
+                  <span class="min-w-0 break-words [overflow-wrap:anywhere]" :class="detail.label === 'Account number' ? 'font-mono tabular-nums' : ''">{{ detail.value }}</span>
+                </dd>
+              </div>
+            </dl>
+            <p class="mt-4 border-t border-blue-100 pt-3 text-xs leading-relaxed text-slate-500 dark:border-blue-950 dark:text-slate-400">
               Check the destination before continuing. Maya Wallet and Maya Bank
               are different destinations.
             </p>
@@ -1847,9 +1838,12 @@ if (import.meta.env.DEV && props.claim_experience) {
     </Card>
 
     <FormFlowVersionStrip
+      v-if="!presentation"
       :show="props.show_package_versions"
       :package-versions="props.package_versions"
       :context="props.package_version_context"
     />
   </div>
+
+  </FormFlowPresentation>
 </template>

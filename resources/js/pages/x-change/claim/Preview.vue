@@ -7,6 +7,7 @@ Do not edit this published host copy directly.
 Changes will be overwritten by php artisan x-change:publish --scope=build --force.
 -->
 <script setup lang="ts">
+import type { FormFlowPresentation } from '@/pages/form-flow/core/components/formFlowPresentation';
 import { Head } from '@inertiajs/vue3';
 import CockpitClaimLiveScreen from '../../../cockpit/components/CockpitClaimLiveScreen.vue';
 import type { CockpitClaimExperiencePreviewStep } from '../../../cockpit/types';
@@ -14,6 +15,7 @@ import type { CockpitClaimExperiencePreviewStep } from '../../../cockpit/types';
 defineOptions({ layout: null });
 
 defineProps<{
+    claim_ui?: FormFlowPresentation | null;
     step: CockpitClaimExperiencePreviewStep;
     viewport: {
         profile: string;
@@ -40,6 +42,7 @@ defineProps<{
         <CockpitClaimLiveScreen
             v-else-if="step.screen"
             :screen="step.screen"
+            :profile="claim_ui"
             presentation="viewport"
         />
     </main>

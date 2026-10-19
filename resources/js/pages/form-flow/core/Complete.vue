@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import FormFlowStatusIcon from "./components/FormFlowStatusIcon.vue";
+import FormFlowPresentation from "./components/FormFlowPresentation.vue";
+import type { FormFlowPresentation as PresentationPolicy } from "./components/formFlowPresentation";
 import { Head, router } from "@inertiajs/vue3";
 import {
   Card,
@@ -11,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
-import { AlertCircle, CheckCircle2, Clock, Landmark, Route, WalletCards } from "lucide-vue-next";
+import { AlertCircle, Clock, Landmark, Route, WalletCards } from "lucide-vue-next";
 import type { Component } from "vue";
 import { computed, ref, onUnmounted } from "vue";
 import { useFormFlowSummary } from "@/composables/useFormFlowSummary";
@@ -51,6 +54,7 @@ interface PackageVersion {
 }
 
 interface Props {
+  presentation?: PresentationPolicy | null;
   flow_id: string;
   state: {
     reference_id: string;
@@ -325,6 +329,7 @@ if (import.meta.env.DEV && props.claim_experience) {
 </script>
 
 <template>
+  <FormFlowPresentation :presentation="presentation">
   <Head title="Flow Complete" />
 
   <!-- ============================================================ -->
@@ -334,7 +339,7 @@ if (import.meta.env.DEV && props.claim_experience) {
     <!-- Processing State -->
     <div
       v-if="isProcessing"
-      class="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary/5 via-background to-background px-6"
+      class="x-claim-canvas min-h-screen flex items-center justify-center bg-gradient-to-b from-primary/5 via-background to-background px-6"
     >
       <!-- Error -->
       <div v-if="showError" class="w-full max-w-sm text-center space-y-6">
@@ -385,7 +390,7 @@ if (import.meta.env.DEV && props.claim_experience) {
     <!-- Completed / Review State -->
     <div
       v-else
-      class="min-h-screen bg-gradient-to-b from-primary/5 via-background to-background px-5 py-8"
+      class="x-claim-canvas min-h-screen bg-gradient-to-b from-primary/5 via-background to-background px-5 py-8"
     >
       <Card class="mx-auto max-w-md border-0 bg-card/80 shadow-sm">
         <CardContent class="flex flex-col gap-6 px-6 py-8">
@@ -568,7 +573,7 @@ if (import.meta.env.DEV && props.claim_experience) {
       <template v-else>
         <CardHeader class="text-center">
           <div class="flex justify-center mb-4">
-            <CheckCircle2 class="h-16 w-16 text-green-500" />
+            <FormFlowStatusIcon role="success" />
           </div>
           <CardTitle class="text-2xl">Flow Completed</CardTitle>
           <CardDescription
@@ -634,4 +639,6 @@ if (import.meta.env.DEV && props.claim_experience) {
       </template>
     </Card>
   </div>
+
+  </FormFlowPresentation>
 </template>
