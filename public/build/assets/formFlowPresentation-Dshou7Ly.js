@@ -1,0 +1,1 @@
+import{J as e,g as t}from"./runtime-core.esm-bundler-CaODJcyn.js";var n=Symbol(`form-flow-presentation`);function r(){return e(n,t(()=>null))}var i=Symbol(`form-flow-artwork`);export{n,r,i as t};
