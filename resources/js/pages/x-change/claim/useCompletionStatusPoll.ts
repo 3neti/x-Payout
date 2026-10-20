@@ -10,7 +10,7 @@ import { computed, onMounted, onUnmounted, ref, watch, type Ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 
 /** Re-read presentation only; never invoke claim or policy execution. */
-export function useCompletionStatusPoll(processing: Ref<boolean>, riderPending: () => boolean = () => false) {
+export function useCompletionStatusPoll(processing: Ref<boolean>) {
     const checking = ref(false);
     const stopped = ref(false);
     let mounted = false;
@@ -74,9 +74,7 @@ export function useCompletionStatusPoll(processing: Ref<boolean>, riderPending: 
     onMounted(() => { mounted = true; begin(); });
     onUnmounted(() => { mounted = false; clear(); });
 
-    const message = computed(() => riderPending()
-        ? (stopped.value ? 'The status check has stopped. Check again to continue.' : 'Checking payment status…')
-        : stopped.value
+    const message = computed(() => stopped.value
         ? 'Processing is taking longer than expected or the status check is unavailable. We’ll send the link by SMS when it is ready. You can check the status again.'
         : 'This page will update automatically when your policy result is ready.');
 

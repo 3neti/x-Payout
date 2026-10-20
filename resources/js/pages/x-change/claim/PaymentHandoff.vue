@@ -7,17 +7,10 @@ Do not edit this published host copy directly.
 Changes will be overwritten by php artisan x-change:publish --scope=build --force.
 -->
 <script setup lang="ts">
-import { useClaimActionLabel } from '@/composables/useClaimActionLabel';
-
-import ClaimStatePanel from '@/components/x-change/ClaimStatePanel.vue';
-import FormFlowActions from '@/pages/form-flow/core/components/FormFlowActions.vue';
-
 import { Head, Link } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import ClaimStepShell from '@/components/x-change/ClaimStepShell.vue';
 import { CheckCircle2, CreditCard } from 'lucide-vue-next';
-
-const claimActionLabel = useClaimActionLabel();
 
 defineOptions({ layout: null });
 
@@ -64,11 +57,16 @@ function dateTime(value: string | null): string | null {
         :tone="is_fully_collected ? 'success' : 'neutral'"
         width="sm"
     >
-        <ClaimStatePanel
-            :role="is_fully_collected ? 'success' : 'pending'"
-            class="space-y-5 text-center"
-            data-testid="payment-handoff-page"
-        >
+        <div class="space-y-5 text-center" data-testid="payment-handoff-page">
+            <component
+                :is="is_fully_collected ? CheckCircle2 : CreditCard"
+                class="mx-auto h-11 w-11"
+                :class="
+                    is_fully_collected ? 'text-emerald-600' : 'text-primary'
+                "
+                aria-hidden="true"
+            />
+
             <div class="space-y-2">
                 <p
                     class="text-xs font-semibold tracking-[0.18em] text-muted-foreground uppercase"
@@ -130,18 +128,14 @@ function dateTime(value: string | null): string | null {
                 </p>
             </div>
 
-            <FormFlowActions v-if="payment_url" :show-secondary="false"
-                ><Button
-                    v-if="payment_url"
-                    as-child
-                    class="w-full"
-                    data-testid="payment-handoff-open-payment"
-                >
-                    <Link :href="payment_url">{{
-                        claimActionLabel('open_link', 'Open payment page')
-                    }}</Link>
-                </Button></FormFlowActions
+            <Button
+                v-if="payment_url"
+                as-child
+                class="w-full"
+                data-testid="payment-handoff-open-payment"
             >
-        </ClaimStatePanel>
+                <Link :href="payment_url">Open payment page</Link>
+            </Button>
+        </div>
     </ClaimStepShell>
 </template>

@@ -26,9 +26,7 @@ export function applyExperienceTheme(value: string | null | undefined): void {
         return;
     }
 
-    const id = Boolean(document.documentElement.dataset.xChangeClaimAppearance)
-        ? experienceProfile.defaultTheme
-        : resolveExperienceTheme(value);
+    const id = resolveExperienceTheme(value);
     const definition = findExperienceTheme(id);
     const root = document.documentElement;
     root.dataset.xChangeTheme = id;
