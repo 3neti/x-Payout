@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e0b7b80b9f1884007993fb40e0db829c",
+    "content-hash": "00c129bed13f25ea9e86b590aaaad794",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1434,16 +1434,16 @@
         },
         {
             "name": "3neti/wallet",
-            "version": "v2.1.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/wallet.git",
-                "reference": "a6fba2ef9d13fdfda397a53347e4b88d8f7469f9"
+                "reference": "8f1387df0906058edf299f21a91e7ed6953f9a48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/wallet/zipball/a6fba2ef9d13fdfda397a53347e4b88d8f7469f9",
-                "reference": "a6fba2ef9d13fdfda397a53347e4b88d8f7469f9",
+                "url": "https://api.github.com/repos/3neti/wallet/zipball/8f1387df0906058edf299f21a91e7ed6953f9a48",
+                "reference": "8f1387df0906058edf299f21a91e7ed6953f9a48",
                 "shasum": ""
             },
             "require": {
@@ -1485,9 +1485,9 @@
             "description": "Custom wallet for X-Change",
             "support": {
                 "issues": "https://github.com/3neti/wallet/issues",
-                "source": "https://github.com/3neti/wallet/tree/v2.1.0"
+                "source": "https://github.com/3neti/wallet/tree/v2.1.1"
             },
-            "time": "2026-09-29T02:45:51+00:00"
+            "time": "2026-10-20T11:59:55+00:00"
         },
         {
             "name": "3neti/x-action",
@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.258",
+            "version": "v1.0.266",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "694c67f317ca6b5ec9234b9af94735b7cb29832b"
+                "reference": "d48a64c3423fd118f8625296c79608239da0271d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/694c67f317ca6b5ec9234b9af94735b7cb29832b",
-                "reference": "694c67f317ca6b5ec9234b9af94735b7cb29832b",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/d48a64c3423fd118f8625296c79608239da0271d",
+                "reference": "d48a64c3423fd118f8625296c79608239da0271d",
                 "shasum": ""
             },
             "require": {
@@ -1781,22 +1781,22 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.258"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.266"
             },
-            "time": "2026-10-20T04:26:46+00:00"
+            "time": "2026-10-20T22:21:52+00:00"
         },
         {
             "name": "3neti/x-commerce",
-            "version": "v1.4.5",
+            "version": "v1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-commerce.git",
-                "reference": "920aaf432d461d376e74548a2c666e753ca379c7"
+                "reference": "9e652de8f83c959c6d9059b9c68cf2167eaceece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-commerce/zipball/920aaf432d461d376e74548a2c666e753ca379c7",
-                "reference": "920aaf432d461d376e74548a2c666e753ca379c7",
+                "url": "https://api.github.com/repos/3neti/x-commerce/zipball/9e652de8f83c959c6d9059b9c68cf2167eaceece",
+                "reference": "9e652de8f83c959c6d9059b9c68cf2167eaceece",
                 "shasum": ""
             },
             "require": {
@@ -1838,9 +1838,9 @@
             ],
             "support": {
                 "issues": "https://github.com/3neti/x-commerce/issues",
-                "source": "https://github.com/3neti/x-commerce/tree/v1.4.5"
+                "source": "https://github.com/3neti/x-commerce/tree/v1.4.6"
             },
-            "time": "2026-10-18T14:27:44+00:00"
+            "time": "2026-10-20T22:21:48+00:00"
         },
         {
             "name": "3neti/x-feedback",
@@ -2340,16 +2340,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.401.3",
+            "version": "3.401.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7b8541e8a4f09cf4375eeef4de6c638dfb2dadbb"
+                "reference": "b5941e2da9fb860f06ad5046d96219c4288ab6b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7b8541e8a4f09cf4375eeef4de6c638dfb2dadbb",
-                "reference": "7b8541e8a4f09cf4375eeef4de6c638dfb2dadbb",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b5941e2da9fb860f06ad5046d96219c4288ab6b8",
+                "reference": "b5941e2da9fb860f06ad5046d96219c4288ab6b8",
                 "shasum": ""
             },
             "require": {
@@ -2431,9 +2431,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.401.3"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.401.4"
             },
-            "time": "2026-10-19T18:11:47+00:00"
+            "time": "2026-10-20T18:15:27+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -10136,16 +10136,16 @@
         },
         {
             "name": "spatie/image",
-            "version": "3.9.8",
+            "version": "3.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image.git",
-                "reference": "75f46c2c0b055f68f54b3c7aa1d941cadfd6e2ee"
+                "reference": "929c00fdab6c0c929e69524fffd1a658167cbcc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image/zipball/75f46c2c0b055f68f54b3c7aa1d941cadfd6e2ee",
-                "reference": "75f46c2c0b055f68f54b3c7aa1d941cadfd6e2ee",
+                "url": "https://api.github.com/repos/spatie/image/zipball/929c00fdab6c0c929e69524fffd1a658167cbcc2",
+                "reference": "929c00fdab6c0c929e69524fffd1a658167cbcc2",
                 "shasum": ""
             },
             "require": {
@@ -10195,7 +10195,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/image/tree/3.9.8"
+                "source": "https://github.com/spatie/image/tree/3.9.9"
             },
             "funding": [
                 {
@@ -10207,7 +10207,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-10-19T12:25:37+00:00"
+            "time": "2026-10-20T06:00:43+00:00"
         },
         {
             "name": "spatie/image-optimizer",
