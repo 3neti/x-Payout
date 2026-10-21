@@ -6,15 +6,16 @@ Companion: [deployment compass](X_PAYOUT_PUBLIC_CLOUD_DEPLOYMENT_COMPASS.md).
 
 ## Sources of truth
 
-- x-stamp: `docs/rendering/PLAN.md` and `docs/rendering/COMPASS.md` own the portable
-  provider/quality design. Documentation branch: `docs/configurable-stamp-rendering`.
-- x-change: `docs/claim-ux/stamp-browser-rendering-guide.md` owns instruction
-  projection, frozen orders, artifact compatibility, retries and financial policy.
+- x-stamp: the [rendering plan](https://github.com/3neti/x-stamp/blob/v1.4.1/docs/rendering/PLAN.md)
+  and [compass](https://github.com/3neti/x-stamp/blob/v1.4.1/docs/rendering/COMPASS.md)
+  own the portable provider and quality design.
+- x-change: the [browser rendering guide](https://github.com/3neti/x-change/blob/v1.0.269/docs/claim-ux/stamp-browser-rendering-guide.md)
+  owns instruction projection, frozen orders, artifact compatibility, retries and financial policy.
 - This host owns environment settings, scoped credentials and operational
   acceptance. Change package source first; never patch generated frontend copies.
 
-Cross-repository paths above are in their respective owning repositories. These
-new documentation commits remain local until an explicit publication step.
+These immutable cross-repository references describe proposed work. Publishing
+this runbook does not activate Cloudflare or change a rendering profile.
 
 ## Last verified release evidence: 2026-10-20
 
