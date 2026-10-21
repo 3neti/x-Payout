@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
             >
                 <div
                     v-if="mobileHeaderVisible"
-                    class="fixed inset-x-0 top-0 z-50 border-b border-sidebar-border/70 bg-background/95 shadow-sm backdrop-blur md:hidden"
+                    class="border-sidebar-border/70 bg-background/95 fixed inset-x-0 top-0 z-50 border-b shadow-sm backdrop-blur md:hidden"
                     data-testid="cockpit-mobile-revealed-header"
                     @pointerenter="clearHideTimer"
                     @pointerleave="revealMobileHeader"

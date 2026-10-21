@@ -69,9 +69,11 @@ final readonly class EmiProviderPrerequisiteProbe implements PrerequisiteProbe
         ));
 
         if (! $result->ready) {
+            $failureCode = $result->failureCode;
+
             return [
                 'status' => 'blocked',
-                'reason' => 'The provider rejected the read-only live-readiness probe ['.($result->failureCode?->value ?? 'unknown').'].',
+                'reason' => 'The provider rejected the read-only live-readiness probe ['.($failureCode === null ? 'unknown' : $failureCode->value).'].',
                 'remediation' => 'Correct the provider identity, source account, credentials, endpoint, or capability before deployment.',
                 'evidence' => [
                     'driver' => $connection['driver'],

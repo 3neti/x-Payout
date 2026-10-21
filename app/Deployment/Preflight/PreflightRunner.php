@@ -45,6 +45,7 @@ final class PreflightRunner
 
     /**
      * @param  array<string, mixed>  $plan
+     * @param  list<string>  $notApplicableCheckIds
      * @return array<string, mixed>
      */
     public function run(

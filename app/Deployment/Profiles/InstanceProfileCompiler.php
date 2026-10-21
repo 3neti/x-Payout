@@ -305,7 +305,13 @@ final class InstanceProfileCompiler
                 throw new InstanceProfileException("Compiled artifact [{$artifactName}] is missing or unreadable.");
             }
 
-            $contents[$artifactName] = file_get_contents($path);
+            $content = file_get_contents($path);
+
+            if ($content === false) {
+                throw new InstanceProfileException("Compiled artifact [{$artifactName}] could not be read.");
+            }
+
+            $contents[$artifactName] = $content;
         }
 
         $manifestPath = rtrim($directory, '/').'/manifest.sha256';
@@ -321,7 +327,13 @@ final class InstanceProfileCompiler
         }
 
         $expectedManifest = hash('sha256', $manifestMaterial);
-        $actualManifest = trim((string) file_get_contents($manifestPath));
+        $manifestContents = file_get_contents($manifestPath);
+
+        if ($manifestContents === false) {
+            throw new InstanceProfileException('Compiled artifact [manifest.sha256] could not be read.');
+        }
+
+        $actualManifest = trim($manifestContents);
 
         if (! hash_equals($expectedManifest, $actualManifest)) {
             throw new InstanceProfileException('Compiled artifact manifest does not match its contents.');
@@ -411,7 +423,7 @@ final class InstanceProfileCompiler
         }
     }
 
-    /** @param array<string, mixed> $mapping */
+    /** @param array<array-key, mixed> $mapping */
     private function assertBooleanMapping(array $mapping, string $path): void
     {
         foreach ($mapping as $key => $value) {

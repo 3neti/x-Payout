@@ -1,0 +1,25 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+        "resources/js/app.ts",
+        "resources/js/components/*.vue",
+        "resources/js/composables/useAppearance.ts",
+        "resources/js/composables/useCurrentUrl.ts",
+        "resources/js/composables/useInitials.ts",
+        "resources/js/composables/useTheme.ts",
+        "resources/js/composables/useTwoFactorAuth.ts",
+        "resources/js/layouts/**/*.vue",
+        "resources/js/lib/**/*.ts",
+        "resources/js/pages/Welcome.vue",
+        "resources/js/pages/auth/**/*.vue",
+        "resources/js/pages/settings/**/*.vue",
+        "resources/js/types/**/*.ts"
+    ],
+    "exclude": [
+        "resources/js/components/NumberInputWithKeypad.vue",
+        "resources/js/components/NumericKeypad.vue",
+        "resources/js/layouts/PublicLayout.vue",
+        "resources/js/layouts/x-change/**",
+        "resources/js/types/voucher.d.ts"
+    ]
+}
