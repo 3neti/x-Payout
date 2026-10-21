@@ -1,0 +1,86 @@
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../wayfinder'
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingVerificationCheckController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingVerificationCheckController.php:19
+* @route '/x/cockpit/funding/intents/{intent}/verification-checks'
+*/
+export const store = (args: { intent: string | number | { reference: string | number } } | [intent: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(args, options),
+    method: 'post',
+})
+
+store.definition = {
+    methods: ["post"],
+    url: '/x/cockpit/funding/intents/{intent}/verification-checks',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingVerificationCheckController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingVerificationCheckController.php:19
+* @route '/x/cockpit/funding/intents/{intent}/verification-checks'
+*/
+store.url = (args: { intent: string | number | { reference: string | number } } | [intent: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { intent: args }
+    }
+
+    if (typeof args === 'object' && !Array.isArray(args) && 'reference' in args) {
+        args = { intent: args.reference }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            intent: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        intent: typeof args.intent === 'object'
+        ? args.intent.reference
+        : args.intent,
+    }
+
+    return store.definition.url
+            .replace('{intent}', parsedArgs.intent.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingVerificationCheckController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingVerificationCheckController.php:19
+* @route '/x/cockpit/funding/intents/{intent}/verification-checks'
+*/
+store.post = (args: { intent: string | number | { reference: string | number } } | [intent: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: store.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingVerificationCheckController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingVerificationCheckController.php:19
+* @route '/x/cockpit/funding/intents/{intent}/verification-checks'
+*/
+const storeForm = (args: { intent: string | number | { reference: string | number } } | [intent: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingVerificationCheckController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingVerificationCheckController.php:19
+* @route '/x/cockpit/funding/intents/{intent}/verification-checks'
+*/
+storeForm.post = (args: { intent: string | number | { reference: string | number } } | [intent: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(args, options),
+    method: 'post',
+})
+
+store.form = storeForm
+
+const verificationChecks = {
+    store: Object.assign(store, store),
+}
+
+export default verificationChecks

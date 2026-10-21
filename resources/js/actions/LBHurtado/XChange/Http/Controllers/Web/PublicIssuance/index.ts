@@ -1,0 +1,21 @@
+import PublicIssuanceBatchRecoveryDiscoveryController from './PublicIssuanceBatchRecoveryDiscoveryController'
+import PublicIssuanceBatchController from './PublicIssuanceBatchController'
+import PublicIssuanceBatchPayCodesPageController from './PublicIssuanceBatchPayCodesPageController'
+import PublicIssuanceBatchRecoveryController from './PublicIssuanceBatchRecoveryController'
+import PublicIssuanceBatchPayCodeDetailController from './PublicIssuanceBatchPayCodeDetailController'
+import PublicCheckoutDraftController from './PublicCheckoutDraftController'
+import PublicIssuanceVoucherActionController from './PublicIssuanceVoucherActionController'
+import PublicCheckoutFundingMethodController from './PublicCheckoutFundingMethodController'
+
+const PublicIssuance = {
+    PublicIssuanceBatchRecoveryDiscoveryController: Object.assign(PublicIssuanceBatchRecoveryDiscoveryController, PublicIssuanceBatchRecoveryDiscoveryController),
+    PublicIssuanceBatchController: Object.assign(PublicIssuanceBatchController, PublicIssuanceBatchController),
+    PublicIssuanceBatchPayCodesPageController: Object.assign(PublicIssuanceBatchPayCodesPageController, PublicIssuanceBatchPayCodesPageController),
+    PublicIssuanceBatchRecoveryController: Object.assign(PublicIssuanceBatchRecoveryController, PublicIssuanceBatchRecoveryController),
+    PublicIssuanceBatchPayCodeDetailController: Object.assign(PublicIssuanceBatchPayCodeDetailController, PublicIssuanceBatchPayCodeDetailController),
+    PublicCheckoutDraftController: Object.assign(PublicCheckoutDraftController, PublicCheckoutDraftController),
+    PublicIssuanceVoucherActionController: Object.assign(PublicIssuanceVoucherActionController, PublicIssuanceVoucherActionController),
+    PublicCheckoutFundingMethodController: Object.assign(PublicCheckoutFundingMethodController, PublicCheckoutFundingMethodController),
+}
+
+export default PublicIssuance
