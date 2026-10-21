@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import {
+  useFormFlowPresentation,
+  actionLabel,
+  type ActionRole,
+} from "./formFlowPresentation";
 import type { ButtonHTMLAttributes } from "vue";
 import { computed, type CSSProperties } from "vue";
 import { Loader2 } from "lucide-vue-next";
@@ -16,6 +21,8 @@ type FormFlowActionPlacement =
 
 const props = withDefaults(
   defineProps<{
+    primaryRole?: ActionRole;
+    secondaryRole?: ActionRole;
     primaryLabel?: string;
     secondaryLabel?: string;
     primaryType?: ButtonHTMLAttributes["type"];
@@ -44,20 +51,24 @@ const emit = defineEmits<{
   secondary: [];
 }>();
 
+const presentation = useFormFlowPresentation();
 const normalizedVariant = computed(() =>
-  normalizeFormFlowUiVariant(props.variant),
+  normalizeFormFlowUiVariant(
+    presentation.value?.layout.density ?? props.variant,
+  ),
 );
 
-const normalizedActionPlacement = computed<FormFlowActionPlacement>(() =>
-  props.actionPlacement === "bottom_sticky" ||
-  props.actionPlacement === "viewport_bottom" ||
-  props.actionPlacement === "bottom" ||
-  props.actionPlacement === "inline"
+const normalizedActionPlacement = computed<FormFlowActionPlacement>(() => {
+  if (presentation.value) return presentation.value.actions.placement;
+  return props.actionPlacement === "bottom_sticky" ||
+    props.actionPlacement === "viewport_bottom" ||
+    props.actionPlacement === "bottom" ||
+    props.actionPlacement === "inline"
     ? props.actionPlacement
     : normalizedVariant.value === "immersive"
       ? "bottom"
-      : "inline",
-);
+      : "inline";
+});
 
 const containerClass = computed(() => {
   const columns =
@@ -96,8 +107,8 @@ const buttonClass = computed(() =>
   normalizedActionPlacement.value === "viewport_bottom"
     ? "h-11 w-full rounded-full shadow-lg shadow-foreground/10"
     : normalizedVariant.value === "immersive"
-    ? "h-11 w-full rounded-full"
-    : "w-full rounded-full",
+      ? "h-11 w-full rounded-full"
+      : "w-full rounded-full",
 );
 
 const viewportBottomStyle = computed<CSSProperties | undefined>(() =>
@@ -114,26 +125,43 @@ const viewportBottomStyle = computed<CSSProperties | undefined>(() =>
     aria-hidden="true"
   />
 
-  <div :class="containerClass" :style="viewportBottomStyle">
-    <Button
-      v-if="props.showSecondary"
-      type="button"
-      variant="outline"
-      :class="buttonClass"
-      :disabled="props.secondaryDisabled || props.processing"
-      @click="emit('secondary')"
-    >
-      {{ props.secondaryLabel }}
-    </Button>
+  <div data-flow-actions :class="containerClass" :style="viewportBottomStyle">
+    <slot>
+      <Button
+        v-if="props.showSecondary"
+        type="button"
+        variant="outline"
+        :class="buttonClass"
+        :disabled="props.secondaryDisabled || props.processing"
+        @click="emit('secondary')"
+      >
+        {{
+          actionLabel(
+            presentation,
+            props.secondaryRole,
+            props.secondaryLabel,
+            false,
+            true,
+          )
+        }}
+      </Button>
 
-    <Button
-      :type="props.primaryType"
-      :class="buttonClass"
-      :disabled="props.primaryDisabled || props.processing"
-      @click="emit('primary')"
-    >
-      <Loader2 v-if="props.processing" class="mr-2 h-4 w-4 animate-spin" />
-      {{ props.processing ? "Please wait..." : props.primaryLabel }}
-    </Button>
+      <Button
+        :type="props.primaryType"
+        :class="buttonClass"
+        :disabled="props.primaryDisabled || props.processing"
+        @click="emit('primary')"
+      >
+        <Loader2 v-if="props.processing" class="mr-2 h-4 w-4 animate-spin" />
+        {{
+          actionLabel(
+            presentation,
+            props.primaryRole,
+            props.processing ? "Please wait..." : props.primaryLabel,
+            props.processing,
+          )
+        }}
+      </Button>
+    </slot>
   </div>
 </template>

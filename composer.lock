@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f743eab79db1644d00d367d451aad25",
+    "content-hash": "ad9ff0c747b7aaa177728a44fff54f4c",
     "packages": [
         {
             "name": "3neti/cash",
@@ -308,16 +308,16 @@
         },
         {
             "name": "3neti/form-flow",
-            "version": "v1.9.25",
+            "version": "v1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/form-flow.git",
-                "reference": "faf2019a6c971c79f525e38f69f7acad83cc81dd"
+                "reference": "11ae18d50e2b78ae4b8af68c37d713155d0a3dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/form-flow/zipball/faf2019a6c971c79f525e38f69f7acad83cc81dd",
-                "reference": "faf2019a6c971c79f525e38f69f7acad83cc81dd",
+                "url": "https://api.github.com/repos/3neti/form-flow/zipball/11ae18d50e2b78ae4b8af68c37d713155d0a3dce",
+                "reference": "11ae18d50e2b78ae4b8af68c37d713155d0a3dce",
                 "shasum": ""
             },
             "require": {
@@ -375,26 +375,26 @@
             ],
             "support": {
                 "issues": "https://github.com/3neti/form-flow/issues",
-                "source": "https://github.com/3neti/form-flow/tree/v1.9.25"
+                "source": "https://github.com/3neti/form-flow/tree/v1.11.0"
             },
-            "time": "2026-09-03T00:08:43+00:00"
+            "time": "2026-10-19T15:22:42+00:00"
         },
         {
             "name": "3neti/form-handler-kyc",
-            "version": "v1.1.5",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/form-handler-kyc.git",
-                "reference": "71888e728f04874d62045b3c8e461071d30b4aee"
+                "reference": "77ee67de37d27e18ef35216b6dd868ec9bca51b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/form-handler-kyc/zipball/71888e728f04874d62045b3c8e461071d30b4aee",
-                "reference": "71888e728f04874d62045b3c8e461071d30b4aee",
+                "url": "https://api.github.com/repos/3neti/form-handler-kyc/zipball/77ee67de37d27e18ef35216b6dd868ec9bca51b6",
+                "reference": "77ee67de37d27e18ef35216b6dd868ec9bca51b6",
                 "shasum": ""
             },
             "require": {
-                "3neti/form-flow": "^1.8",
+                "3neti/form-flow": "^1.11",
                 "3neti/hyperverge": "^1.1 || ^2.0@beta",
                 "illuminate/support": "^12.0 || ^13.0",
                 "lorisleiva/laravel-actions": "^2.9",
@@ -434,26 +434,26 @@
             "description": "KYC/identity verification handler for form flow system using HyperVerge",
             "support": {
                 "issues": "https://github.com/3neti/form-handler-kyc/issues",
-                "source": "https://github.com/3neti/form-handler-kyc/tree/v1.1.5"
+                "source": "https://github.com/3neti/form-handler-kyc/tree/v1.3.0"
             },
-            "time": "2026-08-09T15:57:03+00:00"
+            "time": "2026-10-19T13:30:30+00:00"
         },
         {
             "name": "3neti/form-handler-location",
-            "version": "v1.2.5",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/form-handler-location.git",
-                "reference": "73ac13df9c44002acf3b647e1915a6df96c83e35"
+                "reference": "7ed5b844401c691cc6cde2efd9f385d27a469751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/form-handler-location/zipball/73ac13df9c44002acf3b647e1915a6df96c83e35",
-                "reference": "73ac13df9c44002acf3b647e1915a6df96c83e35",
+                "url": "https://api.github.com/repos/3neti/form-handler-location/zipball/7ed5b844401c691cc6cde2efd9f385d27a469751",
+                "reference": "7ed5b844401c691cc6cde2efd9f385d27a469751",
                 "shasum": ""
             },
             "require": {
-                "3neti/form-flow": "^1.8",
+                "3neti/form-flow": "^1.11",
                 "illuminate/support": "^11.0 || ^12.0 || ^13.0",
                 "php": "^8.2",
                 "spatie/laravel-data": "^4.0"
@@ -491,26 +491,26 @@
             "description": "Location capture handler for form flow system",
             "support": {
                 "issues": "https://github.com/3neti/form-handler-location/issues",
-                "source": "https://github.com/3neti/form-handler-location/tree/v1.2.5"
+                "source": "https://github.com/3neti/form-handler-location/tree/v1.4.0"
             },
-            "time": "2026-08-09T15:55:45+00:00"
+            "time": "2026-10-19T13:30:30+00:00"
         },
         {
             "name": "3neti/form-handler-otp",
-            "version": "v1.2.3",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/form-handler-otp.git",
-                "reference": "2873ad7a9a398f2179be23450189fd2d7559229b"
+                "reference": "e2e53952b1cdeda423a1d61b83fd040d887b1a49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/form-handler-otp/zipball/2873ad7a9a398f2179be23450189fd2d7559229b",
-                "reference": "2873ad7a9a398f2179be23450189fd2d7559229b",
+                "url": "https://api.github.com/repos/3neti/form-handler-otp/zipball/e2e53952b1cdeda423a1d61b83fd040d887b1a49",
+                "reference": "e2e53952b1cdeda423a1d61b83fd040d887b1a49",
                 "shasum": ""
             },
             "require": {
-                "3neti/form-flow": "^1.8",
+                "3neti/form-flow": "^1.11",
                 "illuminate/support": "^12.0 || ^13.0",
                 "php": "^8.2",
                 "spatie/laravel-data": "^4.0"
@@ -548,26 +548,26 @@
             "description": "OTP verification handler for form flow system",
             "support": {
                 "issues": "https://github.com/3neti/form-handler-otp/issues",
-                "source": "https://github.com/3neti/form-handler-otp/tree/v1.2.3"
+                "source": "https://github.com/3neti/form-handler-otp/tree/v1.4.0"
             },
-            "time": "2026-08-09T15:56:36+00:00"
+            "time": "2026-10-19T13:30:30+00:00"
         },
         {
             "name": "3neti/form-handler-selfie",
-            "version": "v1.1.5",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/form-handler-selfie.git",
-                "reference": "4b07e325598f5221ccc5d25aba09a6f642cc475f"
+                "reference": "5511ef39a625a3c2482252a1118aa05839307bed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/form-handler-selfie/zipball/4b07e325598f5221ccc5d25aba09a6f642cc475f",
-                "reference": "4b07e325598f5221ccc5d25aba09a6f642cc475f",
+                "url": "https://api.github.com/repos/3neti/form-handler-selfie/zipball/5511ef39a625a3c2482252a1118aa05839307bed",
+                "reference": "5511ef39a625a3c2482252a1118aa05839307bed",
                 "shasum": ""
             },
             "require": {
-                "3neti/form-flow": "^1.8",
+                "3neti/form-flow": "^1.11",
                 "illuminate/support": "^12.0 || ^13.0",
                 "php": "^8.2",
                 "spatie/laravel-data": "^4.0"
@@ -605,26 +605,26 @@
             "description": "Selfie capture handler for form flow system",
             "support": {
                 "issues": "https://github.com/3neti/form-handler-selfie/issues",
-                "source": "https://github.com/3neti/form-handler-selfie/tree/v1.1.5"
+                "source": "https://github.com/3neti/form-handler-selfie/tree/v1.3.0"
             },
-            "time": "2026-08-09T19:10:55+00:00"
+            "time": "2026-10-19T13:30:30+00:00"
         },
         {
             "name": "3neti/form-handler-signature",
-            "version": "v1.2.3",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/form-handler-signature.git",
-                "reference": "1548d82f607b3b3b21d5e7f8c02d6eb6c5df8cbd"
+                "reference": "3a22921bf4175391de1ab1540e03cbf1c707c680"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/form-handler-signature/zipball/1548d82f607b3b3b21d5e7f8c02d6eb6c5df8cbd",
-                "reference": "1548d82f607b3b3b21d5e7f8c02d6eb6c5df8cbd",
+                "url": "https://api.github.com/repos/3neti/form-handler-signature/zipball/3a22921bf4175391de1ab1540e03cbf1c707c680",
+                "reference": "3a22921bf4175391de1ab1540e03cbf1c707c680",
                 "shasum": ""
             },
             "require": {
-                "3neti/form-flow": "^1.8",
+                "3neti/form-flow": "^1.11",
                 "illuminate/support": "^12.0 || ^13.0",
                 "php": "^8.2",
                 "spatie/laravel-data": "^4.0"
@@ -662,9 +662,9 @@
             "description": "Signature capture handler for form flow system",
             "support": {
                 "issues": "https://github.com/3neti/form-handler-signature/issues",
-                "source": "https://github.com/3neti/form-handler-signature/tree/v1.2.3"
+                "source": "https://github.com/3neti/form-handler-signature/tree/v1.4.0"
             },
-            "time": "2026-08-09T15:56:12+00:00"
+            "time": "2026-10-19T13:30:30+00:00"
         },
         {
             "name": "3neti/hyperverge",
@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.269",
+            "version": "v1.0.271",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "8bb188257f839c3a47d4232fe714104c4d97a0a9"
+                "reference": "72b169626cbffc77dd45651af908747f2746a342"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/8bb188257f839c3a47d4232fe714104c4d97a0a9",
-                "reference": "8bb188257f839c3a47d4232fe714104c4d97a0a9",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/72b169626cbffc77dd45651af908747f2746a342",
+                "reference": "72b169626cbffc77dd45651af908747f2746a342",
                 "shasum": ""
             },
             "require": {
@@ -1781,9 +1781,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.269"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.271"
             },
-            "time": "2026-10-21T08:01:50+00:00"
+            "time": "2026-10-21T09:59:53+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -3401,16 +3401,16 @@
         },
         {
             "name": "dragonmantank/cron-expression",
-            "version": "v3.6.0",
+            "version": "v3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dragonmantank/cron-expression.git",
-                "reference": "d61a8a9604ec1f8c3d150d09db6ce98b32675013"
+                "reference": "4189372ffeff09bf14f731f67a9de90c7b413ebe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/d61a8a9604ec1f8c3d150d09db6ce98b32675013",
-                "reference": "d61a8a9604ec1f8c3d150d09db6ce98b32675013",
+                "url": "https://api.github.com/repos/dragonmantank/cron-expression/zipball/4189372ffeff09bf14f731f67a9de90c7b413ebe",
+                "reference": "4189372ffeff09bf14f731f67a9de90c7b413ebe",
                 "shasum": ""
             },
             "require": {
@@ -3421,8 +3421,8 @@
             },
             "require-dev": {
                 "phpstan/extension-installer": "^1.4.3",
-                "phpstan/phpstan": "^1.12.32|^2.1.31",
-                "phpunit/phpunit": "^8.5.48|^9.0"
+                "phpstan/phpstan": "^2.1.31",
+                "phpunit/phpunit": "^11.5.43 || ^12.4"
             },
             "type": "library",
             "extra": {
@@ -3453,7 +3453,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dragonmantank/cron-expression/issues",
-                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.6.0"
+                "source": "https://github.com/dragonmantank/cron-expression/tree/v3.6.1"
             },
             "funding": [
                 {
@@ -3461,7 +3461,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-31T18:51:33+00:00"
+            "time": "2026-10-19T17:53:57+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -4804,16 +4804,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v13.36.0",
+            "version": "v13.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "e5626e38137cf0d82b1e52f15b16283e8442c13c"
+                "reference": "c42f9abd4a3d2f9a3cd6be109255ddce8092ceb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/e5626e38137cf0d82b1e52f15b16283e8442c13c",
-                "reference": "e5626e38137cf0d82b1e52f15b16283e8442c13c",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c42f9abd4a3d2f9a3cd6be109255ddce8092ceb8",
+                "reference": "c42f9abd4a3d2f9a3cd6be109255ddce8092ceb8",
                 "shasum": ""
             },
             "require": {
@@ -4920,7 +4920,7 @@
                 "aws/aws-sdk-php": "^3.322.9",
                 "ext-gmp": "*",
                 "fakerphp/faker": "^1.24",
-                "intervention/image": "^4.0",
+                "intervention/image": "^4.2",
                 "laravel/pint": "^1.18",
                 "league/flysystem-aws-s3-v3": "^3.25.1",
                 "league/flysystem-ftp": "^3.25.1",
@@ -4959,7 +4959,7 @@
                 "ext-redis": "Required to use the Redis cache and queue drivers (^4.0 || ^5.0 || ^6.0).",
                 "fakerphp/faker": "Required to generate fake data using the fake() helper (^1.23).",
                 "filp/whoops": "Required for friendly error pages in development (^2.14.3).",
-                "intervention/image": "Required to use the image processing features (^4.0).",
+                "intervention/image": "Required to use the image processing features (^4.2).",
                 "laravel/tinker": "Required to use the tinker console command (^2.0).",
                 "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (^3.25.1).",
                 "league/flysystem-ftp": "Required to use the Flysystem FTP driver (^3.25.1).",
@@ -5031,7 +5031,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-10-13T13:21:00+00:00"
+            "time": "2026-10-20T10:45:58+00:00"
         },
         {
             "name": "laravel/mcp",
@@ -5839,16 +5839,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.10.3",
+            "version": "2.10.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "6efbd9c472b91db0a3350fcd601c8332c2382e1f"
+                "reference": "40821b7606d8d946bac57dbd2290076c722e3a65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6efbd9c472b91db0a3350fcd601c8332c2382e1f",
-                "reference": "6efbd9c472b91db0a3350fcd601c8332c2382e1f",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/40821b7606d8d946bac57dbd2290076c722e3a65",
+                "reference": "40821b7606d8d946bac57dbd2290076c722e3a65",
                 "shasum": ""
             },
             "require": {
@@ -5942,7 +5942,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-09-21T13:07:34+00:00"
+            "time": "2026-10-17T19:59:50+00:00"
         },
         {
             "name": "league/config",
@@ -7461,21 +7461,21 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.3.6",
+            "version": "v1.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "c54350438cd6914616f790a49cb424605f421562"
+                "reference": "c1162897273bf9499ca57924c4688a19d82c9310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/c54350438cd6914616f790a49cb424605f421562",
-                "reference": "c54350438cd6914616f790a49cb424605f421562",
+                "url": "https://api.github.com/repos/nette/schema/zipball/c1162897273bf9499ca57924c4688a19d82c9310",
+                "reference": "c1162897273bf9499ca57924c4688a19d82c9310",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^4.0",
-                "php": "8.1 - 8.5"
+                "php": "8.1 - 8.6"
             },
             "require-dev": {
                 "nette/phpstan-rules": "^1.0",
@@ -7522,26 +7522,26 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/schema/issues",
-                "source": "https://github.com/nette/schema/tree/v1.3.6"
+                "source": "https://github.com/nette/schema/tree/v1.3.7"
             },
-            "time": "2026-08-16T21:58:41+00:00"
+            "time": "2026-10-20T15:46:50+00:00"
         },
         {
             "name": "nette/utils",
-            "version": "v4.1.5",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "b043439dbdf954e6c28b5ea7e34b0100f83165e0"
+                "reference": "6bf24518accf32cf845bca305e0b92078700fd01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/b043439dbdf954e6c28b5ea7e34b0100f83165e0",
-                "reference": "b043439dbdf954e6c28b5ea7e34b0100f83165e0",
+                "url": "https://api.github.com/repos/nette/utils/zipball/6bf24518accf32cf845bca305e0b92078700fd01",
+                "reference": "6bf24518accf32cf845bca305e0b92078700fd01",
                 "shasum": ""
             },
             "require": {
-                "php": "8.2 - 8.5"
+                "php": "8.2 - 8.6"
             },
             "conflict": {
                 "nette/finder": "<3",
@@ -7613,9 +7613,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v4.1.5"
+                "source": "https://github.com/nette/utils/tree/v4.1.6"
             },
-            "time": "2026-07-17T23:02:45+00:00"
+            "time": "2026-10-20T17:07:56+00:00"
         },
         {
             "name": "nikic/php-parser",
