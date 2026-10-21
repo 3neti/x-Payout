@@ -1,8 +1,5 @@
 {
-    "agents": [
-        "codex",
-        "junie"
-    ],
+    "agents": ["codex", "junie"],
     "cloud": false,
     "guidelines": true,
     "mcp": true,

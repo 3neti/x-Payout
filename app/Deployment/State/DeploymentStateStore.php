@@ -77,7 +77,7 @@ final class DeploymentStateStore
      */
     public function write(string $path, array $state, ?DateTimeInterface $updatedAt = null): array
     {
-        $state['updated_at'] = ($updatedAt ?? new DateTimeImmutable('now', new DateTimeZone('UTC')))
+        $state['updated_at'] = DateTimeImmutable::createFromInterface($updatedAt ?? new DateTimeImmutable('now', new DateTimeZone('UTC')))
             ->setTimezone(new DateTimeZone('UTC'))
             ->format(DateTimeInterface::ATOM);
         $this->validate($state);

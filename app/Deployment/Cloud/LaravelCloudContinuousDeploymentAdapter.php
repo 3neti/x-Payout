@@ -387,7 +387,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         foreach (preg_split('/\R/', trim($result->output)) ?: [] as $line) {
             $parts = preg_split('/\s+/', trim($line), 2);
 
-            if (count($parts) === 2) {
+            if ($parts !== false && count($parts) === 2) {
                 $references[$parts[1]] = $parts[0];
             }
         }
@@ -473,6 +473,7 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     }
 
     /**
+     * @param  array<string, mixed>  $compiled
      * @param  array<string, mixed>  $state
      * @return array<string, mixed>
      */
@@ -525,7 +526,10 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
         return [];
     }
 
-    /** @param array<string, mixed> $compiled */
+    /**
+     * @param  array<string, mixed>  $compiled
+     * @param  array<string, mixed>  $state
+     */
     private function materializeCommissioningManifest(array $compiled, array $state): string
     {
         $compiledOpening = (array) data_get($compiled, 'commissioning.opening', []);
@@ -710,10 +714,20 @@ final readonly class LaravelCloudContinuousDeploymentAdapter implements Continuo
     {
         for ($attempt = 1; $attempt <= 180; $attempt++) {
             $payload = $this->cloud->json('command:get', [$commandId]);
-            $status = $payload['status'] ?? null;
+            $command = [];
+
+            foreach ($payload as $key => $value) {
+                if (! is_string($key)) {
+                    throw new ContinuousDeploymentException('Laravel Cloud returned an invalid command payload.');
+                }
+
+                $command[$key] = $value;
+            }
+
+            $status = $command['status'] ?? null;
 
             if (in_array($status, ['command.success', 'command.failed'], true)) {
-                return $payload;
+                return $command;
             }
 
             usleep(1_000_000);

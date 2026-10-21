@@ -2,17 +2,14 @@
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
-    "engines": {
-        "node": "22.x",
-        "npm": "10.x"
-    },
     "scripts": {
         "build": "vite build",
         "build:ssr": "vite build && vite build --ssr",
         "dev": "vp dev",
         "check": "vp check",
         "check:fix": "vp check --fix",
-        "types:check": "vue-tsc --noEmit"
+        "types:check": "vue-tsc --noEmit --project tsconfig.host.json",
+        "types:check:all": "vue-tsc --noEmit"
     },
     "dependencies": {
         "@inertiajs/vite": "^3.0.0",
@@ -56,5 +53,9 @@
         "@tailwindcss/oxide-win32-x64-msvc": "^4.0.1",
         "lightningcss-linux-x64-gnu": "^1.29.1",
         "lightningcss-win32-x64-msvc": "^1.29.1"
+    },
+    "engines": {
+        "node": "22.x",
+        "npm": "10.x"
     }
 }

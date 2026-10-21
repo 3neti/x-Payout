@@ -14,9 +14,18 @@ class BootstrapXPayout extends Command
 {
     public function handle(): int
     {
+        $manifest = $this->option('manifest');
+        $previewToken = $this->option('commissioning-preview-token');
+
+        if (! is_string($manifest) || ($previewToken !== null && ! is_string($previewToken))) {
+            $this->error('Bootstrap options must be strings.');
+
+            return self::FAILURE;
+        }
+
         return $this->call('x-change:bootstrap', [
-            '--manifest' => (string) $this->option('manifest'),
-            '--commissioning-preview-token' => (string) $this->option('commissioning-preview-token'),
+            '--manifest' => $manifest,
+            '--commissioning-preview-token' => $previewToken ?? '',
             '--force' => (bool) $this->option('force'),
             '--skip-build' => (bool) $this->option('skip-build'),
             '--skip-verify' => (bool) $this->option('skip-verify'),

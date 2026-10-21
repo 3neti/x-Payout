@@ -38,8 +38,8 @@
             "additionalProperties": false,
             "required": ["repository", "ref"],
             "properties": {
-                "repository": {"type": "string"},
-                "ref": {"type": "string"}
+                "repository": { "type": "string" },
+                "ref": { "type": "string" }
             }
         },
         "canonical_host": {
@@ -47,19 +47,19 @@
         },
         "resources": {
             "type": "object",
-            "additionalProperties": {"type": "string"}
+            "additionalProperties": { "type": "string" }
         },
         "managed_secret_names": {
             "type": "array",
             "uniqueItems": true,
-            "items": {"type": "string"}
+            "items": { "type": "string" }
         },
         "last_deployment_id": {
             "type": ["string", "null"]
         },
         "checkpoints": {
             "type": "object",
-            "additionalProperties": {"type": "string"}
+            "additionalProperties": { "type": "string" }
         },
         "phase_evidence": {
             "type": "object"

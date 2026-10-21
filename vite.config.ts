@@ -5,6 +5,35 @@ import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
+const publishedFrontendPaths = [
+    'resources/js/actions/**',
+    'resources/js/cockpit/**',
+    'resources/js/components/financial/**',
+    'resources/js/components/NumberInputWithKeypad.vue',
+    'resources/js/components/NumericKeypad.vue',
+    'resources/js/components/x-change/**',
+    'resources/js/components/x-rider/**',
+    'resources/js/composables/useClipboard.ts',
+    'resources/js/composables/useFormFlowSummary.ts',
+    'resources/js/composables/useIssuanceFundingPreflight.ts',
+    'resources/js/composables/usePayCodeApi.ts',
+    'resources/js/composables/usePayCodeCostEstimate.ts',
+    'resources/js/composables/usePayCodeForm.ts',
+    'resources/js/composables/usePublicClaimAppearance.ts',
+    'resources/js/composables/useVoucherPreview.ts',
+    'resources/js/config/**',
+    'resources/js/data/**',
+    'resources/js/layouts/PublicLayout.vue',
+    'resources/js/layouts/x-change/**',
+    'resources/js/pages/form-flow/**',
+    'resources/js/pages/x-change/**',
+    'resources/js/pages/x-rider/**',
+    'resources/js/routes/**',
+    'resources/js/types/voucher.d.ts',
+    'resources/js/vendor/**',
+    'resources/js/wayfinder/**',
+];
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -43,10 +72,8 @@ export default defineConfig({
             'public/**',
             'bootstrap/ssr/**',
             'tailwind.config.js',
-            'resources/js/actions/**',
             'resources/js/components/ui/*',
-            'resources/js/routes/**',
-            'resources/js/wayfinder/**',
+            ...publishedFrontendPaths,
         ],
         options: {
             denyWarnings: true,
@@ -61,9 +88,17 @@ export default defineConfig({
         singleAttributePerLine: false,
         htmlWhitespaceSensitivity: 'css',
         ignorePatterns: [
+            '**/*.md',
+            '**/*.yaml',
+            '.agents/**',
+            '.junie/**',
             '.github/**',
             'composer.json',
+            'public/**',
+            'resources/documents/**',
+            'resources/report-drivers/**',
             'resources/js/components/ui/*',
+            ...publishedFrontendPaths,
             'resources/views/mail/*',
         ],
         sortTailwindcss: {

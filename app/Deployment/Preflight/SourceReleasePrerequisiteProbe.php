@@ -68,7 +68,7 @@ final readonly class SourceReleasePrerequisiteProbe implements PrerequisiteProbe
         foreach (preg_split('/\R/', trim($output)) ?: [] as $line) {
             $parts = preg_split('/\s+/', trim($line), 2);
 
-            if (count($parts) === 2 && $parts[0] !== '' && $parts[1] !== '') {
+            if ($parts !== false && count($parts) === 2 && $parts[0] !== '' && $parts[1] !== '') {
                 $references[$parts[1]] = $parts[0];
             }
         }

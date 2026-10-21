@@ -304,7 +304,7 @@ function navigationItemsForGroup(
                                         {{ item.title }}
                                     </span>
                                     <span
-                                        class="block truncate text-[0.7rem] leading-4 text-sidebar-foreground/60"
+                                        class="text-sidebar-foreground/60 block truncate text-[0.7rem] leading-4"
                                     >
                                         {{ item.description }}
                                     </span>
@@ -344,7 +344,7 @@ function navigationItemsForGroup(
                                         {{ item.title }}
                                     </span>
                                     <span
-                                        class="block truncate text-[0.7rem] leading-4 text-sidebar-foreground/60"
+                                        class="text-sidebar-foreground/60 block truncate text-[0.7rem] leading-4"
                                     >
                                         {{ item.description }}
                                     </span>

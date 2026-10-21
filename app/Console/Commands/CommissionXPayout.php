@@ -16,8 +16,16 @@ class CommissionXPayout extends Command
 {
     public function handle(CommissioningManifestCommissioner $commissioner): int
     {
+        $manifest = $this->option('manifest');
+
+        if (! is_string($manifest)) {
+            $this->error('The manifest option must be a string.');
+
+            return self::FAILURE;
+        }
+
         try {
-            $result = $commissioner->commission((string) $this->option('manifest'));
+            $result = $commissioner->commission($manifest);
         } catch (Throwable $exception) {
             if ((bool) $this->option('json')) {
                 $this->line((string) json_encode([

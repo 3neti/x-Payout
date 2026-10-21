@@ -37,5 +37,10 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Prepare test application
+        run: |
+          cp .env.example .env
+          php artisan key:generate --no-interaction
+
       - name: Run CI Checks
         run: composer ci:check
