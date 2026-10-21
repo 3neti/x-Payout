@@ -42,5 +42,10 @@ jobs:
           cp .env.example .env
           php artisan key:generate --no-interaction
 
+      - name: Publish and build package frontend
+        run: |
+          php artisan x-change:publish --scope=build --force --verify --no-interaction
+          npm run build
+
       - name: Run CI Checks
         run: composer ci:check
