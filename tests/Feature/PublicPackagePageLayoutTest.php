@@ -7,6 +7,8 @@ it('uses the package-owned shell boundaries for public and cockpit pages', funct
 
     expect($source)
         ->toContain("import AppSidebarLayoutCockpit from '@/layouts/app/AppSidebarLayoutCockpit.vue';")
+        ->toContain("import { initializePublicClaimAppearance } from '@/composables/usePublicClaimAppearance';")
+        ->toContain('if (!ssr) initializePublicClaimAppearance(page);')
         ->toContain("case name.startsWith('x-change/claim/'):")
         ->toContain("case name.startsWith('x-change/public/'):")
         ->toContain("case name.startsWith('form-flow/'):")
