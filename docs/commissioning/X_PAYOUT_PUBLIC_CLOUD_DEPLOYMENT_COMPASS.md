@@ -1242,3 +1242,21 @@ After every gate:
 4. append decisions, blockers, and accepted risks without deleting history;
 5. distinguish read-only evidence from financial or external mutations; and
 6. state the next bounded move and its authorization requirement.
+
+## 2026-10-21 Configurable Stamp rendering documentation
+
+The [Stamp rendering commissioning runbook](STAMP_RENDERING.md) records the
+2026-10-20 release verification snapshot and the proposed provider/quality model.
+The portable plan and compass live in x-stamp; x-change owns the lifecycle guide.
+
+The chosen future policy is to use available quality before payment, refresh the
+preview to show that result, and freeze the effective provider/quality before
+funding. Paid orders retain that contract; outages must preserve verified funds
+and idempotent recovery. Cloudflare Free is a valid provider tier when enabled and
+within its allowance. Current Cloudflare adapter/automatic-fallback work remains
+pending. This documentation does not change runtime defaults, install credentials,
+enable HD or paid usage, deploy an environment, or authorize financial actions.
+
+Earlier entries and their dated deployment assertions are retained as historical
+evidence. Use the linked runbook's dated snapshot and fresh live verification for
+new Stamp commissioning; do not infer current release state from older headings.
