@@ -43,6 +43,8 @@ jobs:
           php artisan key:generate --no-interaction
 
       - name: Publish and build package frontend
+        env:
+          TXTCMDR_API_TOKEN: ci-placeholder
         run: |
           php artisan x-change:publish --scope=build --force --verify --no-interaction
           npm run build
