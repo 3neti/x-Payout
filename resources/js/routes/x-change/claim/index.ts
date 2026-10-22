@@ -728,7 +728,7 @@ success.form = successForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 export const redirect = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -743,7 +743,7 @@ redirect.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 redirect.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -770,7 +770,7 @@ redirect.url = (args: { code: string | number } | [code: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 redirect.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -780,7 +780,7 @@ redirect.get = (args: { code: string | number } | [code: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 redirect.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -790,7 +790,7 @@ redirect.head = (args: { code: string | number } | [code: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 const redirectForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -800,7 +800,7 @@ const redirectForm = (args: { code: string | number } | [code: string | number ]
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 redirectForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -810,7 +810,7 @@ redirectForm.get = (args: { code: string | number } | [code: string | number ] |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 redirectForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

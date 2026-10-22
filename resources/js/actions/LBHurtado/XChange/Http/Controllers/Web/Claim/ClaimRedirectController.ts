@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 const ClaimRedirectController = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ ClaimRedirectController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 ClaimRedirectController.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ ClaimRedirectController.url = (args: { code: string | number } | [code: string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 ClaimRedirectController.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ ClaimRedirectController.get = (args: { code: string | number } | [code: string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 ClaimRedirectController.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -63,7 +63,7 @@ ClaimRedirectController.head = (args: { code: string | number } | [code: string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 const ClaimRedirectControllerForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -73,7 +73,7 @@ const ClaimRedirectControllerForm = (args: { code: string | number } | [code: st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 ClaimRedirectControllerForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -83,7 +83,7 @@ ClaimRedirectControllerForm.get = (args: { code: string | number } | [code: stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimRedirectController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:19
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimRedirectController.php:20
 * @route '/x/claim/{code}/redirect'
 */
 ClaimRedirectControllerForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

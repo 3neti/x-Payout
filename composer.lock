@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a75b859ec4df2154a0eba16f03a3a4eb",
+    "content-hash": "06c8a45ddef9c28a832ce7f34ea4c72d",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.280",
+            "version": "v1.0.285",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "8da6f87a6b9a7eb6bb49eb53e4cc64bc662831d0"
+                "reference": "704a2f7cedde70d1427748b36e030811996f5785"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/8da6f87a6b9a7eb6bb49eb53e4cc64bc662831d0",
-                "reference": "8da6f87a6b9a7eb6bb49eb53e4cc64bc662831d0",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/704a2f7cedde70d1427748b36e030811996f5785",
+                "reference": "704a2f7cedde70d1427748b36e030811996f5785",
                 "shasum": ""
             },
             "require": {
@@ -1781,9 +1781,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.280"
+                "source": "https://github.com/3neti/x-change/tree/v1.0.285"
             },
-            "time": "2026-10-21T23:17:03+00:00"
+            "time": "2026-10-22T05:53:10+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -2141,16 +2141,16 @@
         },
         {
             "name": "3neti/x-rider",
-            "version": "v1.1.0",
+            "version": "v1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-rider.git",
-                "reference": "bad38c686e8ac808669863a6b01f45d901e90169"
+                "reference": "d1e0a2b7bf1a437a9e17ce0153799eb42765ca1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-rider/zipball/bad38c686e8ac808669863a6b01f45d901e90169",
-                "reference": "bad38c686e8ac808669863a6b01f45d901e90169",
+                "url": "https://api.github.com/repos/3neti/x-rider/zipball/d1e0a2b7bf1a437a9e17ce0153799eb42765ca1c",
+                "reference": "d1e0a2b7bf1a437a9e17ce0153799eb42765ca1c",
                 "shasum": ""
             },
             "require": {
@@ -2194,9 +2194,9 @@
             "description": "Programmable claimant experience layer for post-claim rider messages, redirects, splash, analytics seams, and future campaign runtimes.",
             "support": {
                 "issues": "https://github.com/3neti/x-rider/issues",
-                "source": "https://github.com/3neti/x-rider/tree/v1.1.0"
+                "source": "https://github.com/3neti/x-rider/tree/v1.1.4"
             },
-            "time": "2026-10-19T15:22:42+00:00"
+            "time": "2026-10-22T05:19:49+00:00"
         },
         {
             "name": "3neti/x-stamp",
