@@ -105,6 +105,7 @@ import CockpitRiderLibraryPinController from './CockpitRiderLibraryPinController
 import CockpitRiderLibraryForgetController from './CockpitRiderLibraryForgetController'
 import CockpitRuntimeProfilePageController from './CockpitRuntimeProfilePageController'
 import CockpitPayCodeExplorerPageController from './CockpitPayCodeExplorerPageController'
+import CockpitPayCodeStampController from './CockpitPayCodeStampController'
 import CockpitDistributionWorkspacePageController from './CockpitDistributionWorkspacePageController'
 import CockpitPayCodeEvidenceController from './CockpitPayCodeEvidenceController'
 import CockpitPayCodeEngineeringPreviewController from './CockpitPayCodeEngineeringPreviewController'
@@ -222,6 +223,7 @@ const Cockpit = {
     CockpitRiderLibraryForgetController: Object.assign(CockpitRiderLibraryForgetController, CockpitRiderLibraryForgetController),
     CockpitRuntimeProfilePageController: Object.assign(CockpitRuntimeProfilePageController, CockpitRuntimeProfilePageController),
     CockpitPayCodeExplorerPageController: Object.assign(CockpitPayCodeExplorerPageController, CockpitPayCodeExplorerPageController),
+    CockpitPayCodeStampController: Object.assign(CockpitPayCodeStampController, CockpitPayCodeStampController),
     CockpitDistributionWorkspacePageController: Object.assign(CockpitDistributionWorkspacePageController, CockpitDistributionWorkspacePageController),
     CockpitPayCodeEvidenceController: Object.assign(CockpitPayCodeEvidenceController, CockpitPayCodeEvidenceController),
     CockpitPayCodeEngineeringPreviewController: Object.assign(CockpitPayCodeEngineeringPreviewController, CockpitPayCodeEngineeringPreviewController),

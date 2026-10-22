@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import stamp from './stamp'
 import evidence from './evidence'
 import engineeringPreview from './engineering-preview'
 import collectionAttempts from './collection-attempts'
@@ -286,6 +287,7 @@ show.form = showForm
 
 const payCodes = {
     index: Object.assign(index, index),
+    stamp: Object.assign(stamp, stamp),
     distribution: Object.assign(distribution, distribution),
     evidence: Object.assign(evidence, evidence),
     engineeringPreview: Object.assign(engineeringPreview, engineeringPreview),
