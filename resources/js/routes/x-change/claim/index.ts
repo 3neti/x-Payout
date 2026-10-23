@@ -555,7 +555,7 @@ complete.form = completeForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
 * @route '/x/claim/{code}/submit'
 */
 export const submit = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -570,7 +570,7 @@ submit.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
 * @route '/x/claim/{code}/submit'
 */
 submit.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -597,7 +597,7 @@ submit.url = (args: { code: string | number } | [code: string | number ] | strin
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
 * @route '/x/claim/{code}/submit'
 */
 submit.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -607,7 +607,7 @@ submit.post = (args: { code: string | number } | [code: string | number ] | stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
 * @route '/x/claim/{code}/submit'
 */
 const submitForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -617,7 +617,7 @@ const submitForm = (args: { code: string | number } | [code: string | number ] |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
 * @route '/x/claim/{code}/submit'
 */
 submitForm.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
