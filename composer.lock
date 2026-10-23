@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0db86a7ffdec4efc9afd30aee3aa2b37",
+    "content-hash": "6bb916096f89f71412bd7b536f25e963",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.299",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "aa7a8ed06b5fdb83757e14c1d654a4844fe3095c"
+                "reference": "e99e791d58672954f667350d9b9713be8ea9682b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/aa7a8ed06b5fdb83757e14c1d654a4844fe3095c",
-                "reference": "aa7a8ed06b5fdb83757e14c1d654a4844fe3095c",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/e99e791d58672954f667350d9b9713be8ea9682b",
+                "reference": "e99e791d58672954f667350d9b9713be8ea9682b",
                 "shasum": ""
             },
             "require": {
@@ -1741,6 +1741,7 @@
                 "3neti/x-legal": "Provides jurisdiction-aware advisory Treasury vocabulary and policy traceability.",
                 "laravel/horizon": "Allows a Redis-enabled host application to operate and inspect the declared x-change queue lanes."
             },
+            "default-branch": true,
             "bin": [
                 "bin/x-change-cloud"
             ],
@@ -1781,9 +1782,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.299"
+                "source": "https://github.com/3neti/x-change/tree/main"
             },
-            "time": "2026-10-22T23:18:03+00:00"
+            "time": "2026-10-23T05:34:35+00:00"
         },
         {
             "name": "3neti/x-commerce",
@@ -18669,7 +18670,8 @@
     "aliases": [],
     "minimum-stability": "beta",
     "stability-flags": {
-        "3neti/hyperverge": 10
+        "3neti/hyperverge": 10,
+        "3neti/x-change": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
