@@ -3,6 +3,7 @@ import Claim from './Claim'
 import PublicPricingPageController from './PublicPricingPageController'
 import PublicAnalyticsPageController from './PublicAnalyticsPageController'
 import Provisioning from './Provisioning'
+import StoredValueCollectionController from './StoredValueCollectionController'
 import Checkout from './Checkout'
 import PublicOnboarding from './PublicOnboarding'
 import StampRenderingComparisonController from './StampRenderingComparisonController'
@@ -30,6 +31,7 @@ const Web = {
     PublicPricingPageController: Object.assign(PublicPricingPageController, PublicPricingPageController),
     PublicAnalyticsPageController: Object.assign(PublicAnalyticsPageController, PublicAnalyticsPageController),
     Provisioning: Object.assign(Provisioning, Provisioning),
+    StoredValueCollectionController: Object.assign(StoredValueCollectionController, StoredValueCollectionController),
     Checkout: Object.assign(Checkout, Checkout),
     PublicOnboarding: Object.assign(PublicOnboarding, PublicOnboarding),
     StampRenderingComparisonController: Object.assign(StampRenderingComparisonController, StampRenderingComparisonController),

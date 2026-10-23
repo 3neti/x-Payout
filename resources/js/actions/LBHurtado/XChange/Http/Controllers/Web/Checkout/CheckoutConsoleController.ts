@@ -172,7 +172,7 @@ export const show = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/operations/unlock'
 */
 const unlock8cf930f73258ea0ce143a95801169bff = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -187,7 +187,7 @@ unlock8cf930f73258ea0ce143a95801169bff.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/operations/unlock'
 */
 unlock8cf930f73258ea0ce143a95801169bff.url = (options?: RouteQueryOptions) => {
@@ -196,7 +196,7 @@ unlock8cf930f73258ea0ce143a95801169bff.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/operations/unlock'
 */
 unlock8cf930f73258ea0ce143a95801169bff.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -206,7 +206,7 @@ unlock8cf930f73258ea0ce143a95801169bff.post = (options?: RouteQueryOptions): Rou
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/operations/unlock'
 */
 const unlock8cf930f73258ea0ce143a95801169bffForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -216,7 +216,7 @@ const unlock8cf930f73258ea0ce143a95801169bffForm = (options?: RouteQueryOptions)
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/operations/unlock'
 */
 unlock8cf930f73258ea0ce143a95801169bffForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -227,7 +227,7 @@ unlock8cf930f73258ea0ce143a95801169bffForm.post = (options?: RouteQueryOptions):
 unlock8cf930f73258ea0ce143a95801169bff.form = unlock8cf930f73258ea0ce143a95801169bffForm
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/checkout/unlock'
 */
 const unlock1fe79d30c06293506003b0dae9d3b1c8 = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -242,7 +242,7 @@ unlock1fe79d30c06293506003b0dae9d3b1c8.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/checkout/unlock'
 */
 unlock1fe79d30c06293506003b0dae9d3b1c8.url = (options?: RouteQueryOptions) => {
@@ -251,7 +251,7 @@ unlock1fe79d30c06293506003b0dae9d3b1c8.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/checkout/unlock'
 */
 unlock1fe79d30c06293506003b0dae9d3b1c8.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -261,7 +261,7 @@ unlock1fe79d30c06293506003b0dae9d3b1c8.post = (options?: RouteQueryOptions): Rou
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/checkout/unlock'
 */
 const unlock1fe79d30c06293506003b0dae9d3b1c8Form = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -271,7 +271,7 @@ const unlock1fe79d30c06293506003b0dae9d3b1c8Form = (options?: RouteQueryOptions)
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:58
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
 * @route '/x/checkout/unlock'
 */
 unlock1fe79d30c06293506003b0dae9d3b1c8Form.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -293,7 +293,7 @@ export const unlock = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/operations/lock'
 */
 const lockae7bab6c7427f6d3747ddaa785d3cfb2 = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -308,7 +308,7 @@ lockae7bab6c7427f6d3747ddaa785d3cfb2.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/operations/lock'
 */
 lockae7bab6c7427f6d3747ddaa785d3cfb2.url = (options?: RouteQueryOptions) => {
@@ -317,7 +317,7 @@ lockae7bab6c7427f6d3747ddaa785d3cfb2.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/operations/lock'
 */
 lockae7bab6c7427f6d3747ddaa785d3cfb2.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -327,7 +327,7 @@ lockae7bab6c7427f6d3747ddaa785d3cfb2.post = (options?: RouteQueryOptions): Route
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/operations/lock'
 */
 const lockae7bab6c7427f6d3747ddaa785d3cfb2Form = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -337,7 +337,7 @@ const lockae7bab6c7427f6d3747ddaa785d3cfb2Form = (options?: RouteQueryOptions): 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/operations/lock'
 */
 lockae7bab6c7427f6d3747ddaa785d3cfb2Form.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -348,7 +348,7 @@ lockae7bab6c7427f6d3747ddaa785d3cfb2Form.post = (options?: RouteQueryOptions): R
 lockae7bab6c7427f6d3747ddaa785d3cfb2.form = lockae7bab6c7427f6d3747ddaa785d3cfb2Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/checkout/lock'
 */
 const lock56ba41fa16fb66b14d113a0bb9cba9fd = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -363,7 +363,7 @@ lock56ba41fa16fb66b14d113a0bb9cba9fd.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/checkout/lock'
 */
 lock56ba41fa16fb66b14d113a0bb9cba9fd.url = (options?: RouteQueryOptions) => {
@@ -372,7 +372,7 @@ lock56ba41fa16fb66b14d113a0bb9cba9fd.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/checkout/lock'
 */
 lock56ba41fa16fb66b14d113a0bb9cba9fd.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -382,7 +382,7 @@ lock56ba41fa16fb66b14d113a0bb9cba9fd.post = (options?: RouteQueryOptions): Route
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/checkout/lock'
 */
 const lock56ba41fa16fb66b14d113a0bb9cba9fdForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -392,7 +392,7 @@ const lock56ba41fa16fb66b14d113a0bb9cba9fdForm = (options?: RouteQueryOptions): 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:70
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
 * @route '/x/checkout/lock'
 */
 lock56ba41fa16fb66b14d113a0bb9cba9fdForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -414,7 +414,7 @@ export const lock = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 const viewer4d6ef4e18b3a8ac7541e0b86838cfc62 = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -429,7 +429,7 @@ viewer4d6ef4e18b3a8ac7541e0b86838cfc62.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 viewer4d6ef4e18b3a8ac7541e0b86838cfc62.url = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -456,7 +456,7 @@ viewer4d6ef4e18b3a8ac7541e0b86838cfc62.url = (args: { token: string | number } |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 viewer4d6ef4e18b3a8ac7541e0b86838cfc62.get = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -466,7 +466,7 @@ viewer4d6ef4e18b3a8ac7541e0b86838cfc62.get = (args: { token: string | number } |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 viewer4d6ef4e18b3a8ac7541e0b86838cfc62.head = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -476,7 +476,7 @@ viewer4d6ef4e18b3a8ac7541e0b86838cfc62.head = (args: { token: string | number } 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 const viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -486,7 +486,7 @@ const viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form = (args: { token: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form.get = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -496,7 +496,7 @@ viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form.get = (args: { token: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/operations/view/{token}'
 */
 viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form.head = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -512,7 +512,7 @@ viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form.head = (args: { token: string | numbe
 viewer4d6ef4e18b3a8ac7541e0b86838cfc62.form = viewer4d6ef4e18b3a8ac7541e0b86838cfc62Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 const viewer1c1dd6d5463ac84f1828857461fe31e2 = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -527,7 +527,7 @@ viewer1c1dd6d5463ac84f1828857461fe31e2.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 viewer1c1dd6d5463ac84f1828857461fe31e2.url = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -554,7 +554,7 @@ viewer1c1dd6d5463ac84f1828857461fe31e2.url = (args: { token: string | number } |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 viewer1c1dd6d5463ac84f1828857461fe31e2.get = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -564,7 +564,7 @@ viewer1c1dd6d5463ac84f1828857461fe31e2.get = (args: { token: string | number } |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 viewer1c1dd6d5463ac84f1828857461fe31e2.head = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -574,7 +574,7 @@ viewer1c1dd6d5463ac84f1828857461fe31e2.head = (args: { token: string | number } 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 const viewer1c1dd6d5463ac84f1828857461fe31e2Form = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -584,7 +584,7 @@ const viewer1c1dd6d5463ac84f1828857461fe31e2Form = (args: { token: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 viewer1c1dd6d5463ac84f1828857461fe31e2Form.get = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -594,7 +594,7 @@ viewer1c1dd6d5463ac84f1828857461fe31e2Form.get = (args: { token: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:41
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
 * @route '/x/checkout/view/{token}'
 */
 viewer1c1dd6d5463ac84f1828857461fe31e2Form.head = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -621,7 +621,7 @@ export const viewer = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/operations/{checkout}/retry'
 */
 const retry4f7b669a9a3b6667d9810b9b949f9c67 = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -636,7 +636,7 @@ retry4f7b669a9a3b6667d9810b9b949f9c67.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/operations/{checkout}/retry'
 */
 retry4f7b669a9a3b6667d9810b9b949f9c67.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -669,7 +669,7 @@ retry4f7b669a9a3b6667d9810b9b949f9c67.url = (args: { checkout: string | number |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/operations/{checkout}/retry'
 */
 retry4f7b669a9a3b6667d9810b9b949f9c67.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -679,7 +679,7 @@ retry4f7b669a9a3b6667d9810b9b949f9c67.post = (args: { checkout: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/operations/{checkout}/retry'
 */
 const retry4f7b669a9a3b6667d9810b9b949f9c67Form = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -689,7 +689,7 @@ const retry4f7b669a9a3b6667d9810b9b949f9c67Form = (args: { checkout: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/operations/{checkout}/retry'
 */
 retry4f7b669a9a3b6667d9810b9b949f9c67Form.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -700,7 +700,7 @@ retry4f7b669a9a3b6667d9810b9b949f9c67Form.post = (args: { checkout: string | num
 retry4f7b669a9a3b6667d9810b9b949f9c67.form = retry4f7b669a9a3b6667d9810b9b949f9c67Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/checkout/{checkout}/retry'
 */
 const retry5812a563e7710a5eca249d742885b25e = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -715,7 +715,7 @@ retry5812a563e7710a5eca249d742885b25e.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/checkout/{checkout}/retry'
 */
 retry5812a563e7710a5eca249d742885b25e.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -748,7 +748,7 @@ retry5812a563e7710a5eca249d742885b25e.url = (args: { checkout: string | number |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/checkout/{checkout}/retry'
 */
 retry5812a563e7710a5eca249d742885b25e.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -758,7 +758,7 @@ retry5812a563e7710a5eca249d742885b25e.post = (args: { checkout: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/checkout/{checkout}/retry'
 */
 const retry5812a563e7710a5eca249d742885b25eForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -768,7 +768,7 @@ const retry5812a563e7710a5eca249d742885b25eForm = (args: { checkout: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:82
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
 * @route '/x/checkout/{checkout}/retry'
 */
 retry5812a563e7710a5eca249d742885b25eForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -790,7 +790,7 @@ export const retry = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/operations/{checkout}/refund'
 */
 const openRefund987b1703f7f7acc57d41c95719a97fb7 = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -805,7 +805,7 @@ openRefund987b1703f7f7acc57d41c95719a97fb7.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/operations/{checkout}/refund'
 */
 openRefund987b1703f7f7acc57d41c95719a97fb7.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -838,7 +838,7 @@ openRefund987b1703f7f7acc57d41c95719a97fb7.url = (args: { checkout: string | num
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/operations/{checkout}/refund'
 */
 openRefund987b1703f7f7acc57d41c95719a97fb7.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -848,7 +848,7 @@ openRefund987b1703f7f7acc57d41c95719a97fb7.post = (args: { checkout: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/operations/{checkout}/refund'
 */
 const openRefund987b1703f7f7acc57d41c95719a97fb7Form = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -858,7 +858,7 @@ const openRefund987b1703f7f7acc57d41c95719a97fb7Form = (args: { checkout: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/operations/{checkout}/refund'
 */
 openRefund987b1703f7f7acc57d41c95719a97fb7Form.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -869,7 +869,7 @@ openRefund987b1703f7f7acc57d41c95719a97fb7Form.post = (args: { checkout: string 
 openRefund987b1703f7f7acc57d41c95719a97fb7.form = openRefund987b1703f7f7acc57d41c95719a97fb7Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 const openRefundfacf08d77e5f0daf7bee60ace140aa7e = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -884,7 +884,7 @@ openRefundfacf08d77e5f0daf7bee60ace140aa7e.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 openRefundfacf08d77e5f0daf7bee60ace140aa7e.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -917,7 +917,7 @@ openRefundfacf08d77e5f0daf7bee60ace140aa7e.url = (args: { checkout: string | num
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 openRefundfacf08d77e5f0daf7bee60ace140aa7e.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -927,7 +927,7 @@ openRefundfacf08d77e5f0daf7bee60ace140aa7e.post = (args: { checkout: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 const openRefundfacf08d77e5f0daf7bee60ace140aa7eForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -937,7 +937,7 @@ const openRefundfacf08d77e5f0daf7bee60ace140aa7eForm = (args: { checkout: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::openRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 openRefundfacf08d77e5f0daf7bee60ace140aa7eForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -959,7 +959,7 @@ export const openRefund = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/operations/{checkout}/refund/record'
 */
 const recordRefundf67f3024a880f4eb7c824ff9401a7f1b = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -974,7 +974,7 @@ recordRefundf67f3024a880f4eb7c824ff9401a7f1b.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/operations/{checkout}/refund/record'
 */
 recordRefundf67f3024a880f4eb7c824ff9401a7f1b.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -1007,7 +1007,7 @@ recordRefundf67f3024a880f4eb7c824ff9401a7f1b.url = (args: { checkout: string | n
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/operations/{checkout}/refund/record'
 */
 recordRefundf67f3024a880f4eb7c824ff9401a7f1b.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1017,7 +1017,7 @@ recordRefundf67f3024a880f4eb7c824ff9401a7f1b.post = (args: { checkout: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/operations/{checkout}/refund/record'
 */
 const recordRefundf67f3024a880f4eb7c824ff9401a7f1bForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1027,7 +1027,7 @@ const recordRefundf67f3024a880f4eb7c824ff9401a7f1bForm = (args: { checkout: stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/operations/{checkout}/refund/record'
 */
 recordRefundf67f3024a880f4eb7c824ff9401a7f1bForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1038,7 +1038,7 @@ recordRefundf67f3024a880f4eb7c824ff9401a7f1bForm.post = (args: { checkout: strin
 recordRefundf67f3024a880f4eb7c824ff9401a7f1b.form = recordRefundf67f3024a880f4eb7c824ff9401a7f1bForm
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 const recordRefundcbb9f1f3ef875a17037ffa016dce0738 = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1053,7 +1053,7 @@ recordRefundcbb9f1f3ef875a17037ffa016dce0738.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 recordRefundcbb9f1f3ef875a17037ffa016dce0738.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -1086,7 +1086,7 @@ recordRefundcbb9f1f3ef875a17037ffa016dce0738.url = (args: { checkout: string | n
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 recordRefundcbb9f1f3ef875a17037ffa016dce0738.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1096,7 +1096,7 @@ recordRefundcbb9f1f3ef875a17037ffa016dce0738.post = (args: { checkout: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 const recordRefundcbb9f1f3ef875a17037ffa016dce0738Form = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1106,7 +1106,7 @@ const recordRefundcbb9f1f3ef875a17037ffa016dce0738Form = (args: { checkout: stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::recordRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 recordRefundcbb9f1f3ef875a17037ffa016dce0738Form.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1128,7 +1128,7 @@ export const recordRefund = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/operations/{checkout}/refund/reconcile'
 */
 const reconcileRefundf277a7371ce9a3af023e69d795b7341d = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1143,7 +1143,7 @@ reconcileRefundf277a7371ce9a3af023e69d795b7341d.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/operations/{checkout}/refund/reconcile'
 */
 reconcileRefundf277a7371ce9a3af023e69d795b7341d.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -1176,7 +1176,7 @@ reconcileRefundf277a7371ce9a3af023e69d795b7341d.url = (args: { checkout: string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/operations/{checkout}/refund/reconcile'
 */
 reconcileRefundf277a7371ce9a3af023e69d795b7341d.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1186,7 +1186,7 @@ reconcileRefundf277a7371ce9a3af023e69d795b7341d.post = (args: { checkout: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/operations/{checkout}/refund/reconcile'
 */
 const reconcileRefundf277a7371ce9a3af023e69d795b7341dForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1196,7 +1196,7 @@ const reconcileRefundf277a7371ce9a3af023e69d795b7341dForm = (args: { checkout: s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/operations/{checkout}/refund/reconcile'
 */
 reconcileRefundf277a7371ce9a3af023e69d795b7341dForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1207,7 +1207,7 @@ reconcileRefundf277a7371ce9a3af023e69d795b7341dForm.post = (args: { checkout: st
 reconcileRefundf277a7371ce9a3af023e69d795b7341d.form = reconcileRefundf277a7371ce9a3af023e69d795b7341dForm
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 const reconcileRefundbb3b927934a7ba726f94caa018a99006 = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1222,7 +1222,7 @@ reconcileRefundbb3b927934a7ba726f94caa018a99006.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 reconcileRefundbb3b927934a7ba726f94caa018a99006.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -1255,7 +1255,7 @@ reconcileRefundbb3b927934a7ba726f94caa018a99006.url = (args: { checkout: string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 reconcileRefundbb3b927934a7ba726f94caa018a99006.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -1265,7 +1265,7 @@ reconcileRefundbb3b927934a7ba726f94caa018a99006.post = (args: { checkout: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 const reconcileRefundbb3b927934a7ba726f94caa018a99006Form = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -1275,7 +1275,7 @@ const reconcileRefundbb3b927934a7ba726f94caa018a99006Form = (args: { checkout: s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcileRefund
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 reconcileRefundbb3b927934a7ba726f94caa018a99006Form.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

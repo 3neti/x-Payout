@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::open
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 export const open = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ open.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::open
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 open.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -49,7 +49,7 @@ open.url = (args: { checkout: string | number | { reference: string | number } }
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::open
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 open.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -59,7 +59,7 @@ open.post = (args: { checkout: string | number | { reference: string | number } 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::open
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 const openForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -69,7 +69,7 @@ const openForm = (args: { checkout: string | number | { reference: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::open
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:99
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:101
 * @route '/x/checkout/{checkout}/refund'
 */
 openForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -81,7 +81,7 @@ open.form = openForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::record
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 export const record = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -96,7 +96,7 @@ record.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::record
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 record.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -129,7 +129,7 @@ record.url = (args: { checkout: string | number | { reference: string | number }
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::record
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 record.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -139,7 +139,7 @@ record.post = (args: { checkout: string | number | { reference: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::record
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 const recordForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -149,7 +149,7 @@ const recordForm = (args: { checkout: string | number | { reference: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::record
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:140
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:142
 * @route '/x/checkout/{checkout}/refund/record'
 */
 recordForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -161,7 +161,7 @@ record.form = recordForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcile
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 export const reconcile = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -176,7 +176,7 @@ reconcile.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcile
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 reconcile.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -209,7 +209,7 @@ reconcile.url = (args: { checkout: string | number | { reference: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcile
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 reconcile.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -219,7 +219,7 @@ reconcile.post = (args: { checkout: string | number | { reference: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcile
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 const reconcileForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -229,7 +229,7 @@ const reconcileForm = (args: { checkout: string | number | { reference: string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::reconcile
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:173
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:175
 * @route '/x/checkout/{checkout}/refund/reconcile'
 */
 reconcileForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
+import storedValueCollections from './stored-value-collections'
 import operationsEconomics4f7082 from './operations-economics'
 import commercial from './commercial'
 import apiPartners from './api-partners'
@@ -420,6 +421,7 @@ quickGenerateForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get
 quickGenerate.form = quickGenerateForm
 
 const cockpit = {
+    storedValueCollections: Object.assign(storedValueCollections, storedValueCollections),
     entry: Object.assign(entry, entry),
     dashboard: Object.assign(dashboard, dashboard),
     operationsEconomics: Object.assign(operationsEconomics, operationsEconomics4f7082),
