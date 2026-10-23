@@ -12,9 +12,9 @@
         "types:check:all": "vue-tsc --noEmit"
     },
     "dependencies": {
-        "@inertiajs/core": "^3.9.1",
+        "@inertiajs/core": "3.6.1",
         "@inertiajs/vite": "^3.0.0",
-        "@inertiajs/vue3": "^3.0.0",
+        "@inertiajs/vue3": "3.6.1",
         "@laravel/echo-vue": "^2.4.0",
         "@laravel/passkeys": "^0.2.0",
         "@lucide/vue": "^1.17.0",
