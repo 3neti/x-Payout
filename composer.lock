@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bb916096f89f71412bd7b536f25e963",
+    "content-hash": "467e5670125b1e2f8d2dd8b9807065c0",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1353,16 +1353,16 @@
         },
         {
             "name": "3neti/voucher",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/voucher.git",
-                "reference": "f7864aeb3897f98f5fd21bdfe22b8f2d08cfef3c"
+                "reference": "c85210365ff46779014a7f87fbbdbcb84812983e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/voucher/zipball/f7864aeb3897f98f5fd21bdfe22b8f2d08cfef3c",
-                "reference": "f7864aeb3897f98f5fd21bdfe22b8f2d08cfef3c",
+                "url": "https://api.github.com/repos/3neti/voucher/zipball/c85210365ff46779014a7f87fbbdbcb84812983e",
+                "reference": "c85210365ff46779014a7f87fbbdbcb84812983e",
                 "shasum": ""
             },
             "require": {
@@ -1430,7 +1430,7 @@
                 "issues": "https://github.com/3neti/voucher/issues",
                 "source": "https://github.com/3neti/voucher"
             },
-            "time": "2026-08-26T13:26:02+00:00"
+            "time": "2026-10-23T01:32:38+00:00"
         },
         {
             "name": "3neti/wallet",
@@ -1673,12 +1673,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "e99e791d58672954f667350d9b9713be8ea9682b"
+                "reference": "573db57e6698af27c4e61d7099ff1b2f24c7946b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/e99e791d58672954f667350d9b9713be8ea9682b",
-                "reference": "e99e791d58672954f667350d9b9713be8ea9682b",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/573db57e6698af27c4e61d7099ff1b2f24c7946b",
+                "reference": "573db57e6698af27c4e61d7099ff1b2f24c7946b",
                 "shasum": ""
             },
             "require": {
@@ -1784,7 +1784,7 @@
                 "issues": "https://github.com/3neti/x-change/issues",
                 "source": "https://github.com/3neti/x-change/tree/main"
             },
-            "time": "2026-10-23T05:34:35+00:00"
+            "time": "2026-10-23T06:00:35+00:00"
         },
         {
             "name": "3neti/x-commerce",
