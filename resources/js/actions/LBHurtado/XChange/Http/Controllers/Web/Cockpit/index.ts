@@ -6,6 +6,7 @@ import CockpitQuickGenerateClaimPreviewExportController from './CockpitQuickGene
 import CockpitQuickGenerateInterpretController from './CockpitQuickGenerateInterpretController'
 import CockpitQuickGenerateMutationRouteShellController from './CockpitQuickGenerateMutationRouteShellController'
 import CockpitOnDemandIssuanceFundingOrderController from './CockpitOnDemandIssuanceFundingOrderController'
+import CockpitEnrollmentOfferController from './CockpitEnrollmentOfferController'
 import CockpitEntryPageController from './CockpitEntryPageController'
 import CockpitDashboardPageController from './CockpitDashboardPageController'
 import CockpitDocumentationPageController from './CockpitDocumentationPageController'
@@ -124,6 +125,7 @@ const Cockpit = {
     CockpitQuickGenerateInterpretController: Object.assign(CockpitQuickGenerateInterpretController, CockpitQuickGenerateInterpretController),
     CockpitQuickGenerateMutationRouteShellController: Object.assign(CockpitQuickGenerateMutationRouteShellController, CockpitQuickGenerateMutationRouteShellController),
     CockpitOnDemandIssuanceFundingOrderController: Object.assign(CockpitOnDemandIssuanceFundingOrderController, CockpitOnDemandIssuanceFundingOrderController),
+    CockpitEnrollmentOfferController: Object.assign(CockpitEnrollmentOfferController, CockpitEnrollmentOfferController),
     CockpitEntryPageController: Object.assign(CockpitEntryPageController, CockpitEntryPageController),
     CockpitDashboardPageController: Object.assign(CockpitDashboardPageController, CockpitDashboardPageController),
     CockpitDocumentationPageController: Object.assign(CockpitDocumentationPageController, CockpitDocumentationPageController),

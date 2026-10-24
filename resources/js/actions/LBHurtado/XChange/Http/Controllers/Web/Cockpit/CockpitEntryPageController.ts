@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 const CockpitEntryPageController = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ CockpitEntryPageController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 CockpitEntryPageController.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ CockpitEntryPageController.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 CockpitEntryPageController.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ CockpitEntryPageController.get = (options?: RouteQueryOptions): RouteDefinition<
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 CockpitEntryPageController.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ CockpitEntryPageController.head = (options?: RouteQueryOptions): RouteDefinition
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 const CockpitEntryPageControllerForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const CockpitEntryPageControllerForm = (options?: RouteQueryOptions): RouteFormD
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 CockpitEntryPageControllerForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ CockpitEntryPageControllerForm.get = (options?: RouteQueryOptions): RouteFormDef
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 CockpitEntryPageControllerForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

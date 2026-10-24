@@ -17,6 +17,7 @@ import payCodes from './pay-codes'
 import balances from './balances'
 import providerWallets from './provider-wallets'
 import demoPolicy from './demo-policy'
+import enrollment from './enrollment'
 import pay from './pay'
 import leads from './leads'
 import api from './api'
@@ -204,6 +205,7 @@ const xChange = {
     balances: Object.assign(balances, balances),
     providerWallets: Object.assign(providerWallets, providerWallets),
     demoPolicy: Object.assign(demoPolicy, demoPolicy),
+    enrollment: Object.assign(enrollment, enrollment),
     pay: Object.assign(pay, pay),
     leads: Object.assign(leads, leads),
     api: Object.assign(api, api),

@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
+import enrollments from './enrollments'
 import storedValueCollections from './stored-value-collections'
 import operationsEconomics4f7082 from './operations-economics'
 import commercial from './commercial'
@@ -17,7 +18,7 @@ import diagnostics from './diagnostics'
 import payCodes from './pay-codes'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 export const entry = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -32,7 +33,7 @@ entry.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 entry.url = (options?: RouteQueryOptions) => {
@@ -41,7 +42,7 @@ entry.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 entry.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -51,7 +52,7 @@ entry.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 entry.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -61,7 +62,7 @@ entry.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 const entryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -71,7 +72,7 @@ const entryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 entryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,7 +82,7 @@ entryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
 * @route '/x/cockpit'
 */
 entryForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -421,6 +422,7 @@ quickGenerateForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get
 quickGenerate.form = quickGenerateForm
 
 const cockpit = {
+    enrollments: Object.assign(enrollments, enrollments),
     storedValueCollections: Object.assign(storedValueCollections, storedValueCollections),
     entry: Object.assign(entry, entry),
     dashboard: Object.assign(dashboard, dashboard),

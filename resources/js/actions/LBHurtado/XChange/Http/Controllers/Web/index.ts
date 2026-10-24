@@ -22,6 +22,7 @@ import PayCodeShowPageController from './PayCodeShowPageController'
 import BalancePageController from './BalancePageController'
 import StoredValueInstrumentPageController from './StoredValueInstrumentPageController'
 import LinkPaynamicsWalletController from './LinkPaynamicsWalletController'
+import EnrollmentController from './EnrollmentController'
 import Payment from './Payment'
 import Leads from './Leads'
 
@@ -50,6 +51,7 @@ const Web = {
     BalancePageController: Object.assign(BalancePageController, BalancePageController),
     StoredValueInstrumentPageController: Object.assign(StoredValueInstrumentPageController, StoredValueInstrumentPageController),
     LinkPaynamicsWalletController: Object.assign(LinkPaynamicsWalletController, LinkPaynamicsWalletController),
+    EnrollmentController: Object.assign(EnrollmentController, EnrollmentController),
     Payment: Object.assign(Payment, Payment),
     Leads: Object.assign(Leads, Leads),
 }
