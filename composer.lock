@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7e8118463f5bba467940706d34f88ba9",
+    "content-hash": "c3b1ade6561236afbb4eca397749fc75",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1841,6 +1841,64 @@
                 "source": "https://github.com/3neti/x-commerce/tree/v1.4.6"
             },
             "time": "2026-10-20T22:21:48+00:00"
+        },
+        {
+            "name": "3neti/x-deploy",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/3neti/x-deploy.git",
+                "reference": "2c93bcf14a6cc079c9c5a31a81f1ef2b6080c70d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/3neti/x-deploy/zipball/2c93bcf14a6cc079c9c5a31a81f1ef2b6080c70d",
+                "reference": "2c93bcf14a6cc079c9c5a31a81f1ef2b6080c70d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^12.0 || ^13.0",
+                "illuminate/http": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^10.0 || ^11.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LBHurtado\\XDeploy\\XDeployServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LBHurtado\\XDeploy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lester B. Hurtado"
+                }
+            ],
+            "description": "Release compatibility, commissioning, and deployment telemetry for x-change hosts.",
+            "support": {
+                "issues": "https://github.com/3neti/x-deploy/issues",
+                "source": "https://github.com/3neti/x-deploy/tree/v1.0.0"
+            },
+            "time": "2026-10-23T23:50:31+00:00"
         },
         {
             "name": "3neti/x-feedback",
