@@ -215,7 +215,7 @@ convert.form = convertForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetIntakeController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:178
 * @route '/x/cockpit/campaigns/intakes/{intake}'
 */
 export const destroy = (args: { intake: string | number } | [intake: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -230,7 +230,7 @@ destroy.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetIntakeController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:178
 * @route '/x/cockpit/campaigns/intakes/{intake}'
 */
 destroy.url = (args: { intake: string | number } | [intake: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -257,7 +257,7 @@ destroy.url = (args: { intake: string | number } | [intake: string | number ] | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetIntakeController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:178
 * @route '/x/cockpit/campaigns/intakes/{intake}'
 */
 destroy.delete = (args: { intake: string | number } | [intake: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -267,7 +267,7 @@ destroy.delete = (args: { intake: string | number } | [intake: string | number ]
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetIntakeController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:178
 * @route '/x/cockpit/campaigns/intakes/{intake}'
 */
 const destroyForm = (args: { intake: string | number } | [intake: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -282,7 +282,7 @@ const destroyForm = (args: { intake: string | number } | [intake: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetIntakeController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetIntakeController.php:178
 * @route '/x/cockpit/campaigns/intakes/{intake}'
 */
 destroyForm.delete = (args: { intake: string | number } | [intake: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

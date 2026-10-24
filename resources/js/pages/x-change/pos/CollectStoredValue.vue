@@ -10,13 +10,20 @@ type Collection = {
     status: string;
     amount_minor: number;
     currency: string;
+    authorization_method?: 'collector' | 'holder_otp';
     available_minor?: number;
     balance_after_minor?: number;
     expires_at: string;
 };
+type CollectionSummary = Pick<Collection, 'reference' | 'status' | 'amount_minor' | 'currency' | 'authorization_method'> & {
+    created_at: string | null;
+};
 
 const props = defineProps<{
     channel: 'cockpit' | 'operations';
+    view?: 'collect' | 'activity' | 'exceptions';
+    recent_collections?: CollectionSummary[];
+    fixed_amount_minor: number;
     endpoints: { start: string; status: string; verify: string; commit: string };
 }>();
 
@@ -25,6 +32,7 @@ const amount = ref('');
 const otp = ref('');
 const resumeReference = ref('');
 const collection = ref<Collection | null>(null);
+const showCollector = ref(false);
 const busy = ref(false);
 const scanning = ref(false);
 const error = ref('');
@@ -63,7 +71,7 @@ async function submit(url: string, payload: Record<string, unknown>, key?: strin
 
 async function start(): Promise<void> {
     const code = parsePayCodeInput(input.value);
-    const amountText = String(amount.value).trim();
+    const amountText = props.fixed_amount_minor > 0 ? String(props.fixed_amount_minor / 100) : String(amount.value).trim();
     const validAmount = /^\d+(?:\.\d{1,2})?$/.test(amountText);
     const [whole, fraction = ''] = amountText.split('.');
     const amountMinor = Number(whole) * 100 + Number(fraction.padEnd(2, '0'));
@@ -77,7 +85,7 @@ async function start(): Promise<void> {
     try {
         collection.value = await submit(props.endpoints.start, {
             code,
-            amount_minor: amountMinor,
+            ...(props.fixed_amount_minor > 0 ? {} : { amount_minor: amountMinor }),
             currency: 'PHP',
         }, idempotencyKey.value);
         confirmedCode.value = code;
@@ -107,6 +115,11 @@ async function resume(): Promise<void> {
     }
 }
 
+async function openCollection(reference: string): Promise<void> {
+    resumeReference.value = reference;
+    await resume();
+}
+
 async function verify(): Promise<void> {
     if (!collection.value) return;
     error.value = '';
@@ -122,7 +135,7 @@ async function verify(): Promise<void> {
 }
 
 async function commit(): Promise<void> {
-    if (!collection.value || collection.value.status !== 'verified') return;
+    if (!collection.value || !['ready', 'verified'].includes(collection.value.status)) return;
     error.value = '';
     busy.value = true;
     try {
@@ -162,6 +175,7 @@ async function scan(event: Event): Promise<void> {
 }
 
 function reset(): void {
+    showCollector.value = true;
     collection.value = null;
     input.value = '';
     amount.value = '';
@@ -178,11 +192,25 @@ function reset(): void {
         <div class="mx-auto w-full max-w-lg space-y-6">
             <header>
                 <p class="text-sm font-semibold uppercase tracking-widest text-slate-500">Pay Code · Stored value</p>
-                <h1 class="mt-2 text-3xl font-semibold">Collect a payment</h1>
-                <p class="mt-2 text-sm text-slate-600">Enter or scan the marked Pay Code, then set the amount to collect.</p>
+                <h1 class="mt-2 text-3xl font-semibold">{{ props.view === 'activity' ? 'Collection activity' : props.view === 'exceptions' ? 'Unfinished collections' : 'Collect a payment' }}</h1>
+                <p v-if="!props.view || props.view === 'collect'" class="mt-2 text-sm text-slate-600">{{ props.fixed_amount_minor > 0 ? 'Enter or scan the marked Pay Code to collect the configured fare.' : 'Enter or scan the marked Pay Code, then set the amount to collect.' }}</p>
+                <button v-else type="button" class="mt-3 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold" @click="reset">New collection</button>
             </header>
 
-            <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+            <section v-if="props.view === 'activity' || props.view === 'exceptions'" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" data-testid="stored-value-collection-activity">
+                <p v-if="!props.recent_collections?.length" class="text-sm text-slate-600">No collections in this view.</p>
+                <ul v-else class="divide-y divide-slate-200">
+                    <li v-for="item in props.recent_collections" :key="item.reference" class="flex items-center justify-between gap-3 py-3 text-sm">
+                        <div class="min-w-0">
+                            <p class="font-mono text-xs text-slate-500">{{ item.reference }}</p>
+                            <p class="font-semibold">{{ money(item.amount_minor) }} · {{ item.status }}</p>
+                        </div>
+                        <button type="button" class="rounded-lg border border-slate-300 px-3 py-2 font-semibold" :disabled="busy" @click="openCollection(item.reference)">Open</button>
+                    </li>
+                </ul>
+            </section>
+
+            <section v-if="!props.view || props.view === 'collect' || showCollector || collection" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
                 <form v-if="!collection" class="space-y-5" @submit.prevent="start">
                     <div>
                         <label for="collection-code" class="block text-sm font-medium">Pay Code</label>
@@ -194,13 +222,16 @@ function reset(): void {
                             <input class="sr-only" type="file" accept="image/*" capture="environment" :disabled="scanning || busy" @change="scan" />
                         </label>
                     </div>
-                    <div>
+                    <div v-if="props.fixed_amount_minor > 0" class="rounded-xl bg-slate-100 px-4 py-3 text-lg font-semibold">
+                        Fare · {{ money(props.fixed_amount_minor) }}
+                    </div>
+                    <div v-else>
                         <label for="collection-amount" class="block text-sm font-medium">Amount to collect · PHP</label>
                         <input id="collection-amount" v-model="amount" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="25.00"
                             class="mt-2 w-full rounded-xl border border-slate-300 px-4 py-3 text-lg focus:border-slate-950 focus:outline-none"
                             @input="idempotencyKey = ''" />
                     </div>
-                    <button type="submit" :disabled="busy || scanning" class="w-full rounded-xl bg-slate-950 px-4 py-3 font-semibold text-white disabled:opacity-50">{{ busy ? 'Starting…' : 'Request holder approval' }}</button>
+                    <button type="submit" :disabled="busy || scanning" class="w-full rounded-xl bg-slate-950 px-4 py-3 font-semibold text-white disabled:opacity-50">{{ busy ? 'Starting…' : 'Review collection' }}</button>
                 </form>
 
                 <div v-else class="space-y-5" aria-live="polite">
@@ -217,10 +248,10 @@ function reset(): void {
                             <button type="submit" :disabled="busy" class="w-full rounded-xl bg-slate-950 px-4 py-3 font-semibold text-white disabled:opacity-50">Verify holder</button>
                         </form>
                     </template>
-                    <template v-else-if="collection.status === 'verified'">
-                        <p class="text-sm">Holder approved. Available balance: <strong>{{ money(collection.available_minor ?? 0) }}</strong></p>
+                    <template v-else-if="collection.status === 'verified' || collection.status === 'ready'">
+                        <p class="text-sm">{{ collection.status === 'verified' ? 'Holder approved.' : 'Collector authorized.' }} Available balance: <strong>{{ money(collection.available_minor ?? 0) }}</strong></p>
                         <p v-if="(collection.available_minor ?? 0) < collection.amount_minor" class="text-sm font-medium text-red-700">The available balance is below the collection amount. Start a new collection for a lower amount.</p>
-                        <p v-else class="text-sm">Confirm the amount with the holder before collecting.</p>
+                        <p v-else class="text-sm">Check the amount before collecting.</p>
                         <button type="button" :disabled="busy || (collection.available_minor ?? 0) < collection.amount_minor" class="w-full rounded-xl bg-slate-950 px-4 py-3 font-semibold text-white disabled:opacity-50" @click="commit">{{ busy ? 'Collecting…' : `Collect ${formattedAmount}` }}</button>
                         <button type="button" class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold" @click="reset">Start a new collection</button>
                     </template>
@@ -233,11 +264,11 @@ function reset(): void {
                 </div>
                 <p v-if="error" role="alert" class="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{{ error }}</p>
             </section>
-            <form v-if="!collection" class="flex gap-2" @submit.prevent="resume">
+            <form v-if="!collection && (!props.view || props.view === 'collect')" class="flex gap-2" @submit.prevent="resume">
                 <input v-model="resumeReference" aria-label="Collection reference" placeholder="Resume by reference" class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm" />
                 <button type="submit" :disabled="busy" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold">Resume</button>
             </form>
-            <p class="text-center text-xs text-slate-500">The balance is shown after the holder approves. Camera text recognition runs on this device.</p>
+            <p v-if="!props.view || props.view === 'collect'" class="text-center text-xs text-slate-500">The balance is shown after collection authorization. Camera text recognition runs on this device.</p>
         </div>
     </main>
 </template>

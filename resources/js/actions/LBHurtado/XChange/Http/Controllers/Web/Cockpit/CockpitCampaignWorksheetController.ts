@@ -138,7 +138,7 @@ store.form = storeForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 export const show = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -153,7 +153,7 @@ show.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 show.url = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -180,7 +180,7 @@ show.url = (args: { worksheet: string | number } | [worksheet: string | number ]
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 show.get = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -190,7 +190,7 @@ show.get = (args: { worksheet: string | number } | [worksheet: string | number ]
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 show.head = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -200,7 +200,7 @@ show.head = (args: { worksheet: string | number } | [worksheet: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 const showForm = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -210,7 +210,7 @@ const showForm = (args: { worksheet: string | number } | [worksheet: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 showForm.get = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -220,7 +220,7 @@ showForm.get = (args: { worksheet: string | number } | [worksheet: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::show
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:109
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:115
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 showForm.head = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -237,7 +237,7 @@ show.form = showForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:143
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:149
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 export const destroy = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -252,7 +252,7 @@ destroy.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:143
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:149
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 destroy.url = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -279,7 +279,7 @@ destroy.url = (args: { worksheet: string | number } | [worksheet: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:143
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:149
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 destroy.delete = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -289,7 +289,7 @@ destroy.delete = (args: { worksheet: string | number } | [worksheet: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:143
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:149
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 const destroyForm = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -304,7 +304,7 @@ const destroyForm = (args: { worksheet: string | number } | [worksheet: string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::destroy
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:143
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:149
 * @route '/x/cockpit/campaigns/{worksheet}'
 */
 destroyForm.delete = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -321,7 +321,7 @@ destroy.form = destroyForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::addRow
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:178
 * @route '/x/cockpit/campaigns/{worksheet}/rows'
 */
 export const addRow = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -336,7 +336,7 @@ addRow.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::addRow
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:178
 * @route '/x/cockpit/campaigns/{worksheet}/rows'
 */
 addRow.url = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -363,7 +363,7 @@ addRow.url = (args: { worksheet: string | number } | [worksheet: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::addRow
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:178
 * @route '/x/cockpit/campaigns/{worksheet}/rows'
 */
 addRow.post = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -373,7 +373,7 @@ addRow.post = (args: { worksheet: string | number } | [worksheet: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::addRow
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:178
 * @route '/x/cockpit/campaigns/{worksheet}/rows'
 */
 const addRowForm = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -383,7 +383,7 @@ const addRowForm = (args: { worksheet: string | number } | [worksheet: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitCampaignWorksheetController::addRow
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:172
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitCampaignWorksheetController.php:178
 * @route '/x/cockpit/campaigns/{worksheet}/rows'
 */
 addRowForm.post = (args: { worksheet: string | number } | [worksheet: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
