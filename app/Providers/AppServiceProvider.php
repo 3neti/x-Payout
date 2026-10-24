@@ -5,6 +5,7 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -25,7 +26,26 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configurePaymentNotifications();
+        $this->configureStoredValueCollectors();
         $this->configureDefaults();
+    }
+
+    /**
+     * Grant fare collection only to deployment-approved staff accounts.
+     */
+    protected function configureStoredValueCollectors(): void
+    {
+        $operatorIds = config('stored_value_collection.operator_user_ids', []);
+
+        if (! is_array($operatorIds) || $operatorIds === []) {
+            return;
+        }
+
+        Gate::define('x-change.stored-value.collect', static fn ($user): bool => in_array(
+            (int) $user->getAuthIdentifier(),
+            $operatorIds,
+            true,
+        ));
     }
 
     /**
