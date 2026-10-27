@@ -23,6 +23,7 @@ const publishedFrontendPaths = [
     'resources/js/composables/useVoucherPreview.ts',
     'resources/js/config/**',
     'resources/js/data/**',
+    'resources/js/experience/claim-midnight.css',
     'resources/js/layouts/PublicLayout.vue',
     'resources/js/layouts/x-change/**',
     'resources/js/pages/form-flow/**',
