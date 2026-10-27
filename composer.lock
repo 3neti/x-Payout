@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b471721d9c3f4dedb1c0425e74e4f7a2",
+    "content-hash": "8fb187cbf0b42619965b48b9338c69e6",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.0.310",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "b6703d9906a296221b41d1b6cf960cae4a471360"
+                "reference": "c3030d8237d4fd17c444288e3b3e9dabd99c254b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/b6703d9906a296221b41d1b6cf960cae4a471360",
-                "reference": "b6703d9906a296221b41d1b6cf960cae4a471360",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/c3030d8237d4fd17c444288e3b3e9dabd99c254b",
+                "reference": "c3030d8237d4fd17c444288e3b3e9dabd99c254b",
                 "shasum": ""
             },
             "require": {
@@ -1687,7 +1687,7 @@
                 "3neti/emi-core": "^2.0.2",
                 "3neti/emi-netbank": "^2.3.9",
                 "3neti/emi-paynamics": "^2.0",
-                "3neti/form-flow": "^1.9.3",
+                "3neti/form-flow": "^1.11.0",
                 "3neti/form-handler-kyc": "^1.1.4",
                 "3neti/form-handler-location": "^1.2.4",
                 "3neti/form-handler-otp": "^1.2.2",
@@ -1781,9 +1781,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.0.310"
+                "source": "https://github.com/3neti/x-change/tree/v1.1.2"
             },
-            "time": "2026-10-25T14:56:25+00:00"
+            "time": "2026-10-26T22:52:53+00:00"
         },
         {
             "name": "3neti/x-commerce",
