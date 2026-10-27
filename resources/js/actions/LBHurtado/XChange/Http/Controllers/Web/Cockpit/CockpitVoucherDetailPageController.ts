@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 const CockpitVoucherDetailPageController = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ CockpitVoucherDetailPageController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 CockpitVoucherDetailPageController.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ CockpitVoucherDetailPageController.url = (args: { code: string | number } | [cod
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 CockpitVoucherDetailPageController.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ CockpitVoucherDetailPageController.get = (args: { code: string | number } | [cod
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 CockpitVoucherDetailPageController.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -63,7 +63,7 @@ CockpitVoucherDetailPageController.head = (args: { code: string | number } | [co
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 const CockpitVoucherDetailPageControllerForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -73,7 +73,7 @@ const CockpitVoucherDetailPageControllerForm = (args: { code: string | number } 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 CockpitVoucherDetailPageControllerForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -83,7 +83,7 @@ CockpitVoucherDetailPageControllerForm.get = (args: { code: string | number } | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitVoucherDetailPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:25
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitVoucherDetailPageController.php:27
 * @route '/x/cockpit/pay-codes/{code}'
 */
 CockpitVoucherDetailPageControllerForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

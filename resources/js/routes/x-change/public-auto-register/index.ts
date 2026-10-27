@@ -82,7 +82,7 @@ show.form = showForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::start
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:22
 * @route '/x/auto-register/start'
 */
 export const start = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -97,7 +97,7 @@ start.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::start
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:22
 * @route '/x/auto-register/start'
 */
 start.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ start.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::start
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:22
 * @route '/x/auto-register/start'
 */
 start.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -116,7 +116,7 @@ start.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::start
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:22
 * @route '/x/auto-register/start'
 */
 const startForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -126,7 +126,7 @@ const startForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::start
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:20
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:22
 * @route '/x/auto-register/start'
 */
 startForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -138,7 +138,7 @@ start.form = startForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 export const status = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -153,7 +153,7 @@ status.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 status.url = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -186,7 +186,7 @@ status.url = (args: { registration: string | number | { reference: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 status.get = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -196,7 +196,7 @@ status.get = (args: { registration: string | number | { reference: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 status.head = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -206,7 +206,7 @@ status.head = (args: { registration: string | number | { reference: string | num
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 const statusForm = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -216,7 +216,7 @@ const statusForm = (args: { registration: string | number | { reference: string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 statusForm.get = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -226,7 +226,7 @@ statusForm.get = (args: { registration: string | number | { reference: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::status
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:41
 * @route '/x/auto-register/{registration}'
 */
 statusForm.head = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -243,7 +243,7 @@ status.form = statusForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::complete
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:51
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:62
 * @route '/x/auto-register/{registration}/complete'
 */
 export const complete = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -258,7 +258,7 @@ complete.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::complete
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:51
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:62
 * @route '/x/auto-register/{registration}/complete'
 */
 complete.url = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -291,7 +291,7 @@ complete.url = (args: { registration: string | number | { reference: string | nu
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::complete
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:51
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:62
 * @route '/x/auto-register/{registration}/complete'
 */
 complete.post = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -301,7 +301,7 @@ complete.post = (args: { registration: string | number | { reference: string | n
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::complete
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:51
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:62
 * @route '/x/auto-register/{registration}/complete'
 */
 const completeForm = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -311,7 +311,7 @@ const completeForm = (args: { registration: string | number | { reference: strin
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicOnboarding\AutoRegisterMutationController::complete
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:51
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicOnboarding/AutoRegisterMutationController.php:62
 * @route '/x/auto-register/{registration}/complete'
 */
 completeForm.post = (args: { registration: string | number | { reference: string | number } } | [registration: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
