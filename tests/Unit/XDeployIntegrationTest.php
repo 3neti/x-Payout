@@ -19,7 +19,7 @@ it('commissions the payout release against its locked published packages', funct
 
     expect($report['manifest']['schema'])->toBe('x-deploy.manifest.v1')
         ->and($report['manifest']['composer_lock_hash'])->not->toBeEmpty()
-        ->and($packages->get('3neti/x-change'))->toBe('v1.0.310')
+        ->and($packages->get('3neti/x-change'))->toBe('v1.1.2')
         ->and($packages->get('3neti/x-deploy'))->toBe('v1.0.0')
         ->and($report['commissioning'])->toBe(['passed' => true, 'issues' => []]);
 });
