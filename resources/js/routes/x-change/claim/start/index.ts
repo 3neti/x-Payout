@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 export const submit = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ submit.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 submit.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ submit.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ submit.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const submitForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 submitForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 export const store = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 store.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ store.url = (args: { code: string | number } | [code: string | number ] | string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 store.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ store.post = (args: { code: string | number } | [code: string | number ] | strin
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 const storeForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const storeForm = (args: { code: string | number } | [code: string | number ] | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 storeForm.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

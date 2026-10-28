@@ -22,5 +22,5 @@ it('does not commission collection without an operator allowlist', function (): 
     $method = new ReflectionMethod(AppServiceProvider::class, 'configureStoredValueCollectors');
     $method->invoke(new AppServiceProvider(app()));
 
-    expect(Gate::has('x-change.stored-value.collect'))->toBeFalse();
+    expect(Gate::forUser(User::factory()->create())->allows('x-change.stored-value.collect'))->toBeFalse();
 });

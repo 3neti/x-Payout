@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentAttemptController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:22
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:23
 * @route '/x/pay/{code}/attempts'
 */
 const PaymentAttemptController = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ PaymentAttemptController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentAttemptController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:22
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:23
 * @route '/x/pay/{code}/attempts'
 */
 PaymentAttemptController.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ PaymentAttemptController.url = (args: { code: string | number } | [code: string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentAttemptController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:22
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:23
 * @route '/x/pay/{code}/attempts'
 */
 PaymentAttemptController.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ PaymentAttemptController.post = (args: { code: string | number } | [code: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentAttemptController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:22
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:23
 * @route '/x/pay/{code}/attempts'
 */
 const PaymentAttemptControllerForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const PaymentAttemptControllerForm = (args: { code: string | number } | [code: s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentAttemptController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:22
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentAttemptController.php:23
 * @route '/x/pay/{code}/attempts'
 */
 PaymentAttemptControllerForm.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
