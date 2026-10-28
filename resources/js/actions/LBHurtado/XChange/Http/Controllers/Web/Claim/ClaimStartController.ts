@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 const ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.url = (options?: RouteQuery
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.get = (options?: RouteQuery
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.head = (options?: RouteQuer
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 const ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form = (options?: Rout
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form.get = (options?: RouteQ
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,7 +81,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form.head = (options?: Route
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.form = ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 const ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90 = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -96,7 +96,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.url = (options?: RouteQueryOptions) => {
@@ -105,7 +105,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.url = (options?: RouteQuery
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -115,7 +115,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.post = (options?: RouteQuer
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 const ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -125,7 +125,7 @@ const ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form = (options?: Rout
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim'
 */
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -136,7 +136,7 @@ ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form.post = (options?: Route
 ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90.form = ClaimStartControllerb9fccb311e8eee9fe946e584ae3d2d90Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 const ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8 = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -151,7 +151,7 @@ ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -178,7 +178,7 @@ ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8.url = (args: { code: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -188,7 +188,7 @@ ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8.post = (args: { code: strin
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 const ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8Form = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -198,7 +198,7 @@ const ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8Form = (args: { code: 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimStartController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimStartController.php:58
 * @route '/x/claim/{code}/flows'
 */
 ClaimStartControllere6d5e4fd27b34b40de04dd297c90d0c8Form.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

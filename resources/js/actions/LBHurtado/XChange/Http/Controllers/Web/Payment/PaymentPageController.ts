@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 const PaymentPageController = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ PaymentPageController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 PaymentPageController.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ PaymentPageController.url = (args: { code: string | number } | [code: string | n
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 PaymentPageController.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -53,7 +53,7 @@ PaymentPageController.get = (args: { code: string | number } | [code: string | n
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 PaymentPageController.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -63,7 +63,7 @@ PaymentPageController.head = (args: { code: string | number } | [code: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 const PaymentPageControllerForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -73,7 +73,7 @@ const PaymentPageControllerForm = (args: { code: string | number } | [code: stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 PaymentPageControllerForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -83,7 +83,7 @@ PaymentPageControllerForm.get = (args: { code: string | number } | [code: string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:31
 * @route '/x/pay/{code}'
 */
 PaymentPageControllerForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
