@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:44
 * @route '/x/claim/{code}/submit'
 */
 const ClaimSubmitController = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ ClaimSubmitController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:44
 * @route '/x/claim/{code}/submit'
 */
 ClaimSubmitController.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ ClaimSubmitController.url = (args: { code: string | number } | [code: string | n
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:44
 * @route '/x/claim/{code}/submit'
 */
 ClaimSubmitController.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ ClaimSubmitController.post = (args: { code: string | number } | [code: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:44
 * @route '/x/claim/{code}/submit'
 */
 const ClaimSubmitControllerForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const ClaimSubmitControllerForm = (args: { code: string | number } | [code: stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSubmitController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSubmitController.php:44
 * @route '/x/claim/{code}/submit'
 */
 ClaimSubmitControllerForm.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
