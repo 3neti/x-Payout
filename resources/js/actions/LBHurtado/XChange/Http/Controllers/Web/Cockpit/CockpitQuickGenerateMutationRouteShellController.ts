@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 const CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80 = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 const CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80Form = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80Form.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -56,7 +56,7 @@ CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80
 CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80.form = CockpitQuickGenerateMutationRouteShellController5d33ac6df75c2505f49854337b8ccc80Form
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/cockpit/quick-generate'
 */
 const CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08 = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -71,7 +71,7 @@ CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/cockpit/quick-generate'
 */
 CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08.url = (options?: RouteQueryOptions) => {
@@ -80,7 +80,7 @@ CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/cockpit/quick-generate'
 */
 CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -90,7 +90,7 @@ CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/cockpit/quick-generate'
 */
 const CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08Form = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -100,7 +100,7 @@ const CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/cockpit/quick-generate'
 */
 CockpitQuickGenerateMutationRouteShellControllerc8b9a4dbdad06fc7e7354de042999b08Form.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

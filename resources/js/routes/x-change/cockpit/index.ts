@@ -342,7 +342,7 @@ documentation.form = documentationForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 export const quickGenerate = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -357,7 +357,7 @@ quickGenerate.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerate.url = (options?: RouteQueryOptions) => {
@@ -366,7 +366,7 @@ quickGenerate.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerate.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -376,7 +376,7 @@ quickGenerate.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerate.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -386,7 +386,7 @@ quickGenerate.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 const quickGenerateForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -396,7 +396,7 @@ const quickGenerateForm = (options?: RouteQueryOptions): RouteFormDefinition<'ge
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerateForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -406,7 +406,7 @@ quickGenerateForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:43
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerateForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

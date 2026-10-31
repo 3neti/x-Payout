@@ -3,6 +3,7 @@ import ClaimApprovalPageController from './ClaimApprovalPageController'
 import DemonstrationPolicySummaryController from './DemonstrationPolicySummaryController'
 import ClaimStartController from './ClaimStartController'
 import ClaimPageController from './ClaimPageController'
+import ClaimSettlementReviewController from './ClaimSettlementReviewController'
 import ClaimAuthorizationRequiredController from './ClaimAuthorizationRequiredController'
 import ClaimExperienceController from './ClaimExperienceController'
 import ClaimCompleteController from './ClaimCompleteController'
@@ -17,6 +18,7 @@ const Claim = {
     DemonstrationPolicySummaryController: Object.assign(DemonstrationPolicySummaryController, DemonstrationPolicySummaryController),
     ClaimStartController: Object.assign(ClaimStartController, ClaimStartController),
     ClaimPageController: Object.assign(ClaimPageController, ClaimPageController),
+    ClaimSettlementReviewController: Object.assign(ClaimSettlementReviewController, ClaimSettlementReviewController),
     ClaimAuthorizationRequiredController: Object.assign(ClaimAuthorizationRequiredController, ClaimAuthorizationRequiredController),
     ClaimExperienceController: Object.assign(ClaimExperienceController, ClaimExperienceController),
     ClaimCompleteController: Object.assign(ClaimCompleteController, ClaimCompleteController),
