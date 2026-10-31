@@ -62,7 +62,7 @@ interpret.form = interpretForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -77,7 +77,7 @@ show.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -86,7 +86,7 @@ show.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -96,7 +96,7 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -106,7 +106,7 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -116,7 +116,7 @@ const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -126,7 +126,7 @@ showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 showForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -143,7 +143,7 @@ show.form = showForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -158,7 +158,7 @@ store.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -167,7 +167,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -177,7 +177,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -187,7 +187,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:56
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
 * @route '/x/auto-generate'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

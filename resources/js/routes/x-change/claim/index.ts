@@ -1,5 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 import start864adb from './start'
+import settlementReview from './settlement-review'
 import flows from './flows'
 import approvalDf7719 from './approval'
 /**
@@ -184,7 +185,7 @@ start.form = startForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 export const show = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -199,7 +200,7 @@ show.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 show.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -226,7 +227,7 @@ show.url = (args: { code: string | number } | [code: string | number ] | string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 show.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -236,7 +237,7 @@ show.get = (args: { code: string | number } | [code: string | number ] | string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 show.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -246,7 +247,7 @@ show.head = (args: { code: string | number } | [code: string | number ] | string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 const showForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -256,7 +257,7 @@ const showForm = (args: { code: string | number } | [code: string | number ] | s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 showForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -266,7 +267,7 @@ showForm.get = (args: { code: string | number } | [code: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimPageController.php:31
 * @route '/x/claim/{code}'
 */
 showForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -928,6 +929,7 @@ const claim = {
     shareCard: Object.assign(shareCard, shareCard),
     start: Object.assign(start, start864adb),
     show: Object.assign(show, show),
+    settlementReview: Object.assign(settlementReview, settlementReview),
     authorizationRequired: Object.assign(authorizationRequired, authorizationRequired),
     experience: Object.assign(experience, experience),
     flows: Object.assign(flows, flows),

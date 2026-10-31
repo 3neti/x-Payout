@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 const PublicAutoGeneratePageController = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ PublicAutoGeneratePageController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 PublicAutoGeneratePageController.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ PublicAutoGeneratePageController.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 PublicAutoGeneratePageController.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ PublicAutoGeneratePageController.get = (options?: RouteQueryOptions): RouteDefin
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 PublicAutoGeneratePageController.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ PublicAutoGeneratePageController.head = (options?: RouteQueryOptions): RouteDefi
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 const PublicAutoGeneratePageControllerForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const PublicAutoGeneratePageControllerForm = (options?: RouteQueryOptions): Rout
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 PublicAutoGeneratePageControllerForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ PublicAutoGeneratePageControllerForm.get = (options?: RouteQueryOptions): RouteF
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\PublicAutoGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:38
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/PublicAutoGeneratePageController.php:39
 * @route '/x/auto-generate'
 */
 PublicAutoGeneratePageControllerForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
