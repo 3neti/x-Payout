@@ -631,7 +631,7 @@ submit.form = submitForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 export const success = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -646,7 +646,7 @@ success.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 success.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -673,7 +673,7 @@ success.url = (args: { code: string | number } | [code: string | number ] | stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 success.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -683,7 +683,7 @@ success.get = (args: { code: string | number } | [code: string | number ] | stri
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 success.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -693,7 +693,7 @@ success.head = (args: { code: string | number } | [code: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 const successForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -703,7 +703,7 @@ const successForm = (args: { code: string | number } | [code: string | number ] 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 successForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -713,7 +713,7 @@ successForm.get = (args: { code: string | number } | [code: string | number ] | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSuccessPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSuccessPageController.php:37
 * @route '/x/claim/{code}/success'
 */
 successForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
