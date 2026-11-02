@@ -16,6 +16,8 @@ import payCodeTemplates from './pay-code-templates'
 import riderLibrary from './rider-library'
 import diagnostics from './diagnostics'
 import payCodes from './pay-codes'
+import documents from './documents'
+import contributionInvitations from './contribution-invitations'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitEntryPageController::__invoke
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitEntryPageController.php:22
@@ -442,6 +444,8 @@ const cockpit = {
     riderLibrary: Object.assign(riderLibrary, riderLibrary),
     diagnostics: Object.assign(diagnostics, diagnostics),
     payCodes: Object.assign(payCodes, payCodes),
+    documents: Object.assign(documents, documents),
+    contributionInvitations: Object.assign(contributionInvitations, contributionInvitations),
 }
 
 export default cockpit

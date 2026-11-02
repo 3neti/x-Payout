@@ -98,6 +98,7 @@ import CockpitQuickGenerateFundingPreflightController from './CockpitQuickGenera
 import CockpitCampaignDisplaySessionController from './CockpitCampaignDisplaySessionController'
 import CockpitInstanceKeepsakeDownloadShowController from './CockpitInstanceKeepsakeDownloadShowController'
 import CockpitInstanceKeepsakeDownloadController from './CockpitInstanceKeepsakeDownloadController'
+import CockpitIssuerInvoiceDraftController from './CockpitIssuerInvoiceDraftController'
 import CockpitRiderArtworkPreviewController from './CockpitRiderArtworkPreviewController'
 import CockpitPayCodeTemplateStoreController from './CockpitPayCodeTemplateStoreController'
 import CockpitPayCodeTemplateUpdateController from './CockpitPayCodeTemplateUpdateController'
@@ -106,6 +107,8 @@ import CockpitRiderLibraryPinController from './CockpitRiderLibraryPinController
 import CockpitRiderLibraryForgetController from './CockpitRiderLibraryForgetController'
 import CockpitRuntimeProfilePageController from './CockpitRuntimeProfilePageController'
 import CockpitPayCodeExplorerPageController from './CockpitPayCodeExplorerPageController'
+import CockpitEnvelopeDocumentReviewController from './CockpitEnvelopeDocumentReviewController'
+import CockpitContributionInvitationController from './CockpitContributionInvitationController'
 import CockpitPayCodeStampController from './CockpitPayCodeStampController'
 import CockpitDistributionWorkspacePageController from './CockpitDistributionWorkspacePageController'
 import CockpitPayCodeEvidenceController from './CockpitPayCodeEvidenceController'
@@ -217,6 +220,7 @@ const Cockpit = {
     CockpitCampaignDisplaySessionController: Object.assign(CockpitCampaignDisplaySessionController, CockpitCampaignDisplaySessionController),
     CockpitInstanceKeepsakeDownloadShowController: Object.assign(CockpitInstanceKeepsakeDownloadShowController, CockpitInstanceKeepsakeDownloadShowController),
     CockpitInstanceKeepsakeDownloadController: Object.assign(CockpitInstanceKeepsakeDownloadController, CockpitInstanceKeepsakeDownloadController),
+    CockpitIssuerInvoiceDraftController: Object.assign(CockpitIssuerInvoiceDraftController, CockpitIssuerInvoiceDraftController),
     CockpitRiderArtworkPreviewController: Object.assign(CockpitRiderArtworkPreviewController, CockpitRiderArtworkPreviewController),
     CockpitPayCodeTemplateStoreController: Object.assign(CockpitPayCodeTemplateStoreController, CockpitPayCodeTemplateStoreController),
     CockpitPayCodeTemplateUpdateController: Object.assign(CockpitPayCodeTemplateUpdateController, CockpitPayCodeTemplateUpdateController),
@@ -225,6 +229,8 @@ const Cockpit = {
     CockpitRiderLibraryForgetController: Object.assign(CockpitRiderLibraryForgetController, CockpitRiderLibraryForgetController),
     CockpitRuntimeProfilePageController: Object.assign(CockpitRuntimeProfilePageController, CockpitRuntimeProfilePageController),
     CockpitPayCodeExplorerPageController: Object.assign(CockpitPayCodeExplorerPageController, CockpitPayCodeExplorerPageController),
+    CockpitEnvelopeDocumentReviewController: Object.assign(CockpitEnvelopeDocumentReviewController, CockpitEnvelopeDocumentReviewController),
+    CockpitContributionInvitationController: Object.assign(CockpitContributionInvitationController, CockpitContributionInvitationController),
     CockpitPayCodeStampController: Object.assign(CockpitPayCodeStampController, CockpitPayCodeStampController),
     CockpitDistributionWorkspacePageController: Object.assign(CockpitDistributionWorkspacePageController, CockpitDistributionWorkspacePageController),
     CockpitPayCodeEvidenceController: Object.assign(CockpitPayCodeEvidenceController, CockpitPayCodeEvidenceController),
