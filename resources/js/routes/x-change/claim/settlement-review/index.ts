@@ -100,7 +100,7 @@ show.form = showForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSettlementReviewController::store
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:40
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:41
 * @route '/x/claim/{code}/settlement-review'
 */
 export const store = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -115,7 +115,7 @@ store.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSettlementReviewController::store
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:40
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:41
 * @route '/x/claim/{code}/settlement-review'
 */
 store.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -142,7 +142,7 @@ store.url = (args: { code: string | number } | [code: string | number ] | string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSettlementReviewController::store
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:40
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:41
 * @route '/x/claim/{code}/settlement-review'
 */
 store.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -152,7 +152,7 @@ store.post = (args: { code: string | number } | [code: string | number ] | strin
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSettlementReviewController::store
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:40
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:41
 * @route '/x/claim/{code}/settlement-review'
 */
 const storeForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -162,7 +162,7 @@ const storeForm = (args: { code: string | number } | [code: string | number ] | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimSettlementReviewController::store
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:40
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimSettlementReviewController.php:41
 * @route '/x/claim/{code}/settlement-review'
 */
 storeForm.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

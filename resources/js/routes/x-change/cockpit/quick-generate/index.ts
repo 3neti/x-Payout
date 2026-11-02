@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import invoiceDrafts from './invoice-drafts'
 import fundingOrders from './funding-orders'
 import claimPreviews from './claim-previews'
 import artworkPreviews from './artwork-previews'
@@ -116,7 +117,7 @@ fundingPreflight.form = fundingPreflightForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
 * @route '/x/cockpit/quick-generate'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -131,7 +132,7 @@ store.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
 * @route '/x/cockpit/quick-generate'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -140,7 +141,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
 * @route '/x/cockpit/quick-generate'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -150,7 +151,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
 * @route '/x/cockpit/quick-generate'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -160,7 +161,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:57
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
 * @route '/x/cockpit/quick-generate'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -174,6 +175,7 @@ const quickGenerate = {
     interpret: Object.assign(interpret, interpret),
     fundingPreflight: Object.assign(fundingPreflight, fundingPreflight),
     store: Object.assign(store, store),
+    invoiceDrafts: Object.assign(invoiceDrafts, invoiceDrafts),
     fundingOrders: Object.assign(fundingOrders, fundingOrders),
     claimPreviews: Object.assign(claimPreviews, claimPreviews),
     artworkPreviews: Object.assign(artworkPreviews, artworkPreviews),

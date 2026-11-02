@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 export const artifact = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ artifact.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 artifact.url = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions) => {
@@ -42,7 +42,7 @@ artifact.url = (args: { code: string | number, sha256: string | number } | [code
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 artifact.get = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -52,7 +52,7 @@ artifact.get = (args: { code: string | number, sha256: string | number } | [code
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 artifact.head = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -62,7 +62,7 @@ artifact.head = (args: { code: string | number, sha256: string | number } | [cod
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 const artifactForm = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -72,7 +72,7 @@ const artifactForm = (args: { code: string | number, sha256: string | number } |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 artifactForm.get = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ artifactForm.get = (args: { code: string | number, sha256: string | number } | [
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 artifactForm.head = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 const ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.url = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions) => {
@@ -42,7 +42,7 @@ ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.url = (args: { code: st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.get = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -52,7 +52,7 @@ ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.get = (args: { code: st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.head = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -62,7 +62,7 @@ ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.head = (args: { code: s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 const ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -72,7 +72,7 @@ const ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm = (args: { co
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm.get = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm.get = (args: { code
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card/{sha256}.png'
 */
 ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm.head = (args: { code: string | number, sha256: string | number } | [code: string | number, sha256: string | number ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -98,7 +98,7 @@ ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm.head = (args: { cod
 ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37b.form = ClaimShareCardController04fb0ac5f18fbf38ab9d7edcc81ed37bForm
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 const ClaimShareCardController5b23871d970405c4fd1348ed42263e55 = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -113,7 +113,7 @@ ClaimShareCardController5b23871d970405c4fd1348ed42263e55.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 ClaimShareCardController5b23871d970405c4fd1348ed42263e55.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -140,7 +140,7 @@ ClaimShareCardController5b23871d970405c4fd1348ed42263e55.url = (args: { code: st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 ClaimShareCardController5b23871d970405c4fd1348ed42263e55.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -150,7 +150,7 @@ ClaimShareCardController5b23871d970405c4fd1348ed42263e55.get = (args: { code: st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 ClaimShareCardController5b23871d970405c4fd1348ed42263e55.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -160,7 +160,7 @@ ClaimShareCardController5b23871d970405c4fd1348ed42263e55.head = (args: { code: s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 const ClaimShareCardController5b23871d970405c4fd1348ed42263e55Form = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -170,7 +170,7 @@ const ClaimShareCardController5b23871d970405c4fd1348ed42263e55Form = (args: { co
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 ClaimShareCardController5b23871d970405c4fd1348ed42263e55Form.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -180,7 +180,7 @@ ClaimShareCardController5b23871d970405c4fd1348ed42263e55Form.get = (args: { code
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimShareCardController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:16
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimShareCardController.php:17
 * @route '/x/claim/{code}/share-card.png'
 */
 ClaimShareCardController5b23871d970405c4fd1348ed42263e55Form.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
