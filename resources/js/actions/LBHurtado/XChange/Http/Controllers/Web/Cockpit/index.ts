@@ -115,6 +115,7 @@ import CockpitPayCodeEvidenceController from './CockpitPayCodeEvidenceController
 import CockpitPayCodeEngineeringPreviewController from './CockpitPayCodeEngineeringPreviewController'
 import CockpitPayCodeCollectionAttemptController from './CockpitPayCodeCollectionAttemptController'
 import CockpitPayCodePaymentTransactionsController from './CockpitPayCodePaymentTransactionsController'
+import CockpitPaymentRecoveryReportsController from './CockpitPaymentRecoveryReportsController'
 import CockpitPayCodePayoutCorrectionController from './CockpitPayCodePayoutCorrectionController'
 import CockpitPayCodeTerminalStateController from './CockpitPayCodeTerminalStateController'
 import CockpitVoucherDetailPageController from './CockpitVoucherDetailPageController'
@@ -237,6 +238,7 @@ const Cockpit = {
     CockpitPayCodeEngineeringPreviewController: Object.assign(CockpitPayCodeEngineeringPreviewController, CockpitPayCodeEngineeringPreviewController),
     CockpitPayCodeCollectionAttemptController: Object.assign(CockpitPayCodeCollectionAttemptController, CockpitPayCodeCollectionAttemptController),
     CockpitPayCodePaymentTransactionsController: Object.assign(CockpitPayCodePaymentTransactionsController, CockpitPayCodePaymentTransactionsController),
+    CockpitPaymentRecoveryReportsController: Object.assign(CockpitPaymentRecoveryReportsController, CockpitPaymentRecoveryReportsController),
     CockpitPayCodePayoutCorrectionController: Object.assign(CockpitPayCodePayoutCorrectionController, CockpitPayCodePayoutCorrectionController),
     CockpitPayCodeTerminalStateController: Object.assign(CockpitPayCodeTerminalStateController, CockpitPayCodeTerminalStateController),
     CockpitVoucherDetailPageController: Object.assign(CockpitVoucherDetailPageController, CockpitVoucherDetailPageController),

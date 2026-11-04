@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 const CockpitFundingPageController = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ CockpitFundingPageController.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 CockpitFundingPageController.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ CockpitFundingPageController.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 CockpitFundingPageController.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ CockpitFundingPageController.get = (options?: RouteQueryOptions): RouteDefinitio
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 CockpitFundingPageController.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ CockpitFundingPageController.head = (options?: RouteQueryOptions): RouteDefiniti
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 const CockpitFundingPageControllerForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const CockpitFundingPageControllerForm = (options?: RouteQueryOptions): RouteFor
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 CockpitFundingPageControllerForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ CockpitFundingPageControllerForm.get = (options?: RouteQueryOptions): RouteFormD
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitFundingPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:46
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingPageController.php:43
 * @route '/x/cockpit/funding'
 */
 CockpitFundingPageControllerForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
