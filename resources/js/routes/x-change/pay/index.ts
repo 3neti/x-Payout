@@ -1,10 +1,11 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
+import recoveryReports from './recovery-reports'
 import documents from './documents'
 import invoice from './invoice'
 import attempts from './attempts'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 export const show = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -19,7 +20,7 @@ show.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 show.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -46,7 +47,7 @@ show.url = (args: { code: string | number } | [code: string | number ] | string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 show.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -56,7 +57,7 @@ show.get = (args: { code: string | number } | [code: string | number ] | string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 show.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -66,7 +67,7 @@ show.head = (args: { code: string | number } | [code: string | number ] | string
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 const showForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -76,7 +77,7 @@ const showForm = (args: { code: string | number } | [code: string | number ] | s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 showForm.get = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -86,7 +87,7 @@ showForm.get = (args: { code: string | number } | [code: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Payment\PaymentPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:34
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Payment/PaymentPageController.php:35
 * @route '/x/pay/{code}'
 */
 showForm.head = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -103,6 +104,7 @@ show.form = showForm
 
 const pay = {
     show: Object.assign(show, show),
+    recoveryReports: Object.assign(recoveryReports, recoveryReports),
     documents: Object.assign(documents, documents),
     invoice: Object.assign(invoice, invoice),
     attempts: Object.assign(attempts, attempts),
