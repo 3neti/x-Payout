@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "65db1498565fc68b68494834c2735597",
+    "content-hash": "faabeb3fe7257130e68581cdf087c938",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1669,16 +1669,16 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.7.1",
+            "version": "v1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "3b6bfe50ea36907a3e6fdbf7326a9b066a7a77e5"
+                "reference": "8b4e75332f563106784e7d66ae032443872b3f5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/3b6bfe50ea36907a3e6fdbf7326a9b066a7a77e5",
-                "reference": "3b6bfe50ea36907a3e6fdbf7326a9b066a7a77e5",
+                "url": "https://api.github.com/repos/3neti/x-change/zipball/8b4e75332f563106784e7d66ae032443872b3f5b",
+                "reference": "8b4e75332f563106784e7d66ae032443872b3f5b",
                 "shasum": ""
             },
             "require": {
@@ -1781,9 +1781,9 @@
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
             "support": {
                 "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.7.1"
+                "source": "https://github.com/3neti/x-change/tree/v1.7.2"
             },
-            "time": "2026-11-04T14:17:11+00:00"
+            "time": "2026-11-05T09:04:42+00:00"
         },
         {
             "name": "3neti/x-commerce",
