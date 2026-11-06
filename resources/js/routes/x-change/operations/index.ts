@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
+import recovery from './recovery'
 import storedValueCollections from './stored-value-collections'
 import economicsE6a247 from './economics'
 import pricingCf18cb from './pricing'
@@ -248,7 +249,7 @@ pricing.form = pricingForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:61
 * @route '/x/operations/unlock'
 */
 export const unlock = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -263,7 +264,7 @@ unlock.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:61
 * @route '/x/operations/unlock'
 */
 unlock.url = (options?: RouteQueryOptions) => {
@@ -272,7 +273,7 @@ unlock.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:61
 * @route '/x/operations/unlock'
 */
 unlock.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -282,7 +283,7 @@ unlock.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:61
 * @route '/x/operations/unlock'
 */
 const unlockForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -292,7 +293,7 @@ const unlockForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::unlock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:61
 * @route '/x/operations/unlock'
 */
 unlockForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -304,7 +305,7 @@ unlock.form = unlockForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:73
 * @route '/x/operations/lock'
 */
 export const lock = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -319,7 +320,7 @@ lock.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:73
 * @route '/x/operations/lock'
 */
 lock.url = (options?: RouteQueryOptions) => {
@@ -328,7 +329,7 @@ lock.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:73
 * @route '/x/operations/lock'
 */
 lock.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -338,7 +339,7 @@ lock.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:73
 * @route '/x/operations/lock'
 */
 const lockForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -348,7 +349,7 @@ const lockForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::lock
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:71
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:73
 * @route '/x/operations/lock'
 */
 lockForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -360,7 +361,7 @@ lock.form = lockForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 export const viewer = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -375,7 +376,7 @@ viewer.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 viewer.url = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -402,7 +403,7 @@ viewer.url = (args: { token: string | number } | [token: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 viewer.get = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -412,7 +413,7 @@ viewer.get = (args: { token: string | number } | [token: string | number ] | str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 viewer.head = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -422,7 +423,7 @@ viewer.head = (args: { token: string | number } | [token: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 const viewerForm = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -432,7 +433,7 @@ const viewerForm = (args: { token: string | number } | [token: string | number ]
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 viewerForm.get = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -442,7 +443,7 @@ viewerForm.get = (args: { token: string | number } | [token: string | number ] |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::viewer
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:42
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:44
 * @route '/x/operations/view/{token}'
 */
 viewerForm.head = (args: { token: string | number } | [token: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -459,7 +460,7 @@ viewer.form = viewerForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:86
 * @route '/x/operations/{checkout}/retry'
 */
 export const retry = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -474,7 +475,7 @@ retry.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:86
 * @route '/x/operations/{checkout}/retry'
 */
 retry.url = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions) => {
@@ -507,7 +508,7 @@ retry.url = (args: { checkout: string | number | { reference: string | number } 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:86
 * @route '/x/operations/{checkout}/retry'
 */
 retry.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -517,7 +518,7 @@ retry.post = (args: { checkout: string | number | { reference: string | number }
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:86
 * @route '/x/operations/{checkout}/retry'
 */
 const retryForm = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -527,7 +528,7 @@ const retryForm = (args: { checkout: string | number | { reference: string | num
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Checkout\CheckoutConsoleController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:84
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Checkout/CheckoutConsoleController.php:86
 * @route '/x/operations/{checkout}/retry'
 */
 retryForm.post = (args: { checkout: string | number | { reference: string | number } } | [checkout: string | number | { reference: string | number } ] | string | number | { reference: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -538,6 +539,7 @@ retryForm.post = (args: { checkout: string | number | { reference: string | numb
 retry.form = retryForm
 
 const operations = {
+    recovery: Object.assign(recovery, recovery),
     storedValueCollections: Object.assign(storedValueCollections, storedValueCollections),
     show: Object.assign(show, show),
     economics: Object.assign(economics, economicsE6a247),

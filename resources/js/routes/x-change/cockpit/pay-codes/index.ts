@@ -5,6 +5,7 @@ import engineeringPreview from './engineering-preview'
 import collectionAttempts from './collection-attempts'
 import paymentTransactions from './payment-transactions'
 import paymentRecoveryReports from './payment-recovery-reports'
+import valueFlowPayouts from './value-flow-payouts'
 import payoutCorrections from './payout-corrections'
 import terminalActions from './terminal-actions'
 /**
@@ -295,6 +296,7 @@ const payCodes = {
     collectionAttempts: Object.assign(collectionAttempts, collectionAttempts),
     paymentTransactions: Object.assign(paymentTransactions, paymentTransactions),
     paymentRecoveryReports: Object.assign(paymentRecoveryReports, paymentRecoveryReports),
+    valueFlowPayouts: Object.assign(valueFlowPayouts, valueFlowPayouts),
     payoutCorrections: Object.assign(payoutCorrections, payoutCorrections),
     terminalActions: Object.assign(terminalActions, terminalActions),
     show: Object.assign(show, show),
