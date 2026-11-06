@@ -4,7 +4,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-export const show = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -19,7 +19,7 @@ show.definition = {
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-show.url = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions) => {
+show.url = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
         args = {
             fundingRequest: args[0],
@@ -49,7 +49,7 @@ show.url = (args: { fundingRequest: string | number | { reference: string | numb
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-show.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -59,7 +59,7 @@ show.get = (args: { fundingRequest: string | number | { reference: string | numb
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-show.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
@@ -69,7 +69,7 @@ show.head = (args: { fundingRequest: string | number | { reference: string | num
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-const showForm = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+const showForm = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
     method: 'get',
 })
@@ -79,7 +79,7 @@ const showForm = (args: { fundingRequest: string | number | { reference: string 
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-showForm.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+showForm.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, options),
     method: 'get',
 })
@@ -89,7 +89,7 @@ showForm.get = (args: { fundingRequest: string | number | { reference: string | 
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-showForm.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+showForm.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: show.url(args, {
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
             _method: 'HEAD',
