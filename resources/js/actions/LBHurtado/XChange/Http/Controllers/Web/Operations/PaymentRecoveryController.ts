@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,8 +81,385 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 index.form = indexForm
 
 /**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+export const partnerReservations = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: partnerReservations.url(options),
+    method: 'get',
+})
+
+partnerReservations.definition = {
+    methods: ["get","head"],
+    url: '/x/operations/recovery/partner-reservations',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+partnerReservations.url = (options?: RouteQueryOptions) => {
+    return partnerReservations.definition.url + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+partnerReservations.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: partnerReservations.url(options),
+    method: 'get',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+partnerReservations.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: partnerReservations.url(options),
+    method: 'head',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+const partnerReservationsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: partnerReservations.url(options),
+    method: 'get',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+partnerReservationsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: partnerReservations.url(options),
+    method: 'get',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::partnerReservations
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:38
+* @route '/x/operations/recovery/partner-reservations'
+*/
+partnerReservationsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: partnerReservations.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+partnerReservations.form = partnerReservationsForm
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::releasePartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:76
+* @route '/x/operations/recovery/partner-reservations/{reservation}/release'
+*/
+export const releasePartnerReservation = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: releasePartnerReservation.url(args, options),
+    method: 'post',
+})
+
+releasePartnerReservation.definition = {
+    methods: ["post"],
+    url: '/x/operations/recovery/partner-reservations/{reservation}/release',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::releasePartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:76
+* @route '/x/operations/recovery/partner-reservations/{reservation}/release'
+*/
+releasePartnerReservation.url = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { reservation: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            reservation: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        reservation: args.reservation,
+    }
+
+    return releasePartnerReservation.definition.url
+            .replace('{reservation}', parsedArgs.reservation.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::releasePartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:76
+* @route '/x/operations/recovery/partner-reservations/{reservation}/release'
+*/
+releasePartnerReservation.post = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: releasePartnerReservation.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::releasePartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:76
+* @route '/x/operations/recovery/partner-reservations/{reservation}/release'
+*/
+const releasePartnerReservationForm = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: releasePartnerReservation.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::releasePartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:76
+* @route '/x/operations/recovery/partner-reservations/{reservation}/release'
+*/
+releasePartnerReservationForm.post = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: releasePartnerReservation.url(args, options),
+    method: 'post',
+})
+
+releasePartnerReservation.form = releasePartnerReservationForm
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::verifyPartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:56
+* @route '/x/operations/recovery/partner-reservations/{reservation}/verify'
+*/
+export const verifyPartnerReservation = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: verifyPartnerReservation.url(args, options),
+    method: 'post',
+})
+
+verifyPartnerReservation.definition = {
+    methods: ["post"],
+    url: '/x/operations/recovery/partner-reservations/{reservation}/verify',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::verifyPartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:56
+* @route '/x/operations/recovery/partner-reservations/{reservation}/verify'
+*/
+verifyPartnerReservation.url = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { reservation: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            reservation: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        reservation: args.reservation,
+    }
+
+    return verifyPartnerReservation.definition.url
+            .replace('{reservation}', parsedArgs.reservation.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::verifyPartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:56
+* @route '/x/operations/recovery/partner-reservations/{reservation}/verify'
+*/
+verifyPartnerReservation.post = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: verifyPartnerReservation.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::verifyPartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:56
+* @route '/x/operations/recovery/partner-reservations/{reservation}/verify'
+*/
+const verifyPartnerReservationForm = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: verifyPartnerReservation.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::verifyPartnerReservation
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:56
+* @route '/x/operations/recovery/partner-reservations/{reservation}/verify'
+*/
+verifyPartnerReservationForm.post = (args: { reservation: string | number } | [reservation: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: verifyPartnerReservation.url(args, options),
+    method: 'post',
+})
+
+verifyPartnerReservation.form = verifyPartnerReservationForm
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:96
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/review'
+*/
+export const reviewTreasuryPayout = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: reviewTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+reviewTreasuryPayout.definition = {
+    methods: ["post"],
+    url: '/x/operations/recovery/treasury-payouts/{outbox}/review',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:96
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/review'
+*/
+reviewTreasuryPayout.url = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { outbox: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            outbox: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        outbox: args.outbox,
+    }
+
+    return reviewTreasuryPayout.definition.url
+            .replace('{outbox}', parsedArgs.outbox.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:96
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/review'
+*/
+reviewTreasuryPayout.post = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: reviewTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:96
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/review'
+*/
+const reviewTreasuryPayoutForm = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: reviewTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:96
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/review'
+*/
+reviewTreasuryPayoutForm.post = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: reviewTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+reviewTreasuryPayout.form = reviewTreasuryPayoutForm
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::investigateTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:86
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/investigate'
+*/
+export const investigateTreasuryPayout = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: investigateTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+investigateTreasuryPayout.definition = {
+    methods: ["post"],
+    url: '/x/operations/recovery/treasury-payouts/{outbox}/investigate',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::investigateTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:86
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/investigate'
+*/
+investigateTreasuryPayout.url = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { outbox: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            outbox: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        outbox: args.outbox,
+    }
+
+    return investigateTreasuryPayout.definition.url
+            .replace('{outbox}', parsedArgs.outbox.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::investigateTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:86
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/investigate'
+*/
+investigateTreasuryPayout.post = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: investigateTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::investigateTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:86
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/investigate'
+*/
+const investigateTreasuryPayoutForm = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: investigateTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::investigateTreasuryPayout
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:86
+* @route '/x/operations/recovery/treasury-payouts/{outbox}/investigate'
+*/
+investigateTreasuryPayoutForm.post = (args: { outbox: string | number } | [outbox: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: investigateTreasuryPayout.url(args, options),
+    method: 'post',
+})
+
+investigateTreasuryPayout.form = investigateTreasuryPayoutForm
+
+/**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 export const retry = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -97,7 +474,7 @@ retry.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 retry.url = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -124,7 +501,7 @@ retry.url = (args: { payout: string | number } | [payout: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 retry.post = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -134,7 +511,7 @@ retry.post = (args: { payout: string | number } | [payout: string | number ] | s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 const retryForm = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -144,7 +521,7 @@ const retryForm = (args: { payout: string | number } | [payout: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 retryForm.post = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -156,7 +533,7 @@ retry.form = retryForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewReport
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 export const reviewReport = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -171,7 +548,7 @@ reviewReport.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewReport
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 reviewReport.url = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -198,7 +575,7 @@ reviewReport.url = (args: { reference: string | number } | [reference: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewReport
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 reviewReport.post = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -208,7 +585,7 @@ reviewReport.post = (args: { reference: string | number } | [reference: string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewReport
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 const reviewReportForm = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -218,7 +595,7 @@ const reviewReportForm = (args: { reference: string | number } | [reference: str
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::reviewReport
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 reviewReportForm.post = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -230,7 +607,7 @@ reviewReport.form = reviewReportForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::markAccounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 export const markAccounted = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -245,7 +622,7 @@ markAccounted.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::markAccounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 markAccounted.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -272,7 +649,7 @@ markAccounted.url = (args: { review: string | number } | [review: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::markAccounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 markAccounted.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -282,7 +659,7 @@ markAccounted.post = (args: { review: string | number } | [review: string | numb
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::markAccounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 const markAccountedForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -292,7 +669,7 @@ const markAccountedForm = (args: { review: string | number } | [review: string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::markAccounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 markAccountedForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -304,7 +681,7 @@ markAccounted.form = markAccountedForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 export const creditExcess = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -319,7 +696,7 @@ creditExcess.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 creditExcess.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -346,7 +723,7 @@ creditExcess.url = (args: { review: string | number } | [review: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 creditExcess.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -356,7 +733,7 @@ creditExcess.post = (args: { review: string | number } | [review: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 const creditExcessForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -366,7 +743,7 @@ const creditExcessForm = (args: { review: string | number } | [review: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 creditExcessForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -378,7 +755,7 @@ creditExcess.form = creditExcessForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::applyPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 export const applyPayment = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -393,7 +770,7 @@ applyPayment.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::applyPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 applyPayment.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -420,7 +797,7 @@ applyPayment.url = (args: { review: string | number } | [review: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::applyPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 applyPayment.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -430,7 +807,7 @@ applyPayment.post = (args: { review: string | number } | [review: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::applyPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 const applyPaymentForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -440,7 +817,7 @@ const applyPaymentForm = (args: { review: string | number } | [review: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::applyPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 applyPaymentForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -452,7 +829,7 @@ applyPayment.form = applyPaymentForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::splitPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 export const splitPayment = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -467,7 +844,7 @@ splitPayment.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::splitPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 splitPayment.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -494,7 +871,7 @@ splitPayment.url = (args: { review: string | number } | [review: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::splitPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 splitPayment.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -504,7 +881,7 @@ splitPayment.post = (args: { review: string | number } | [review: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::splitPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 const splitPaymentForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -514,7 +891,7 @@ const splitPaymentForm = (args: { review: string | number } | [review: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::splitPayment
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 splitPaymentForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -524,6 +901,6 @@ splitPaymentForm.post = (args: { review: string | number } | [review: string | n
 
 splitPayment.form = splitPaymentForm
 
-const PaymentRecoveryController = { index, retry, reviewReport, markAccounted, creditExcess, applyPayment, splitPayment }
+const PaymentRecoveryController = { index, partnerReservations, releasePartnerReservation, verifyPartnerReservation, reviewTreasuryPayout, investigateTreasuryPayout, retry, reviewReport, markAccounted, creditExcess, applyPayment, splitPayment }
 
 export default PaymentRecoveryController

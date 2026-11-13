@@ -1,5 +1,6 @@
 import Commissioning from './Commissioning'
 import Claim from './Claim'
+import DeveloperAccessPageController from './DeveloperAccessPageController'
 import PublicPricingPageController from './PublicPricingPageController'
 import PublicAnalyticsPageController from './PublicAnalyticsPageController'
 import Provisioning from './Provisioning'
@@ -31,6 +32,7 @@ import Leads from './Leads'
 const Web = {
     Commissioning: Object.assign(Commissioning, Commissioning),
     Claim: Object.assign(Claim, Claim),
+    DeveloperAccessPageController: Object.assign(DeveloperAccessPageController, DeveloperAccessPageController),
     PublicPricingPageController: Object.assign(PublicPricingPageController, PublicPricingPageController),
     PublicAnalyticsPageController: Object.assign(PublicAnalyticsPageController, PublicAnalyticsPageController),
     Provisioning: Object.assign(Provisioning, Provisioning),

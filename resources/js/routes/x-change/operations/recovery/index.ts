@@ -1,10 +1,12 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import partnerReservation from './partner-reservation'
+import treasuryPayout from './treasury-payout'
 import payout from './payout'
 import report from './report'
 import payment from './payment'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -19,7 +21,7 @@ index.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -28,7 +30,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -38,7 +40,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -48,7 +50,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -58,7 +60,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -68,7 +70,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::index
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:29
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:119
 * @route '/x/operations/recovery'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -85,6 +87,8 @@ index.form = indexForm
 
 const recovery = {
     index: Object.assign(index, index),
+    partnerReservation: Object.assign(partnerReservation, partnerReservation),
+    treasuryPayout: Object.assign(treasuryPayout, treasuryPayout),
     payout: Object.assign(payout, payout),
     report: Object.assign(report, report),
     payment: Object.assign(payment, payment),
