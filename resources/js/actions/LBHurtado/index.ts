@@ -1,5 +1,6 @@
 import PaymentGateway from './PaymentGateway'
 import FormFlowManager from './FormFlowManager'
+import FormHandlerDocument from './FormHandlerDocument'
 import FormHandlerKYC from './FormHandlerKYC'
 import FormHandlerLocation from './FormHandlerLocation'
 import FormHandlerOtp from './FormHandlerOtp'
@@ -14,6 +15,7 @@ import XRider from './XRider'
 const LBHurtado = {
     PaymentGateway: Object.assign(PaymentGateway, PaymentGateway),
     FormFlowManager: Object.assign(FormFlowManager, FormFlowManager),
+    FormHandlerDocument: Object.assign(FormHandlerDocument, FormHandlerDocument),
     FormHandlerKYC: Object.assign(FormHandlerKYC, FormHandlerKYC),
     FormHandlerLocation: Object.assign(FormHandlerLocation, FormHandlerLocation),
     FormHandlerOtp: Object.assign(FormHandlerOtp, FormHandlerOtp),

@@ -4,7 +4,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-const CockpitFundingRequestEvidenceController = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+const CockpitFundingRequestEvidenceController = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: CockpitFundingRequestEvidenceController.url(args, options),
     method: 'get',
 })
@@ -19,7 +19,7 @@ CockpitFundingRequestEvidenceController.definition = {
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-CockpitFundingRequestEvidenceController.url = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions) => {
+CockpitFundingRequestEvidenceController.url = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions) => {
     if (Array.isArray(args)) {
         args = {
             fundingRequest: args[0],
@@ -49,7 +49,7 @@ CockpitFundingRequestEvidenceController.url = (args: { fundingRequest: string | 
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-CockpitFundingRequestEvidenceController.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+CockpitFundingRequestEvidenceController.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: CockpitFundingRequestEvidenceController.url(args, options),
     method: 'get',
 })
@@ -59,7 +59,7 @@ CockpitFundingRequestEvidenceController.get = (args: { fundingRequest: string | 
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-CockpitFundingRequestEvidenceController.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+CockpitFundingRequestEvidenceController.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: CockpitFundingRequestEvidenceController.url(args, options),
     method: 'head',
 })
@@ -69,7 +69,7 @@ CockpitFundingRequestEvidenceController.head = (args: { fundingRequest: string |
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-const CockpitFundingRequestEvidenceControllerForm = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+const CockpitFundingRequestEvidenceControllerForm = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: CockpitFundingRequestEvidenceController.url(args, options),
     method: 'get',
 })
@@ -79,7 +79,7 @@ const CockpitFundingRequestEvidenceControllerForm = (args: { fundingRequest: str
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-CockpitFundingRequestEvidenceControllerForm.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+CockpitFundingRequestEvidenceControllerForm.get = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: CockpitFundingRequestEvidenceController.url(args, options),
     method: 'get',
 })
@@ -89,7 +89,7 @@ CockpitFundingRequestEvidenceControllerForm.get = (args: { fundingRequest: strin
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitFundingRequestEvidenceController.php:16
 * @route '/x/cockpit/funding/requests/{fundingRequest}/evidence/{attachment}'
 */
-CockpitFundingRequestEvidenceControllerForm.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } } | [fundingRequest: string | number | { reference: string | number }, attachment: string | number | { id: string | number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+CockpitFundingRequestEvidenceControllerForm.head = (args: { fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } } | [fundingRequest: string | number | { reference: string | number }, attachment: number | { id: number } ], options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: CockpitFundingRequestEvidenceController.url(args, {
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
             _method: 'HEAD',

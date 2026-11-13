@@ -1,4 +1,5 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
+import documents from './documents'
 import kyc from './kyc'
 import location from './location'
 import otpChallenge from './otp-challenge'
@@ -469,6 +470,7 @@ const formFlow = {
     complete: Object.assign(complete, complete),
     cancel: Object.assign(cancel, cancel),
     destroy: Object.assign(destroy, destroy),
+    documents: Object.assign(documents, documents),
     kyc: Object.assign(kyc, kyc),
     location: Object.assign(location, location),
     otpChallenge: Object.assign(otpChallenge, otpChallenge),

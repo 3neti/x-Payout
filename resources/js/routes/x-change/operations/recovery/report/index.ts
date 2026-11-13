@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::review
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 export const review = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ review.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::review
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 review.url = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ review.url = (args: { reference: string | number } | [reference: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::review
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 review.post = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ review.post = (args: { reference: string | number } | [reference: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::review
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 const reviewForm = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const reviewForm = (args: { reference: string | number } | [reference: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::review
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:199
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:306
 * @route '/x/operations/recovery/reports/{reference}/review'
 */
 reviewForm.post = (args: { reference: string | number } | [reference: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

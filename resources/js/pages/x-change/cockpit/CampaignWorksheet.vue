@@ -8,8 +8,10 @@ Changes will be overwritten by php artisan x-change:publish --scope=build --forc
 -->
 <script setup lang="ts">
 import CampaignWorksheet from '../../../cockpit/pages/CampaignWorksheet.vue';
+import { useAttrs } from 'vue';
 
 defineOptions({ inheritAttrs: false });
+const props = useAttrs() as unknown as InstanceType<typeof CampaignWorksheet>['$props'];
 </script>
 
-<template><CampaignWorksheet v-bind="$attrs" /></template>
+<template><CampaignWorksheet v-bind="props" /></template>

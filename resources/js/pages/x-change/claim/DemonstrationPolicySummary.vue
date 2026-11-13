@@ -10,7 +10,7 @@ Changes will be overwritten by php artisan x-change:publish --scope=build --forc
 import { Head } from '@inertiajs/vue3';
 import ClaimStepShell from '@/components/x-change/ClaimStepShell.vue';
 
-defineOptions({ layout: null });
+defineOptions({ layout: undefined });
 
 defineProps<{
     summary: {

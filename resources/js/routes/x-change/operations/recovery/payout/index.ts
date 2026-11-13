@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 export const retry = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ retry.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 retry.url = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ retry.url = (args: { payout: string | number } | [payout: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 retry.post = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ retry.post = (args: { payout: string | number } | [payout: string | number ] | s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 const retryForm = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const retryForm = (args: { payout: string | number } | [payout: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::retry
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:217
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:324
 * @route '/x/operations/recovery/payouts/{payout}/retry'
 */
 retryForm.post = (args: { payout: string | number } | [payout: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

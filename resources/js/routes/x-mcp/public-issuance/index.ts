@@ -1,6 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 export const discovery = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -14,7 +14,7 @@ discovery.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 discovery.url = (options?: RouteQueryOptions) => {
@@ -22,7 +22,7 @@ discovery.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 discovery.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -31,7 +31,7 @@ discovery.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 discovery.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -40,7 +40,7 @@ discovery.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 const discoveryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -49,7 +49,7 @@ const discoveryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 })
 
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 discoveryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -58,7 +58,7 @@ discoveryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 })
 
 /**
-* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:102
+* @see vendor/3neti/x-mcp/src/XMcpServiceProvider.php:104
 * @route '/.well-known/x-change-public-mcp'
 */
 discoveryForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

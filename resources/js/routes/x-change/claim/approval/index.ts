@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimApprovalOtpController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:31
 * @route '/x/claim/{code}/approval/otp'
 */
 export const otp = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ otp.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimApprovalOtpController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:31
 * @route '/x/claim/{code}/approval/otp'
 */
 otp.url = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ otp.url = (args: { code: string | number } | [code: string | number ] | string |
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimApprovalOtpController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:31
 * @route '/x/claim/{code}/approval/otp'
 */
 otp.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ otp.post = (args: { code: string | number } | [code: string | number ] | string 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimApprovalOtpController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:31
 * @route '/x/claim/{code}/approval/otp'
 */
 const otpForm = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const otpForm = (args: { code: string | number } | [code: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Claim\ClaimApprovalOtpController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:30
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Claim/ClaimApprovalOtpController.php:31
 * @route '/x/claim/{code}/approval/otp'
 */
 otpForm.post = (args: { code: string | number } | [code: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

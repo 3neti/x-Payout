@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head, useForm } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
+import { review as reviewTreasuryPayout, investigate as investigateTreasuryPayout } from "@/routes/x-change/operations/recovery/treasury-payout";
 
 type Payout = {
   id: number;
@@ -55,14 +56,21 @@ type Report = {
   };
 };
 defineOptions({ layout: [] });
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   transactionReviews: Case[];
   fundingCases: Case[];
   reports: Report[];
   failures: Case[];
   payouts: Payout[];
-}>();
+  treasuryPayoutReviews?: { id: number; code: string; created_at: string; updated_at: string; can_check?: boolean }[];
+  partnerReservations?: { id: number; external_reference: string; order_reference: string; order_status: string; expires_at: string; last_checked_at: string | null; last_outcome: string | null; release_url: string; verify_url: string }[];
+}>(), { treasuryPayoutReviews: () => [], partnerReservations: () => [] });
 const form = useForm({ reason: "", destination_ready: false });
+const treasuryForm = useForm({ reason: "" });
+const reservationForm = useForm({ reason: "", evidence_reference: "" });
+const reservationVerifyForm = useForm({});
+const selectedReservation = ref<number | null>(null);
+const selectedTreasuryPayout = ref<number | null>(null);
 const selectedPayout = ref<number | null>(null);
 const selectedReport = ref<string | null>(null);
 const reportForm = useForm({ note: "" });
@@ -88,6 +96,12 @@ const decisionError = computed(
 );
 const recoveryError = computed(
   () => (form.errors as Record<string, string>).recovery,
+);
+const reservationVerificationError = computed(
+  () => (reservationVerifyForm.errors as Record<string, string>).recovery,
+);
+const reservationReleaseError = computed(
+  () => (reservationForm.errors as Record<string, string>).reservation,
 );
 function selectPayout(id: number) {
   form.reset();
@@ -411,6 +425,40 @@ function markAccounted(url: string) {
               </form>
             </li>
           </ul>
+        </div>
+      </section>
+      <section class="rounded-2xl border border-slate-700 bg-slate-900 p-5">
+        <h2 class="text-lg font-semibold">Partner issuance reservations</h2>
+        <p class="mt-2 text-sm text-slate-400">Review provider evidence before releasing a reservation. The original reference remains reserved; any later payment requires review.</p>
+        <p v-if="!partnerReservations.length" class="mt-3 text-sm text-slate-400">No expired or cancelled reservations need review.</p>
+        <div v-for="reservation in partnerReservations" :key="reservation.id" class="mt-4 rounded-xl border border-slate-700 p-4 text-sm">
+          <p class="font-medium">{{ reservation.external_reference }} · {{ reservation.order_status }}</p>
+          <p class="mt-1 break-all text-slate-400">Order {{ reservation.order_reference }} · Expires {{ reservation.expires_at }}</p>
+          <p class="mt-1 text-slate-400">Last check: {{ reservation.last_checked_at ?? 'None' }} · {{ reservation.last_outcome ?? 'Unavailable' }}</p>
+          <button type="button" :disabled="reservationVerifyForm.processing" class="mt-3 mr-4 text-cyan-300 disabled:opacity-50" @click="reservationVerifyForm.post(reservation.verify_url, { preserveScroll: true })">Check provider</button>
+          <p v-if="reservationVerificationError" role="alert" class="mt-2 text-amber-300">{{ reservationVerificationError }}</p>
+          <button v-if="selectedReservation !== reservation.id" type="button" class="mt-3 text-cyan-300" @click="reservationForm.reset(); reservationForm.clearErrors(); selectedReservation = reservation.id">Review release</button>
+          <form v-else class="mt-3 flex flex-col gap-3" @submit.prevent="reservationForm.post(reservation.release_url, { preserveScroll: true, onSuccess: () => { reservationForm.reset(); selectedReservation = null; } })">
+            <label>Provider evidence reference<input v-model="reservationForm.evidence_reference" required minlength="3" maxlength="190" class="mt-1 block w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" /></label>
+            <label>Reason<textarea v-model="reservationForm.reason" required minlength="8" maxlength="2000" class="mt-1 block w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" /></label>
+            <p v-if="reservationReleaseError" role="alert" class="text-amber-300">{{ reservationReleaseError }}</p>
+            <div class="flex gap-3"><button type="submit" :disabled="reservationForm.processing" class="rounded-lg bg-cyan-300 px-4 py-2 font-medium text-slate-950 disabled:opacity-50">Release reservation</button><button type="button" class="text-slate-300" @click="selectedReservation = null">Cancel</button></div>
+          </form>
+        </div>
+      </section>
+      <section class="rounded-2xl border border-slate-700 bg-slate-900 p-5">
+        <h2 class="text-lg font-semibold">Treasury payout review</h2>
+        <p class="mt-2 text-sm text-slate-300">Check provider and reconciliation evidence before resolving an uncertain payout.</p>
+        <p v-if="!treasuryPayoutReviews.length" class="mt-3 text-sm text-slate-400">No treasury payouts need review.</p>
+        <div v-for="review in treasuryPayoutReviews" :key="review.id" class="mt-4 rounded-xl border border-slate-700 p-4">
+          <p class="font-semibold">{{ review.code }} · Review {{ review.id }}</p>
+          <p class="mt-1 text-sm text-slate-300">Last updated: {{ review.updated_at }}</p>
+          <p v-if="!review.can_check" class="mt-2 text-sm text-slate-400">Provider transaction evidence is needed before status can be checked.</p>
+          <button v-if="selectedTreasuryPayout !== review.id" type="button" class="mt-3 rounded-lg bg-cyan-300 px-4 py-2 font-medium text-slate-950" @click="selectedTreasuryPayout = review.id">{{ review.can_check ? 'Check provider status' : 'Record investigation' }}</button>
+          <form v-else class="mt-3 flex flex-col gap-3" @submit.prevent="treasuryForm.post((review.can_check ? reviewTreasuryPayout : investigateTreasuryPayout)({ outbox: review.id }).url)">
+            <label>Reason for check<textarea v-model="treasuryForm.reason" required minlength="8" maxlength="2000" class="mt-1 block w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2" /></label>
+            <button type="submit" :disabled="treasuryForm.processing" class="w-fit rounded-lg bg-cyan-300 px-4 py-2 font-medium text-slate-950 disabled:opacity-50">{{ review.can_check ? 'Check status' : 'Record investigation' }}</button>
+          </form>
         </div>
       </section>
       <section class="rounded-2xl border border-slate-700 bg-slate-900 p-5">

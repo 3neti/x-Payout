@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::accounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 export const accounted = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ accounted.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::accounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 accounted.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -43,7 +43,7 @@ accounted.url = (args: { review: string | number } | [review: string | number ] 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::accounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 accounted.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -53,7 +53,7 @@ accounted.post = (args: { review: string | number } | [review: string | number ]
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::accounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 const accountedForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -63,7 +63,7 @@ const accountedForm = (args: { review: string | number } | [review: string | num
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::accounted
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:177
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:284
 * @route '/x/operations/recovery/payments/{review}/accounted'
 */
 accountedForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -75,7 +75,7 @@ accounted.form = accountedForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 export const creditExcess = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -90,7 +90,7 @@ creditExcess.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 creditExcess.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -117,7 +117,7 @@ creditExcess.url = (args: { review: string | number } | [review: string | number
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 creditExcess.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -127,7 +127,7 @@ creditExcess.post = (args: { review: string | number } | [review: string | numbe
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 const creditExcessForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -137,7 +137,7 @@ const creditExcessForm = (args: { review: string | number } | [review: string | 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::creditExcess
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:114
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:216
 * @route '/x/operations/recovery/payments/{review}/credit-excess'
 */
 creditExcessForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -149,7 +149,7 @@ creditExcess.form = creditExcessForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::apply
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 export const apply = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -164,7 +164,7 @@ apply.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::apply
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 apply.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -191,7 +191,7 @@ apply.url = (args: { review: string | number } | [review: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::apply
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 apply.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -201,7 +201,7 @@ apply.post = (args: { review: string | number } | [review: string | number ] | s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::apply
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 const applyForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -211,7 +211,7 @@ const applyForm = (args: { review: string | number } | [review: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::apply
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:131
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:233
 * @route '/x/operations/recovery/payments/{review}/apply'
 */
 applyForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -223,7 +223,7 @@ apply.form = applyForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::split
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 export const split = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -238,7 +238,7 @@ split.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::split
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 split.url = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -265,7 +265,7 @@ split.url = (args: { review: string | number } | [review: string | number ] | st
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::split
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 split.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -275,7 +275,7 @@ split.post = (args: { review: string | number } | [review: string | number ] | s
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::split
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 const splitForm = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -285,7 +285,7 @@ const splitForm = (args: { review: string | number } | [review: string | number 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Operations\PaymentRecoveryController::split
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:148
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Operations/PaymentRecoveryController.php:250
 * @route '/x/operations/recovery/payments/{review}/split'
 */
 splitForm.post = (args: { review: string | number } | [review: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

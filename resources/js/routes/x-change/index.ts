@@ -2,6 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 import commissioning from './commissioning'
 import publicIssuance from './public-issuance'
 import claim from './claim'
+import developerAccess from './developer-access'
 import pricing from './pricing'
 import analytics from './analytics'
 import provisioning from './provisioning'
@@ -190,6 +191,7 @@ const xChange = {
     operationalReadiness: Object.assign(operationalReadiness, operationalReadiness),
     publicIssuance: Object.assign(publicIssuance, publicIssuance),
     claim: Object.assign(claim, claim),
+    developerAccess: Object.assign(developerAccess, developerAccess),
     pricing: Object.assign(pricing, pricing),
     analytics: Object.assign(analytics, analytics),
     provisioning: Object.assign(provisioning, provisioning),
