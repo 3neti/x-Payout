@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dea9790f74c2d97ca18e8ee16a720d79",
+    "content-hash": "bc90b7012d9f42ab172c546396e6bcce",
     "packages": [
         {
             "name": "3neti/cash",
@@ -1720,17 +1720,11 @@
         },
         {
             "name": "3neti/x-change",
-            "version": "v1.11.1",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-change.git",
-                "reference": "9f939eadc5cd293ba3958ffcca1474b6aa96788e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-change/zipball/9f939eadc5cd293ba3958ffcca1474b6aa96788e",
-                "reference": "9f939eadc5cd293ba3958ffcca1474b6aa96788e",
-                "shasum": ""
+                "reference": "70c346ed0a4a09a116adf2645f76ff0b9a559812"
             },
             "require": {
                 "3neti/cash": "^1.3",
@@ -1799,18 +1793,18 @@
             ],
             "type": "library",
             "extra": {
+                "x-change": {
+                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
+                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md",
+                    "adopt-command": "x-change:adopt"
+                },
+                "settlement-os": {
+                    "queue-manifest": "resources/settlement-os/queues.php"
+                },
                 "laravel": {
                     "providers": [
                         "LBHurtado\\XChange\\Providers\\XChangeServiceProvider"
                     ]
-                },
-                "x-change": {
-                    "cloud-recipe": "resources/deployment/laravel-cloud.yaml",
-                    "adopt-command": "x-change:adopt",
-                    "deployment-guide": "docs/deployment/X_CHANGE_CLOUD_RECIPE.md"
-                },
-                "settlement-os": {
-                    "queue-manifest": "resources/settlement-os/queues.php"
                 }
             },
             "autoload": {
@@ -1818,7 +1812,22 @@
                     "LBHurtado\\XChange\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "LBHurtado\\XChange\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "php -d memory_limit=2G vendor/bin/pest"
+                ],
+                "test:unit": [
+                    "php -d memory_limit=2G vendor/bin/pest"
+                ],
+                "test:coverage": [
+                    "php -d memory_limit=2G vendor/bin/pest --coverage"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1832,11 +1841,7 @@
                 }
             ],
             "description": "X-Change API-first financial product platform for onboarding, wallet, pricing, Pay Code issuance, and redemption workflows.",
-            "support": {
-                "issues": "https://github.com/3neti/x-change/issues",
-                "source": "https://github.com/3neti/x-change/tree/v1.11.1"
-            },
-            "time": "2026-11-13T00:52:03+00:00"
+            "time": "2026-11-13T22:52:39+00:00"
         },
         {
             "name": "3neti/x-commerce",
