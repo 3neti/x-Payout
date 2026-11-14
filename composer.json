@@ -128,10 +128,5 @@
         }
     },
     "minimum-stability": "beta",
-    "prefer-stable": true,
-    "repositories": [{
-        "name": "x-change",
-        "type": "git",
-        "url": "https://github.com/3neti/x-change.git"
-    }]
+    "prefer-stable": true
 }
