@@ -3,7 +3,11 @@
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Mail\Events\MessageSending;
+use Illuminate\Mail\Transport\ResendTransport;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Features;
 
@@ -61,4 +65,33 @@ test('PIN reset rejects non-numeric credentials', function () {
 
         return true;
     });
+});
+
+test('PIN reset reaches the configured Resend mailer with the account email', function () {
+    config([
+        'mail.default' => 'resend',
+        'services.resend.key' => 're_test_placeholder',
+        'mail.from.address' => 'admin@disburse.cash',
+        'mail.from.name' => 'X-Change',
+    ]);
+    $user = User::factory()->create();
+    $messages = [];
+
+    Event::listen(MessageSending::class, function (MessageSending $event) use (&$messages): false {
+        $messages[] = $event->message;
+
+        return false;
+    });
+
+    expect(Mail::mailer()->getSymfonyTransport())->toBeInstanceOf(ResendTransport::class);
+
+    $this->post(route('password.email'), ['email' => $user->email])
+        ->assertSessionHasNoErrors()
+        ->assertSessionHas('status', __('passwords.sent'));
+
+    expect($messages)->toHaveCount(1);
+    expect($messages[0]->getFrom()[0]->getAddress())->toBe('admin@disburse.cash');
+    expect($messages[0]->getFrom()[0]->getName())->toBe('X-Change');
+    expect($messages[0]->getTo()[0]->getAddress())->toBe($user->email);
+    expect($messages[0]->getHtmlBody())->toContain('/reset-password/');
 });
