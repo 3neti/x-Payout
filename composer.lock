@@ -2356,16 +2356,16 @@
         },
         {
             "name": "3neti/x-stamp-designs",
-            "version": "v1.4.0",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/x-stamp-designs.git",
-                "reference": "633d7213a7c506d03e167033972d1d40e991c398"
+                "reference": "7f933706468dcb17d334d86172aca326060f9352"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/x-stamp-designs/zipball/633d7213a7c506d03e167033972d1d40e991c398",
-                "reference": "633d7213a7c506d03e167033972d1d40e991c398",
+                "url": "https://api.github.com/repos/3neti/x-stamp-designs/zipball/7f933706468dcb17d334d86172aca326060f9352",
+                "reference": "7f933706468dcb17d334d86172aca326060f9352",
                 "shasum": ""
             },
             "require": {
@@ -2391,9 +2391,9 @@
             "description": "Versioned portable Stamp design collection.",
             "support": {
                 "issues": "https://github.com/3neti/x-stamp-designs/issues",
-                "source": "https://github.com/3neti/x-stamp-designs/tree/v1.4.0"
+                "source": "https://github.com/3neti/x-stamp-designs/tree/v1.5.0"
             },
-            "time": "2026-11-23T04:23:16+00:00"
+            "time": "2026-11-23T09:35:06+00:00"
         },
         {
             "name": "aws/aws-crt-php",
