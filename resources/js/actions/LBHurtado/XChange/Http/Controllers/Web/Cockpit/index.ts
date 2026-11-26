@@ -12,6 +12,8 @@ import CockpitDashboardPageController from './CockpitDashboardPageController'
 import CockpitDocumentationPageController from './CockpitDocumentationPageController'
 import CockpitCommercialOfferingPageController from './CockpitCommercialOfferingPageController'
 import CockpitPartnerApiPageController from './CockpitPartnerApiPageController'
+import CockpitAccountLifecycleController from './CockpitAccountLifecycleController'
+import OwnerPartnerApiClientController from './OwnerPartnerApiClientController'
 import CockpitProvisioningPageController from './CockpitProvisioningPageController'
 import CockpitProvisioningRequestController from './CockpitProvisioningRequestController'
 import CockpitProvisioningApprovalController from './CockpitProvisioningApprovalController'
@@ -73,6 +75,7 @@ import CockpitCampaignWorksheetFallbackController from './CockpitCampaignWorkshe
 import CockpitCampaignWorksheetImportController from './CockpitCampaignWorksheetImportController'
 import CockpitAccountPageController from './CockpitAccountPageController'
 import CockpitAccountScenarioController from './CockpitAccountScenarioController'
+import CockpitBankAccountController from './CockpitBankAccountController'
 import CockpitFundingDestinationController from './CockpitFundingDestinationController'
 import CockpitFundingQrMerchantProfileController from './CockpitFundingQrMerchantProfileController'
 import CockpitFundingPageController from './CockpitFundingPageController'
@@ -93,11 +96,15 @@ import CockpitStandingFundingReceiptApprovalController from './CockpitStandingFu
 import CockpitQrPhFundingSimulationController from './CockpitQrPhFundingSimulationController'
 import CockpitFundingReconciliationRequestController from './CockpitFundingReconciliationRequestController'
 import CockpitFundingReconciliationApprovalController from './CockpitFundingReconciliationApprovalController'
+import CockpitIssuanceDiagnosticController from './CockpitIssuanceDiagnosticController'
 import CockpitQuickGeneratePageController from './CockpitQuickGeneratePageController'
 import CockpitQuickGenerateFundingPreflightController from './CockpitQuickGenerateFundingPreflightController'
 import CockpitCampaignDisplaySessionController from './CockpitCampaignDisplaySessionController'
 import CockpitInstanceKeepsakeDownloadShowController from './CockpitInstanceKeepsakeDownloadShowController'
 import CockpitInstanceKeepsakeDownloadController from './CockpitInstanceKeepsakeDownloadController'
+import CockpitReserveIssuanceIndexController from './CockpitReserveIssuanceIndexController'
+import CockpitReserveIssuanceRecoveryController from './CockpitReserveIssuanceRecoveryController'
+import CockpitReserveIssuanceStatusController from './CockpitReserveIssuanceStatusController'
 import CockpitIssuerInvoiceDraftController from './CockpitIssuerInvoiceDraftController'
 import CockpitRiderArtworkPreviewController from './CockpitRiderArtworkPreviewController'
 import CockpitPayCodeTemplateStoreController from './CockpitPayCodeTemplateStoreController'
@@ -136,6 +143,8 @@ const Cockpit = {
     CockpitDocumentationPageController: Object.assign(CockpitDocumentationPageController, CockpitDocumentationPageController),
     CockpitCommercialOfferingPageController: Object.assign(CockpitCommercialOfferingPageController, CockpitCommercialOfferingPageController),
     CockpitPartnerApiPageController: Object.assign(CockpitPartnerApiPageController, CockpitPartnerApiPageController),
+    CockpitAccountLifecycleController: Object.assign(CockpitAccountLifecycleController, CockpitAccountLifecycleController),
+    OwnerPartnerApiClientController: Object.assign(OwnerPartnerApiClientController, OwnerPartnerApiClientController),
     CockpitProvisioningPageController: Object.assign(CockpitProvisioningPageController, CockpitProvisioningPageController),
     CockpitProvisioningRequestController: Object.assign(CockpitProvisioningRequestController, CockpitProvisioningRequestController),
     CockpitProvisioningApprovalController: Object.assign(CockpitProvisioningApprovalController, CockpitProvisioningApprovalController),
@@ -197,6 +206,7 @@ const Cockpit = {
     CockpitCampaignWorksheetImportController: Object.assign(CockpitCampaignWorksheetImportController, CockpitCampaignWorksheetImportController),
     CockpitAccountPageController: Object.assign(CockpitAccountPageController, CockpitAccountPageController),
     CockpitAccountScenarioController: Object.assign(CockpitAccountScenarioController, CockpitAccountScenarioController),
+    CockpitBankAccountController: Object.assign(CockpitBankAccountController, CockpitBankAccountController),
     CockpitFundingDestinationController: Object.assign(CockpitFundingDestinationController, CockpitFundingDestinationController),
     CockpitFundingQrMerchantProfileController: Object.assign(CockpitFundingQrMerchantProfileController, CockpitFundingQrMerchantProfileController),
     CockpitFundingPageController: Object.assign(CockpitFundingPageController, CockpitFundingPageController),
@@ -217,11 +227,15 @@ const Cockpit = {
     CockpitQrPhFundingSimulationController: Object.assign(CockpitQrPhFundingSimulationController, CockpitQrPhFundingSimulationController),
     CockpitFundingReconciliationRequestController: Object.assign(CockpitFundingReconciliationRequestController, CockpitFundingReconciliationRequestController),
     CockpitFundingReconciliationApprovalController: Object.assign(CockpitFundingReconciliationApprovalController, CockpitFundingReconciliationApprovalController),
+    CockpitIssuanceDiagnosticController: Object.assign(CockpitIssuanceDiagnosticController, CockpitIssuanceDiagnosticController),
     CockpitQuickGeneratePageController: Object.assign(CockpitQuickGeneratePageController, CockpitQuickGeneratePageController),
     CockpitQuickGenerateFundingPreflightController: Object.assign(CockpitQuickGenerateFundingPreflightController, CockpitQuickGenerateFundingPreflightController),
     CockpitCampaignDisplaySessionController: Object.assign(CockpitCampaignDisplaySessionController, CockpitCampaignDisplaySessionController),
     CockpitInstanceKeepsakeDownloadShowController: Object.assign(CockpitInstanceKeepsakeDownloadShowController, CockpitInstanceKeepsakeDownloadShowController),
     CockpitInstanceKeepsakeDownloadController: Object.assign(CockpitInstanceKeepsakeDownloadController, CockpitInstanceKeepsakeDownloadController),
+    CockpitReserveIssuanceIndexController: Object.assign(CockpitReserveIssuanceIndexController, CockpitReserveIssuanceIndexController),
+    CockpitReserveIssuanceRecoveryController: Object.assign(CockpitReserveIssuanceRecoveryController, CockpitReserveIssuanceRecoveryController),
+    CockpitReserveIssuanceStatusController: Object.assign(CockpitReserveIssuanceStatusController, CockpitReserveIssuanceStatusController),
     CockpitIssuerInvoiceDraftController: Object.assign(CockpitIssuerInvoiceDraftController, CockpitIssuerInvoiceDraftController),
     CockpitRiderArtworkPreviewController: Object.assign(CockpitRiderArtworkPreviewController, CockpitRiderArtworkPreviewController),
     CockpitPayCodeTemplateStoreController: Object.assign(CockpitPayCodeTemplateStoreController, CockpitPayCodeTemplateStoreController),

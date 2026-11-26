@@ -4,6 +4,8 @@ import storedValueCollections from './stored-value-collections'
 import operationsEconomics4f7082 from './operations-economics'
 import commercial from './commercial'
 import apiPartners from './api-partners'
+import accountLifecycle from './account-lifecycle'
+import ownerApiClients from './owner-api-clients'
 import provisioning from './provisioning'
 import treasury from './treasury'
 import campaigns from './campaigns'
@@ -344,7 +346,7 @@ documentation.form = documentationForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 export const quickGenerate = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -359,7 +361,7 @@ quickGenerate.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerate.url = (options?: RouteQueryOptions) => {
@@ -368,7 +370,7 @@ quickGenerate.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerate.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -378,7 +380,7 @@ quickGenerate.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerate.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -388,7 +390,7 @@ quickGenerate.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 const quickGenerateForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -398,7 +400,7 @@ const quickGenerateForm = (options?: RouteQueryOptions): RouteFormDefinition<'ge
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerateForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -408,7 +410,7 @@ quickGenerateForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGeneratePageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:44
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGeneratePageController.php:50
 * @route '/x/cockpit/quick-generate'
 */
 quickGenerateForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -432,6 +434,8 @@ const cockpit = {
     documentation: Object.assign(documentation, documentation),
     commercial: Object.assign(commercial, commercial),
     apiPartners: Object.assign(apiPartners, apiPartners),
+    accountLifecycle: Object.assign(accountLifecycle, accountLifecycle),
+    ownerApiClients: Object.assign(ownerApiClients, ownerApiClients),
     provisioning: Object.assign(provisioning, provisioning),
     treasury: Object.assign(treasury, treasury),
     campaigns: Object.assign(campaigns, campaigns),
