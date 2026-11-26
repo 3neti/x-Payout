@@ -1,8 +1,65 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import reserveIssuances from './reserve-issuances'
 import invoiceDrafts from './invoice-drafts'
 import fundingOrders from './funding-orders'
 import claimPreviews from './claim-previews'
 import artworkPreviews from './artwork-previews'
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitIssuanceDiagnosticController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitIssuanceDiagnosticController.php:15
+* @route '/x/cockpit/quick-generate/diagnostics'
+*/
+export const diagnostics = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: diagnostics.url(options),
+    method: 'post',
+})
+
+diagnostics.definition = {
+    methods: ["post"],
+    url: '/x/cockpit/quick-generate/diagnostics',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitIssuanceDiagnosticController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitIssuanceDiagnosticController.php:15
+* @route '/x/cockpit/quick-generate/diagnostics'
+*/
+diagnostics.url = (options?: RouteQueryOptions) => {
+    return diagnostics.definition.url + queryParams(options)
+}
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitIssuanceDiagnosticController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitIssuanceDiagnosticController.php:15
+* @route '/x/cockpit/quick-generate/diagnostics'
+*/
+diagnostics.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: diagnostics.url(options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitIssuanceDiagnosticController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitIssuanceDiagnosticController.php:15
+* @route '/x/cockpit/quick-generate/diagnostics'
+*/
+const diagnosticsForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: diagnostics.url(options),
+    method: 'post',
+})
+
+/**
+* @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitIssuanceDiagnosticController::__invoke
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitIssuanceDiagnosticController.php:15
+* @route '/x/cockpit/quick-generate/diagnostics'
+*/
+diagnosticsForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: diagnostics.url(options),
+    method: 'post',
+})
+
+diagnostics.form = diagnosticsForm
+
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateInterpretController::__invoke
 * @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateInterpretController.php:16
@@ -117,7 +174,7 @@ fundingPreflight.form = fundingPreflightForm
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:63
 * @route '/x/cockpit/quick-generate'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -132,7 +189,7 @@ store.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:63
 * @route '/x/cockpit/quick-generate'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -141,7 +198,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:63
 * @route '/x/cockpit/quick-generate'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -151,7 +208,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:63
 * @route '/x/cockpit/quick-generate'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -161,7 +218,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitQuickGenerateMutationRouteShellController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:59
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitQuickGenerateMutationRouteShellController.php:63
 * @route '/x/cockpit/quick-generate'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -175,6 +232,7 @@ const quickGenerate = {
     interpret: Object.assign(interpret, interpret),
     fundingPreflight: Object.assign(fundingPreflight, fundingPreflight),
     store: Object.assign(store, store),
+    reserveIssuances: Object.assign(reserveIssuances, reserveIssuances),
     invoiceDrafts: Object.assign(invoiceDrafts, invoiceDrafts),
     fundingOrders: Object.assign(fundingOrders, fundingOrders),
     claimPreviews: Object.assign(claimPreviews, claimPreviews),

@@ -1,10 +1,11 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 import scenarios from './scenarios'
+import bankAccounts from './bank-accounts'
 import providers from './providers'
 import fundingQrMerchantProfile from './funding-qr-merchant-profile'
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -19,7 +20,7 @@ index.definition = {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -28,7 +29,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -38,7 +39,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -48,7 +49,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -58,7 +59,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -68,7 +69,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \LBHurtado\XChange\Http\Controllers\Web\Cockpit\CockpitAccountPageController::__invoke
-* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:28
+* @see vendor/3neti/x-change/src/Http/Controllers/Web/Cockpit/CockpitAccountPageController.php:35
 * @route '/x/cockpit/accounts'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -86,6 +87,7 @@ index.form = indexForm
 const accounts = {
     index: Object.assign(index, index),
     scenarios: Object.assign(scenarios, scenarios),
+    bankAccounts: Object.assign(bankAccounts, bankAccounts),
     providers: Object.assign(providers, providers),
     fundingQrMerchantProfile: Object.assign(fundingQrMerchantProfile, fundingQrMerchantProfile),
 }
