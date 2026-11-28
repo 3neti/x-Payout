@@ -13,11 +13,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "3neti/emi-netbank": "v2.7.1",
+        "3neti/emi-netbank": "v2.8.1",
         "3neti/form-flow": "^1.9",
         "3neti/hyperverge": "2.0.0-beta.2",
         "3neti/report-registry": "v1.1.3",
-        "3neti/x-change": "v1.12.12",
+        "3neti/x-change": "v1.12.13",
         "3neti/x-deploy": "^1.0",
         "3neti/x-mcp": "^0.3.2",
         "inertiajs/inertia-laravel": "^3.0",
