@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9fd86272c34995b6f9be3342582c4bb9",
+    "content-hash": "50cb4a0a831b23db2c48f900a4a84123",
     "packages": [
         {
             "name": "3neti/cash",
@@ -182,16 +182,16 @@
         },
         {
             "name": "3neti/emi-netbank",
-            "version": "v2.8.1",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/3neti/emi-netbank.git",
-                "reference": "ac900120b8f635bd21e6071feda8db19aafd3ff5"
+                "reference": "b729069aa0d2d54d336b0535bc3e26751fa3b04f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/3neti/emi-netbank/zipball/ac900120b8f635bd21e6071feda8db19aafd3ff5",
-                "reference": "ac900120b8f635bd21e6071feda8db19aafd3ff5",
+                "url": "https://api.github.com/repos/3neti/emi-netbank/zipball/b729069aa0d2d54d336b0535bc3e26751fa3b04f",
+                "reference": "b729069aa0d2d54d336b0535bc3e26751fa3b04f",
                 "shasum": ""
             },
             "require": {
@@ -245,9 +245,9 @@
             "description": "NetBank EMI provider adapter for emi-core",
             "support": {
                 "issues": "https://github.com/3neti/emi-netbank/issues",
-                "source": "https://github.com/3neti/emi-netbank/tree/v2.8.1"
+                "source": "https://github.com/3neti/emi-netbank/tree/v2.8.2"
             },
-            "time": "2026-11-28T09:52:04+00:00"
+            "time": "2026-11-28T13:16:31+00:00"
         },
         {
             "name": "3neti/emi-paynamics",
